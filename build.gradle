@@ -1,0 +1,31 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+dependencies {
+    // OkHttp 3 - Http client (without Kotlin dependency of version 4)
+    api("com.squareup.okhttp3:okhttp:3.14.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:3.14.2")
+    
+    // Moshi JSON Library
+    implementation("com.squareup.moshi:moshi:1.8.0")
+    
+    // Logging facade
+    implementation("org.slf4j:slf4j-api:1.7.28")
+    
+    // jUnit 5 for Testing
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.5.1")
+    
+    testRuntimeOnly('org.apache.logging.log4j:log4j-slf4j-impl:2.12.1')
+}
+
+test {
+    useJUnitPlatform()
+}
