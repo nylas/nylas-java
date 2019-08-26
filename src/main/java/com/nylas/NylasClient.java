@@ -1,12 +1,17 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Map;
+
+import com.squareup.moshi.JsonAdapter;
 
 import okhttp3.Credentials;
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -27,8 +32,9 @@ public class NylasClient {
 		HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 		logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 		httpClient = new OkHttpClient.Builder()
-		  .addInterceptor(logging)
-		  .build();
+				.addInterceptor(new UserAgentInterceptor())
+				.addNetworkInterceptor(logging)
+				.build();
 	}
 
 	public HttpUrl getBaseUrl() {
@@ -43,32 +49,76 @@ public class NylasClient {
 		return new Application(this, clientId, clientSecret);
 	}
 	
-	public Account account(String accessToken) {
-		return new Account(this, accessToken);
+	public Threads threads(String accessToken) {
+		return new Threads(this, accessToken);
 	}
 	
-	public void revoke(String accessToken) throws IOException {
+	public Folders folders(String accessToken) {
+		return new Folders(this, accessToken);
+	}
+	
+	public Account fetchAccountByAccessToken(String accessToken) throws IOException, RequestFailedException {
+		HttpUrl accountUrl = getBaseUrl().resolve("account");
+		Account.JsonBean accountJson = executeGetWithToken(accessToken, accountUrl, Account.JsonBean.class);
+		return new Account(accountJson);
+	}
+	
+	public void revoke(String accessToken) throws IOException, RequestFailedException {
 		HttpUrl revokeUrl = getBaseUrl().resolve("oauth/revoke");
-		
-		FormBody emptyBody = new FormBody.Builder().build();
-		
-		Request request = new Request.Builder().url(revokeUrl)
-				.post(emptyBody)
+		executePostWithToken(accessToken, revokeUrl, Collections.emptyMap(), null);
+	}
+	
+	<T> T executeGetWithToken(String accessToken, HttpUrl url, Type resultType)
+			throws IOException, RequestFailedException {
+		return executeRequestWithToken(accessToken, url, HttpMethod.GET, null, resultType);
+	}
+	
+	<T> T executePutWithToken(String accessToken, HttpUrl url, Map<String, Object> params, Type resultType)
+			throws IOException, RequestFailedException {
+		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
+		return executeRequestWithToken(accessToken, url, HttpMethod.PUT, jsonBody, resultType);
+	}
+	
+	<T> T executePostWithToken(String accessToken, HttpUrl url, Map<String, Object> params, Type resultType)
+			throws IOException, RequestFailedException {
+		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
+		return executeRequestWithToken(accessToken, url, HttpMethod.POST, jsonBody, resultType);
+	}
+	
+	<T> T executeDeleteWithToken(String accessToken, HttpUrl url, Type resultType)
+			throws IOException, RequestFailedException {
+		return executeRequestWithToken(accessToken, url, HttpMethod.DELETE, null, resultType);
+	}
+	
+	private <T> T executeRequestWithToken(String accessToken, HttpUrl url, HttpMethod method, RequestBody body,
+			Type resultType) throws IOException, RequestFailedException {
+		Request request = new Request.Builder().url(url)
 				.addHeader("Authorization", Credentials.basic(accessToken, ""))
+				.method(method.toString(), body)
 				.build();
-		
+		return executeRequest(request, resultType);
+	}
+	
+	<T> T executeRequest(Request request, Type resultType) throws IOException, RequestFailedException {
 		try (Response response = getHttpClient().newCall(request).execute()) {
 			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code " + response);
+				throw new RequestFailedException(response.code(), response.body().string());
 			}
-			String responseString = response.body().string();
-			System.out.println(responseString);
+			if (resultType == null) {
+				return null;
+			} else {
+				JsonAdapter<T> adapter = JsonHelper.moshi().adapter(resultType);
+				return adapter.fromJson(response.body().source());
+			}
 		}
 	}
 	
-	public static void main(String[] args) throws IOException {
-		new NylasClient().revoke("tfJfCvGQQTfy7jU4zwtTYMGZqZFJNn");
-
+	static enum HttpMethod {
+		GET,
+		PUT,
+		POST,
+		DELETE,
+		;
 	}
 
 }

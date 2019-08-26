@@ -5,8 +5,6 @@ import static com.nylas.Validations.nullOrEmpty;
 
 import java.util.Map;
 
-import com.squareup.moshi.Moshi;
-
 public class ImapProviderSettings extends ProviderSettings {
 
 	private String imap_host;
@@ -74,13 +72,13 @@ public class ImapProviderSettings extends ProviderSettings {
 	}
 	
 	@Override
-	protected void fillSettings(Map<String, String> settings) {
+	protected void fillSettings(Map<String, Object> settings) {
 		validate();
 		
 		// IMAP
 		settings.put("imap_host", imap_host);
-		if (imap_port > 0) {
-			settings.put("imap_port", Integer.toString(imap_port));
+		if (imap_port != null) {
+			settings.put("imap_port", imap_port);
 		}
 		if (!nullOrEmpty(imap_username)) {
 			settings.put("imap_username", imap_username);
@@ -93,8 +91,8 @@ public class ImapProviderSettings extends ProviderSettings {
 		if (!nullOrEmpty(smtp_host)) {
 			settings.put("smtp_host", smtp_host);
 		}
-		if (smtp_port > 0) {
-			settings.put("smtp_port", Integer.toString(smtp_port));
+		if (smtp_port != null) {
+			settings.put("smtp_port", smtp_port);
 		}
 		if (!nullOrEmpty(smtp_username)) {
 			settings.put("smtp_username", smtp_username);
@@ -105,7 +103,7 @@ public class ImapProviderSettings extends ProviderSettings {
 
 		// SSL
 		if (ssl_required != null) {
-			settings.put("ssl_required", ssl_required.toString());
+			settings.put("ssl_required", ssl_required);
 		}
 	}
 

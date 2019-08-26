@@ -3,16 +3,18 @@ package com.nylas;
 import static com.nylas.Validations.assertState;
 import static com.nylas.Validations.nullOrEmpty;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.squareup.moshi.Moshi;
 
-import okhttp3.Credentials;
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class NativeAuthentication {
 
@@ -30,17 +32,18 @@ public class NativeAuthentication {
 		
 		private transient final Application application;
 		
+		private final String client_id;
 		private String name;
 		private String email_address;
 		private String provider;
-		private ProviderSettings settings;
+		private Map<String, Object> settings;
 		private String scopes;
 		private String reauth_account_id;
-	
 		
 		AuthRequestBuilder(Application application) {
 			super();
 			this.application = application;
+			this.client_id = application.getClientId();
 		}
 
 		public AuthRequestBuilder name(String name) {
@@ -53,10 +56,30 @@ public class NativeAuthentication {
 			return this;
 		}
 		
+		/**
+		 * Provider-specific name and configuration.
+		 * Strongly typed.
+		 */
 		public AuthRequestBuilder providerSettings(ProviderSettings providerSettings) {
-			this.provider = providerSettings.getName();
+			return providerSettings(providerSettings.getName(), providerSettings.getSettings());
+		}
+		
+		public AuthRequestBuilder providerSettings(String providerName, Map<String, Object> providerSettings) {
+			this.provider = providerName;
 			this.settings = providerSettings;
 			return this;
+		}
+		
+		/**
+		 * The set of specific scopes being requested.
+		 * Strongly typed.
+		 */
+		public AuthRequestBuilder scopes(Scope... scopes) {
+			StringJoiner joiner = new StringJoiner(",");
+			for (Scope scope : scopes) {
+				joiner.add(scope.getName());
+			}
+			return scopes(joiner.toString());
 		}
 		
 		/**
@@ -68,71 +91,64 @@ public class NativeAuthentication {
 			return this;
 		}
 		
-		/**
-		 * The set of specific scopes being requested.
-		 */
-		public AuthRequestBuilder scopes(Scope... scopes) {
-			StringJoiner joiner = new StringJoiner(",");
-			for (Scope scope : scopes) {
-				joiner.add(scope.getName());
-			}
-			return scopes(joiner.toString());
-		}
-		
 		public AuthRequestBuilder reauthAccountId(String reauthAccountId) {
 			this.reauth_account_id = reauthAccountId;
 			return this;
 		}
 		
-
 		private void validate() {
 			assertState(!nullOrEmpty(name), "Name is required");
 			assertState(!nullOrEmpty(email_address), "Email Address is required");
 			assertState(settings != null, "Provider Settings required");
 		}
 		
-		private String getRequestJSON() {
-			return null;
-		}
-		
-		public String execute() {
+		public String execute() throws IOException {
 			validate();
 			
-			HttpUrl revokeUrl = application.getClient().getBaseUrl().resolve("connect/authorize");
-			MediaType jsonType = MediaType.parse("application/json; charset=utf-8");
-			RequestBody body = RequestBody.create(jsonType, "");
-
+			Moshi moshi = new Moshi.Builder().build();
+			String json = moshi.adapter(AuthRequestBuilder.class).toJson(this);
 			
-			Request request = new Request.Builder().url(revokeUrl)
+			HttpUrl authUrl = application.getClient().getBaseUrl().resolve("connect/authorize");
+			RequestBody body = RequestBody.create(JsonHelper.jsonType(), json);
+			
+			Request request = new Request.Builder().url(authUrl)
 					.post(body)
-					//.addHeader("Authorization", Credentials.basic(accessToken, ""))
 					.build();
-			return null;
+			
+			try (Response response = application.getClient().getHttpClient().newCall(request).execute()) {
+				if (!response.isSuccessful()) {
+					throw new IOException("Unexpected code " + response);
+				}
+				
+				AuthorizationCode code = moshi.adapter(AuthorizationCode.class).fromJson(response.body().source());
+				return code.getCode();
+			}
 		}
-
 	}
 	
-	
-	public static void main(String[] args) {
-		ImapProviderSettings settings = new ImapProviderSettings()
-				.imapHost("imap.gmail.com")
-				.imapPort(587)
-				;
-		NylasClient client = new NylasClient();
-		Application application = client.application("eookptrxndc091k0w30jtczyy", "7c7gi98svph4o2tcgbrondah1");
-		NativeAuthentication authentication = application.nativeAuthentication();
-		AuthRequestBuilder authRequest = authentication.authRequest();
-		authRequest.emailAddress("davenylastest@gmail.com");
-		authRequest.name("David Latham");
-		authRequest.scopes(Scope.CALENDAR_ALL, Scope.EMAIL_DRAFTS);
-		authRequest.providerSettings(settings);
+	public AccessToken fetchToken(String authorizationCode) throws IOException {
 		
-		Moshi moshi = new Moshi.Builder().build();
-		String json = moshi.adapter(AuthRequestBuilder.class).toJson(authRequest);
-		System.out.println(json);
+		HttpUrl tokenUrl = application.getClient().getBaseUrl().resolve("connect/token");
 		
-
+		Map<String, Object> params = new HashMap<>();
+		params.put("client_id", application.getClientId());
+		params.put("client_secret", application.getClientSecret());
+		params.put("code", authorizationCode);
 		
+		RequestBody body = JsonHelper.jsonRequestBody(params);
+		Request request = new Request.Builder().url(tokenUrl)
+				.post(body)
+				.build();
+		
+		try (Response response = application.getClient().getHttpClient().newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				throw new IOException("Unexpected code " + response);
+			}
+			
+			Moshi moshi = new Moshi.Builder().build();
+			AccessToken token = moshi.adapter(AccessToken.class).fromJson(response.body().source());
+			return token;
+		}
 	}
 	
 }

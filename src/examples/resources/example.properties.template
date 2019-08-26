@@ -1,0 +1,14 @@
+# Template for example.properties file.
+# Make a copy of this file and fill in your own values here to run the examples.
+
+client.id=YOUR_CLIENT_ID_HERE
+client.secret=YOUR_CLIENT_SECRET_HERE
+access.token=YOUR_ACCESS_TOKEN_HERE
+
+imap.host=
+imap.port=
+imap.username=
+imap.password=
+smtp.host=
+smtp.port=
+

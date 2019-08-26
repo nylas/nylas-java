@@ -43,7 +43,7 @@ public class GoogleProviderSettings extends ProviderSettings {
 	}
 	
 	@Override
-	protected void fillSettings(Map<String, String> settings) {
+	protected void fillSettings(Map<String, Object> settings) {
 		validate();
 		
 		settings.put("google_client_id", googleClientId);

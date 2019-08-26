@@ -15,13 +15,13 @@ public abstract class ProviderSettings {
 		return providerName;
 	}
 	
-	public Map<String, String> getSettings() {
-		Map<String, String> settings = new HashMap<>();
+	public Map<String, Object> getSettings() {
+		Map<String, Object> settings = new HashMap<>();
 		fillSettings(settings);
 		return settings;
 	}
 	
-	protected abstract void fillSettings(Map<String, String> settings);
+	protected abstract void fillSettings(Map<String, Object> settings);
 
 	
 }
