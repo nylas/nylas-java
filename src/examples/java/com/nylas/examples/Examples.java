@@ -2,15 +2,18 @@ package com.nylas.examples;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Properties;
 
 import com.nylas.AccessToken;
 import com.nylas.Account;
 import com.nylas.Application;
-import com.nylas.Folder;
-import com.nylas.Folders;
 import com.nylas.ImapProviderSettings;
+import com.nylas.Message;
+import com.nylas.Messages;
 import com.nylas.NativeAuthentication;
 import com.nylas.NativeAuthentication.AuthRequestBuilder;
 import com.nylas.NylasClient;
@@ -29,52 +32,15 @@ public class Examples {
 		//runNativeAuthExample(props);
 		
 		runThreadsAndFolderExample(props);
-
-		
+		//runMessagesExample(props);
 	}
-
-	@SuppressWarnings("unused")
-	private static void runThreadsAndFolderExample(Properties props) throws IOException, RequestFailedException {
-		String accessToken = props.getProperty("access.token");
-		
-		NylasClient client = new NylasClient();
-		Threads threads = client.threads(accessToken);
-		List<Thread> allThreads = threads.expanded(new ThreadQuery());
-		for (Thread thread : allThreads) {
-			System.out.println(thread);
+	
+	private static Properties loadProperties() throws IOException {
+		Properties props = new Properties();
+		try (final InputStream in = Examples.class.getResourceAsStream("/example.properties")) {
+			props.load(in);
 		}
-		
-		String threadId = allThreads.get(0).getId();
-		Thread thread = threads.get(threadId);
-		System.out.println(thread);
-
-		
-		Folders folders = client.folders(accessToken);
-		List<Folder> allFolders = folders.list();
-		Folder inbox = null;
-		for (Folder folder : allFolders) {
-			System.out.println(folder);
-			if ("inbox".equals(folder.getName())) {
-				inbox = folder;
-			}
-		}
-		
-		Folder newFolder = folders.create("Example Folder");
-		System.out.println(newFolder);
-		
-		thread = threads.setFolderId(threadId, newFolder.getId());
-		System.out.println(thread);
-		
-		try {
-			folders.delete(newFolder.getId());
-		} catch (RequestFailedException rfe) {
-			System.out.println(rfe.getErrorMessage());
-		}
-		
-		thread = threads.setFolderId(threadId, inbox.getId());
-		System.out.println(thread);
-		
-		folders.delete(newFolder.getId());
+		return props;
 	}
 
 	@SuppressWarnings("unused")
@@ -99,7 +65,7 @@ public class Examples {
 				.name(props.getProperty("imap.name"))
 				.emailAddress(props.getProperty("imap.email"))
 				.providerSettings(settings)
-				.scopes(Scope.EMAIL_ALL, Scope.CALENDAR_ALL, Scope.CONTACTS_ALL);
+				.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS);
 				
 		String authorizationCode = authRequest.execute();
 		System.out.println("code: " + authorizationCode);
@@ -111,11 +77,114 @@ public class Examples {
 		System.out.println(account);
 	}
 	
-	private static Properties loadProperties() throws IOException {
-		Properties props = new Properties();
-		try (final InputStream in = Examples.class.getResourceAsStream("/example.properties")) {
-			props.load(in);
+	@SuppressWarnings("unused")
+	private static void runThreadsAndFolderExample(Properties props) throws IOException, RequestFailedException {
+		String accessToken = props.getProperty("access.token");
+		
+		NylasClient client = new NylasClient();
+		Threads threads = client.threads(accessToken);
+		
+		Instant start = LocalDate.of(2019,9,1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+		Instant end = LocalDate.of(2019,9,2).atStartOfDay(ZoneId.systemDefault()).toInstant();
+		ThreadQuery query = new ThreadQuery()
+				.limit(100)
+				.lastMessageAfter(start)
+				.lastMessageBefore(end)
+				;
+		List<Thread> allThreads = threads.list(query);
+		System.out.println("result thread count: " + allThreads.size());
+		for (Thread thread : allThreads) {
+			System.out.println(thread);
 		}
-		return props;
+		
+//		String threadId = allThreads.get(0).getId();
+//		Thread thread = threads.get(threadId);
+//		System.out.println(thread);
+//
+//		
+//		Folders folders = client.folders(accessToken);
+//		List<Folder> allFolders = folders.list();
+//		Folder inbox = null;
+//		for (Folder folder : allFolders) {
+//			System.out.println(folder);
+//			if ("inbox".equals(folder.getName())) {
+//				inbox = folder;
+//			}
+//		}
+//		
+//		Folder newFolder = folders.create("Example Folder");
+//		System.out.println(newFolder);
+//		
+//		thread = threads.setFolderId(threadId, newFolder.getId());
+//		System.out.println(thread);
+//		
+//		try {
+//			folders.delete(newFolder.getId());
+//		} catch (RequestFailedException rfe) {
+//			System.out.println(rfe.getErrorMessage());
+//		}
+//		
+//		thread = threads.setFolderId(threadId, inbox.getId());
+//		System.out.println(thread);
+//		
+//		folders.delete(newFolder.getId());
 	}
+
+	@SuppressWarnings("unused")
+	private static void runMessagesExample(Properties props) throws IOException, RequestFailedException {
+		String accessToken = props.getProperty("access.token");
+		
+		NylasClient client = new NylasClient();
+		Messages messages = client.messages(accessToken);
+		
+		List<Message> allMessages = messages.list();
+		Message firstMessage = allMessages.get(0);
+//		for (Message message : allMessages) {
+//			System.out.println(message);
+//		}
+		
+//		List<ExpandedMessage> allMessages = messages.expanded(null);
+//		for (ExpandedMessage message : allMessages) {
+//			System.out.println(message);
+//		}
+		
+
+		String raw = messages.getRaw(firstMessage.getId());
+		System.out.println(raw);
+
+		
+//		Message message = messages.get(firstMessage.getId());
+//		System.out.println(message);
+//		
+//		message = messages.setUnread(firstMessage.getId(), !firstMessage.getUnread());
+//		System.out.println(message);
+//		
+//		message = messages.setStarred(firstMessage.getId(), !firstMessage.getStarred());
+//		System.out.println(message);
+
+//		Folders folders = client.folders(accessToken);
+//		List<Folder> allFolders = folders.list();
+//		Folder inbox = null;
+//		for (Folder folder : allFolders) {
+//			System.out.println(folder);
+//			if ("inbox".equals(folder.getName())) {
+//				inbox = folder;
+//			}
+//		}
+//		
+//		Folder newFolder = folders.create("Example Folder");
+//		System.out.println(newFolder);
+//		message = messages.setFolderId(firstMessage.getId(), newFolder.getId());
+//		try {
+//			folders.delete(newFolder.getId());
+//		} catch (RequestFailedException rfe) {
+//			System.out.println(rfe.getErrorMessage());
+//		}
+//
+//		message = messages.setFolderId(firstMessage.getId(), inbox.getId());
+//		System.out.println(message);
+//		
+//		folders.delete(newFolder.getId());
+	}
+
 }

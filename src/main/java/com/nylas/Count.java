@@ -1,6 +1,6 @@
 package com.nylas;
 
-public class Count {
+class Count {
 
 	private long count;
 

@@ -13,7 +13,7 @@ public class Thread {
 	private Long last_message_received_timestamp;
 	private Long last_message_sent_timestamp;
 	private Long first_message_timestamp;
-	private List<Participant> participants;
+	private List<NameEmail> participants;
 	private String snippet;
 	private List<String> message_ids;
 	private List<String> draft_ids;
@@ -58,7 +58,7 @@ public class Thread {
 		return first_message_timestamp;
 	}
 
-	public List<Participant> getParticipants() {
+	public List<NameEmail> getParticipants() {
 		return participants;
 	}
 
@@ -99,29 +99,6 @@ public class Thread {
 				+ first_message_timestamp + ", participants=" + participants + ", snippet=" + snippet + ", message_ids="
 				+ message_ids + ", draft_ids=" + draft_ids + ", version=" + version + ", folders=" + folders
 				+ ", has_attachments=" + has_attachments + "]";
-	}
-
-	public static class Participant {
-		private String name;
-		private String email;
-		
-		@Override
-		public String toString() {
-			return "Participant [name=" + name + ", email=" + email + "]";
-		}
-	}
-
-	
-	// TODO - how is label different from FoldeR?
-	public static class Label {
-		private String id;
-		private String name;
-		private String display_name;
-		
-		@Override
-		public String toString() {
-			return "Label [id=" + id + ", name=" + name + ", display_name=" + display_name + "]";
-		}
 	}
 }
 

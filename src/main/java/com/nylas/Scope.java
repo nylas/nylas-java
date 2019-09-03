@@ -9,7 +9,7 @@ public enum Scope {
 	/**
 	 * Full email permissions, including read, modify, and send emails, folders, and labels
 	 */
-	EMAIL_ALL("email"),
+	EMAIL("email"),
 	
 	/**
 	 * Read and modify all messages, threads, file attachments, and read email metadata like headers.
@@ -45,7 +45,7 @@ public enum Scope {
 	/**
 	 * Read and modify calendars and events.
 	 */
-	CALENDAR_ALL("calendar"),
+	CALENDAR("calendar"),
 	
 	/**
 	 * Read calendars and events.
@@ -55,7 +55,7 @@ public enum Scope {
 	/**
 	 * Read and modify contacts.
 	 */
-	CONTACTS_ALL("contacts"),
+	CONTACTS("contacts"),
 	
 	/**
 	 * Read contacts.

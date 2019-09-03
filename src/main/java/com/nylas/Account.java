@@ -24,16 +24,12 @@ public class Account {
 		this.linkedAt = new Date(account.linked_at * 1000L);
 	}
 	
-	
-	
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", name=" + name + ", emailAddress=" + emailAddress + ", provider=" + provider
 				+ ", organizationUnit=" + organizationUnit + ", syncState=" + syncState + ", linkedAt=" + linkedAt
 				+ "]";
 	}
-
-
 
 	static class JsonBean {
 		

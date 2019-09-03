@@ -1,13 +1,16 @@
 package com.nylas;
 
-import java.util.Set;
+import java.time.Instant;
+import java.util.Arrays;
+
+import okhttp3.HttpUrl;
 
 public class ThreadQuery {
 
 	private Integer limit;
 	private Integer offset;
 	private String subject;
-	private Set<String> anyEmail;
+	private String anyEmail;
 	private String to;
 	private String from;
 	private String cc;
@@ -20,6 +23,57 @@ public class ThreadQuery {
 	private Long lastMessageAfter;
 	private Long startedBefore;
 	private Long startedAfter;
+	
+	public void addParameters(HttpUrl.Builder url) {
+		if (limit != null) {
+			url.addQueryParameter("limit", limit.toString());
+		}
+		if (offset != null) {
+			url.addQueryParameter("offset", offset.toString());
+		}
+		if (subject != null) {
+			url.addQueryParameter("subject", subject);
+		}
+		if (anyEmail != null) {
+			url.addQueryParameter("any_email", anyEmail);
+		}
+		if (to != null) {
+			url.addQueryParameter("to", to);
+		}
+		if (from != null) {
+			url.addQueryParameter("from", from);
+		}
+		if (cc != null) {
+			url.addQueryParameter("cc", cc);
+		}
+		if (bcc != null) {
+			url.addQueryParameter("bcc", bcc);
+		}
+		if (in != null) {
+			url.addQueryParameter("in", in);
+		}
+		if (unread != null) {
+			url.addQueryParameter("unread", unread.toString());
+		}
+		if (starred != null) {
+			url.addQueryParameter("starred", starred.toString());
+		}
+		if (filename != null) {
+			url.addQueryParameter("filename", filename);
+		}
+		if (lastMessageBefore != null) {
+			url.addQueryParameter("last_message_before", lastMessageBefore.toString());
+		}
+		if (lastMessageAfter != null) {
+			url.addQueryParameter("last_message_after", lastMessageAfter.toString());
+		}
+		if (startedBefore != null) {
+			url.addQueryParameter("started_before", startedBefore.toString());
+		}
+		if (startedAfter != null) {
+			url.addQueryParameter("started_after", startedAfter.toString());
+		}
+	}
 	
 	public ThreadQuery limit(int limit) {
 		this.limit = limit;
@@ -36,8 +90,19 @@ public class ThreadQuery {
 		return this;
 	}
 	
-	public ThreadQuery anyEmail(Set<String> anyEmail) {
-		this.anyEmail = anyEmail;
+	public ThreadQuery anyEmail(String... emails) {
+		return anyEmail(Arrays.asList(emails));
+	}
+	
+	public ThreadQuery anyEmail(Iterable<String> emails) {
+		if (emails == null) {
+			this.anyEmail = null;
+		} else {
+			this.anyEmail = String.join(",", emails);
+			if (this.anyEmail.isEmpty()) {
+				this.anyEmail = null;
+			}
+		}
 		return this;
 	}
 	
@@ -86,9 +151,17 @@ public class ThreadQuery {
 		return this;
 	}
 	
+	public ThreadQuery lastMessageBefore(Instant lastMessageBefore) {
+		return lastMessageBefore(lastMessageBefore.getEpochSecond());
+	}
+	
 	public ThreadQuery lastMessageAfter(long lastMessageAfter) {
 		this.lastMessageAfter = lastMessageAfter;
 		return this;
+	}
+	
+	public ThreadQuery lastMessageAfter(Instant lastMessageAfter) {
+		return lastMessageAfter(lastMessageAfter.getEpochSecond());
 	}
 	
 	public ThreadQuery startedBefore(long startedBefore) {
@@ -96,9 +169,17 @@ public class ThreadQuery {
 		return this;
 	}
 	
+	public ThreadQuery startedBefore(Instant startedBefore) {
+		return startedBefore(startedBefore.getEpochSecond());
+	}
+	
 	public ThreadQuery startedAfter(long startedAfter) {
 		this.startedAfter = startedAfter;
 		return this;
+	}
+	
+	public ThreadQuery startedAfter(Instant startedAfter) {
+		return startedAfter(startedAfter.getEpochSecond());
 	}
 	
 
