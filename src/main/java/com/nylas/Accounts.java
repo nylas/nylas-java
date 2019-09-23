@@ -35,6 +35,12 @@ public class Accounts extends RestfulCollection<Account, AccountQuery> {
 		client.executePost(authUser, url, params, null);
 	}
 
+	public TokenInfo tokenInfo(String accountId, String accessToken) throws IOException, RequestFailedException {
+		HttpUrl url = getAccountUrl(accountId, "token-info");
+		Map<String, Object> params = Maps.of("access_token", accessToken);
+		return client.executePost(authUser, url, params, TokenInfo.class);
+	}
+	
 	@Override
 	protected HttpUrl.Builder getBaseUrlBuilder() {
 		return super.getBaseUrlBuilder()

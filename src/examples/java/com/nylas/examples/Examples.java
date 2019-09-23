@@ -10,12 +10,12 @@ import java.util.Properties;
 
 import com.nylas.AccessToken;
 import com.nylas.Account;
-import com.nylas.Accounts;
 import com.nylas.AccountQuery;
+import com.nylas.Accounts;
 import com.nylas.Application;
 import com.nylas.Draft;
-import com.nylas.Drafts;
 import com.nylas.DraftQuery;
+import com.nylas.Drafts;
 import com.nylas.Folder;
 import com.nylas.FolderQuery;
 import com.nylas.Folders;
@@ -33,6 +33,7 @@ import com.nylas.Scope;
 import com.nylas.Thread;
 import com.nylas.ThreadQuery;
 import com.nylas.Threads;
+import com.nylas.TokenInfo;
 
 public class Examples {
 
@@ -45,9 +46,10 @@ public class Examples {
 		//runThreadsAndFolderExample(props);
 		//runMessagesAndLabelsExample(props);
 		
-		//runAccountsExample(props);
+		runAccountsExample(props);
 		//runIpAddressesExample(props);
-		runDraftsExample(props);
+		//runTokenInfoExample(props);
+		//runDraftsExample(props);
 	}
 	
 	private static Properties loadProperties() throws IOException {
@@ -76,6 +78,9 @@ public class Examples {
 		for (Draft draft : allDrafts) {
 			System.out.println(draft);
 		}
+		
+		firstDraft = drafts.get(firstDraft.getId());
+		System.out.println("first = " + firstDraft);
 	}
 
 	@SuppressWarnings("unused")
@@ -104,6 +109,10 @@ public class Examples {
 		
 		Account first = accounts.get(accountList.get(0).getId());
 		System.out.println("first: " + first);
+		
+		String accessToken = props.getProperty("access.token");
+		TokenInfo tokenInfo = accounts.tokenInfo(first.getId(), accessToken);
+		System.out.println("token info: " + tokenInfo);
 		
 		accounts.downgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
