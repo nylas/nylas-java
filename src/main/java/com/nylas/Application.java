@@ -1,5 +1,9 @@
 package com.nylas;
 
+import java.io.IOException;
+
+import okhttp3.HttpUrl;
+
 public class Application {
 
 	private final NylasClient client;
@@ -30,6 +34,19 @@ public class Application {
 
 	public NativeAuthentication nativeAuthentication() {
 		return new NativeAuthentication(this);
+	}
+	
+	public Accounts accounts() {
+		return new Accounts(client, this);
+	}
+	
+	public IPAddressWhitelist fetchIpAddressWhitelist() throws IOException, RequestFailedException {
+		HttpUrl url = client.getBaseUrl().newBuilder()
+				.addPathSegment("a")
+				.addPathSegment(clientId)
+				.addPathSegment("ip_addresses")
+				.build();
+		return client.executeGet(clientSecret, url, IPAddressWhitelist.class);
 	}
 
 }

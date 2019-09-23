@@ -10,7 +10,7 @@ public class LoggingInterceptor implements Interceptor {
 	@Override
 	public Response intercept(Chain chain) throws IOException {
 		Response response = chain.proceed(chain.request());
-		return null;
+		return response;
 	}
 
 }

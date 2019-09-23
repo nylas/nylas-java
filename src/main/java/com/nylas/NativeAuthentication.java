@@ -11,7 +11,6 @@ import java.util.StringJoiner;
 import com.squareup.moshi.Moshi;
 
 import okhttp3.HttpUrl;
-import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -28,6 +27,7 @@ public class NativeAuthentication {
 		return new AuthRequestBuilder(application);
 	}
 	
+	@SuppressWarnings("unused")  // some fields used only via reflection
 	public static class AuthRequestBuilder {
 		
 		private transient final Application application;
@@ -41,7 +41,6 @@ public class NativeAuthentication {
 		private String reauth_account_id;
 		
 		AuthRequestBuilder(Application application) {
-			super();
 			this.application = application;
 			this.client_id = application.getClientId();
 		}

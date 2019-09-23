@@ -25,25 +25,29 @@ public class Folders {
 	private static final Type FOLDER_LIST_TYPE = Types.newParameterizedType(List.class, Folder.class);
 	public List<Folder> list() throws IOException, RequestFailedException {
 		HttpUrl foldersUrl = client.getBaseUrl().resolve("folders");
-		return client.executeGetWithToken(accessToken, foldersUrl, FOLDER_LIST_TYPE);
+		return client.executeGet(accessToken, foldersUrl, FOLDER_LIST_TYPE);
 	}
 	
 	public Folder get(String folderId) throws IOException, RequestFailedException {
 		HttpUrl folderUrl = getFolderUrl(folderId);
-		return client.executeGetWithToken(accessToken, folderUrl, Folder.class);
+		return client.executeGet(accessToken, folderUrl, Folder.class);
 	}
 	
 	public Folder create(String displayName) throws IOException, RequestFailedException {
 		HttpUrl foldersUrl = client.getBaseUrl().resolve("folders");
 		Map<String, Object> params = Maps.of("display_name", displayName);
-		return client.executePostWithToken(accessToken, foldersUrl, params, Folder.class);
+		return client.executePost(accessToken, foldersUrl, params, Folder.class);
 	}
 	
 	public void delete(String folderId) throws IOException, RequestFailedException {
 		HttpUrl folderUrl = getFolderUrl(folderId);
-		client.executeDeleteWithToken(accessToken, folderUrl, null);
+		client.executeDelete(accessToken, folderUrl, null);
 	}
 	
+	/**
+	 * Change the display name of the given folder.
+	 * Note that the core folders such as INBOX, Trash, etc. often cannot be renamed
+	 */
 	public Folder setDisplayName(String folderId, String displayName) throws IOException, RequestFailedException {
 		return updateFolder(folderId, Maps.of("display_name", displayName));
 	}
@@ -59,7 +63,7 @@ public class Folders {
 	private Folder updateFolder(String folderId, Map<String, Object> params)
 			throws IOException, RequestFailedException {
 		HttpUrl folderUrl = getFolderUrl(folderId);
-		return client.executePutWithToken(accessToken, folderUrl, params, Folder.class);
+		return client.executePut(accessToken, folderUrl, params, Folder.class);
 	}
 	
 	private HttpUrl getFolderUrl(String folderId) {

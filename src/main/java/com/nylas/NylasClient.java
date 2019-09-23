@@ -2,7 +2,6 @@ package com.nylas;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.Map;
 
 import com.squareup.moshi.JsonAdapter;
@@ -13,6 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.internal.Util;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class NylasClient {
@@ -61,50 +61,60 @@ public class NylasClient {
 		return new Folders(this, accessToken);
 	}
 	
+	public Labels labels(String accessToken) {
+		return new Labels(this, accessToken);
+	}
+	
+	public Drafts drafts(String accessToken) {
+		return new Drafts(this, accessToken);
+	}
+	
 	public Account fetchAccountByAccessToken(String accessToken) throws IOException, RequestFailedException {
 		HttpUrl accountUrl = getBaseUrl().resolve("account");
-		Account.JsonBean accountJson = executeGetWithToken(accessToken, accountUrl, Account.JsonBean.class);
-		return new Account(accountJson);
+		return executeGet(accessToken, accountUrl, Account.class);
 	}
 	
-	public void revoke(String accessToken) throws IOException, RequestFailedException {
+	public void revokeAccessToken(String accessToken) throws IOException, RequestFailedException {
 		HttpUrl revokeUrl = getBaseUrl().resolve("oauth/revoke");
-		executePostWithToken(accessToken, revokeUrl, Collections.emptyMap(), null);
+		executePost(accessToken, revokeUrl, null, null);
 	}
 	
-	protected <T> T executeGetWithToken(String accessToken, HttpUrl url, Type resultType)
+	protected <T> T executeGet(String authUser, HttpUrl url, Type resultType)
 			throws IOException, RequestFailedException {
-		return executeRequestWithToken(accessToken, url, HttpMethod.GET, null, resultType);
+		return executeRequestWithAuth(authUser, url, HttpMethod.GET, null, resultType);
 	}
 	
-	protected <T> T executePutWithToken(String accessToken, HttpUrl url, Map<String, Object> params, Type resultType)
-			throws IOException, RequestFailedException {
-		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
-		return executeRequestWithToken(accessToken, url, HttpMethod.PUT, jsonBody, resultType);
-	}
-	
-	protected <T> T executePostWithToken(String accessToken, HttpUrl url, Map<String, Object> params, Type resultType)
+	protected <T> T executePut(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
 		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
-		return executeRequestWithToken(accessToken, url, HttpMethod.POST, jsonBody, resultType);
+		return executeRequestWithAuth(authUser, url, HttpMethod.PUT, jsonBody, resultType);
 	}
 	
-	protected <T> T executeDeleteWithToken(String accessToken, HttpUrl url, Type resultType)
+	protected <T> T executePost(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
-		return executeRequestWithToken(accessToken, url, HttpMethod.DELETE, null, resultType);
+		RequestBody jsonBody = Util.EMPTY_REQUEST;
+		if (params != null) {
+			jsonBody = JsonHelper.jsonRequestBody(params);
+		}
+		return executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
 	}
 	
-	protected <T> T executeRequestWithToken(String accessToken, HttpUrl url, HttpMethod method, RequestBody body,
+	protected <T> T executeDelete(String authUser, HttpUrl url, Type resultType)
+			throws IOException, RequestFailedException {
+		return executeRequestWithAuth(authUser, url, HttpMethod.DELETE, null, resultType);
+	}
+	
+	protected <T> T executeRequestWithAuth(String authUser, HttpUrl url, HttpMethod method, RequestBody body,
 			Type resultType) throws IOException, RequestFailedException {
 		Request.Builder builder = new Request.Builder().url(url);
-		addAccessTokenHeader(builder, accessToken);
+		addAuthHeader(builder, authUser);
 		Request request = builder.method(method.toString(), body)
 				.build();
 		return executeRequest(request, resultType);
 	}
 	
-	protected void addAccessTokenHeader(Request.Builder request, String accessToken) {
-		request.addHeader("Authorization", Credentials.basic(accessToken, ""));
+	protected void addAuthHeader(Request.Builder request, String authUser) {
+		request.addHeader("Authorization", Credentials.basic(authUser, ""));
 	}
 	
 	@SuppressWarnings("unchecked")

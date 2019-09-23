@@ -22,30 +22,30 @@ public class Threads {
 	private static final Type THREAD_LIST_TYPE = Types.newParameterizedType(List.class, Thread.class);
 	public List<Thread> list(ThreadQuery query) throws IOException, RequestFailedException {
 		HttpUrl url = getThreadsUrl(query, null);
-		return client.executeGetWithToken(accessToken, url, THREAD_LIST_TYPE);
+		return client.executeGet(accessToken, url, THREAD_LIST_TYPE);
 	}
 	
 	private static final Type EXPANDED_THREAD_LIST_TYPE = Types.newParameterizedType(List.class, ExpandedThread.class);
 	public List<ExpandedThread> expanded(ThreadQuery query) throws IOException, RequestFailedException {
 		HttpUrl url = getThreadsUrl(query, "expanded");
-		return client.executeGetWithToken(accessToken, url, EXPANDED_THREAD_LIST_TYPE);
+		return client.executeGet(accessToken, url, EXPANDED_THREAD_LIST_TYPE);
 	}
 	
 	private static final Type STRING_LIST_TYPE = Types.newParameterizedType(List.class, String.class);
 	public List<String> ids(ThreadQuery query) throws IOException, RequestFailedException {
 		HttpUrl url = getThreadsUrl(query, "ids");
-		return client.executeGetWithToken(accessToken, url, STRING_LIST_TYPE);
+		return client.executeGet(accessToken, url, STRING_LIST_TYPE);
 	}
 	
 	public long count(ThreadQuery query) throws IOException, RequestFailedException {
 		HttpUrl url = getThreadsUrl(query, "count");
-		Count count = client.executeGetWithToken(accessToken, url, Count.class);
+		Count count = client.executeGet(accessToken, url, Count.class);
 		return count.getCount();
 	}
 	
 	public Thread get(String threadId) throws IOException, RequestFailedException {
 		HttpUrl threadUrl = getThreadUrl(threadId);
-		return client.executeGetWithToken(accessToken, threadUrl, Thread.class);
+		return client.executeGet(accessToken, threadUrl, Thread.class);
 	}
 	
 	/**
@@ -75,10 +75,17 @@ public class Threads {
 		return updateThread(threadId, Maps.of("folder_id", folderId));
 	}
 	
+	/**
+	 * Updates the labels on the given thread, overwriting all previous labels on the thread.
+	 */
+	public Thread setLabelIds(String threadId, Iterable<String> labelIds) throws IOException, RequestFailedException {
+		return updateThread(threadId, Maps.of("label_ids", String.join(",", labelIds)));
+	}
+	
 	private Thread updateThread(String threadId, Map<String, Object> params)
 			throws IOException, RequestFailedException {
 		HttpUrl threadUrl = getThreadUrl(threadId);
-		return client.executePutWithToken(accessToken, threadUrl, params, Thread.class);
+		return client.executePut(accessToken, threadUrl, params, Thread.class);
 	}
 	
 	private HttpUrl getThreadsUrl(ThreadQuery query, String view) {
@@ -87,7 +94,7 @@ public class Threads {
 			query.addParameters(urlBuilder);
 		}
 		if (view != null) {
-			urlBuilder.addQueryParameter("view", "expanded");
+			urlBuilder.addQueryParameter("view", view);
 		}
 		return urlBuilder.build();
 	}
