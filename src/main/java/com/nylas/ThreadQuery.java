@@ -5,10 +5,8 @@ import java.util.Arrays;
 
 import okhttp3.HttpUrl;
 
-public class ThreadQuery {
+public class ThreadQuery extends RestfulQuery<ThreadQuery> {
 
-	private Integer limit;
-	private Integer offset;
 	private String subject;
 	private String anyEmail;
 	private String to;
@@ -25,12 +23,8 @@ public class ThreadQuery {
 	private Long startedAfter;
 	
 	public void addParameters(HttpUrl.Builder url) {
-		if (limit != null) {
-			url.addQueryParameter("limit", limit.toString());
-		}
-		if (offset != null) {
-			url.addQueryParameter("offset", offset.toString());
-		}
+		super.addParameters(url);  // must call through
+		
 		if (subject != null) {
 			url.addQueryParameter("subject", subject);
 		}
@@ -73,16 +67,6 @@ public class ThreadQuery {
 		if (startedAfter != null) {
 			url.addQueryParameter("started_after", startedAfter.toString());
 		}
-	}
-	
-	public ThreadQuery limit(int limit) {
-		this.limit = limit;
-		return this;
-	}
-	
-	public ThreadQuery offset(int offset) {
-		this.offset = offset;
-		return this;
 	}
 	
 	public ThreadQuery subject(String subject) {

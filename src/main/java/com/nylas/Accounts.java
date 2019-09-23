@@ -1,44 +1,28 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import com.squareup.moshi.Types;
 
 import okhttp3.HttpUrl;
 
-public class Accounts {
+public class Accounts extends RestfulCollection<Account, AccountQuery> {
 
-	private final NylasClient client;
-	private final Application application;
+	private final String clientId;
 	
 	Accounts(NylasClient client, Application application) {
-		this.client = client;
-		this.application = application;
-	}
-
-	private static final Type ACCOUNT_LIST_TYPE = Types.newParameterizedType(List.class, Account.class);
-	public List<Account> list(AccountsQuery query) throws IOException, RequestFailedException {
-		HttpUrl url = getAccountsUrl(query);
-		return client.executeGet(application.getClientSecret(), url, ACCOUNT_LIST_TYPE);
-	}
-	
-	public Account get(String accountId) throws IOException, RequestFailedException {
-		HttpUrl url = getAccountUrl(accountId, null);
-		return client.executeGet(application.getClientSecret(), url, Account.class);
+		super(client, Account.class, "accounts", application.getClientSecret());
+		this.clientId = application.getClientId();
 	}
 
 	public void downgrade(String accountId) throws IOException, RequestFailedException {
 		HttpUrl url = getAccountUrl(accountId, "downgrade");
-		client.executePost(application.getClientSecret(), url, null, null);
+		client.executePost(authUser, url, null, null);
 	}
 	
 	public void upgrade(String accountId) throws IOException, RequestFailedException {
 		HttpUrl url = getAccountUrl(accountId, "upgrade");
-		client.executePost(application.getClientSecret(), url, null, null);
+		client.executePost(authUser, url, null, null);
 	}
 	
 	public void revokeAllTokensForAccount(String accountId, String keepAccessToken)
@@ -48,26 +32,17 @@ public class Accounts {
 		if (keepAccessToken != null) {
 			params.put("keep_access_token", keepAccessToken);
 		}
-		client.executePost(application.getClientSecret(), url, params, null);
-	}
-	
-	private HttpUrl getAccountsUrl(AccountsQuery query) {
-		HttpUrl.Builder urlBuilder = client.getBaseUrl().newBuilder()
-			.addPathSegment("a")
-			.addPathSegment(application.getClientId())
-			.addPathSegment("accounts");
-			if (query != null) {
-				query.addParameters(urlBuilder);
-			}
-		return urlBuilder.build();
+		client.executePost(authUser, url, params, null);
 	}
 
-	private HttpUrl getAccountUrl(String accountId, String accountEndpoint) {
-		HttpUrl.Builder urlBuilder = getAccountsUrl(null).newBuilder().addPathSegment(accountId);
-		if (accountEndpoint != null) {
-			urlBuilder.addPathSegment(accountEndpoint);
-		}
-		return urlBuilder.build();
+	@Override
+	protected HttpUrl.Builder getBaseUrlBuilder() {
+		return super.getBaseUrlBuilder()
+				.addPathSegment("a")
+				.addPathSegment(clientId);
 	}
 	
+	private HttpUrl getAccountUrl(String accountId, String accountEndpoint) {
+		return getInstanceUrl(accountId).newBuilder().addPathSegment(accountEndpoint).build();
+	}
 }

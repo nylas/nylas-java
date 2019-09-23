@@ -1,51 +1,24 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 
-import com.squareup.moshi.Types;
+public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 
-import okhttp3.HttpUrl;
-
-public class Threads {
-
-	private final NylasClient client;
-	private final String accessToken;
-	
 	Threads(NylasClient client, String accessToken) {
-		this.client = client;
-		this.accessToken = accessToken;
+		super(client, Thread.class, "threads", accessToken);
 	}
 	
-	private static final Type THREAD_LIST_TYPE = Types.newParameterizedType(List.class, Thread.class);
-	public List<Thread> list(ThreadQuery query) throws IOException, RequestFailedException {
-		HttpUrl url = getThreadsUrl(query, null);
-		return client.executeGet(accessToken, url, THREAD_LIST_TYPE);
-	}
-	
-	private static final Type EXPANDED_THREAD_LIST_TYPE = Types.newParameterizedType(List.class, ExpandedThread.class);
 	public List<ExpandedThread> expanded(ThreadQuery query) throws IOException, RequestFailedException {
-		HttpUrl url = getThreadsUrl(query, "expanded");
-		return client.executeGet(accessToken, url, EXPANDED_THREAD_LIST_TYPE);
+		return super.expanded(query, ExpandedThread.class);
 	}
 	
-	private static final Type STRING_LIST_TYPE = Types.newParameterizedType(List.class, String.class);
 	public List<String> ids(ThreadQuery query) throws IOException, RequestFailedException {
-		HttpUrl url = getThreadsUrl(query, "ids");
-		return client.executeGet(accessToken, url, STRING_LIST_TYPE);
+		return super.ids(query);
 	}
 	
 	public long count(ThreadQuery query) throws IOException, RequestFailedException {
-		HttpUrl url = getThreadsUrl(query, "count");
-		Count count = client.executeGet(accessToken, url, Count.class);
-		return count.getCount();
-	}
-	
-	public Thread get(String threadId) throws IOException, RequestFailedException {
-		HttpUrl threadUrl = getThreadUrl(threadId);
-		return client.executeGet(accessToken, threadUrl, Thread.class);
+		return super.count(query);
 	}
 	
 	/**
@@ -54,7 +27,7 @@ public class Threads {
 	 * @return The updated Thread as returned by the server.
 	 */
 	public Thread setUnread(String threadId, boolean unread) throws IOException, RequestFailedException {
-		return updateThread(threadId, Maps.of("unread", unread));
+		return super.put(threadId, Maps.of("unread", unread));
 	}
 	
 	/**
@@ -63,7 +36,7 @@ public class Threads {
 	 * @return The updated Thread as returned by the server.
 	 */
 	public Thread setStarred(String threadId, boolean starred) throws IOException, RequestFailedException {
-		return updateThread(threadId, Maps.of("starred", starred));
+		return super.put(threadId, Maps.of("starred", starred));
 	}
 	
 	/**
@@ -72,37 +45,13 @@ public class Threads {
 	 * @return The updated Thread as returned by the server.
 	 */
 	public Thread setFolderId(String threadId, String folderId) throws IOException, RequestFailedException {
-		return updateThread(threadId, Maps.of("folder_id", folderId));
+		return super.put(threadId, Maps.of("folder_id", folderId));
 	}
 	
 	/**
 	 * Updates the labels on the given thread, overwriting all previous labels on the thread.
 	 */
 	public Thread setLabelIds(String threadId, Iterable<String> labelIds) throws IOException, RequestFailedException {
-		return updateThread(threadId, Maps.of("label_ids", String.join(",", labelIds)));
-	}
-	
-	private Thread updateThread(String threadId, Map<String, Object> params)
-			throws IOException, RequestFailedException {
-		HttpUrl threadUrl = getThreadUrl(threadId);
-		return client.executePut(accessToken, threadUrl, params, Thread.class);
-	}
-	
-	private HttpUrl getThreadsUrl(ThreadQuery query, String view) {
-		HttpUrl.Builder urlBuilder = client.getBaseUrl().newBuilder("threads");
-		if (query != null) {
-			query.addParameters(urlBuilder);
-		}
-		if (view != null) {
-			urlBuilder.addQueryParameter("view", view);
-		}
-		return urlBuilder.build();
-	}
-	
-	private HttpUrl getThreadUrl(String threadId) {
-		return client.getBaseUrl().newBuilder()
-				.addPathSegment("threads")
-				.addPathSegment(threadId)
-				.build();
+		return super.put(threadId, Maps.of("label_ids", String.join(",", labelIds)));
 	}
 }

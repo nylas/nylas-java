@@ -5,10 +5,8 @@ import java.util.Arrays;
 
 import okhttp3.HttpUrl;
 
-public class MessageQuery {
+public class MessageQuery extends RestfulQuery<MessageQuery> {
 
-	private Integer limit;
-	private Integer offset;
 	private String subject;
 	private String anyEmail;
 	private String to;
@@ -26,12 +24,8 @@ public class MessageQuery {
 	private Boolean hasAttachment;
 	
 	public void addParameters(HttpUrl.Builder url) {
-		if (limit != null) {
-			url.addQueryParameter("limit", limit.toString());
-		}
-		if (offset != null) {
-			url.addQueryParameter("offset", offset.toString());
-		}
+		super.addParameters(url);  // must call through
+		
 		if (subject != null) {
 			url.addQueryParameter("subject", subject);
 		}
@@ -75,16 +69,6 @@ public class MessageQuery {
 		if (hasAttachment != null) {
 			url.addQueryParameter("has_attachment", hasAttachment.toString());
 		}
-	}
-	
-	public MessageQuery limit(int limit) {
-		this.limit = limit;
-		return this;
-	}
-	
-	public MessageQuery offset(int offset) {
-		this.offset = offset;
-		return this;
 	}
 	
 	public MessageQuery subject(String subject) {

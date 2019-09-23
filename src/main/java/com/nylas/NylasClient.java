@@ -79,18 +79,18 @@ public class NylasClient {
 		executePost(accessToken, revokeUrl, null, null);
 	}
 	
-	protected <T> T executeGet(String authUser, HttpUrl url, Type resultType)
+	<T> T executeGet(String authUser, HttpUrl url, Type resultType)
 			throws IOException, RequestFailedException {
 		return executeRequestWithAuth(authUser, url, HttpMethod.GET, null, resultType);
 	}
 	
-	protected <T> T executePut(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
+	<T> T executePut(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
 		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
 		return executeRequestWithAuth(authUser, url, HttpMethod.PUT, jsonBody, resultType);
 	}
 	
-	protected <T> T executePost(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
+	<T> T executePost(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
 		RequestBody jsonBody = Util.EMPTY_REQUEST;
 		if (params != null) {
@@ -99,12 +99,12 @@ public class NylasClient {
 		return executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
 	}
 	
-	protected <T> T executeDelete(String authUser, HttpUrl url, Type resultType)
+	<T> T executeDelete(String authUser, HttpUrl url, Type resultType)
 			throws IOException, RequestFailedException {
 		return executeRequestWithAuth(authUser, url, HttpMethod.DELETE, null, resultType);
 	}
 	
-	protected <T> T executeRequestWithAuth(String authUser, HttpUrl url, HttpMethod method, RequestBody body,
+	<T> T executeRequestWithAuth(String authUser, HttpUrl url, HttpMethod method, RequestBody body,
 			Type resultType) throws IOException, RequestFailedException {
 		Request.Builder builder = new Request.Builder().url(url);
 		addAuthHeader(builder, authUser);
@@ -113,12 +113,12 @@ public class NylasClient {
 		return executeRequest(request, resultType);
 	}
 	
-	protected void addAuthHeader(Request.Builder request, String authUser) {
+	void addAuthHeader(Request.Builder request, String authUser) {
 		request.addHeader("Authorization", Credentials.basic(authUser, ""));
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T> T executeRequest(Request request, Type resultType) throws IOException, RequestFailedException {
+	<T> T executeRequest(Request request, Type resultType) throws IOException, RequestFailedException {
 		try (Response response = getHttpClient().newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				throw new RequestFailedException(response.code(), response.body().string());

@@ -5,23 +5,23 @@ import java.io.InputStream;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import com.nylas.AccessToken;
 import com.nylas.Account;
 import com.nylas.Accounts;
-import com.nylas.AccountsQuery;
+import com.nylas.AccountQuery;
 import com.nylas.Application;
 import com.nylas.Draft;
 import com.nylas.Drafts;
-import com.nylas.DraftsQuery;
+import com.nylas.DraftQuery;
+import com.nylas.Folder;
+import com.nylas.FolderQuery;
+import com.nylas.Folders;
 import com.nylas.HostedAuthentication;
 import com.nylas.IPAddressWhitelist;
 import com.nylas.ImapProviderSettings;
-import com.nylas.Label;
-import com.nylas.Labels;
 import com.nylas.Message;
 import com.nylas.MessageQuery;
 import com.nylas.Messages;
@@ -65,10 +65,10 @@ public class Examples {
 		NylasClient client = new NylasClient();
 		Drafts drafts = client.drafts(accessToken);
 		
-		DraftsQuery query = new DraftsQuery()
+		DraftQuery query = new DraftQuery()
 				//.limit(1)
 				//.offset(1)
-				.anyEmail("info@twitter.com")
+				//.anyEmail("info@twitter.com")
 				;
 		
 		List<Draft> allDrafts = drafts.list(query);
@@ -93,7 +93,7 @@ public class Examples {
 		Application application = client.application(props.getProperty("client.id"),
 				props.getProperty("client.secret"));
 		Accounts accounts = application.accounts();
-		AccountsQuery query = new AccountsQuery()
+		AccountQuery query = new AccountQuery()
 				.limit(2)
 				//.offset(10)
 				;
@@ -180,9 +180,9 @@ public class Examples {
 		Instant start = LocalDate.of(2019,9,1).atStartOfDay(ZoneId.systemDefault()).toInstant();
 		Instant end = LocalDate.of(2019,9,2).atStartOfDay(ZoneId.systemDefault()).toInstant();
 		ThreadQuery query = new ThreadQuery()
-				.limit(100)
-				.lastMessageAfter(start)
-				.lastMessageBefore(end)
+				.limit(5)
+				//.lastMessageAfter(start)
+				//.lastMessageBefore(end)
 				;
 		List<Thread> allThreads = threads.list(query);
 		System.out.println("result thread count: " + allThreads.size());
@@ -195,18 +195,23 @@ public class Examples {
 //		System.out.println(thread);
 //
 //		
-//		Folders folders = client.folders(accessToken);
-//		List<Folder> allFolders = folders.list();
-//		Folder inbox = null;
-//		for (Folder folder : allFolders) {
-//			System.out.println(folder);
-//			if ("inbox".equals(folder.getName())) {
-//				inbox = folder;
-//			}
-//		}
-//		
-//		Folder newFolder = folders.create("Example Folder");
-//		System.out.println(newFolder);
+		Folders folders = client.folders(accessToken);
+		
+		FolderQuery fQuery = new FolderQuery()
+				.limit(5)
+				.offset(0);
+		
+		List<Folder> allFolders = folders.list(fQuery);
+		Folder inbox = null;
+		for (Folder folder : allFolders) {
+			System.out.println(folder);
+			if ("inbox".equals(folder.getName())) {
+				inbox = folder;
+			}
+		}
+		
+		Folder newFolder = folders.create("Example Folder 7");
+		System.out.println(newFolder);
 //		
 //		thread = threads.setFolderId(threadId, newFolder.getId());
 //		System.out.println(thread);
@@ -251,8 +256,8 @@ public class Examples {
 		String labelId = "89g7aoatr4u4br5ldxri5cxct";
 		
 		
-//		List<ExpandedMessage> allMessages = messages.expanded(null);
-//		for (ExpandedMessage message : allMessages) {
+//		List<ExpandedMessage> allExpandedMessages = messages.expanded(query);
+//		for (ExpandedMessage message : allExpandedMessages) {
 //			System.out.println(message);
 //		}
 		
@@ -261,39 +266,39 @@ public class Examples {
 //		System.out.println(raw);
 
 		
-//		Message message = messages.get(firstMessage.getId());
-//		System.out.println(message);
-//		
-//		message = messages.setUnread(firstMessage.getId(), !firstMessage.getUnread());
-//		System.out.println(message);
-//		
-//		message = messages.setStarred(firstMessage.getId(), !firstMessage.getStarred());
-//		System.out.println(message);
-
-		Labels labels = client.labels(accessToken);
-		List<Label> allLabels = labels.list();
-		Label inbox = null;
-		for (Label label : allLabels) {
-			System.out.println(label);
-			if ("inbox".equals(label.getName())) {
-				inbox = label;
-			}
-			
-//			if (label.getDisplayName().startsWith("Example")) {
-//				labels.delete(label.getId());
-//				System.out.println("Deleted: " + label);
-//			}
-		}
-		System.out.println("Inbox label: " + inbox);
-		
-	//	Label newLabel1 = labels.create("Example Label 1");
-	//	System.out.println(newLabel1);
-		Label newLabel2 = labels.create("Example Label 3");
-		System.out.println(newLabel2);
-//		
-//		String messageId = firstMessage.getId();
-		Message message = messages.setLabelIds(messageId, Arrays.asList("89g7aoatr4u4br5ldxri5cxct"));
+		Message message = messages.get(firstMessage.getId());
 		System.out.println(message);
+		
+		message = messages.setUnread(firstMessage.getId(), !firstMessage.getUnread());
+		System.out.println(message);
+		
+		message = messages.setStarred(firstMessage.getId(), !firstMessage.getStarred());
+		System.out.println(message);
+
+//		Labels labels = client.labels(accessToken);
+//		List<Label> allLabels = labels.list();
+//		Label inbox = null;
+//		for (Label label : allLabels) {
+//			System.out.println(label);
+//			if ("inbox".equals(label.getName())) {
+//				inbox = label;
+//			}
+//			
+////			if (label.getDisplayName().startsWith("Example")) {
+////				labels.delete(label.getId());
+////				System.out.println("Deleted: " + label);
+////			}
+//		}
+//		System.out.println("Inbox label: " + inbox);
+//		
+//	//	Label newLabel1 = labels.create("Example Label 1");
+//	//	System.out.println(newLabel1);
+//		Label newLabel2 = labels.create("Example Label 3");
+//		System.out.println(newLabel2);
+////		
+////		String messageId = firstMessage.getId();
+//		message = messages.setLabelIds(messageId, Arrays.asList("89g7aoatr4u4br5ldxri5cxct"));
+//		System.out.println(message);
 		
 		
 		

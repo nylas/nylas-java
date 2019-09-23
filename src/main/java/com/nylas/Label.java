@@ -1,15 +1,10 @@
 package com.nylas;
 
-public class Label {
+public class Label extends RestfulModel {
 
-	private String id;
 	private String name;
 	private String display_name;
 	
-	public String getId() {
-		return id;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -20,6 +15,6 @@ public class Label {
 
 	@Override
 	public String toString() {
-		return "Label [id=" + id + ", name=" + name + ", display_name=" + display_name + "]";
+		return "Label [id=" + getId() + ", name=" + name + ", display_name=" + display_name + "]";
 	}
 }

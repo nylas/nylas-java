@@ -2,9 +2,8 @@ package com.nylas;
 
 import java.util.List;
 
-public class Message {
+public class Message extends RestfulModel {
 
-	protected String id;
 	protected String account_id;
 	protected String thread_id;
 	protected String subject;
@@ -26,10 +25,6 @@ public class Message {
 	private List<Label> labels;
 	
 	
-	public String getId() {
-		return id;
-	}
-
 	public String getAccountId() {
 		return account_id;
 	}
@@ -92,7 +87,7 @@ public class Message {
 
 	@Override
 	public String toString() {
-		return "Message [id=" + id + ", account_id=" + account_id + ", thread_id=" + thread_id + ", subject=" + subject
+		return "Message [id=" + getId() + ", account_id=" + account_id + ", thread_id=" + thread_id + ", subject=" + subject
 				+ ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date="
 				+ date + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet + ", body.length="
 				+ body.length() + ", folder=" + folder + ", labels=" + labels + "]";

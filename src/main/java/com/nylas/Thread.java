@@ -2,9 +2,8 @@ package com.nylas;
 
 import java.util.List;
 
-public class Thread {
+public class Thread extends RestfulModel {
 
-	private String id;
 	private String account_id;
 	private String subject;
 	private boolean unread;
@@ -22,10 +21,6 @@ public class Thread {
 	private List<Label> labels;
 	private boolean has_attachments;
 	
-	public String getId() {
-		return id;
-	}
-
 	public String getAccountId() {
 		return account_id;
 	}
@@ -92,7 +87,7 @@ public class Thread {
 
 	@Override
 	public String toString() {
-		return "Thread [id=" + id + ", account_id=" + account_id + ", subject=" + subject + ", unread=" + unread
+		return "Thread [id=" + getId() + ", account_id=" + account_id + ", subject=" + subject + ", unread=" + unread
 				+ ", starred=" + starred + ", last_message_timestamp=" + last_message_timestamp
 				+ ", last_message_received_timestamp=" + last_message_received_timestamp
 				+ ", last_message_sent_timestamp=" + last_message_sent_timestamp + ", first_message_timestamp="

@@ -2,11 +2,10 @@ package com.nylas;
 
 import okhttp3.HttpUrl;
 
-public class AccountsQuery {
+public abstract class RestfulQuery<Q extends RestfulQuery<Q>> {
 
 	private Integer limit;
 	private Integer offset;
-
 	
 	public void addParameters(HttpUrl.Builder url) {
 		if (limit != null) {
@@ -17,15 +16,18 @@ public class AccountsQuery {
 		}
 	}
 	
-	public AccountsQuery limit(int limit) {
+	public Q limit(int limit) {
 		this.limit = limit;
-		return this;
+		return self();
 	}
 	
-	public AccountsQuery offset(int offset) {
+	public Q offset(int offset) {
 		this.offset = offset;
-		return this;
+		return self();
 	}
 	
-
+	@SuppressWarnings("unchecked")
+	final Q self() {
+		return (Q) this;
+	}
 }

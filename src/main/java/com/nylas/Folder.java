@@ -1,14 +1,9 @@
 package com.nylas;
 
-public class Folder {
+public class Folder extends RestfulModel {
 
-	private String id;
 	private String name;
 	private String display_name;
-
-	public String getId() {
-		return id;
-	}
 
 	public String getName() {
 		return name;
@@ -20,7 +15,7 @@ public class Folder {
 
 	@Override
 	public String toString() {
-		return "Folder [id=" + id + ", name=" + name + ", display_name=" + display_name + "]";
+		return "Folder [id=" + getId() + ", name=" + name + ", display_name=" + display_name + "]";
 	}
 
 }
