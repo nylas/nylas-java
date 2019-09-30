@@ -92,5 +92,9 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 				.addPathSegment(id)
 				.build();
 	}
+	
+	protected HttpUrl getInstancePathUrl(String id, String path) {
+		return getInstanceUrl(id).newBuilder().addPathSegment(path).build();
+	}
 
 }

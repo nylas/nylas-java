@@ -69,6 +69,10 @@ public class NylasClient {
 		return new Drafts(this, accessToken);
 	}
 	
+	public Files files(String accessToken) {
+		return new Files(this, accessToken);
+	}
+	
 	public Account fetchAccountByAccessToken(String accessToken) throws IOException, RequestFailedException {
 		HttpUrl accountUrl = getBaseUrl().resolve("account");
 		return executeGet(accessToken, accountUrl, Account.class);
@@ -106,11 +110,14 @@ public class NylasClient {
 	
 	<T> T executeRequestWithAuth(String authUser, HttpUrl url, HttpMethod method, RequestBody body,
 			Type resultType) throws IOException, RequestFailedException {
+		Request request = buildRequest(authUser, url, method, body);
+		return executeRequest(request, resultType);
+	}
+
+	Request buildRequest(String authUser, HttpUrl url, HttpMethod method, RequestBody body) {
 		Request.Builder builder = new Request.Builder().url(url);
 		addAuthHeader(builder, authUser);
-		Request request = builder.method(method.toString(), body)
-				.build();
-		return executeRequest(request, resultType);
+		return builder.method(method.toString(), body).build();
 	}
 	
 	void addAuthHeader(Request.Builder request, String authUser) {

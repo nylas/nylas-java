@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Message extends RestfulModel {
@@ -7,22 +8,22 @@ public class Message extends RestfulModel {
 	protected String account_id;
 	protected String thread_id;
 	protected String subject;
-	protected List<NameEmail> from;
-	protected List<NameEmail> to;
-	protected List<NameEmail> cc;
-	protected List<NameEmail> bcc;
-	protected List<NameEmail> reply_to;
+	protected List<NameEmail> from = Collections.emptyList();
+	protected List<NameEmail> to = Collections.emptyList();
+	protected List<NameEmail> cc = Collections.emptyList();
+	protected List<NameEmail> bcc = Collections.emptyList();
+	protected List<NameEmail> reply_to = Collections.emptyList();
 	protected Long date;
 	protected Boolean unread;
 	protected Boolean starred;
 	protected String snippet;
 	protected String body;
+	private List<File> files = Collections.emptyList();
 	
-	// TODO files
 	// TODO events
 	
 	private Folder folder;
-	private List<Label> labels;
+	private List<Label> labels = Collections.emptyList();
 	
 	
 	public String getAccountId() {
@@ -77,6 +78,10 @@ public class Message extends RestfulModel {
 		return body;
 	}
 
+	public List<File> getFiles() {
+		return files;
+	}
+
 	public Folder getFolder() {
 		return folder;
 	}
@@ -90,7 +95,7 @@ public class Message extends RestfulModel {
 		return "Message [id=" + getId() + ", account_id=" + account_id + ", thread_id=" + thread_id + ", subject=" + subject
 				+ ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date="
 				+ date + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet + ", body.length="
-				+ body.length() + ", folder=" + folder + ", labels=" + labels + "]";
+				+ body.length() + ", files=" + files + ", folder=" + folder + ", labels=" + labels + "]";
 	}
 	
 }

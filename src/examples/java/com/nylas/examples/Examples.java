@@ -2,6 +2,7 @@ package com.nylas.examples;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -16,12 +17,14 @@ import com.nylas.Application;
 import com.nylas.Draft;
 import com.nylas.DraftQuery;
 import com.nylas.Drafts;
+import com.nylas.File;
+import com.nylas.Files;
 import com.nylas.Folder;
 import com.nylas.FolderQuery;
 import com.nylas.Folders;
+import com.nylas.GoogleProviderSettings;
 import com.nylas.HostedAuthentication;
 import com.nylas.IPAddressWhitelist;
-import com.nylas.ImapProviderSettings;
 import com.nylas.Message;
 import com.nylas.MessageQuery;
 import com.nylas.Messages;
@@ -46,12 +49,37 @@ public class Examples {
 		//runThreadsAndFolderExample(props);
 		//runMessagesAndLabelsExample(props);
 		
-		runAccountsExample(props);
+		//runAccountsExample(props);
 		//runIpAddressesExample(props);
 		//runTokenInfoExample(props);
 		//runDraftsExample(props);
+		
+		runFilesExample(props);
 	}
 	
+	@SuppressWarnings("unused")
+	private static void runFilesExample(Properties props) throws IOException, RequestFailedException {
+		String accessToken = props.getProperty("access.token");
+		
+		NylasClient client = new NylasClient();
+		Files files = client.files(accessToken);
+		List<File> allFiles = files.list();
+		for (File file : allFiles) {
+			System.out.println("File: " + file);
+		}
+		
+		File first = allFiles.get(0);
+		byte[] fileBytes = files.downloadBytes(first.getId());
+		java.nio.file.Files.write(Paths.get("/tmp/" + first.getFilename()), fileBytes);
+		
+		File uploaded = files.upload(first.getFilename(), first.getContentType(), fileBytes);
+		System.out.println("Uploaded: " + uploaded);
+		
+		files.delete(uploaded.getId());
+		System.out.println("deleted");
+		
+	}
+
 	private static Properties loadProperties() throws IOException {
 		Properties props = new Properties();
 		try (final InputStream in = Examples.class.getResourceAsStream("/example.properties")) {
@@ -139,7 +167,7 @@ public class Examples {
 			.loginHint(props.getProperty("login.hint"))
 			.state("example_csrf_token").buildUrl();
 		System.out.println(hostedAuthUrl);
-		
+	
 		String authorizationCode = props.getProperty("hosted.auth.code");
 		String token = authentication.fetchToken(authorizationCode).getAccessToken();
 		System.out.println(token);
@@ -147,17 +175,25 @@ public class Examples {
 	
 	@SuppressWarnings("unused")
 	private static void runNativeAuthExample(Properties props) throws IOException, RequestFailedException {
-		ImapProviderSettings settings = new ImapProviderSettings()
-			.imapHost(props.getProperty("imap.host"))
-			.imapPort(Integer.parseInt(props.getProperty("imap.port")))
-			.imapUsername(props.getProperty("imap.username"))
-			.imapPassword(props.getProperty("imap.password"))
-			.smtpHost(props.getProperty("smtp.host"))
-			.smtpPort(Integer.parseInt(props.getProperty("smtp.port")))
-			.smtpUsername(props.getProperty("imap.username"))
-			.smtpPassword(props.getProperty("imap.password"))
-			.sslRequired(true)
-			;
+//		ImapProviderSettings settings = new ImapProviderSettings()
+//			.imapHost(props.getProperty("imap.host"))
+//			.imapPort(Integer.parseInt(props.getProperty("imap.port")))
+//			.imapUsername(props.getProperty("imap.username"))
+//			.imapPassword(props.getProperty("imap.password"))
+//			.smtpHost(props.getProperty("smtp.host"))
+//			.smtpPort(Integer.parseInt(props.getProperty("smtp.port")))
+//			.smtpUsername(props.getProperty("imap.username"))
+//			.smtpPassword(props.getProperty("imap.password"))
+//			.sslRequired(true)
+//			;
+		
+		
+		
+		GoogleProviderSettings settings = new GoogleProviderSettings()
+				.googleClientId("")
+				.googleClientSecret("")
+				.googleRefreshToken("")
+				;
 		
 		NylasClient client = new NylasClient();
 		Application application = client.application(props.getProperty("client.id"),
@@ -231,6 +267,7 @@ public class Examples {
 //			System.out.println(rfe.getErrorMessage());
 //		}
 //		
+		
 //		thread = threads.setFolderId(threadId, inbox.getId());
 //		System.out.println(thread);
 //		
@@ -248,9 +285,10 @@ public class Examples {
 		Instant end = LocalDate.of(2019,9,8).atStartOfDay(ZoneId.systemDefault()).toInstant();
 		MessageQuery query = new MessageQuery()
 				.limit(10)
+				.hasAttachment(true)
 				//.receivedAfter(start)
 				//.receivedBefore(end)
-				.anyEmail("info@twitter.com")
+				//.anyEmail("info@twitter.com")
 //				.in("Example Label 2")
 				;
 

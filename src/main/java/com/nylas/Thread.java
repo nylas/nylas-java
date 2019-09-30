@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Thread extends RestfulModel {
@@ -12,13 +13,13 @@ public class Thread extends RestfulModel {
 	private Long last_message_received_timestamp;
 	private Long last_message_sent_timestamp;
 	private Long first_message_timestamp;
-	private List<NameEmail> participants;
+	private List<NameEmail> participants = Collections.emptyList();
 	private String snippet;
-	private List<String> message_ids;
-	private List<String> draft_ids;
+	private List<String> message_ids = Collections.emptyList();
+	private List<String> draft_ids = Collections.emptyList();
 	private int version;
-	private List<Folder> folders;
-	private List<Label> labels;
+	private List<Folder> folders = Collections.emptyList();
+	private List<Label> labels = Collections.emptyList();
 	private boolean has_attachments;
 	
 	public String getAccountId() {

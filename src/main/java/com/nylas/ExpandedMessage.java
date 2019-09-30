@@ -1,10 +1,11 @@
 package com.nylas;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class ExpandedMessage extends Message {
 
-	private Map<String, Object> headers;
+	private Map<String, Object> headers = Collections.emptyMap();
 
 	public Map<String, Object> getHeaders() {
 		return headers;
