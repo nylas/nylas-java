@@ -1,11 +1,24 @@
 plugins {
     id 'java-library'
+    id 'eclipse'  // necessary for workaround below
 }
 
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+}
+
+sourceSets {
+    examples {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    examplesImplementation.extendsFrom implementation
+    examplesRuntimeOnly.extendsFrom runtimeOnly
 }
 
 dependencies {
@@ -24,27 +37,18 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.5.1")
     
     testRuntimeOnly('org.apache.logging.log4j:log4j-slf4j-impl:2.12.1')
+    
+    // google api client for native auth example
+    examplesImplementation('com.google.api-client:google-api-client:1.30.2')
 }
 
 test {
     useJUnitPlatform()
 }
 
-sourceSets {
-    examples {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
-configurations {
-    examplesImplementation.extendsFrom implementation
-    examplesRuntimeOnly.extendsFrom runtimeOnly
-}
-
 task runExample(type: JavaExec) {
     classpath = sourceSets.examples.runtimeClasspath
-    main = example
+    main = project.hasProperty("example") ? project.getProperty("example") : "com.nylas.examples.Examples"
 }
 
 task createProperties(dependsOn: processResources) {
@@ -59,4 +63,11 @@ task createProperties(dependsOn: processResources) {
 
 classes {
     dependsOn createProperties
+}
+
+// workaround for https://github.com/eclipse/buildship/issues/476
+eclipse {
+    classpath {
+        plusConfigurations.add configurations.examplesCompileClasspath
+    }
 }
