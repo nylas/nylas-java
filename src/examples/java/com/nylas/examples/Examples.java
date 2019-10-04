@@ -54,7 +54,7 @@ public class Examples {
 		//runTokenInfoExample(props);
 		//runDraftsExample(props);
 		
-		runFilesExample(props);
+		//runFilesExample(props);
 	}
 	
 	@SuppressWarnings("unused")
@@ -114,8 +114,8 @@ public class Examples {
 	@SuppressWarnings("unused")
 	private static void runIpAddressesExample(Properties props) throws IOException, RequestFailedException {
 		NylasClient client = new NylasClient();
-		Application application = client.application(props.getProperty("client.id"),
-				props.getProperty("client.secret"));
+		Application application = client.application(props.getProperty("nylas.client.id"),
+				props.getProperty("nylas.client.secret"));
 		IPAddressWhitelist ipAddresses = application.fetchIpAddressWhitelist();
 		System.out.println(ipAddresses);
 	}
@@ -123,8 +123,8 @@ public class Examples {
 	@SuppressWarnings("unused")
 	private static void runAccountsExample(Properties props) throws IOException, RequestFailedException {
 		NylasClient client = new NylasClient();
-		Application application = client.application(props.getProperty("client.id"),
-				props.getProperty("client.secret"));
+		Application application = client.application(props.getProperty("nylas.client.id"),
+				props.getProperty("nylas.client.secret"));
 		Accounts accounts = application.accounts();
 		AccountQuery query = new AccountQuery()
 				.limit(2)
@@ -157,14 +157,14 @@ public class Examples {
 	@SuppressWarnings("unused")
 	private static void runHostedAuthExample(Properties props) throws IOException, RequestFailedException {
 		NylasClient client = new NylasClient();
-		Application application = client.application(props.getProperty("client.id"),
-				props.getProperty("client.secret"));
+		Application application = client.application(props.getProperty("nylas.client.id"),
+				props.getProperty("nylas.client.secret"));
 		HostedAuthentication authentication = application.hostedAuthentication();
 		String hostedAuthUrl = authentication.urlBuilder()
 			.redirectUri("https://example.com/nylas-redirect")
 			.responseType("code")
 			.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS)
-			.loginHint(props.getProperty("login.hint"))
+			.loginHint(props.getProperty("hosted.login.hint"))
 			.state("example_csrf_token").buildUrl();
 		System.out.println(hostedAuthUrl);
 	
@@ -182,8 +182,8 @@ public class Examples {
 //			.imapPassword(props.getProperty("imap.password"))
 //			.smtpHost(props.getProperty("smtp.host"))
 //			.smtpPort(Integer.parseInt(props.getProperty("smtp.port")))
-//			.smtpUsername(props.getProperty("imap.username"))
-//			.smtpPassword(props.getProperty("imap.password"))
+//			.smtpUsername(props.getProperty("smtp.username"))
+//			.smtpPassword(props.getProperty("smtp.password"))
 //			.sslRequired(true)
 //			;
 		
@@ -196,8 +196,8 @@ public class Examples {
 				;
 		
 		NylasClient client = new NylasClient();
-		Application application = client.application(props.getProperty("client.id"),
-				props.getProperty("client.secret"));
+		Application application = client.application(props.getProperty("nylas.client.id"),
+				props.getProperty("nylas.client.secret"));
 		NativeAuthentication authentication = application.nativeAuthentication();
 		AuthRequestBuilder authRequest = authentication.authRequest()
 				.name(props.getProperty("imap.name"))
