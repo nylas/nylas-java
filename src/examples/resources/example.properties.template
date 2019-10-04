@@ -1,14 +1,34 @@
 # Template for example.properties file.
 # Make a copy of this file and fill in your own values here to run the examples.
 
-client.id=YOUR_CLIENT_ID_HERE
-client.secret=YOUR_CLIENT_SECRET_HERE
+# Register a nylas account and then
+# https://docs.nylas.com/docs/get-your-developer-api-keys
+#
+nylas.client.id=YOUR_CLIENT_ID_HERE
+nylas.client.secret=YOUR_CLIENT_SECRET_HERE
+
+# Once you have added an email account, if you want to use it in examples
+# list its access token here 
 access.token=YOUR_ACCESS_TOKEN_HERE
 
+# For Native Authentication with a custom IMAP provider fill in account details here
+imap.name=
+imap.email
 imap.host=
 imap.port=
 imap.username=
 imap.password=
 smtp.host=
 smtp.port=
+smtp.username=
+smtp.password=
+
+# For Native Authentication with a Google provider fill in account details here
+google.client.id=
+google.client.secret=
+google.refresh.token=
+
+# For Hosted Authentication fill in details here
+hosted.login.hint=
+hosted.auth.code=
 
