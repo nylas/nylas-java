@@ -18,12 +18,12 @@ public class Message extends RestfulModel {
 	protected Boolean starred;
 	protected String snippet;
 	protected String body;
-	private List<File> files = Collections.emptyList();
+	protected List<File> files = Collections.emptyList();
 	
 	// TODO events
 	
-	private Folder folder;
-	private List<Label> labels = Collections.emptyList();
+	protected Folder folder;
+	protected List<Label> labels = Collections.emptyList();
 	
 	
 	public String getAccountId() {

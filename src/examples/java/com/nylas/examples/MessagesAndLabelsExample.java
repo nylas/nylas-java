@@ -15,7 +15,7 @@ public class MessagesAndLabelsExample {
 
 	public static void main(String[] args) throws Exception {
 		Properties props = Examples.loadExampleProperties();
-String accessToken = props.getProperty("access.token");
+		String accessToken = props.getProperty("access.token");
 		
 		NylasClient client = new NylasClient();
 		Messages messages = client.messages(accessToken);
