@@ -32,3 +32,25 @@ google.refresh.token=
 hosted.login.hint=
 hosted.auth.code=
 
+# For sending examples - ok to leave some fields blank as long as their is a to, cc, or bcc
+send.from.name=
+send.from.email=
+send.to.name=
+send.to.email=
+send.cc.name=
+send.cc.email=
+send.bcc.name=
+send.bcc.email=
+send.subject=test message!!!
+send.body=hey friend, what is up?
+
+# Raw mime to send - use \n\ to insert a newline in the property value
+send.rawmime=MIME-Version: 1.0\n\
+Content-Type: text/plain; charset=UTF-8\n\
+Subject: Meeting on Thursday\n\
+To: example@example.com\n\
+\n\
+Hey Ben,\n\
+\n\
+Would you like to grab coffee @ 2pm this Thursday?"\n\
+Bill\n\

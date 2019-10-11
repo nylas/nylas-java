@@ -1,13 +1,15 @@
 package com.nylas;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Draft extends Message {
 
 	private String reply_to_message_id;
 	private Integer version;
-	private Tracking tracking;  // used only for direct sending
 	
 	public String getReplyToMessageId() {
 		return reply_to_message_id;
@@ -72,18 +74,55 @@ public class Draft extends Message {
 		this.files = files;
 	}
 	
-	public void setReplyToMessageId(String replyToMessageId) {
-		this.reply_to_message_id = replyToMessageId;
-	}
-
-	/**
-	 * Set tracking options for this email.
-	 */
-	public void setTracking(Tracking tracking) {
-		this.tracking = tracking;
+	public void attach(File file) {
+		this.files.add(file);
 	}
 	
+	public void detach(File file) {
+		for (int i = 0; i < this.files.size(); i++) {
+			File f = this.files.get(i);
+			if (f == file
+					|| (f.getId() != null && f.getId().equals(file.getId()))) {
+				this.files.remove(i);
+				i--; // back up a step since we removed an item
+			}
+		}
+	}
+	
+	public void setReplyToMessageId(String replyToMessageId) {
+		if (hasId()) {
+			throw new UnsupportedOperationException("Cannot set or modify a reply_to_message_id on an existing draft");
+		}
+		this.reply_to_message_id = replyToMessageId;
+	}
+	
+	public void setThreadId(String threadId) {
+		if (hasId()) {
+			throw new UnsupportedOperationException("Cannot set or modify a thread_id on an existing draft");
+		}
+		this.thread_id = threadId;
+	}
 
+	Map<String, Object> getWritableFields(boolean includeThreading) {
+		Map<String, Object> params = new HashMap<>();
+		Maps.putIfNotNull(params, "subject", getSubject());
+		Maps.putIfNotNull(params, "from", getFrom());
+		Maps.putIfNotNull(params, "reply_to", getReplyTo());
+		Maps.putIfNotNull(params, "to", getTo());
+		Maps.putIfNotNull(params, "cc", getCc());
+		Maps.putIfNotNull(params, "bcc", getBcc());
+		Maps.putIfNotNull(params, "body", getBody());
+		Maps.putIfNotNull(params, "version", getVersion());
+		List<String> fileIds = getFiles().stream().map(f -> f.getId()).collect(Collectors.toList());
+		params.put("file_ids", fileIds);
+		
+		if (includeThreading) {
+			Maps.putIfNotNull(params, "thread_id", getThreadId());
+			Maps.putIfNotNull(params, "reply_to_message_id", getReplyToMessageId());
+		}
+		return params;
+	}
+	
 	@Override
 	public String toString() {
 		return "Draft [reply_to_message_id=" + reply_to_message_id + ", version=" + version + ", account_id="
@@ -92,9 +131,6 @@ public class Draft extends Message {
 				+ ", starred=" + starred + ", snippet=" + snippet + ", body=" + body + ", files=" + files + ", folder="
 				+ folder + ", labels=" + labels + "]";
 	}
-
-
-	
 	
 	
 }

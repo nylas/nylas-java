@@ -8,4 +8,8 @@ public abstract class RestfulModel {
 		return id;
 	}
 
+	public boolean hasId() {
+		return id != null;
+	}
+	
 }

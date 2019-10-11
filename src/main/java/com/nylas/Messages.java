@@ -67,7 +67,8 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	/**
 	 * Updates the labels on the given message, overwriting all previous labels on the message.
 	 */
-	public Message setLabelIds(String threadId, Collection<String> labelIds) throws IOException, RequestFailedException {
+	public Message setLabelIds(String threadId, Collection<String> labelIds)
+			throws IOException, RequestFailedException {
 		return super.put(threadId, Maps.of("label_ids", labelIds));
 	}
 	

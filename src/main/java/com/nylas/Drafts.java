@@ -1,10 +1,14 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import com.nylas.NylasClient.HttpMethod;
+
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 
@@ -12,38 +16,83 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 		super(client, Draft.class, "drafts", accessToken);
 	}
 	
-
-	public Draft put(Draft draft) throws IOException, RequestFailedException {
-		Map<String, Object> params = new HashMap<>();
-		List<String> file_ids = draft.getFiles().stream().map(f -> f.getId()).collect(Collectors.toList());
-		
-		List<String> label_ids = draft.getLabels().stream().map(f -> f.getId()).collect(Collectors.toList());
-
-		Tracking tracking = new Tracking();
-		tracking.setLinks(true);
-		tracking.setOpens(true);
-		tracking.setThreadReplies(false);
-		tracking.setPayload("tracking_payload");
-		
-		params.put("reply_to_message_id", draft.getReplyToMessageId());
-		params.put("version", draft.getVersion());
-		return super.put(draft.getId(),params);
+	/**
+	 * Create the given draft on the server.
+	 * Returns the new draft object with an assigned ID as returned by the server.
+	 * Does not modify the passed in draft object.
+	 */
+	public Draft create(Draft draft) throws IOException, RequestFailedException {
+		if (draft.hasId()) {
+			throw new UnsupportedOperationException("Cannot create draft with an existing id.  Use update instead.");
+		}
+		Map<String, Object> params = draft.getWritableFields(true);
+		return super.create(params);
+	}
+	
+	/**
+	 * Update the given draft on the server.
+	 * Requires that the version of the given draft matches the latest version returned by the server.  This can fail
+	 * if any client (including this one) has updated the draft since this was fetched from the server.
+	 * 
+	 * Returns the updated draft object as returned by the server.
+	 * @throws RequestFailedException if the version of the given draft does not match the latest version on the server.
+	 */
+	public Draft update(Draft draft) throws IOException, RequestFailedException {
+		if (!draft.hasId()) {
+			throw new UnsupportedOperationException("Cannot update draft without an existing id.  Use create instead.");
+		}
+		Map<String, Object> params = draft.getWritableFields(false);
+		return super.create(params);
+	}
+	
+	/**
+	 * Convenience method to create or update the given draft.
+	 * If it has an existing ID, update it, otherwise create it.
+	 * Returns the draft as returned by the server.
+	 */
+	public Draft createOrUpdate(Draft draft) throws IOException, RequestFailedException {
+		return draft.hasId() ? update(draft) : create(draft);
 	}
 
+	/**
+	 * Sends the given draft.
+	 * 
+	 * Note - If the draft was already saved to the server and has an id, then sends using the server's copy.
+	 * If there are local changes, first call update(), then send().
+	 * In this case, the server returns only a 200 success and no message object
+	 * 
+	 * If the draft was not saved and has no id, then sends using its fields directly.
+	 * 
+	 * @return a Message representing the sent message, only if it is sent directly, not from a saved draft
+	 */
+	public Message send(Draft draft) throws IOException, RequestFailedException {
+		Map<String, Object> params;
+		Type resultType;
+		if (draft.hasId()) {
+			params = Maps.of("draft_id", draft.getId(), "version", draft.getVersion());
+			resultType = null;
+		} else {
+			params = draft.getWritableFields(true);
+			resultType = Message.class;
+		}
+		HttpUrl url = getSendUrl();
+		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
+		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
+	}
+
+	private HttpUrl getSendUrl() {
+		return getBaseUrlBuilder().addPathSegment("send").build();
+	}
+
+	/**
+	 * Sends the given mime message with Content-Type: message/rfc822
+	 * @return a Message representing the sent message
+	 */
+	public Message sendRawMime(String mimeMessage) throws IOException, RequestFailedException {
+		HttpUrl url = getSendUrl();
+		RequestBody requestBody = RequestBody.create(MediaType.get("message/rfc822"), mimeMessage);
+		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, Message.class);
+	}
+	
 }
 
-
-/*
- *  account_id ignored
- *  thread_id ignored
- *  subject worked
- *  from failed (but probably due to gmail)
- *  to, cc, bcc worked
- *  date failed
- *  unread, starred failed
- *  snippet failed
- *  body worked
- *  file_ids worked
- *  reply_to_message_id failed
- *  label_ids failed
- */
