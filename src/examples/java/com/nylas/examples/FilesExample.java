@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import com.nylas.File;
 import com.nylas.Files;
+import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 
 public class FilesExample {
@@ -15,7 +16,8 @@ public class FilesExample {
 		String accessToken = props.getProperty("access.token");
 		
 		NylasClient client = new NylasClient();
-		Files files = client.files(accessToken);
+		NylasAccount account = client.account(accessToken);
+		Files files = account.files();
 		List<File> allFiles = files.list();
 		for (File file : allFiles) {
 			System.out.println("File: " + file);

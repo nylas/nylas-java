@@ -9,6 +9,7 @@ import java.util.Properties;
 import com.nylas.Folder;
 import com.nylas.FolderQuery;
 import com.nylas.Folders;
+import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.Thread;
 import com.nylas.ThreadQuery;
@@ -21,7 +22,8 @@ public class ThreadsAndFoldersExample {
 		String accessToken = props.getProperty("access.token");
 		
 		NylasClient client = new NylasClient();
-		Threads threads = client.threads(accessToken);
+		NylasAccount account = client.account(accessToken);
+		Threads threads = account.threads();
 		
 		Instant start = LocalDate.of(2019,9,1).atStartOfDay(ZoneId.systemDefault()).toInstant();
 		Instant end = LocalDate.of(2019,9,2).atStartOfDay(ZoneId.systemDefault()).toInstant();
@@ -41,7 +43,7 @@ public class ThreadsAndFoldersExample {
 //		System.out.println(thread);
 //
 //		
-		Folders folders = client.folders(accessToken);
+		Folders folders = account.folders();
 		
 		FolderQuery fQuery = new FolderQuery()
 				.limit(5)

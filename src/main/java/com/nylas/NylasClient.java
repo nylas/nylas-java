@@ -49,38 +49,8 @@ public class NylasClient {
 		return new NylasApplication(this, clientId, clientSecret);
 	}
 	
-	public Threads threads(String accessToken) {
-		return new Threads(this, accessToken);
-	}
-	
-	public Messages messages(String accessToken) {
-		return new Messages(this, accessToken);
-	}
-	
-	public Folders folders(String accessToken) {
-		return new Folders(this, accessToken);
-	}
-	
-	public Labels labels(String accessToken) {
-		return new Labels(this, accessToken);
-	}
-	
-	public Drafts drafts(String accessToken) {
-		return new Drafts(this, accessToken);
-	}
-	
-	public Files files(String accessToken) {
-		return new Files(this, accessToken);
-	}
-	
-	public Account fetchAccountByAccessToken(String accessToken) throws IOException, RequestFailedException {
-		HttpUrl accountUrl = getBaseUrl().resolve("account");
-		return executeGet(accessToken, accountUrl, Account.class);
-	}
-	
-	public void revokeAccessToken(String accessToken) throws IOException, RequestFailedException {
-		HttpUrl revokeUrl = getBaseUrl().resolve("oauth/revoke");
-		executePost(accessToken, revokeUrl, null, null);
+	public NylasAccount account(String accessToken) {
+		return new NylasAccount(this, accessToken);
 	}
 	
 	<T> T executeGet(String authUser, HttpUrl url, Type resultType)

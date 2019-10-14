@@ -9,6 +9,7 @@ import java.util.Properties;
 import com.nylas.Message;
 import com.nylas.MessageQuery;
 import com.nylas.Messages;
+import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 
 public class MessagesAndLabelsExample {
@@ -18,7 +19,9 @@ public class MessagesAndLabelsExample {
 		String accessToken = props.getProperty("access.token");
 		
 		NylasClient client = new NylasClient();
-		Messages messages = client.messages(accessToken);
+		NylasAccount account = client.account(accessToken);
+
+		Messages messages = account.messages();
 		
 		Instant start = LocalDate.of(2019,9,7).atStartOfDay(ZoneId.systemDefault()).toInstant();
 		Instant end = LocalDate.of(2019,9,8).atStartOfDay(ZoneId.systemDefault()).toInstant();

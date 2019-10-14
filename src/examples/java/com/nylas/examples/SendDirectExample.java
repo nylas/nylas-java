@@ -5,6 +5,7 @@ import java.util.Properties;
 import com.nylas.Draft;
 import com.nylas.Drafts;
 import com.nylas.Message;
+import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 
 public class SendDirectExample {
@@ -14,7 +15,8 @@ public class SendDirectExample {
 		String accessToken = props.getProperty("access.token");
 		
 		NylasClient client = new NylasClient();
-		Drafts drafts = client.drafts(accessToken);
+		NylasAccount account = client.account(accessToken);
+		Drafts drafts = account.drafts();
 
 		Draft draft = new Draft();
 		draft.setFrom(Examples.getNameEmail(props, "send.from.name", "send.from.email"));

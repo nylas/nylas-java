@@ -7,6 +7,7 @@ import com.nylas.Account;
 import com.nylas.NylasApplication;
 import com.nylas.ImapProviderSettings;
 import com.nylas.NativeAuthentication;
+import com.nylas.NylasAccount;
 import com.nylas.NativeAuthentication.AuthRequestBuilder;
 import com.nylas.NylasClient;
 import com.nylas.Scope;
@@ -47,8 +48,9 @@ public class NativeAuthGoogleExample {
 		System.out.println("Succeeded.  Returned token: " + token);
 		
 		System.out.println("Requesting account details with token.");
-		Account account = client.fetchAccountByAccessToken(token.getAccessToken());
-		System.out.println("Succeeded.  Account details: " + account);
+		NylasAccount account = client.account(token.getAccessToken());
+		Account accountInfo = account.fetchAccountByAccessToken();
+		System.out.println("Succeeded.  Account details: " + accountInfo);
 	}
 
 }

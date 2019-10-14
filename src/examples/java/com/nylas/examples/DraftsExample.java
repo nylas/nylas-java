@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -14,7 +13,7 @@ import com.nylas.Drafts;
 import com.nylas.Message;
 import com.nylas.MessageQuery;
 import com.nylas.Messages;
-import com.nylas.NameEmail;
+import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 
 public class DraftsExample {
@@ -24,7 +23,8 @@ public class DraftsExample {
 		String accessToken = props.getProperty("access.token");
 		
 		NylasClient client = new NylasClient();
-		Drafts drafts = client.drafts(accessToken);
+		NylasAccount account = client.account(accessToken);
+		Drafts drafts = account.drafts();
 		
 		DraftQuery query = new DraftQuery()
 				//.limit(1)
@@ -57,7 +57,7 @@ public class DraftsExample {
 //		firstDraft.getFiles().add(uploaded);
 	
 		
-		Messages messages = client.messages(accessToken);
+		Messages messages = account.messages();
 		
 		Instant start = LocalDate.of(2019,10,7).atStartOfDay(ZoneId.systemDefault()).toInstant();
 		Instant end = start.plus(1, ChronoUnit.DAYS);
