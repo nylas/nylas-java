@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import okhttp3.HttpUrl;
 
-public class Application {
+public class NylasApplication {
 
 	private final NylasClient client;
 	private final String clientId;
 	private final String clientSecret;
 	
-	Application(NylasClient client, String clientId, String clientSecret) {
+	NylasApplication(NylasClient client, String clientId, String clientSecret) {
 		this.client = client;
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;

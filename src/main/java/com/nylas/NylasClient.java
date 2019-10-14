@@ -45,8 +45,8 @@ public class NylasClient {
 		return httpClient;
 	}
 	
-	public Application application(String clientId, String clientSecret) {
-		return new Application(this, clientId, clientSecret);
+	public NylasApplication application(String clientId, String clientSecret) {
+		return new NylasApplication(this, clientId, clientSecret);
 	}
 	
 	public Threads threads(String accessToken) {

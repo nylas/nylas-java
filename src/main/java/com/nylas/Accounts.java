@@ -10,7 +10,7 @@ public class Accounts extends RestfulCollection<Account, AccountQuery> {
 
 	private final String clientId;
 	
-	Accounts(NylasClient client, Application application) {
+	Accounts(NylasClient client, NylasApplication application) {
 		super(client, Account.class, "accounts", application.getClientSecret());
 		this.clientId = application.getClientId();
 	}

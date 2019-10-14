@@ -11,9 +11,9 @@ import okhttp3.Response;
 
 public class HostedAuthentication {
 
-	private final Application application;
+	private final NylasApplication application;
 
-	HostedAuthentication(Application application) {
+	HostedAuthentication(NylasApplication application) {
 		this.application = application;
 	}
 	

@@ -6,7 +6,7 @@ import java.util.Properties;
 import com.nylas.Account;
 import com.nylas.AccountQuery;
 import com.nylas.Accounts;
-import com.nylas.Application;
+import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.TokenInfo;
 
@@ -15,7 +15,7 @@ public class AccountsExample {
 	public static void main(String[] args) throws Exception {
 		Properties props = Examples.loadExampleProperties();
 		NylasClient client = new NylasClient();
-		Application application = client.application(props.getProperty("nylas.client.id"),
+		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
 				props.getProperty("nylas.client.secret"));
 		Accounts accounts = application.accounts();
 		AccountQuery query = new AccountQuery()

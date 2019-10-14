@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import com.nylas.AccessToken;
 import com.nylas.Account;
-import com.nylas.Application;
+import com.nylas.NylasApplication;
 import com.nylas.GoogleProviderSettings;
 import com.nylas.NativeAuthentication;
 import com.nylas.NativeAuthentication.AuthRequestBuilder;
@@ -23,7 +23,7 @@ public class NativeAuthImapExample {
 				;
 		
 		NylasClient client = new NylasClient();
-		Application application = client.application(props.getProperty("nylas.client.id"),
+		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
 				props.getProperty("nylas.client.secret"));
 		NativeAuthentication authentication = application.nativeAuthentication();
 		AuthRequestBuilder authRequest = authentication.authRequest()

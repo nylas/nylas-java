@@ -17,9 +17,9 @@ import okhttp3.Response;
 
 public class NativeAuthentication {
 
-	private final Application application;
+	private final NylasApplication application;
 
-	NativeAuthentication(Application application) {
+	NativeAuthentication(NylasApplication application) {
 		this.application = application;
 	}
 	
@@ -30,7 +30,7 @@ public class NativeAuthentication {
 	@SuppressWarnings("unused")  // some fields used only via reflection
 	public static class AuthRequestBuilder {
 		
-		private transient final Application application;
+		private transient final NylasApplication application;
 		
 		private final String client_id;
 		private String name;
@@ -40,7 +40,7 @@ public class NativeAuthentication {
 		private String scopes;
 		private String reauth_account_id;
 		
-		AuthRequestBuilder(Application application) {
+		AuthRequestBuilder(NylasApplication application) {
 			this.application = application;
 			this.client_id = application.getClientId();
 		}

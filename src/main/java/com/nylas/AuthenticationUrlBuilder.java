@@ -9,7 +9,7 @@ import okhttp3.HttpUrl;
 
 public class AuthenticationUrlBuilder {
 
-	private final Application app;
+	private final NylasApplication app;
 	
 	private String redirectUri = "";
 	private String responseType = "code";
@@ -17,7 +17,7 @@ public class AuthenticationUrlBuilder {
 	private String loginHint = "";
 	private String state = "";
 
-	AuthenticationUrlBuilder(Application app) {
+	AuthenticationUrlBuilder(NylasApplication app) {
 		this.app = app;
 	}
 	

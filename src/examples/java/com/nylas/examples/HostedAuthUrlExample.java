@@ -2,7 +2,7 @@ package com.nylas.examples;
 
 import java.util.Properties;
 
-import com.nylas.Application;
+import com.nylas.NylasApplication;
 import com.nylas.HostedAuthentication;
 import com.nylas.NylasClient;
 import com.nylas.Scope;
@@ -13,7 +13,7 @@ public class HostedAuthUrlExample {
 		Properties props = Examples.loadExampleProperties();
 
 		NylasClient client = new NylasClient();
-		Application application = client.application(props.getProperty("nylas.client.id"),
+		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
 				props.getProperty("nylas.client.secret"));
 		HostedAuthentication authentication = application.hostedAuthentication();
 		String hostedAuthUrl = authentication.urlBuilder()
