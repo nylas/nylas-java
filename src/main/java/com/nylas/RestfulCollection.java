@@ -52,6 +52,14 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		return count.getCount();
 	}
 	
+	protected List<M> search(SearchQuery query) throws IOException, RequestFailedException {
+		HttpUrl url = getCollectionUrl(query, null).newBuilder()
+				.addPathSegment("search")
+				.build();
+		Type listType = Types.newParameterizedType(List.class, modelClass);
+		return client.executeGet(authUser, url, listType);
+	}
+	
 	public M get(String id) throws IOException, RequestFailedException {
 		HttpUrl messageUrl = getInstanceUrl(id);
 		return client.executeGet(authUser, messageUrl, modelClass);
@@ -76,7 +84,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		return client.getBaseUrl().newBuilder();
 	}
 	
-	protected HttpUrl getCollectionUrl(Q query, String view) {
+	protected HttpUrl getCollectionUrl(RestfulQuery<?> query, String view) {
 		HttpUrl.Builder urlBuilder = getBaseUrlBuilder().addPathSegment(urlPath);
 		if (query != null) {
 			query.addParameters(urlBuilder);

@@ -27,6 +27,10 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 		return super.count(query);
 	}
 	
+	public List<Message> search(SearchQuery query) throws IOException, RequestFailedException {
+		return super.search(query);
+	}
+	
 	public String getRaw(String messageId) throws IOException, RequestFailedException {
 		HttpUrl messageUrl = getInstanceUrl(messageId);
 		Request.Builder builder = new Request.Builder().url(messageUrl);

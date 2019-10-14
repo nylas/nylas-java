@@ -21,6 +21,9 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 		return super.count(query);
 	}
 	
+	public List<Thread> search(SearchQuery query) throws IOException, RequestFailedException {
+		return super.search(query);
+	}
 	/**
 	 * Set the unread status for the given thread.
 	 * 
