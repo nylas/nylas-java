@@ -2,15 +2,15 @@ package com.nylas;
 
 import okhttp3.HttpUrl.Builder;
 
-public class SearchQuery extends RestfulQuery<SearchQuery> {
+class SearchQuery extends RestfulQuery<SearchQuery> {
 
 	private String query;
 	
-	public SearchQuery(String query) {
+	SearchQuery(String query) {
 		this.query = query;
 	}
 	
-	public SearchQuery(String query, Integer limit, Integer offset) {
+	SearchQuery(String query, Integer limit, Integer offset) {
 		this(query);
 		limit(limit);
 		offset(offset);

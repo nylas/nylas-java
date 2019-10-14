@@ -27,8 +27,12 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 		return super.count(query);
 	}
 	
-	public List<Message> search(SearchQuery query) throws IOException, RequestFailedException {
-		return super.search(query);
+	public List<Message> search(String query) throws IOException, RequestFailedException {
+		return super.search(new SearchQuery(query));
+	}
+	
+	public List<Message> search(String query, int limit, int offset) throws IOException, RequestFailedException {
+		return super.search(new SearchQuery(query, limit, offset));
 	}
 	
 	public String getRaw(String messageId) throws IOException, RequestFailedException {
