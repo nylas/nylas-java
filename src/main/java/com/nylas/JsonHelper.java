@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -14,7 +15,9 @@ public class JsonHelper {
 	private static final Moshi moshi;
 	
 	static {
-		moshi = new Moshi.Builder().build();
+		moshi = new Moshi.Builder()
+				.add(Event.WHEN_JSON_FACTORY)
+				.build();
 	}
 	
 	public static Moshi moshi() {
