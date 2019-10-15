@@ -3,12 +3,12 @@ package com.nylas.examples;
 import java.util.Properties;
 
 import com.nylas.AccessToken;
-import com.nylas.Account;
-import com.nylas.NylasApplication;
-import com.nylas.ImapProviderSettings;
+import com.nylas.AccountDetail;
+import com.nylas.GoogleProviderSettings;
 import com.nylas.NativeAuthentication;
-import com.nylas.NylasAccount;
 import com.nylas.NativeAuthentication.AuthRequestBuilder;
+import com.nylas.NylasAccount;
+import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.Scope;
 
@@ -17,17 +17,11 @@ public class NativeAuthGoogleExample {
 	public static void main(String[] args) throws Exception {
 		Properties props = Examples.loadExampleProperties();
 
-		ImapProviderSettings settings = new ImapProviderSettings()
-			.imapHost(props.getProperty("imap.host"))
-			.imapPort(Integer.parseInt(props.getProperty("imap.port")))
-			.imapUsername(props.getProperty("imap.username"))
-			.imapPassword(props.getProperty("imap.password"))
-			.smtpHost(props.getProperty("smtp.host"))
-			.smtpPort(Integer.parseInt(props.getProperty("smtp.port")))
-			.smtpUsername(props.getProperty("smtp.username"))
-			.smtpPassword(props.getProperty("smtp.password"))
-			.sslRequired(true)
-			;
+		GoogleProviderSettings settings = new GoogleProviderSettings()
+				.googleClientId(props.getProperty("google.client.id"))
+				.googleClientSecret(props.getProperty("google.client.secret"))
+				.googleRefreshToken(props.getProperty("google.refresh.token"))
+				;
 		
 		NylasClient client = new NylasClient();
 		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
@@ -49,8 +43,8 @@ public class NativeAuthGoogleExample {
 		
 		System.out.println("Requesting account details with token.");
 		NylasAccount account = client.account(token.getAccessToken());
-		Account accountInfo = account.fetchAccountByAccessToken();
-		System.out.println("Succeeded.  Account details: " + accountInfo);
+		AccountDetail accountDetail = account.fetchAccountByAccessToken();
+		System.out.println("Succeeded.  Account details: " + accountDetail);
 	}
 
 }

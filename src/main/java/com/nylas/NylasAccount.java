@@ -46,9 +46,9 @@ public class NylasAccount {
 		return new Files(client, accessToken);
 	}
 	
-	public Account fetchAccountByAccessToken() throws IOException, RequestFailedException {
+	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
 		HttpUrl accountUrl = client.getBaseUrl().resolve("account");
-		return client.executeGet(accessToken, accountUrl, Account.class);
+		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
 	}
 	
 	public void revokeAccessToken() throws IOException, RequestFailedException {
