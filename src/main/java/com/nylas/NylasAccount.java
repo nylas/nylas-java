@@ -46,6 +46,10 @@ public class NylasAccount {
 		return new Files(client, accessToken);
 	}
 	
+	public Calendars calendars() {
+		return new Calendars(client, accessToken);
+	}
+	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
 		HttpUrl accountUrl = client.getBaseUrl().resolve("account");
 		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
@@ -55,6 +59,6 @@ public class NylasAccount {
 		HttpUrl revokeUrl = client.getBaseUrl().resolve("oauth/revoke");
 		client.executePost(accessToken, revokeUrl, null, null);
 	}
-	
+
 	
 }
