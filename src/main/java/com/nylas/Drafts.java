@@ -42,7 +42,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 			throw new UnsupportedOperationException("Cannot update draft without an existing id.  Use create instead.");
 		}
 		Map<String, Object> params = draft.getWritableFields(false);
-		return super.create(params);
+		return super.put(draft.getId(), params);
 	}
 	
 	/**
