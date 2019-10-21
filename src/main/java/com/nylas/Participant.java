@@ -6,7 +6,7 @@ public class Participant {
 	private String email;
 	private String status;
 	private String comment;
-
+	
 	public String getName() {
 		return name;
 	}
@@ -21,6 +21,22 @@ public class Participant {
 
 	public String getComment() {
 		return comment;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	@Override

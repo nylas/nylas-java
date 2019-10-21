@@ -59,7 +59,7 @@ public class Files extends RestfulCollection<File, FileQuery> {
 		RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
 				.addFormDataPart("file", filename, fileData)
 				.build();
-		HttpUrl url = getCollectionUrl(null, null);
+		HttpUrl url = getCollectionUrl();
 		Type listType = Types.newParameterizedType(List.class, modelClass);
 		List<File> resultList = client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, listType);
 		if (resultList.size() != 1) {

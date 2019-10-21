@@ -71,7 +71,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	}
 	
 	protected M create(Map<String, Object> params) throws IOException, RequestFailedException {
-		HttpUrl url = getCollectionUrl(null, null);
+		HttpUrl url = getCollectionUrl();
 		return client.executePost(authUser, url, params, modelClass);
 	}
 	
@@ -82,6 +82,10 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	
 	protected HttpUrl.Builder getBaseUrlBuilder() {
 		return client.getBaseUrl().newBuilder();
+	}
+	
+	protected HttpUrl getCollectionUrl() {
+		return getCollectionUrl(null, null);
 	}
 	
 	protected HttpUrl getCollectionUrl(RestfulQuery<?> query, String view) {
@@ -96,7 +100,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	}
 	
 	protected HttpUrl getInstanceUrl(String id) {
-		return getCollectionUrl(null, null).newBuilder()
+		return getCollectionUrl().newBuilder()
 				.addPathSegment(id)
 				.build();
 	}
