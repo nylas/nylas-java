@@ -1,6 +1,8 @@
 package com.nylas;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
@@ -23,12 +25,118 @@ public class Event extends RestfulModel {
 	private String master_event_id;
 	private Long original_start_time;
 	
+	/** for deserialization only */ public Event() {} 
+	
+	public Event(String calendarId, When when) {
+		this.calendar_id = calendarId;
+		this.when = when;
+	}
+
+	public String getCalendarId() {
+		return calendar_id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public When getWhen() {
+		return when;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public List<Participant> getParticipants() {
+		return participants;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public Boolean getReadOnly() {
+		return read_only;
+	}
+
+	public Boolean getBusy() {
+		return busy;
+	}
+
+	public Recurrence getRecurrence() {
+		return recurrence;
+	}
+
+	public String getMasterEventId() {
+		return master_event_id;
+	}
+
+	public Long getOriginalStartTime() {
+		return original_start_time;
+	}
+
+	public static JsonAdapter.Factory getWhenJsonFactory() {
+		return WHEN_JSON_FACTORY;
+	}
+
 	@Override
 	public String toString() {
 		return "Event [calendar_id=" + calendar_id + ", title=" + title + ", description=" + description + ", when="
 				+ when + ", location=" + location + ", owner=" + owner + ", participants=" + participants + ", status="
 				+ status + ", read_only=" + read_only + ", busy=" + busy + ", recurrence=" + recurrence
 				+ ", master_event_id=" + master_event_id + ", original_start_time=" + original_start_time + "]";
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setWhen(When when) {
+		this.when = when;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public void setParticipants(List<Participant> participants) {
+		this.participants = participants;
+	}
+
+	public void setBusy(Boolean busy) {
+		this.busy = busy;
+	}
+
+	public void setRecurrence(Recurrence recurrence) {
+		this.recurrence = recurrence;
+	}
+
+	public Map<String, Object> getWritableFields(boolean creation) {
+		Map<String, Object> params = new HashMap<>();
+		if (creation) {
+			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
+		}
+		Maps.putIfNotNull(params, "when", getWhen());
+		Maps.putIfNotNull(params, "title", getTitle());
+		Maps.putIfNotNull(params, "description", getDescription());
+		Maps.putIfNotNull(params, "location", getLocation());
+		Maps.putIfNotNull(params, "participants", getParticipants());
+		Maps.putIfNotNull(params, "busy", getBusy());
+		Maps.putIfNotNull(params, "recurrence", getRecurrence());
+		return params;
 	}
 
 	public static class Recurrence {
@@ -47,9 +155,15 @@ public class Event extends RestfulModel {
 	
 	public static class Time implements When {
 		
-		private Long time;
+		private long time;
 		
-		public Long getTime() {
+		/** For deserialization only */ public Time() {}
+		
+		public Time(long time) {
+			this.time = time;
+		}
+		
+		public long getTime() {
 			return time;
 		}
 
@@ -65,14 +179,21 @@ public class Event extends RestfulModel {
 
 	public static class Timespan implements When {
 		
-		private Long start_time;
-		private Long end_time;
-		
-		public Long getStartTime() {
+		private long start_time;
+		private long end_time;
+
+		/** For deserialization only */ public Timespan() {}
+
+		public Timespan(long startTime, long endTime) {
+			this.start_time = startTime;
+			this.end_time = endTime;
+		}
+
+		public long getStartTime() {
 			return start_time;
 		}
 
-		public Long getEndTime() {
+		public long getEndTime() {
 			return end_time;
 		}
 
@@ -89,7 +210,13 @@ public class Event extends RestfulModel {
 	public static class Date implements When {
 		
 		private String date;
-		
+
+		/** For deserialization only */ public Date() {}
+
+		public Date(String date) {
+			this.date = date;
+		}
+
 		public String getDate() {
 			return date;
 		}
@@ -109,6 +236,13 @@ public class Event extends RestfulModel {
 		private String start_date;
 		private String end_date;
 		
+		/** For deserialization only */ public Datespan() {}
+
+		public Datespan(String startDate, String endDate) {
+			this.start_date = startDate;
+			this.end_date = endDate;
+		}
+
 		public String getStartDate() {
 			return start_date;
 		}
