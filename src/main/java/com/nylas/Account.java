@@ -1,6 +1,6 @@
 package com.nylas;
 
-public class Account extends RestfulModel {
+public class Account extends AccountOwnedModel {
 
 	private String billing_state;
 	private String email;

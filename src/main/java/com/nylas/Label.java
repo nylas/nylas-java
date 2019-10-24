@@ -1,6 +1,6 @@
 package com.nylas;
 
-public class Label extends RestfulModel {
+public class Label extends AccountOwnedModel {
 
 	private String name;
 	private String display_name;

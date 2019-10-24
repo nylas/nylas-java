@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,10 +67,20 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 		return event.hasId() ? update(event, notifyParticipants) : create(event, notifyParticipants);
 	}
 	
-	public Event rsvp(String eventId, String status, String acountId, String comment)
+	public Event rsvp(String eventId, String status, String accountId, String comment, boolean notifyParticipants)
 			 throws IOException, RequestFailedException {
-		// TODO
-		return null;
+		Map<String, Object> params = new HashMap<>();
+		params.put("event_id", eventId);
+		params.put("status", status);
+		params.put("account_id", accountId);
+		if (comment != null && !comment.isEmpty()) {
+			params.put("comment", comment);
+		}
+		HttpUrl url= getBaseUrlBuilder().addPathSegment("send-rsvp").build();
+		if (notifyParticipants) {
+			url = notifyUrl(url);
+		}
+		return client.executePost(authUser, url, params, modelClass);
 	}
 	
 	private static HttpUrl notifyUrl(HttpUrl url) {

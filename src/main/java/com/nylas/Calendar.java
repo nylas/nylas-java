@@ -1,6 +1,6 @@
 package com.nylas;
 
-public class Calendar extends RestfulModel {
+public class Calendar extends AccountOwnedModel {
 
 	private String name;
 	private String description;

@@ -3,7 +3,7 @@ package com.nylas;
 import java.util.Collections;
 import java.util.List;
 
-public class Thread extends RestfulModel {
+public class Thread extends AccountOwnedModel {
 
 	private String account_id;
 	private String subject;

@@ -1,6 +1,6 @@
 package com.nylas;
 
-public class Folder extends RestfulModel {
+public class Folder extends AccountOwnedModel {
 
 	private String name;
 	private String display_name;
