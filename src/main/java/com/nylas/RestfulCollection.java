@@ -65,6 +65,22 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		return client.executeGet(authUser, messageUrl, modelClass);
 	}
 	
+	protected M create(M model) throws IOException, RequestFailedException {
+		if (model.hasId()) {
+			throw new UnsupportedOperationException("Cannot create object with an existing id. Use update instead.");
+		}
+		Map<String, Object> params = model.getWritableFields(true);
+		return create(params);
+	}
+	
+	protected M update(M model) throws IOException, RequestFailedException {
+		if (!model.hasId()) {
+			throw new UnsupportedOperationException("Cannot update object without an existing id. Use create instead.");
+		}
+		Map<String, Object> params = model.getWritableFields(false);
+		return put(model.getId(), params);
+	}
+	
 	protected M put(String id, Map<String, Object> params) throws IOException, RequestFailedException {
 		HttpUrl url = getInstanceUrl(id);
 		return client.executePut(authUser, url, params, modelClass);

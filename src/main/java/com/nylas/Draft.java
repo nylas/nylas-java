@@ -103,7 +103,8 @@ public class Draft extends Message {
 		this.thread_id = threadId;
 	}
 
-	Map<String, Object> getWritableFields(boolean includeThreading) {
+	@Override
+	Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		Maps.putIfNotNull(params, "subject", getSubject());
 		Maps.putIfNotNull(params, "from", getFrom());
@@ -116,7 +117,7 @@ public class Draft extends Message {
 		List<String> fileIds = getFiles().stream().map(f -> f.getId()).collect(Collectors.toList());
 		params.put("file_ids", fileIds);
 		
-		if (includeThreading) {
+		if (creation) {
 			Maps.putIfNotNull(params, "thread_id", getThreadId());
 			Maps.putIfNotNull(params, "reply_to_message_id", getReplyToMessageId());
 		}

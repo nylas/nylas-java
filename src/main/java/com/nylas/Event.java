@@ -124,7 +124,8 @@ public class Event extends AccountOwnedModel {
 		this.recurrence = recurrence;
 	}
 
-	public Map<String, Object> getWritableFields(boolean creation) {
+	@Override
+	Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		if (creation) {
 			Maps.putIfNotNull(params, "calendar_id", getCalendarId());

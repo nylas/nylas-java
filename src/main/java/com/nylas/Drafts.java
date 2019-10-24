@@ -22,11 +22,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 	 * Does not modify the passed in draft object.
 	 */
 	public Draft create(Draft draft) throws IOException, RequestFailedException {
-		if (draft.hasId()) {
-			throw new UnsupportedOperationException("Cannot create draft with an existing id.  Use update instead.");
-		}
-		Map<String, Object> params = draft.getWritableFields(true);
-		return super.create(params);
+		return super.create(draft);
 	}
 	
 	/**
@@ -38,11 +34,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 	 * @throws RequestFailedException if the version of the given draft does not match the latest version on the server.
 	 */
 	public Draft update(Draft draft) throws IOException, RequestFailedException {
-		if (!draft.hasId()) {
-			throw new UnsupportedOperationException("Cannot update draft without an existing id.  Use create instead.");
-		}
-		Map<String, Object> params = draft.getWritableFields(false);
-		return super.put(draft.getId(), params);
+		return super.update(draft);
 	}
 	
 	/**
