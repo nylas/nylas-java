@@ -127,7 +127,7 @@ public class Draft extends Message {
 	@Override
 	public String toString() {
 		return "Draft [reply_to_message_id=" + reply_to_message_id + ", version=" + version + ", account_id="
-				+ account_id + ", thread_id=" + thread_id + ", subject=" + subject + ", from=" + from + ", to=" + to
+				+ getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject + ", from=" + from + ", to=" + to
 				+ ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date=" + date + ", unread=" + unread
 				+ ", starred=" + starred + ", snippet=" + snippet + ", body=" + body + ", files=" + files + ", folder="
 				+ folder + ", labels=" + labels + "]";
