@@ -27,7 +27,7 @@ public class Draft extends Message {
 	}
 
 	/**
-	 * A single name and email pair, to set as the “from” header.
+	 * A single name and email pair, to set as the "from" header.
 	 * Note that not all providers support setting this in a draft.
 	 */
 	public void setFrom(NameEmail from) {
