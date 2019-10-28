@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Message extends AccountOwnedModel {
 
-	protected String account_id;
 	protected String thread_id;
 	protected String subject;
 	protected List<NameEmail> from = Collections.emptyList();
@@ -26,10 +25,6 @@ public class Message extends AccountOwnedModel {
 	protected List<Label> labels = Collections.emptyList();
 	
 	
-	public String getAccountId() {
-		return account_id;
-	}
-
 	public String getThreadId() {
 		return thread_id;
 	}
@@ -92,7 +87,7 @@ public class Message extends AccountOwnedModel {
 
 	@Override
 	public String toString() {
-		return "Message [id=" + getId() + ", account_id=" + account_id + ", thread_id=" + thread_id + ", subject=" + subject
+		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject
 				+ ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date="
 				+ date + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet + ", body.length="
 				+ body.length() + ", files=" + files + ", folder=" + folder + ", labels=" + labels + "]";
