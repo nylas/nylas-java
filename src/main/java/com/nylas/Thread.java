@@ -80,6 +80,18 @@ public class Thread extends AccountOwnedModel {
 	public boolean hasAttachments() {
 		return has_attachments;
 	}
+	
+	/**
+	 * Convenience method to create a draft for a reply to this thread.
+	 * Sets the threadId and the subject to those of the thread.
+	 * Does not populate other draft fields, including to/cc/bcc
+	 */
+	public Draft createReply() {
+		Draft reply = new Draft();
+		reply.setThreadId(getId());
+		reply.setSubject(subject);
+		return reply;
+	}
 
 	@Override
 	public String toString() {
