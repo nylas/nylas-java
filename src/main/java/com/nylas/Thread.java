@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Thread extends AccountOwnedModel {
 
-	private String account_id;
 	private String subject;
 	private boolean unread;
 	private boolean starred;
@@ -22,10 +21,6 @@ public class Thread extends AccountOwnedModel {
 	private List<Label> labels = Collections.emptyList();
 	private boolean has_attachments;
 	
-	public String getAccountId() {
-		return account_id;
-	}
-
 	public String getSubject() {
 		return subject;
 	}
@@ -88,7 +83,7 @@ public class Thread extends AccountOwnedModel {
 
 	@Override
 	public String toString() {
-		return "Thread [id=" + getId() + ", account_id=" + account_id + ", subject=" + subject + ", unread=" + unread
+		return "Thread [id=" + getId() + ", account_id=" + getAccountId() + ", subject=" + subject + ", unread=" + unread
 				+ ", starred=" + starred + ", last_message_timestamp=" + last_message_timestamp
 				+ ", last_message_received_timestamp=" + last_message_received_timestamp
 				+ ", last_message_sent_timestamp=" + last_message_sent_timestamp + ", first_message_timestamp="
