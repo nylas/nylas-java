@@ -18,6 +18,5 @@ public class ContactGroup extends AccountOwnedModel {
 		return "ContactGroup [name=" + name + ", path=" + path + ", accountId=" + getAccountId() + ", id="
 				+ getId() + "]";
 	}
-
 	
 }

@@ -2,10 +2,12 @@ package com.nylas.examples;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 
 import com.nylas.Contact;
+import com.nylas.ContactGroup;
+import com.nylas.ContactGroups;
 import com.nylas.ContactQuery;
 import com.nylas.Contacts;
 import com.nylas.NylasAccount;
@@ -39,7 +41,8 @@ public class ContactsExample {
 		} else {
 			try (ResponseBody picResponse = contacts.downloadProfilePicture(hasProfilePicture.getId())) {
 				Files.copy(picResponse.byteStream(),
-						Paths.get("/tmp/contact.profile." + hasProfilePicture.getId() + ".jpg"));
+						Paths.get("/tmp/contact.profile." + hasProfilePicture.getId() + ".jpg"),
+						StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
 		
@@ -81,5 +84,10 @@ public class ContactsExample {
 //		
 //		contacts.delete(updated.getId());
 //		System.out.println("deleted");
+		
+		ContactGroups groups = account.contactGroups();
+		for (ContactGroup group : groups.list()) {
+			System.out.println(group);
+		}
 	}
 }
