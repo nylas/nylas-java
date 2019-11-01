@@ -19,10 +19,12 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 		return super.expanded(query, ExpandedMessage.class);
 	}
 	
+	@Override
 	public List<String> ids(MessageQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
 	
+	@Override
 	public long count(MessageQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}

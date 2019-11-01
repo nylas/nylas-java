@@ -21,10 +21,12 @@ public class Files extends RestfulCollection<File, FileQuery> {
 		super(client, File.class, "files", accessToken);
 	}
 	
+	@Override
 	public List<String> ids(FileQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
 	
+	@Override
 	public long count(FileQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}
@@ -70,6 +72,7 @@ public class Files extends RestfulCollection<File, FileQuery> {
 		return resultList.get(0);
 	}
 	
+	@Override
 	public void delete(String folderId) throws IOException, RequestFailedException {
 		super.delete(folderId);
 	}

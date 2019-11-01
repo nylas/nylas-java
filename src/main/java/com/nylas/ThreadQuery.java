@@ -22,6 +22,7 @@ public class ThreadQuery extends RestfulQuery<ThreadQuery> {
 	private Long startedBefore;
 	private Long startedAfter;
 	
+	@Override
 	public void addParameters(HttpUrl.Builder url) {
 		super.addParameters(url);  // must call through
 		

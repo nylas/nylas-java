@@ -13,10 +13,12 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 		return super.expanded(query, ExpandedThread.class);
 	}
 	
+	@Override
 	public List<String> ids(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
 	
+	@Override
 	public long count(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}

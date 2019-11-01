@@ -23,6 +23,7 @@ public class MessageQuery extends RestfulQuery<MessageQuery> {
 	private Long receivedAfter;
 	private Boolean hasAttachment;
 	
+	@Override
 	public void addParameters(HttpUrl.Builder url) {
 		super.addParameters(url);  // must call through
 		

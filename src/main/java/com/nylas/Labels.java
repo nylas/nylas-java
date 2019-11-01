@@ -15,6 +15,7 @@ public class Labels extends RestfulCollection<Label, LabelQuery> {
 		return super.create(Maps.of("display_name", displayName));
 	}
 	
+	@Override
 	public void delete(String labelId) throws IOException, RequestFailedException {
 		super.delete(labelId);
 	}

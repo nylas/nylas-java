@@ -21,6 +21,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 	 * Returns the new draft object with an assigned ID as returned by the server.
 	 * Does not modify the passed in draft object.
 	 */
+	@Override
 	public Draft create(Draft draft) throws IOException, RequestFailedException {
 		return super.create(draft);
 	}
@@ -33,6 +34,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 	 * Returns the updated draft object as returned by the server.
 	 * @throws RequestFailedException if the version of the given draft does not match the latest version on the server.
 	 */
+	@Override
 	public Draft update(Draft draft) throws IOException, RequestFailedException {
 		return super.update(draft);
 	}

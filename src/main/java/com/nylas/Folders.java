@@ -15,6 +15,7 @@ public class Folders extends RestfulCollection<Folder, FolderQuery>{
 		return super.create(Maps.of("display_name", displayName));
 	}
 	
+	@Override
 	public void delete(String folderId) throws IOException, RequestFailedException {
 		super.delete(folderId);
 	}

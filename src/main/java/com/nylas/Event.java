@@ -168,6 +168,7 @@ public class Event extends AccountOwnedModel {
 			return time;
 		}
 
+		@Override
 		public String getObjectType() {
 			return "time";
 		}
@@ -198,6 +199,7 @@ public class Event extends AccountOwnedModel {
 			return end_time;
 		}
 
+		@Override
 		public String getObjectType() {
 			return "timespan";
 		}
@@ -222,6 +224,7 @@ public class Event extends AccountOwnedModel {
 			return date;
 		}
 
+		@Override
 		public String getObjectType() {
 			return "date";
 		}
@@ -252,6 +255,7 @@ public class Event extends AccountOwnedModel {
 			return end_date;
 		}
 
+		@Override
 		public String getObjectType() {
 			return "datespan";
 		}

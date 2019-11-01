@@ -14,6 +14,7 @@ public class ContactQuery extends RestfulQuery<ContactQuery> {
 	private String groupId;
 	private Boolean recurse;
 	
+	@Override
 	public void addParameters(HttpUrl.Builder url) {
 		super.addParameters(url);  // must call through
 		

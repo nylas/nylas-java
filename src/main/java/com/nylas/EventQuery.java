@@ -18,6 +18,7 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	private Long endsBefore;
 	private Long endsAfter;
 
+	@Override
 	public void addParameters(HttpUrl.Builder url) {
 		super.addParameters(url);  // must call through
 		
