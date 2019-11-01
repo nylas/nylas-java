@@ -36,8 +36,8 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	}
 	
 	public String getRaw(String messageId) throws IOException, RequestFailedException {
-		HttpUrl messageUrl = getInstanceUrl(messageId);
-		Request.Builder builder = new Request.Builder().url(messageUrl);
+		HttpUrl.Builder messageUrl = getInstanceUrlBuilder(messageId);
+		Request.Builder builder = new Request.Builder().url(messageUrl.build());
 		client.addAuthHeader(builder, authUser);
 		Request request = builder.method(HttpMethod.GET.toString(), null)
 				.addHeader("Accept", "message/rfc822")
@@ -51,7 +51,7 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	 * @return The updated Message as returned by the server.
 	 */
 	public Message setUnread(String messageId, boolean unread) throws IOException, RequestFailedException {
-		return super.put(messageId, Maps.of("unread", unread));
+		return super.update(messageId, Maps.of("unread", unread));
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	 * @return The updated Message as returned by the server.
 	 */
 	public Message setStarred(String messageId, boolean starred) throws IOException, RequestFailedException {
-		return super.put(messageId, Maps.of("starred", starred));
+		return super.update(messageId, Maps.of("starred", starred));
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	 * @return The updated Message as returned by the server.
 	 */
 	public Message setFolderId(String messageId, String folderId) throws IOException, RequestFailedException {
-		return super.put(messageId, Maps.of("folder_id", folderId));
+		return super.update(messageId, Maps.of("folder_id", folderId));
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	 */
 	public Message setLabelIds(String threadId, Collection<String> labelIds)
 			throws IOException, RequestFailedException {
-		return super.put(threadId, Maps.of("label_ids", labelIds));
+		return super.update(threadId, Maps.of("label_ids", labelIds));
 	}
 	
 }

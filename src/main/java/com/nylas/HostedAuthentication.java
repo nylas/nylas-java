@@ -23,7 +23,7 @@ public class HostedAuthentication {
 	
 	public AccessToken fetchToken(String authorizationCode) throws IOException {
 		
-		HttpUrl tokenUrl = application.getClient().getBaseUrl().resolve("oauth/token");
+		HttpUrl tokenUrl = application.getClient().newUrlBuilder().addPathSegments("oauth/token").build();
 		
 		FormBody params = new FormBody.Builder()
 				.add("client_id", application.getClientId())

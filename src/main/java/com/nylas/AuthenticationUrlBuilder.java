@@ -72,7 +72,7 @@ public class AuthenticationUrlBuilder {
 	public String buildUrl() {
 		validate();
 		
-		HttpUrl.Builder urlBuilder = app.getClient().getBaseUrl().newBuilder()
+		HttpUrl.Builder urlBuilder = app.getClient().newUrlBuilder()
 				.addPathSegments("oauth/authorize")
 				.addQueryParameter("client_id", app.getClientId())
 				.addQueryParameter("redirect_uri", redirectUri)

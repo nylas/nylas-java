@@ -8,6 +8,7 @@ import java.util.Map;
 import com.squareup.moshi.Types;
 
 import okhttp3.HttpUrl;
+import okhttp3.HttpUrl.Builder;
 
 public abstract class RestfulCollection<M extends RestfulModel, Q extends RestfulQuery<Q>> {
 
@@ -28,83 +29,107 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	}
 	
 	public List<M> list(Q query) throws IOException, RequestFailedException {
-		HttpUrl url = getCollectionUrl(query, null);
+		HttpUrl.Builder url = getCollectionUrlBuilder(query, null);
 		Type listType = Types.newParameterizedType(List.class, modelClass);
 		return client.executeGet(authUser, url, listType);
 	}
 	
 	protected <E extends M> List<E> expanded(Q query, Class<E> expandedModelClass)
 			throws IOException, RequestFailedException {
-		HttpUrl url = getCollectionUrl(query, "expanded");
+		HttpUrl.Builder url = getCollectionUrlBuilder(query, "expanded");
 		Type listType = Types.newParameterizedType(List.class, expandedModelClass);
 		return client.executeGet(authUser, url, listType);
 	}
 
 	private static final Type STRING_LIST_TYPE = Types.newParameterizedType(List.class, String.class);
 	protected List<String> ids(Q query) throws IOException, RequestFailedException {
-		HttpUrl url = getCollectionUrl(query, "ids");
+		HttpUrl.Builder url = getCollectionUrlBuilder(query, "ids");
 		return client.executeGet(authUser, url, STRING_LIST_TYPE);
 	}
 	
 	protected long count(Q query) throws IOException, RequestFailedException {
-		HttpUrl url = getCollectionUrl(query, "count");
+		HttpUrl.Builder url = getCollectionUrlBuilder(query, "count");
 		Count count = client.executeGet(authUser, url, Count.class);
 		return count.getCount();
 	}
 	
 	protected List<M> search(SearchQuery query) throws IOException, RequestFailedException {
-		HttpUrl url = getCollectionUrl(query, null).newBuilder()
-				.addPathSegment("search")
-				.build();
+		HttpUrl.Builder url = getCollectionUrlBuilder(query, null)
+				.addPathSegment("search");
 		Type listType = Types.newParameterizedType(List.class, modelClass);
 		return client.executeGet(authUser, url, listType);
 	}
 	
 	public M get(String id) throws IOException, RequestFailedException {
-		HttpUrl messageUrl = getInstanceUrl(id);
+		HttpUrl.Builder messageUrl = getInstanceUrlBuilder(id);
 		return client.executeGet(authUser, messageUrl, modelClass);
 	}
 	
 	protected M create(M model) throws IOException, RequestFailedException {
+		return create(model, null);
+	}
+	
+	protected M create(M model, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
 		if (model.hasId()) {
 			throw new UnsupportedOperationException("Cannot create object with an existing id. Use update instead.");
 		}
 		Map<String, Object> params = model.getWritableFields(true);
-		return create(params);
-	}
-	
-	protected M update(M model) throws IOException, RequestFailedException {
-		if (!model.hasId()) {
-			throw new UnsupportedOperationException("Cannot update object without an existing id. Use create instead.");
-		}
-		Map<String, Object> params = model.getWritableFields(false);
-		return put(model.getId(), params);
-	}
-	
-	protected M put(String id, Map<String, Object> params) throws IOException, RequestFailedException {
-		HttpUrl url = getInstanceUrl(id);
-		return client.executePut(authUser, url, params, modelClass);
+		return create(params, extraQueryParams);
 	}
 	
 	protected M create(Map<String, Object> params) throws IOException, RequestFailedException {
-		HttpUrl url = getCollectionUrl();
+		return create(params, null);
+	}
+
+	protected M create(Map<String, Object> params, Map<String, String> extraQueryParams)
+			throws IOException, RequestFailedException {
+		HttpUrl.Builder url = getCollectionUrlBuilder();
+		url = addQueryParams(url, extraQueryParams);
 		return client.executePost(authUser, url, params, modelClass);
+	}
+
+	protected M update(M model) throws IOException, RequestFailedException {
+		return update(model, null);
+	}
+	
+	protected M update(M model, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
+		if (model.hasId()) {
+			throw new UnsupportedOperationException("Cannot create object with an existing id. Use update instead.");
+		}
+		Map<String, Object> params = model.getWritableFields(false);
+		return update(model.getId(), params, extraQueryParams);
+	}
+	
+	protected M update(String id, Map<String, Object> params) throws IOException, RequestFailedException {
+		return update(id, params, null);
+	}
+	
+	protected M update(String id, Map<String, Object> params, Map<String, String> extraQueryParams)
+			throws IOException, RequestFailedException {
+		HttpUrl.Builder url = getInstanceUrlBuilder(id);
+		addQueryParams(url, extraQueryParams);
+		return client.executePut(authUser, url, params, modelClass);
 	}
 	
 	protected void delete(String id) throws IOException, RequestFailedException {
-		HttpUrl url = getInstanceUrl(id);
+		delete(id, null);
+	}
+	
+	protected void delete(String id, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
+		HttpUrl.Builder url = getInstanceUrlBuilder(id);
+		addQueryParams(url, extraQueryParams);
 		client.executeDelete(authUser, url, null);
 	}
 	
 	protected HttpUrl.Builder getBaseUrlBuilder() {
-		return client.getBaseUrl().newBuilder();
+		return client.newUrlBuilder();
 	}
 	
-	protected HttpUrl getCollectionUrl() {
-		return getCollectionUrl(null, null);
+	protected HttpUrl.Builder getCollectionUrlBuilder() {
+		return getCollectionUrlBuilder(null, null);
 	}
 	
-	protected HttpUrl getCollectionUrl(RestfulQuery<?> query, String view) {
+	protected HttpUrl.Builder getCollectionUrlBuilder(RestfulQuery<?> query, String view) {
 		HttpUrl.Builder urlBuilder = getBaseUrlBuilder().addPathSegment(urlPath);
 		if (query != null) {
 			query.addParameters(urlBuilder);
@@ -112,17 +137,20 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		if (view != null) {
 			urlBuilder.addQueryParameter("view", view);
 		}
-		return urlBuilder.build();
+		return urlBuilder;
 	}
 	
-	protected HttpUrl getInstanceUrl(String id) {
-		return getCollectionUrl().newBuilder()
-				.addPathSegment(id)
-				.build();
+	protected HttpUrl.Builder getInstanceUrlBuilder(String id) {
+		return getCollectionUrlBuilder().addPathSegment(id);
 	}
 	
-	protected HttpUrl getInstancePathUrl(String id, String path) {
-		return getInstanceUrl(id).newBuilder().addPathSegment(path).build();
+	protected Builder addQueryParams(Builder url, Map<String, String> params) {
+		if (params != null) {
+			for (Map.Entry<String, String> param : params.entrySet()) {
+				url.addQueryParameter(param.getKey(), param.getValue());
+			}
+		}
+		return url;
 	}
 
 }

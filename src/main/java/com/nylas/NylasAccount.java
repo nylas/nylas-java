@@ -59,12 +59,12 @@ public class NylasAccount {
 	}
 	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
-		HttpUrl accountUrl = client.getBaseUrl().resolve("account");
+		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");
 		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
 	}
 	
 	public void revokeAccessToken() throws IOException, RequestFailedException {
-		HttpUrl revokeUrl = client.getBaseUrl().resolve("oauth/revoke");
+		HttpUrl.Builder revokeUrl = client.newUrlBuilder().addPathSegments("oauth/revoke");
 		client.executePost(accessToken, revokeUrl, null, null);
 	}
 

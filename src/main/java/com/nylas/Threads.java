@@ -35,7 +35,7 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 	 * @return The updated Thread as returned by the server.
 	 */
 	public Thread setUnread(String threadId, boolean unread) throws IOException, RequestFailedException {
-		return super.put(threadId, Maps.of("unread", unread));
+		return super.update(threadId, Maps.of("unread", unread));
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 	 * @return The updated Thread as returned by the server.
 	 */
 	public Thread setStarred(String threadId, boolean starred) throws IOException, RequestFailedException {
-		return super.put(threadId, Maps.of("starred", starred));
+		return super.update(threadId, Maps.of("starred", starred));
 	}
 	
 	/**
@@ -53,13 +53,13 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 	 * @return The updated Thread as returned by the server.
 	 */
 	public Thread setFolderId(String threadId, String folderId) throws IOException, RequestFailedException {
-		return super.put(threadId, Maps.of("folder_id", folderId));
+		return super.update(threadId, Maps.of("folder_id", folderId));
 	}
 	
 	/**
 	 * Updates the labels on the given thread, overwriting all previous labels on the thread.
 	 */
 	public Thread setLabelIds(String threadId, Iterable<String> labelIds) throws IOException, RequestFailedException {
-		return super.put(threadId, Maps.of("label_ids", String.join(",", labelIds)));
+		return super.update(threadId, Maps.of("label_ids", String.join(",", labelIds)));
 	}
 }

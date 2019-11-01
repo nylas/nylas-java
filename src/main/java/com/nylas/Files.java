@@ -39,7 +39,7 @@ public class Files extends RestfulCollection<File, FileQuery> {
 	 * Alternately, use downloadBytes to buffer the full response in memory.
 	 */
 	public ResponseBody download(String fileId) throws IOException, RequestFailedException {
-		HttpUrl url = getInstancePathUrl(fileId, "download");
+		HttpUrl.Builder url = getInstanceUrlBuilder(fileId).addPathSegment("download");
 		Request request = client.buildRequest(authUser, url, HttpMethod.GET, null);
 		Response response = client.getHttpClient().newCall(request).execute();
 		if (!response.isSuccessful()) {
@@ -59,9 +59,10 @@ public class Files extends RestfulCollection<File, FileQuery> {
 		RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
 				.addFormDataPart("file", filename, fileData)
 				.build();
-		HttpUrl url = getCollectionUrl();
+		HttpUrl.Builder url = getCollectionUrlBuilder();
 		Type listType = Types.newParameterizedType(List.class, modelClass);
-		List<File> resultList = client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, listType);
+		List<File> resultList
+			= client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, listType);
 		if (resultList.size() != 1) {
 			throw new RuntimeException("Server failed to respond with exactly 1 file object, got " + resultList.size()
 				+ " instead");

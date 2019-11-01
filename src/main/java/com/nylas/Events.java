@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,35 +28,15 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 	}
 	
 	public Event create(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
-		if (event.hasId()) {
-			throw new UnsupportedOperationException("Cannot create event with an existing id.  Use update instead.");
-		}
-		Map<String, Object> params = event.getWritableFields(true);
-		HttpUrl url = getCollectionUrl();
-		if (notifyParticipants) {
-			url = notifyUrl(url);
-		}
-		return client.executePost(authUser, url, params, modelClass);
+		return super.create(event, getExtraQueryParams(notifyParticipants));
 	}
 	
 	public Event update(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
-		if (!event.hasId()) {
-			throw new UnsupportedOperationException("Cannot update event without an existing id.  Use create instead.");
-		}
-		Map<String, Object> params = event.getWritableFields(false);
-		HttpUrl url = getInstanceUrl(event.getId());
-		if (notifyParticipants) {
-			url = notifyUrl(url);
-		}
-		return client.executePut(authUser, url, params, modelClass);
+		return super.update(event, getExtraQueryParams(notifyParticipants));
 	}
 	
 	public void delete(String id, boolean notifyParticipants) throws IOException, RequestFailedException {
-		HttpUrl url = getInstanceUrl(id);
-		if (notifyParticipants) {
-			url = notifyUrl(url);
-		}
-		client.executeDelete(authUser, url, null);
+		super.delete(id, getExtraQueryParams(notifyParticipants));
 	}
 
 	/**
@@ -76,14 +57,14 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 		if (comment != null && !comment.isEmpty()) {
 			params.put("comment", comment);
 		}
-		HttpUrl url= getBaseUrlBuilder().addPathSegment("send-rsvp").build();
-		if (notifyParticipants) {
-			url = notifyUrl(url);
-		}
+		HttpUrl.Builder url = getBaseUrlBuilder().addPathSegment("send-rsvp");
+		addQueryParams(url, getExtraQueryParams(notifyParticipants));
 		return client.executePost(authUser, url, params, modelClass);
 	}
 	
-	private static HttpUrl notifyUrl(HttpUrl url) {
-		return url.newBuilder().addQueryParameter("notify_participants", "true").build();
+	private static final Map<String, String> NOTIFY_PARTICIPANTS_PARAMS
+		= Collections.unmodifiableMap(Maps.of("notify_participants", "true"));
+	private static Map<String, String> getExtraQueryParams(boolean notifyParticipants) {
+		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : null;
 	}
 }

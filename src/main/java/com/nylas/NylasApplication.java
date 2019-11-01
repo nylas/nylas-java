@@ -41,11 +41,10 @@ public class NylasApplication {
 	}
 	
 	public IPAddressWhitelist fetchIpAddressWhitelist() throws IOException, RequestFailedException {
-		HttpUrl url = client.getBaseUrl().newBuilder()
+		HttpUrl.Builder url = client.newUrlBuilder()
 				.addPathSegment("a")
 				.addPathSegment(clientId)
-				.addPathSegment("ip_addresses")
-				.build();
+				.addPathSegment("ip_addresses");
 		return client.executeGet(clientSecret, url, IPAddressWhitelist.class);
 	}
 

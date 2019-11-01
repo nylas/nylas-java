@@ -16,18 +16,18 @@ public class Accounts extends RestfulCollection<Account, AccountQuery> {
 	}
 
 	public void downgrade(String accountId) throws IOException, RequestFailedException {
-		HttpUrl url = getInstancePathUrl(accountId, "downgrade");
+		HttpUrl.Builder url = getInstanceUrlBuilder(accountId).addPathSegment("downgrade");
 		client.executePost(authUser, url, null, null);
 	}
 	
 	public void upgrade(String accountId) throws IOException, RequestFailedException {
-		HttpUrl url = getInstancePathUrl(accountId, "upgrade");
+		HttpUrl.Builder url = getInstanceUrlBuilder(accountId).addPathSegment("upgrade");
 		client.executePost(authUser, url, null, null);
 	}
 	
 	public void revokeAllTokensForAccount(String accountId, String keepAccessToken)
 			throws IOException, RequestFailedException {
-		HttpUrl url = getInstancePathUrl(accountId, "revoke-all");
+		HttpUrl.Builder url = getInstanceUrlBuilder(accountId).addPathSegment("revoke-all");
 		Map<String, Object> params = new HashMap<>();
 		if (keepAccessToken != null) {
 			params.put("keep_access_token", keepAccessToken);
@@ -36,7 +36,7 @@ public class Accounts extends RestfulCollection<Account, AccountQuery> {
 	}
 
 	public TokenInfo tokenInfo(String accountId, String accessToken) throws IOException, RequestFailedException {
-		HttpUrl url = getInstancePathUrl(accountId, "token-info");
+		HttpUrl.Builder url = getInstanceUrlBuilder(accountId).addPathSegment("token-info");
 		Map<String, Object> params = Maps.of("access_token", accessToken);
 		return client.executePost(authUser, url, params, TokenInfo.class);
 	}

@@ -25,6 +25,6 @@ public class Labels extends RestfulCollection<Label, LabelQuery> {
 	 * Note that the core labels such as Inbox, Trash, etc. cannot be renamed.
 	 */
 	public Label setDisplayName(String labelId, String displayName) throws IOException, RequestFailedException {
-		return super.put(labelId, Maps.of("display_name", displayName));
+		return super.update(labelId, Maps.of("display_name", displayName));
 	}
 }

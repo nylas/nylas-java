@@ -107,7 +107,7 @@ public class NativeAuthentication {
 			Moshi moshi = new Moshi.Builder().build();
 			String json = moshi.adapter(AuthRequestBuilder.class).toJson(this);
 			
-			HttpUrl authUrl = application.getClient().getBaseUrl().resolve("connect/authorize");
+			HttpUrl authUrl = application.getClient().newUrlBuilder().addPathSegments("connect/authorize").build();
 			RequestBody body = RequestBody.create(JsonHelper.jsonType(), json);
 			
 			Request request = new Request.Builder().url(authUrl)
@@ -127,7 +127,7 @@ public class NativeAuthentication {
 	
 	public AccessToken fetchToken(String authorizationCode) throws IOException {
 		
-		HttpUrl tokenUrl = application.getClient().getBaseUrl().resolve("connect/token");
+		HttpUrl tokenUrl = application.getClient().newUrlBuilder().addPathSegments("connect/token").build();
 		
 		Map<String, Object> params = new HashMap<>();
 		params.put("client_id", application.getClientId());

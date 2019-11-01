@@ -24,7 +24,7 @@ public class Folders extends RestfulCollection<Folder, FolderQuery>{
 	 * Note that the core folders such as INBOX, Trash, etc. often cannot be renamed
 	 */
 	public Folder setDisplayName(String folderId, String displayName) throws IOException, RequestFailedException {
-		return super.put(folderId, Maps.of("display_name", displayName));
+		return super.update(folderId, Maps.of("display_name", displayName));
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class Folders extends RestfulCollection<Folder, FolderQuery>{
 	 * This feature is supported for custom IMAP accounts only.
 	 */
 	public Folder setAsSentFolder(String folderId) throws IOException, RequestFailedException {
-		return super.put(folderId, Maps.of("name", "sent"));
+		return super.update(folderId, Maps.of("name", "sent"));
 	}
 
 }

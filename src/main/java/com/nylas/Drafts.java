@@ -67,13 +67,13 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 			params = draft.getWritableFields(true);
 			resultType = Message.class;
 		}
-		HttpUrl url = getSendUrl();
+		HttpUrl.Builder url = getSendUrl();
 		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
 		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
 	}
 
-	private HttpUrl getSendUrl() {
-		return getBaseUrlBuilder().addPathSegment("send").build();
+	private HttpUrl.Builder getSendUrl() {
+		return getBaseUrlBuilder().addPathSegment("send");
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 	 * @return a Message representing the sent message
 	 */
 	public Message sendRawMime(String mimeMessage) throws IOException, RequestFailedException {
-		HttpUrl url = getSendUrl();
+		HttpUrl.Builder url = getSendUrl();
 		RequestBody requestBody = RequestBody.create(MediaType.get("message/rfc822"), mimeMessage);
 		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, Message.class);
 	}

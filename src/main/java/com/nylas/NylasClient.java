@@ -37,8 +37,8 @@ public class NylasClient {
 				.build();
 	}
 
-	public HttpUrl getBaseUrl() {
-		return baseUrl;
+	public HttpUrl.Builder newUrlBuilder() {
+		return baseUrl.newBuilder();
 	}
 	
 	public OkHttpClient getHttpClient() {
@@ -53,18 +53,18 @@ public class NylasClient {
 		return new NylasAccount(this, accessToken);
 	}
 	
-	<T> T executeGet(String authUser, HttpUrl url, Type resultType)
+	<T> T executeGet(String authUser, HttpUrl.Builder url, Type resultType)
 			throws IOException, RequestFailedException {
 		return executeRequestWithAuth(authUser, url, HttpMethod.GET, null, resultType);
 	}
 	
-	<T> T executePut(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
+	<T> T executePut(String authUser, HttpUrl.Builder url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
 		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
 		return executeRequestWithAuth(authUser, url, HttpMethod.PUT, jsonBody, resultType);
 	}
 	
-	<T> T executePost(String authUser, HttpUrl url, Map<String, Object> params, Type resultType)
+	<T> T executePost(String authUser, HttpUrl.Builder url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
 		RequestBody jsonBody = Util.EMPTY_REQUEST;
 		if (params != null) {
@@ -73,19 +73,19 @@ public class NylasClient {
 		return executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
 	}
 	
-	<T> T executeDelete(String authUser, HttpUrl url, Type resultType)
+	<T> T executeDelete(String authUser, HttpUrl.Builder url, Type resultType)
 			throws IOException, RequestFailedException {
 		return executeRequestWithAuth(authUser, url, HttpMethod.DELETE, null, resultType);
 	}
 	
-	<T> T executeRequestWithAuth(String authUser, HttpUrl url, HttpMethod method, RequestBody body,
+	<T> T executeRequestWithAuth(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body,
 			Type resultType) throws IOException, RequestFailedException {
 		Request request = buildRequest(authUser, url, method, body);
 		return executeRequest(request, resultType);
 	}
 
-	Request buildRequest(String authUser, HttpUrl url, HttpMethod method, RequestBody body) {
-		Request.Builder builder = new Request.Builder().url(url);
+	Request buildRequest(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body) {
+		Request.Builder builder = new Request.Builder().url(url.build());
 		addAuthHeader(builder, authUser);
 		return builder.method(method.toString(), body).build();
 	}
