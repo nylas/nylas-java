@@ -9,6 +9,21 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 		super(client, Thread.class, "threads", accessToken);
 	}
 	
+	@Override
+	public List<Thread> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<Thread> list(ThreadQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public Thread get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
 	public List<ExpandedThread> expanded(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.expanded(query, ExpandedThread.class);
 	}

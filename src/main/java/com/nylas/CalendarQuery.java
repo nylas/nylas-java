@@ -1,5 +1,5 @@
 package com.nylas;
 
-public class CalendarQuery extends RestfulQuery<CalendarQuery> {
+public class CalendarQuery extends PaginatedQuery<CalendarQuery> {
 
 }

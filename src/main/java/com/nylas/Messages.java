@@ -15,6 +15,21 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 		super(client, Message.class, "messages", accessToken);
 	}
 
+	@Override
+	public List<Message> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<Message> list(MessageQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public Message get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
 	public List<ExpandedMessage> expanded(MessageQuery query) throws IOException, RequestFailedException {
 		return super.expanded(query, ExpandedMessage.class);
 	}

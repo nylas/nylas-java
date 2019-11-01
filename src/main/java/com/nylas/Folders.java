@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @see https://docs.nylas.com/reference#folders
@@ -11,6 +12,21 @@ public class Folders extends RestfulCollection<Folder, FolderQuery>{
 		super(client, Folder.class, "folders", accessToken);
 	}
 	
+	@Override
+	public List<Folder> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<Folder> list(FolderQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public Folder get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
 	public Folder create(String displayName) throws IOException, RequestFailedException {
 		return super.create(Maps.of("display_name", displayName));
 	}

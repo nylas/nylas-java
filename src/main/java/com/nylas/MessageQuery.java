@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import okhttp3.HttpUrl;
 
-public class MessageQuery extends RestfulQuery<MessageQuery> {
+public class MessageQuery extends PaginatedQuery<MessageQuery> {
 
 	private String subject;
 	private String anyEmail;

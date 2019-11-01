@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 
 import com.nylas.NylasClient.HttpMethod;
@@ -16,6 +17,21 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 		super(client, Draft.class, "drafts", accessToken);
 	}
 	
+	@Override
+	public List<Draft> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<Draft> list(DraftQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public Draft get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
 	/**
 	 * Create the given draft on the server.
 	 * Returns the new draft object with an assigned ID as returned by the server.

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import okhttp3.HttpUrl;
 
-public class DraftQuery extends RestfulQuery<DraftQuery> {
+public class DraftQuery extends PaginatedQuery<DraftQuery> {
 
 	private String anyEmail;
 

@@ -13,6 +13,21 @@ public class Calendars extends RestfulCollection<Calendar, CalendarQuery>{
 	}
 
 	@Override
+	public List<Calendar> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<Calendar> list(CalendarQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public Calendar get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
+	@Override
 	public List<String> ids(CalendarQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}

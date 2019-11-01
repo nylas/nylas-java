@@ -4,7 +4,7 @@ import java.time.Instant;
 
 import okhttp3.HttpUrl;
 
-public class EventQuery extends RestfulQuery<EventQuery> {
+public class EventQuery extends PaginatedQuery<EventQuery> {
 
 	private Boolean expandRecurring;
 	private Boolean showCancelled;

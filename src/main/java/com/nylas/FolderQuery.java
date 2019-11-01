@@ -1,5 +1,5 @@
 package com.nylas;
 
-public class FolderQuery extends RestfulQuery<FolderQuery> {
+public class FolderQuery extends PaginatedQuery<FolderQuery> {
 
 }

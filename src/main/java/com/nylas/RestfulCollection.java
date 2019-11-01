@@ -24,11 +24,11 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		this.authUser = authUser;
 	}
 	
-	public List<M> list() throws IOException, RequestFailedException {
+	protected List<M> list() throws IOException, RequestFailedException {
 		return list(null);
 	}
 	
-	public List<M> list(Q query) throws IOException, RequestFailedException {
+	protected List<M> list(Q query) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl();
 		setQuery(url, query);
 		Type listType = Types.newParameterizedType(List.class, modelClass);
@@ -67,7 +67,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		return client.executeGet(authUser, url, listType);
 	}
 	
-	public M get(String id) throws IOException, RequestFailedException {
+	protected M get(String id) throws IOException, RequestFailedException {
 		HttpUrl.Builder messageUrl = getInstanceUrl(id);
 		return client.executeGet(authUser, messageUrl, modelClass);
 	}

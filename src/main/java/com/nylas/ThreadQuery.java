@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import okhttp3.HttpUrl;
 
-public class ThreadQuery extends RestfulQuery<ThreadQuery> {
+public class ThreadQuery extends PaginatedQuery<ThreadQuery> {
 
 	private String subject;
 	private String anyEmail;

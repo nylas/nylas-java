@@ -1,5 +1,5 @@
 package com.nylas;
 
-public class LabelQuery extends RestfulQuery<LabelQuery> {
+public class LabelQuery extends PaginatedQuery<LabelQuery> {
 
 }

@@ -18,6 +18,21 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 	}
 
 	@Override
+	public List<Event> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<Event> list(EventQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public Event get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
+	@Override
 	public List<String> ids(EventQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}

@@ -20,6 +20,21 @@ public class Files extends RestfulCollection<File, FileQuery> {
 	}
 	
 	@Override
+	public List<File> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<File> list(FileQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public File get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
+	@Override
 	public List<String> ids(FileQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}

@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @see https://docs.nylas.com/reference#labels
@@ -11,6 +12,21 @@ public class Labels extends RestfulCollection<Label, LabelQuery> {
 		super(client, Label.class, "labels", accessToken);
 	}
 	
+	@Override
+	public List<Label> list() throws IOException, RequestFailedException {
+		return super.list();
+	}
+
+	@Override
+	public List<Label> list(LabelQuery query) throws IOException, RequestFailedException {
+		return super.list(query);
+	}
+
+	@Override
+	public Label get(String id) throws IOException, RequestFailedException {
+		return super.get(id);
+	}
+
 	public Label create(String displayName) throws IOException, RequestFailedException {
 		return super.create(Maps.of("display_name", displayName));
 	}
