@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
-
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 

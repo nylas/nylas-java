@@ -1,20 +1,14 @@
 package com.nylas.examples;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import com.nylas.Calendar;
 import com.nylas.Event;
-import com.nylas.Event.Time;
-import com.nylas.Event.Timespan;
 import com.nylas.EventQuery;
 import com.nylas.Events;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
-import com.nylas.Participant;
 
 public class EventsExample {
 
