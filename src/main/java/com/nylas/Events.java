@@ -57,7 +57,7 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 		if (comment != null && !comment.isEmpty()) {
 			params.put("comment", comment);
 		}
-		HttpUrl.Builder url = getBaseUrlBuilder().addPathSegment("send-rsvp");
+		HttpUrl.Builder url = client.newUrlBuilder().addPathSegment("send-rsvp");
 		addQueryParams(url, getExtraQueryParams(notifyParticipants));
 		return client.executePost(authUser, url, params, modelClass);
 	}

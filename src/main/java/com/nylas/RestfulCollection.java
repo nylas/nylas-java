@@ -14,13 +14,13 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 
 	protected final NylasClient client;
 	protected final Class<M> modelClass;
-	protected final String urlPath;
+	protected final String collectionPath;
 	protected final String authUser;
 	
-	protected RestfulCollection(NylasClient client, Class<M> modelClass, String urlPath, String authUser) {
+	protected RestfulCollection(NylasClient client, Class<M> modelClass, String collectionPath, String authUser) {
 		this.client = client;
 		this.modelClass = modelClass;
-		this.urlPath = urlPath;
+		this.collectionPath = collectionPath;
 		this.authUser = authUser;
 	}
 	
@@ -29,39 +29,46 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	}
 	
 	public List<M> list(Q query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrlBuilder(query, null);
+		HttpUrl.Builder url = getCollectionUrl();
+		setQuery(url, query);
 		Type listType = Types.newParameterizedType(List.class, modelClass);
 		return client.executeGet(authUser, url, listType);
 	}
 	
 	protected <E extends M> List<E> expanded(Q query, Class<E> expandedModelClass)
 			throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrlBuilder(query, "expanded");
+		HttpUrl.Builder url = getCollectionUrl();
+		setQuery(url, query);
+		setView(url, "expanded");
 		Type listType = Types.newParameterizedType(List.class, expandedModelClass);
 		return client.executeGet(authUser, url, listType);
 	}
 
 	private static final Type STRING_LIST_TYPE = Types.newParameterizedType(List.class, String.class);
 	protected List<String> ids(Q query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrlBuilder(query, "ids");
+		HttpUrl.Builder url = getCollectionUrl();
+		setQuery(url, query);
+		setView(url, "ids");
 		return client.executeGet(authUser, url, STRING_LIST_TYPE);
 	}
 	
 	protected long count(Q query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrlBuilder(query, "count");
+		HttpUrl.Builder url = getCollectionUrl();
+		setQuery(url, query);
+		setView(url, "count");
 		Count count = client.executeGet(authUser, url, Count.class);
 		return count.getCount();
 	}
 	
 	protected List<M> search(SearchQuery query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrlBuilder(query, null)
-				.addPathSegment("search");
+		HttpUrl.Builder url = getCollectionUrl().addPathSegment("search");
+		setQuery(url, query);
 		Type listType = Types.newParameterizedType(List.class, modelClass);
 		return client.executeGet(authUser, url, listType);
 	}
 	
 	public M get(String id) throws IOException, RequestFailedException {
-		HttpUrl.Builder messageUrl = getInstanceUrlBuilder(id);
+		HttpUrl.Builder messageUrl = getInstanceUrl(id);
 		return client.executeGet(authUser, messageUrl, modelClass);
 	}
 	
@@ -83,7 +90,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 
 	protected M create(Map<String, Object> params, Map<String, String> extraQueryParams)
 			throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrlBuilder();
+		HttpUrl.Builder url = getCollectionUrl();
 		url = addQueryParams(url, extraQueryParams);
 		return client.executePost(authUser, url, params, modelClass);
 	}
@@ -106,7 +113,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	
 	protected M update(String id, Map<String, Object> params, Map<String, String> extraQueryParams)
 			throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getInstanceUrlBuilder(id);
+		HttpUrl.Builder url = getInstanceUrl(id);
 		addQueryParams(url, extraQueryParams);
 		return client.executePut(authUser, url, params, modelClass);
 	}
@@ -116,32 +123,17 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	}
 	
 	protected void delete(String id, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getInstanceUrlBuilder(id);
+		HttpUrl.Builder url = getInstanceUrl(id);
 		addQueryParams(url, extraQueryParams);
 		client.executeDelete(authUser, url, null);
 	}
 	
-	protected HttpUrl.Builder getBaseUrlBuilder() {
-		return client.newUrlBuilder();
+	protected HttpUrl.Builder getCollectionUrl() {
+		return client.newUrlBuilder().addPathSegments(collectionPath);
 	}
 	
-	protected HttpUrl.Builder getCollectionUrlBuilder() {
-		return getCollectionUrlBuilder(null, null);
-	}
-	
-	protected HttpUrl.Builder getCollectionUrlBuilder(RestfulQuery<?> query, String view) {
-		HttpUrl.Builder urlBuilder = getBaseUrlBuilder().addPathSegment(urlPath);
-		if (query != null) {
-			query.addParameters(urlBuilder);
-		}
-		if (view != null) {
-			urlBuilder.addQueryParameter("view", view);
-		}
-		return urlBuilder;
-	}
-	
-	protected HttpUrl.Builder getInstanceUrlBuilder(String id) {
-		return getCollectionUrlBuilder().addPathSegment(id);
+	protected HttpUrl.Builder getInstanceUrl(String id) {
+		return getCollectionUrl().addPathSegment(id);
 	}
 	
 	protected Builder addQueryParams(Builder url, Map<String, String> params) {
@@ -151,6 +143,16 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 			}
 		}
 		return url;
+	}
+
+	private static void setQuery(HttpUrl.Builder url, RestfulQuery<?> query) {
+		if (query != null) {
+			query.addParameters(url);
+		}
+	}
+	
+	private static void setView(HttpUrl.Builder url, String view) {
+		url.addQueryParameter("view", view);
 	}
 
 }

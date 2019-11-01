@@ -73,7 +73,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 	}
 
 	private HttpUrl.Builder getSendUrl() {
-		return getBaseUrlBuilder().addPathSegment("send");
+		return client.newUrlBuilder().addPathSegment("send");
 	}
 
 	/**

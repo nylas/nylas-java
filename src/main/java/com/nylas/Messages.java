@@ -36,7 +36,7 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	}
 	
 	public String getRaw(String messageId) throws IOException, RequestFailedException {
-		HttpUrl.Builder messageUrl = getInstanceUrlBuilder(messageId);
+		HttpUrl.Builder messageUrl = getInstanceUrl(messageId);
 		Request.Builder builder = new Request.Builder().url(messageUrl.build());
 		client.addAuthHeader(builder, authUser);
 		Request request = builder.method(HttpMethod.GET.toString(), null)
