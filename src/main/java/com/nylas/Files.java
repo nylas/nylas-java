@@ -10,9 +10,7 @@ import com.squareup.moshi.Types;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class Files extends RestfulCollection<File, FileQuery> {
@@ -42,13 +40,7 @@ public class Files extends RestfulCollection<File, FileQuery> {
 	 */
 	public ResponseBody download(String fileId) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getInstanceUrl(fileId).addPathSegment("download");
-		Request request = client.buildRequest(authUser, url, HttpMethod.GET, null);
-		Response response = client.getHttpClient().newCall(request).execute();
-		if (!response.isSuccessful()) {
-			response.close();
-			throw new RequestFailedException(response.code(), response.body().string());
-		}
-		return response.body();
+		return client.download(authUser, url);
 	}
 	
 	public byte[] downloadBytes(String fileId) throws IOException, RequestFailedException {

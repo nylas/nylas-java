@@ -100,8 +100,8 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	}
 	
 	protected M update(M model, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
-		if (model.hasId()) {
-			throw new UnsupportedOperationException("Cannot create object with an existing id. Use update instead.");
+		if (!model.hasId()) {
+			throw new UnsupportedOperationException("Cannot update an object without an id. Use create instead.");
 		}
 		Map<String, Object> params = model.getWritableFields(false);
 		return update(model.getId(), params, extraQueryParams);
