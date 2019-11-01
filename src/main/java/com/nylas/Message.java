@@ -18,12 +18,9 @@ public class Message extends AccountOwnedModel {
 	protected String snippet;
 	protected String body;
 	protected List<File> files = Collections.emptyList();
-	
-	// TODO events
-	
+	protected List<Event> events = Collections.emptyList();
 	protected Folder folder;
 	protected List<Label> labels = Collections.emptyList();
-	
 	
 	public String getThreadId() {
 		return thread_id;
@@ -77,6 +74,10 @@ public class Message extends AccountOwnedModel {
 		return files;
 	}
 
+	public List<Event> getEvents() {
+		return events;
+	}
+	
 	public Folder getFolder() {
 		return folder;
 	}
@@ -87,10 +88,11 @@ public class Message extends AccountOwnedModel {
 
 	@Override
 	public String toString() {
-		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject
-				+ ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date="
-				+ date + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet + ", body.length="
-				+ body.length() + ", files=" + files + ", folder=" + folder + ", labels=" + labels + "]";
+		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject="
+				+ subject + ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to
+				+ ", date=" + date + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet
+				+ ", body.length=" + body.length() + ", files=" + files + ", events=" + events + ", folder=" + folder
+				+ ", labels=" + labels + "]";
 	}
 	
 }
