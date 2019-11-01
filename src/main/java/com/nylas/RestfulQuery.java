@@ -4,7 +4,7 @@ import okhttp3.HttpUrl;
 
 public abstract class RestfulQuery<Q extends RestfulQuery<Q>> {
 
-	public void addParameters(HttpUrl.Builder url) {
+	public void addParameters(@SuppressWarnings("unused") HttpUrl.Builder url) {
 		// subclasses to override
 	}
 	
