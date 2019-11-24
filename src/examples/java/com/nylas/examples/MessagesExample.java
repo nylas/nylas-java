@@ -23,7 +23,6 @@ public class MessagesExample {
 
 		Messages messages = account.messages();
 		
-		
 		Instant end = ZonedDateTime.now().toInstant();
 		Instant start = end.minus(1, ChronoUnit.DAYS);
 		MessageQuery query = new MessageQuery()
