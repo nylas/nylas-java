@@ -1,9 +1,14 @@
 package com.nylas;
 
-public class Label extends AccountOwnedModel {
+public class Label extends AccountOwnedModel implements Delta.Attributes {
 
 	private String name;
 	private String display_name;
+	
+	@Override
+	public String getObjectType() {
+		return "label";
+	}
 	
 	public String getName() {
 		return name;

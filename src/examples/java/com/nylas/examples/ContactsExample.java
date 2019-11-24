@@ -3,6 +3,7 @@ package com.nylas.examples;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Properties;
 
 import com.nylas.Contact;
@@ -48,42 +49,42 @@ public class ContactsExample {
 		
 		
 		
-//		Contact newContact = new Contact();
-//		newContact.setGivenName("Icarus");
-//		newContact.setMiddleName("J.");
-//		newContact.setSurname("Daedaluson");
-//		newContact.setSuffix("Esq.");
-//		newContact.setNickname("Ick");
-//		newContact.setBirthday("1959-03-31");
-//		newContact.setCompanyName("Solar Airlines");
-//		newContact.setJobTitle("Aviation Engineer");
-//		newContact.setManagerName("Minos");
-//		newContact.setNotes("Sensitive to solar radiation");
-//		newContact.setOfficeLocation("Crete");
-//		newContact.setEmails(Arrays.asList(new Contact.Email("work", "icarus@example.com"),
-//				new Contact.Email("personal", "ickthestick@example.com")));
-//		newContact.setIMAddresses(Arrays.asList(new Contact.IMAddress("yahoo", "ickthestick")));
-//		newContact.setPhoneNumbers(Arrays.asList(new Contact.PhoneNumber("mobile", "510-555-5555"),
-//				new Contact.PhoneNumber("business", "415-555-5555")));
-//		Contact.PhysicalAddress address = new Contact.PhysicalAddress();
-//		address.setStreetAddress("12345 Avian Ave.");
-//		address.setType("other");
-//		address.setCity("Flyville");
-//		address.setState("CA");
-//		address.setCountry("USA");
-//		address.setPostalCode("00000");
-//		address.setFormat("structured");
-//		newContact.setPhysicalAddresses(Arrays.asList(address));
-//		
-//		Contact created = contacts.create(newContact);
-//		System.out.println("Created: " + created);
-//		
-//		created.setGivenName("Icarus (deceased)");
-//		Contact updated = contacts.update(created);
-//		System.out.println("Updated: " + updated);
-//		
-//		contacts.delete(updated.getId());
-//		System.out.println("deleted");
+		Contact newContact = new Contact();
+		newContact.setGivenName("Icarus");
+		newContact.setMiddleName("J.");
+		newContact.setSurname("Daedaluson");
+		newContact.setSuffix("Esq.");
+		newContact.setNickname("Ick");
+		newContact.setBirthday("1959-03-31");
+		newContact.setCompanyName("Solar Airlines");
+		newContact.setJobTitle("Aviation Engineer");
+		newContact.setManagerName("Minos");
+		newContact.setNotes("Sensitive to solar radiation");
+		newContact.setOfficeLocation("Crete");
+		newContact.setEmails(Arrays.asList(new Contact.Email("work", "icarus@example.com"),
+				new Contact.Email("personal", "ickthestick@example.com")));
+		newContact.setIMAddresses(Arrays.asList(new Contact.IMAddress("yahoo", "ickthestick")));
+		newContact.setPhoneNumbers(Arrays.asList(new Contact.PhoneNumber("mobile", "510-555-5555"),
+				new Contact.PhoneNumber("business", "415-555-5555")));
+		Contact.PhysicalAddress address = new Contact.PhysicalAddress();
+		address.setStreetAddress("12345 Avian Ave.");
+		address.setType("other");
+		address.setCity("Flyville");
+		address.setState("CA");
+		address.setCountry("USA");
+		address.setPostalCode("00000");
+		address.setFormat("structured");
+		newContact.setPhysicalAddresses(Arrays.asList(address));
+		
+		Contact created = contacts.create(newContact);
+		System.out.println("Created: " + created);
+		
+		created.setGivenName("Icarus (deceased)");
+		Contact updated = contacts.update(created);
+		System.out.println("Updated: " + updated);
+		
+		contacts.delete(updated.getId());
+		System.out.println("deleted");
 		
 		ContactGroups groups = account.contactGroups();
 		for (ContactGroup group : groups.list()) {

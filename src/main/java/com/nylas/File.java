@@ -3,13 +3,18 @@ package com.nylas;
 import java.util.Collections;
 import java.util.List;
 
-public class File extends AccountOwnedModel {
+public class File extends AccountOwnedModel implements Delta.Attributes {
 
 	private String filename;
 	private Integer size;
 	private String content_type;
 	private List<String> message_ids = Collections.emptyList();
 	private String content_id;
+	
+	@Override
+	public String getObjectType() {
+		return "file";
+	}
 	
 	public String getFilename() {
 		return filename;

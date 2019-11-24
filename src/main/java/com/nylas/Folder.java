@@ -1,10 +1,15 @@
 package com.nylas;
 
-public class Folder extends AccountOwnedModel {
+public class Folder extends AccountOwnedModel implements Delta.Attributes {
 
 	private String name;
 	private String display_name;
 
+	@Override
+	public String getObjectType() {
+		return "folder";
+	}
+	
 	public String getName() {
 		return name;
 	}

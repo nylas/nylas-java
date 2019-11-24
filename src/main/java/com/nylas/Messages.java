@@ -30,8 +30,9 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 		return super.get(id);
 	}
 
-	public List<ExpandedMessage> expanded(MessageQuery query) throws IOException, RequestFailedException {
-		return super.expanded(query, ExpandedMessage.class);
+	@Override
+	public List<Message> expanded(MessageQuery query) throws IOException, RequestFailedException {
+		return super.expanded(query);
 	}
 	
 	@Override

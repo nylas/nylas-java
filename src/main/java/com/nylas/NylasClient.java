@@ -3,6 +3,7 @@ package com.nylas;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.squareup.moshi.JsonAdapter;
 
@@ -35,6 +36,9 @@ public class NylasClient {
 		httpClient = new OkHttpClient.Builder()
 				.addInterceptor(new UserAgentInterceptor())
 				.addNetworkInterceptor(logging)
+				.connectTimeout(15, TimeUnit.SECONDS)
+				.readTimeout(15, TimeUnit.SECONDS)
+				.writeTimeout(15,  TimeUnit.SECONDS)
 				.build();
 	}
 

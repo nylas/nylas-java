@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Contact extends AccountOwnedModel {
+public class Contact extends AccountOwnedModel implements Delta.Attributes {
 
 	private String given_name;
 	private String middle_name;
@@ -26,6 +26,11 @@ public class Contact extends AccountOwnedModel {
 	private List<WebPage> web_pages;
 	private List<ContactGroup> groups;
 	private String source;
+	
+	@Override
+	public String getObjectType() {
+		return "contact";
+	}
 	
 	public String getGivenName() {
 		return given_name;
@@ -381,4 +386,5 @@ public class Contact extends AccountOwnedModel {
 			return "WebPage [type=" + type + ", url=" + url + "]";
 		}
 	}
+
 }

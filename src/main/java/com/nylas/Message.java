@@ -2,8 +2,9 @@ package com.nylas;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class Message extends AccountOwnedModel {
+public class Message extends AccountOwnedModel implements Delta.Attributes {
 
 	protected String thread_id;
 	protected String subject;
@@ -21,6 +22,14 @@ public class Message extends AccountOwnedModel {
 	protected List<Event> events = Collections.emptyList();
 	protected Folder folder;
 	protected List<Label> labels = Collections.emptyList();
+
+	// only available in expanded message view
+	private Map<String, Object> headers = Collections.emptyMap();
+
+	@Override
+	public String getObjectType() {
+		return "message";
+	}
 	
 	public String getThreadId() {
 		return thread_id;
@@ -86,13 +95,20 @@ public class Message extends AccountOwnedModel {
 		return labels;
 	}
 
+	/**
+	 * Return additional RFC2822 headers, only available in expanded view
+	 */
+	public Map<String, Object> getHeaders() {
+		return headers;
+	}
+
 	@Override
 	public String toString() {
 		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject="
 				+ subject + ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to
 				+ ", date=" + date + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet
 				+ ", body.length=" + body.length() + ", files=" + files + ", events=" + events + ", folder=" + folder
-				+ ", labels=" + labels + "]";
+				+ ", labels=" + labels + ", headers=" + headers + "]";
 	}
 	
 }

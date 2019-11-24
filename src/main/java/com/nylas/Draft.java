@@ -11,6 +11,11 @@ public class Draft extends Message {
 	private String reply_to_message_id;
 	private Integer version;
 	
+	@Override
+	public String getObjectType() {
+		return "draft";
+	}
+	
 	public String getReplyToMessageId() {
 		return reply_to_message_id;
 	}

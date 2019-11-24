@@ -24,8 +24,9 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 		return super.get(id);
 	}
 
-	public List<ExpandedThread> expanded(ThreadQuery query) throws IOException, RequestFailedException {
-		return super.expanded(query, ExpandedThread.class);
+	@Override
+	public List<Thread> expanded(ThreadQuery query) throws IOException, RequestFailedException {
+		return super.expanded(query);
 	}
 	
 	@Override

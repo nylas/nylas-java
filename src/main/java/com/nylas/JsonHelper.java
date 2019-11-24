@@ -15,6 +15,7 @@ public class JsonHelper {
 	static {
 		moshi = new Moshi.Builder()
 				.add(Event.WHEN_JSON_FACTORY)
+				.add(Delta.ATTRIBUTES_JSON_FACTORY)
 				.build();
 	}
 	

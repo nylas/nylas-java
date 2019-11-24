@@ -7,7 +7,7 @@ import java.util.Map;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
 
-public class Event extends AccountOwnedModel {
+public class Event extends AccountOwnedModel implements Delta.Attributes {
 
 	private String calendar_id;
 	private String title;
@@ -32,6 +32,11 @@ public class Event extends AccountOwnedModel {
 		this.when = when;
 	}
 
+	@Override
+	public String getObjectType() {
+		return "event";
+	}
+	
 	public String getCalendarId() {
 		return calendar_id;
 	}
@@ -150,9 +155,7 @@ public class Event extends AccountOwnedModel {
 		}
 	}
 	
-	public static interface When {
-		String getObjectType();
-	}
+	public static interface When extends JsonObject {}
 	
 	public static class Time implements When {
 		

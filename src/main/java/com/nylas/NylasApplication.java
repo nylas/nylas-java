@@ -40,6 +40,10 @@ public class NylasApplication {
 		return new Accounts(client, this);
 	}
 	
+	public Webhooks webhooks() {
+		return new Webhooks(client, this);
+	}
+	
 	public IPAddressWhitelist fetchIpAddressWhitelist() throws IOException, RequestFailedException {
 		HttpUrl.Builder url = client.newUrlBuilder()
 				.addPathSegment("a")

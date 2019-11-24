@@ -24,6 +24,10 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		this.authUser = authUser;
 	}
 	
+	protected Type getModelListType() {
+		return Types.newParameterizedType(List.class, modelClass);
+	}
+	
 	protected List<M> list() throws IOException, RequestFailedException {
 		return list(null);
 	}
@@ -31,16 +35,15 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	protected List<M> list(Q query) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl();
 		setQuery(url, query);
-		Type listType = Types.newParameterizedType(List.class, modelClass);
+		Type listType = getModelListType();
 		return client.executeGet(authUser, url, listType);
 	}
 	
-	protected <E extends M> List<E> expanded(Q query, Class<E> expandedModelClass)
-			throws IOException, RequestFailedException {
+	protected List<M> expanded(Q query) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl();
 		setQuery(url, query);
 		setView(url, "expanded");
-		Type listType = Types.newParameterizedType(List.class, expandedModelClass);
+		Type listType = getModelListType();
 		return client.executeGet(authUser, url, listType);
 	}
 
@@ -63,7 +66,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	protected List<M> search(SearchQuery query) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl().addPathSegment("search");
 		setQuery(url, query);
-		Type listType = Types.newParameterizedType(List.class, modelClass);
+		Type listType = getModelListType();
 		return client.executeGet(authUser, url, listType);
 	}
 	

@@ -3,7 +3,7 @@ package com.nylas;
 import java.util.Collections;
 import java.util.List;
 
-public class Thread extends AccountOwnedModel {
+public class Thread extends AccountOwnedModel implements Delta.Attributes {
 
 	private String subject;
 	private boolean unread;
@@ -14,12 +14,23 @@ public class Thread extends AccountOwnedModel {
 	private Long first_message_timestamp;
 	private List<NameEmail> participants = Collections.emptyList();
 	private String snippet;
-	private List<String> message_ids = Collections.emptyList();
-	private List<String> draft_ids = Collections.emptyList();
 	private int version;
 	private List<Folder> folders = Collections.emptyList();
 	private List<Label> labels = Collections.emptyList();
 	private boolean has_attachments;
+	
+	// available only in regular thread view
+	private List<String> message_ids = Collections.emptyList();
+	private List<String> draft_ids = Collections.emptyList();
+
+	// available only in expanded thread view
+	private List<Message> messages = Collections.emptyList();
+	private List<Draft> drafts = Collections.emptyList();
+	
+	@Override
+	public String getObjectType() {
+		return "thread";
+	}
 	
 	public String getSubject() {
 		return subject;
@@ -57,14 +68,6 @@ public class Thread extends AccountOwnedModel {
 		return snippet;
 	}
 
-	public List<String> getMessageIds() {
-		return message_ids;
-	}
-
-	public List<String> getDraftIds() {
-		return draft_ids;
-	}
-
 	public int getVersion() {
 		return version;
 	}
@@ -82,6 +85,38 @@ public class Thread extends AccountOwnedModel {
 	}
 	
 	/**
+	 * Get contained message ids.
+	 * Available only in regular (non-expanded) thread view
+	 */
+	public List<String> getMessageIds() {
+		return message_ids;
+	}
+
+	/**
+	 * Get contained draft ids.
+	 * Available only in regular (non-expanded) thread view
+	 */
+	public List<String> getDraftIds() {
+		return draft_ids;
+	}
+
+	/**
+	 * Get full contained message objects.
+	 * Available only in expanded thread view
+	 */
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	/**
+	 * Get full contained draft objects.
+	 * Available only in expanded thread view
+	 */
+	public List<Draft> getDrafts() {
+		return drafts;
+	}
+
+	/**
 	 * Convenience method to create a draft for a reply to this thread.
 	 * Sets the threadId and the subject to those of the thread.
 	 * Does not populate other draft fields, including to/cc/bcc
@@ -95,13 +130,14 @@ public class Thread extends AccountOwnedModel {
 
 	@Override
 	public String toString() {
-		return "Thread [id=" + getId() + ", account_id=" + getAccountId() + ", subject=" + subject + ", unread=" + unread
-				+ ", starred=" + starred + ", last_message_timestamp=" + last_message_timestamp
-				+ ", last_message_received_timestamp=" + last_message_received_timestamp
-				+ ", last_message_sent_timestamp=" + last_message_sent_timestamp + ", first_message_timestamp="
-				+ first_message_timestamp + ", participants=" + participants + ", snippet=" + snippet + ", message_ids="
-				+ message_ids + ", draft_ids=" + draft_ids + ", version=" + version + ", folders=" + folders
-				+ ", has_attachments=" + has_attachments + "]";
+		return "Thread [id=" + getId() + ", account_id=" + getAccountId() + 
+				",subject=" + subject + ", unread=" + unread + ", starred=" + starred
+				+ ", last_message_timestamp=" + last_message_timestamp + ", last_message_received_timestamp="
+				+ last_message_received_timestamp + ", last_message_sent_timestamp=" + last_message_sent_timestamp
+				+ ", first_message_timestamp=" + first_message_timestamp + ", participants=" + participants
+				+ ", snippet=" + snippet + ", version=" + version + ", folders=" + folders + ", labels=" + labels
+				+ ", has_attachments=" + has_attachments + ", message_ids=" + message_ids + ", draft_ids=" + draft_ids
+				+ ", messages=" + messages + ", drafts=" + drafts + "]";
 	}
 }
 

@@ -62,6 +62,10 @@ public class NylasAccount {
 		return new ContactGroups(client, accessToken);
 	}
 	
+	public Deltas deltas() {
+		return new Deltas(client, accessToken);
+	}
+	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");
 		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
