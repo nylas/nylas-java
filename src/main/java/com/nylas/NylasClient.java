@@ -15,7 +15,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.internal.Util;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class NylasClient {
 
@@ -31,11 +30,9 @@ public class NylasClient {
 	public NylasClient(String baseUrl) {
 		this.baseUrl = HttpUrl.get(baseUrl);
 		
-		HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-		logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 		httpClient = new OkHttpClient.Builder()
 				.addInterceptor(new UserAgentInterceptor())
-				.addNetworkInterceptor(logging)
+				.addNetworkInterceptor(new HttpLoggingInterceptor())
 				.connectTimeout(15, TimeUnit.SECONDS)
 				.readTimeout(15, TimeUnit.SECONDS)
 				.writeTimeout(15,  TimeUnit.SECONDS)

@@ -42,7 +42,7 @@ public class AccountsExample {
 		first = accounts.get(accountList.get(0).getId());
 		System.out.println("after upgrade: " + first);
 		
-		accounts.revokeAllTokensForAccount(first.getId(), "blahblah");
+		//accounts.revokeAllTokensForAccount(first.getId(), "blahblah");
 	}
 
 }

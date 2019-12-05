@@ -32,12 +32,12 @@ public class WebhooksExample {
 		Webhook created = webhooks.create(newWebhook);
 		System.out.println("Created: " + created);
 		
-		//created.setState("inactive");
-		//Webhook updated = webhooks.update(created);
-		//System.out.println("Updated: " + updated);
+		created.setState("inactive");
+		Webhook updated = webhooks.update(created);
+		System.out.println("Updated: " + updated);
 		
-		//webhooks.delete(updated.getId());
-		//System.out.println("Deleted.");
+		webhooks.delete(updated.getId());
+		System.out.println("Deleted.");
 	}
 
 }

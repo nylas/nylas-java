@@ -24,7 +24,6 @@ configurations {
 dependencies {
     // OkHttp 3 - Http client (without Kotlin dependency of version 4)
     api("com.squareup.okhttp3:okhttp:3.14.2")
-    implementation("com.squareup.okhttp3:logging-interceptor:3.14.2")
     
     // Moshi JSON Library
     implementation("com.squareup.moshi:moshi:1.8.0")
@@ -38,6 +37,11 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.5.1")
     
     testRuntimeOnly('org.apache.logging.log4j:log4j-slf4j-impl:2.12.1')
+    
+    // use log4j2 logging for examples
+    examplesImplementation('org.apache.logging.log4j:log4j-api:2.12.1')
+    examplesImplementation('org.apache.logging.log4j:log4j-core:2.12.1')
+    examplesImplementation('org.apache.logging.log4j:log4j-slf4j-impl:2.12.1')
     
     // google api client for native auth example
     examplesImplementation('com.google.api-client:google-api-client:1.30.2')
