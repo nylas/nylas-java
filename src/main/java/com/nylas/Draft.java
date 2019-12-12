@@ -67,6 +67,14 @@ public class Draft extends Message {
 	public void setReplyTo(List<NameEmail> replyTo) {
 		this.reply_to = replyTo;
 	}
+	
+	/**
+	 * A single name/email pair, to set an alternative Reply-To header in the final sent message.
+	 * Note that not all providers support setting this in a draft.
+	 */
+	public void setReplyTo(NameEmail replyTo) {
+		setReplyTo(Arrays.asList(replyTo));
+	}
 
 	/**
 	 * The full HTML draft body text.

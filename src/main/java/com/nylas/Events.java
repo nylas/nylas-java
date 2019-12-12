@@ -59,7 +59,7 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 	 * If it has an existing ID, update it, otherwise create it.
 	 * Returns the event as returned by the server.
 	 */
-	public Event createOrUpdate(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
+	public Event save(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
 		return event.hasId() ? update(event, notifyParticipants) : create(event, notifyParticipants);
 	}
 	

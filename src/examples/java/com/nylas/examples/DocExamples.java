@@ -1,7 +1,11 @@
 package com.nylas.examples;
 
 import java.io.IOException;
+import java.util.Arrays;
 
+import com.nylas.Draft;
+import com.nylas.File;
+import com.nylas.NameEmail;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.RequestFailedException;
@@ -14,16 +18,10 @@ import com.nylas.Threads;
  */
 public class DocExamples {
 
-	// technically "thread.list()" will only get the first 100 threads since that's the default limit
-	// the comment for "Available filter" I think belongs with(before) the second example
-	// why thread.object / Thread.getObjectType()?  if you know it's a thread already
-	// the order of the attributes seems unorganized - doesn't match docs, not alphabetized,
-	// related attributes not together.  copy that order from python?
-	// python "last_message_received_at" appears redundant to "last_message_received_timestamp"
-	// likewise for "last_message_at" and "last_message_timestamp"
-	// and missing "last_message_sent_at"
-	
-	public static void threadsExample() throws IOException, RequestFailedException {
+	/**
+	 * https://docs.nylas.com/reference#get-threads
+	 */
+	public static void getThreadsExample() throws IOException, RequestFailedException {
 		NylasClient client = new NylasClient();
 		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
 		Threads threads = account.threads();
@@ -63,5 +61,90 @@ public class DocExamples {
 		thread.getDraftIds();
 		thread.getVersion();
 		thread.isStarred();
+	}
+	
+	/*
+	 * 2019-12-12 NOTE David Latham:
+	 * currently with the Java SDK, updates to an object go through the collection interface.
+	 * For example, `threads.setUnread(thread.getId(), true)` compared to the python `thread.mark_as_unread()`
+	 * This is to maintain the invariant that all api network requests go through the collection objects
+	 * and avoid any surprising behavior.
+	 * 
+	 * Likewise, updating label ids requires specifying the entire set, so I removed the individual add/remove cases.
+	 * 
+	 * However, after talking with Ben it seems that other threads perform auto batching when iterating
+	 * collections, which would violate this invariant.  If we're willing to throw out the invariant anyway,
+	 * then we could make these object updates similar to other SDKs as well.  E.g. `thread.setUnread(true)`
+	 */
+	/**
+	 * https://docs.nylas.com/reference#threadsid-1
+	 */
+	public static void putThreadsExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
+		Threads threads = account.threads();
+		
+		// Replace '{id}' with the appropriate value
+		Thread thread = threads.get("{id}");
+
+		// Mark thread read
+		threads.setUnread(thread.getId(), false);
+
+		// Mark thread unread
+		threads.setUnread(thread.getId(), true);
+
+		// Star a thread
+		threads.setStarred(thread.getId(), true);
+
+		// Unstar a thread
+		threads.setStarred(thread.getId(), false);
+
+		// Update labels on a thread (Gmail)
+		threads.setLabelIds(thread.getId(), Arrays.asList("{label_id}", "{another_label_id}"));
+
+		// Move a thread to a different folder (Non-Gmail)
+		threads.setFolderId(thread.getId(), "{folder_id}");
+	}
+	
+	/*
+	 * 2019-12-12 NOTE David Latham:
+	 * This example copies the python example's lead of calling "save" once at the end.
+	 * Save performs either a "create" or a "update" under the covers depending on whether
+	 * the passed draft was created only locally by the SDK or was previously retrieved from the server
+	 * I think the example may be improved by demonstrating separate calls to create a new draft
+	 * and later to update a previously created one.  But left it as-is to match existing ones.
+	 */
+	/**
+	 * https://docs.nylas.com/reference#post-draft
+	 */
+	public static void postDraftExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
+		
+		// Create a new draft object
+		Draft draft = new Draft();
+
+		draft.setSubject("With Love, From Nylas");
+		draft.setTo(Arrays.asList(new NameEmail("My Nylas Friend", "swag@nylas.com")));
+		// You can also assign draft.cc, draft.bcc, and draft.from_ in the same manner
+		draft.setBody("This email was sent using the Nylas email API. Visit https://nylas.com for details.");
+		draft.setReplyTo(new NameEmail("Your Name", "you@example.com"));
+		// Note: changing from_ to a different email address may cause deliverability issues
+		draft.setFrom(new NameEmail("Your Name", "you@example.com"));
+		
+		// Replace {id} with the appropriate id for a file that you want to attach to a draft
+		File file = account.files().get("{id}");
+
+		// Attach a file to a draft
+		draft.attach(file);
+
+		// Remove a file attachment from a draft
+		draft.detach(file);
+
+		// You must save the draft for changes to take effect
+		draft = account.drafts().save(draft);
+		// Note: Nylas saves all drafts, but not all providers
+		// display the drafts on their user interface
+
 	}
 }

@@ -60,7 +60,7 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 	 * If it has an existing ID, update it, otherwise create it.
 	 * Returns the draft as returned by the server.
 	 */
-	public Draft createOrUpdate(Draft draft) throws IOException, RequestFailedException {
+	public Draft save(Draft draft) throws IOException, RequestFailedException {
 		return draft.hasId() ? update(draft) : create(draft);
 	}
 
