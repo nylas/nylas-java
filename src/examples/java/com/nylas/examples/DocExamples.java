@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.nylas.Draft;
 import com.nylas.File;
+import com.nylas.Message;
 import com.nylas.NameEmail;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
@@ -145,6 +146,20 @@ public class DocExamples {
 		draft = account.drafts().save(draft);
 		// Note: Nylas saves all drafts, but not all providers
 		// display the drafts on their user interface
-
+	}
+	
+	/*
+	 * 2019-12-12 NOTE David Latham:
+	 * Followed javascript example writing the result message to the console (system) output.
+	 */
+	/**
+	 * https://docs.nylas.com/reference#sending-raw-mime
+	 */
+	public static void sendRawMimeExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
+		String rawMime = ""; // rawMIME should be a MIME-format string with headers and multipart message
+		Message message = account.drafts().sendRawMime(rawMime);
+		System.out.println(message);
 	}
 }
