@@ -10,12 +10,14 @@ import com.nylas.File;
 import com.nylas.Message;
 import com.nylas.NameEmail;
 import com.nylas.NylasAccount;
+import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.Participant;
 import com.nylas.RequestFailedException;
 import com.nylas.Thread;
 import com.nylas.ThreadQuery;
 import com.nylas.Threads;
+import com.nylas.Webhook;
 
 /**
  * Code examples for the reference doc
@@ -292,5 +294,19 @@ public class DocExamples {
 		// Save the contact to Nylas and the 3rd party provider
 		// This must be executed whenever you want to save changes.
 		contact = account.contacts().create(contact);
+	}
+	
+	/**
+	 * https://docs.nylas.com/reference#webhooks-post
+	 */
+	public static void postWebhooksExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasApplication application = client.application("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET");
+		Webhook webhook = new Webhook();
+		webhook.setCallbackUrl("https://wwww.myapp.com/webhook");
+		webhook.setState("active");
+		webhook.setTriggers(Arrays.asList("event.created", "event.updated"));
+		webhook = application.webhooks().create(webhook);
+		System.out.println(webhook);
 	}
 }

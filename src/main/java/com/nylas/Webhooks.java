@@ -23,13 +23,13 @@ public class Webhooks extends RestfulCollection<Webhook, UnsupportedQuery> {
 	}
 
 	@Override
-	public Webhook create(Webhook model) throws IOException, RequestFailedException {
-		return super.create(model);
+	public Webhook create(Webhook webhook) throws IOException, RequestFailedException {
+		return super.create(webhook);
 	}
 
 	@Override
-	public Webhook update(Webhook model) throws IOException, RequestFailedException {
-		return super.update(model);
+	public Webhook update(Webhook webhook) throws IOException, RequestFailedException {
+		return super.update(webhook);
 	}
 
 	@Override
