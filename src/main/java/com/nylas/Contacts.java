@@ -31,13 +31,13 @@ public class Contacts extends RestfulCollection<Contact, ContactQuery> {
 	}
 
 	@Override
-	public Contact create(Contact draft) throws IOException, RequestFailedException {
-		return super.create(draft);
+	public Contact create(Contact contact) throws IOException, RequestFailedException {
+		return super.create(contact);
 	}
 	
 	@Override
-	public Contact update(Contact draft) throws IOException, RequestFailedException {
-		return super.update(draft);
+	public Contact update(Contact contact) throws IOException, RequestFailedException {
+		return super.update(contact);
 	}
 
 	@Override

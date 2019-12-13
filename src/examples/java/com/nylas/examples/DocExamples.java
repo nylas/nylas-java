@@ -3,6 +3,7 @@ package com.nylas.examples;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.nylas.Contact;
 import com.nylas.Draft;
 import com.nylas.Event;
 import com.nylas.File;
@@ -231,5 +232,65 @@ public class DocExamples {
 		// If notifyParticipants is true, then the message will be sent via email to all participants
 		account.events().rsvp("{eventId}", "maybe", "{accountId}", "I may attend this event", true);
 		System.out.println("RSVP sent!");
+	}
+	
+	/*
+	 * 2019-12-12 NOTE David Latham:
+	 * The python example creates and saves an empty contact, then makes a bunch of 
+	 * changes to it and never updates/saves them to the server.  I think this is very misleading, so
+	 * I changed this example to create it with all the fields instead.
+	*/
+	/**
+	 * https://docs.nylas.com/reference#contacts-2
+	 */
+	public static void postContactsExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
+		
+		// Create a new contact
+		Contact contact = new Contact();
+
+		// The following attributes can be modified for the contact object
+		contact.setGivenName("My");
+		contact.setMiddleName("Nylas");
+		contact.setSurname("Friend");
+		contact.setSuffix("API");
+		contact.setNickname("Nylas");
+		contact.setOfficeLocation("San Francisco");
+		contact.setCompanyName("Nylas");
+		contact.setNotes("Check out the Nylas Email, Calendar, and Contacts APIs");
+		contact.setManagerName("Communications");
+		contact.setJobTitle("Communications Platform");
+		contact.setBirthday("2014-06-01");
+
+		// emails must be one of type personal, or work
+		contact.setEmails(Arrays.asList(new Contact.Email("personal", "swag@nylas.com")));
+
+		// physical_addresses must be one of type work, home, or other
+		Contact.PhysicalAddress address = new Contact.PhysicalAddress();
+		address.setStreetAddress("695 Minna St");
+		address.setType("work");
+		address.setCity("San Francisco");
+		address.setState("CA");
+		address.setCountry("US");
+		address.setPostalCode("94103");
+		address.setFormat("structured");
+		contact.setPhysicalAddresses(Arrays.asList(address));
+
+		// phone_numbers must be one of type
+		// business, organization_main, mobile, assistant,
+		// business_fax, home_fax, radio, car, home, or pager
+		contact.setPhoneNumbers(Arrays.asList(new Contact.PhoneNumber("business", "555 555-5555")));
+
+		// web_pages must be one of type homepage, profile, work, or blog
+		contact.setWebPages(Arrays.asList(new Contact.WebPage("homepage", "https://nylas.com")));
+
+		// im_addresses must be one of type gtalk, aim,
+		// yahoo, lync, skype, qq, msn, icc, or jabber
+		contact.setIMAddresses(Arrays.asList(new Contact.IMAddress("gtalk", "Nylas")));
+		
+		// Save the contact to Nylas and the 3rd party provider
+		// This must be executed whenever you want to save changes.
+		contact = account.contacts().create(contact);
 	}
 }
