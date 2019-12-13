@@ -68,24 +68,20 @@ public class EventsExample {
 //		long time = LocalDate.now().plusDays(2).atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
 //		Event event = new Event(cal.getId(), new Time(time));
 //		event.setTitle("Surprise Party");
-//		Participant partier = new Participant();
-//		partier.setName("Alexander Hamilton");
-//		partier.setEmail("hamilton@davelink.net");
+//		Participant partier = new Participant("hamilton@davelink.net");
+//		partier.name("Alexander Hamilton");
 //
 //		Event created = events.create(event, true);
 //		System.out.println("Created: " + created);
 //		
-//		Participant partier1 = new Participant();
-//		partier1.setName("Hercules Mulligan");
-//		partier1.setEmail("hmulligan@avelink.net");
+//		Participant partier1 = new Participant("hmulligan@avelink.net");
+//		partier1.name("Hercules Mulligan");
 //
-//		Participant partier2 = new Participant();
-//		partier2.setName("John Laurens");
-//		partier2.setEmail("jlaurens@example.com");
+//		Participant partier2 = new Participant("jlaurens@example.com");
+//		partier2.name("John Laurens");
 //
-//		Participant partier3 = new Participant();
-//		partier3.setName("Marquis de Lafayette");
-//		partier3.setEmail("lafayette@example.com");
+//		Participant partier3 = new Participant("lafayette@example.com");
+//		partier3.name("Marquis de Lafayette");
 //
 //		created.setDescription("hopping good fun");
 //		created.setWhen(new Timespan(time, time+86400));

@@ -7,6 +7,15 @@ public class Participant {
 	private String status;
 	private String comment;
 	
+	/** For deserialiation only */ public Participant() {}
+	
+	/**
+	 * Email is required for participants
+	 */
+	public Participant(String email) {
+		this.email = email;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -23,20 +32,19 @@ public class Participant {
 		return comment;
 	}
 
-	public void setName(String name) {
+	public Participant name(String name) {
 		this.name = name;
+		return this;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setStatus(String status) {
+	public Participant status(String status) {
 		this.status = status;
+		return this;
 	}
 
-	public void setComment(String comment) {
+	public Participant comment(String comment) {
 		this.comment = comment;
+		return this;
 	}
 
 	@Override

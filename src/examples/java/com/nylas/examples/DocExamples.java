@@ -1,14 +1,18 @@
 package com.nylas.examples;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 
 import com.nylas.Draft;
+import com.nylas.Event;
 import com.nylas.File;
 import com.nylas.Message;
 import com.nylas.NameEmail;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.Participant;
 import com.nylas.RequestFailedException;
 import com.nylas.Thread;
 import com.nylas.ThreadQuery;
@@ -161,5 +165,55 @@ public class DocExamples {
 		String rawMime = ""; // rawMIME should be a MIME-format string with headers and multipart message
 		Message message = account.drafts().sendRawMime(rawMime);
 		System.out.println(message);
+	}
+	
+	/*
+	 * 2019-12-12 NOTE David Latham:
+	 * The python example says that the date/time can be set in 3 ways, but I think that's out of date
+	 * as there are now 4 supported types.
+	 * May want to improve this example when I revisit date object handling
+	 * 
+	 * The example mentions that the event object must have `calendarId` and `when` before creation,
+	 * and the Java API requires it explicitly, so even though the python example doesn't do it,
+	 * this Java example includes a calendarId and date upfront rather than later on.
+	 * 
+	 * The python example updates many fields locally but doesn't appear to save/update them back to the server
+	 * I think it's important to show that, so I added a line for it in the Java example here
+	 */
+	/**
+	 * https://docs.nylas.com/reference#post-event
+	 */
+	public static void postEventExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
+				
+		// The event "when" (date/time) can be set as one of 4 types.
+		// For details: https://docs.nylas.com/reference#event-subobjects
+		Event.When when = null;
+		when = new Event.Date("2020-01-01");
+		when = new Event.Datespan("2019-08-29", "2019-09-01");
+		when = new Event.Time(1408875644L);
+		when = new Event.Timespan(1409594400L, 1409598000L);
+				
+		// Create a new event object
+		// Provide the appropriate id for a calendar to add the event to a specific calendar
+		Event event = new Event("{calendarId}", when);
+
+		// save() must be called to save the event to the third party provider
+		// notifyParticipants='true' will send a notification email to
+		// all email addresses specified in the participants
+		account.events().create(event, true);
+
+		event.setTitle("Party!");
+		event.setLocation("My House!");
+		event.setDescription("Let's celebrate our calendar integration!!");
+		event.setBusy(true);
+
+		// Participants are added as a list of Participant objects, which require email
+		// and may contain name, status, or comment as well
+		event.setParticipants(Arrays.asList(new Participant("swag@nylas.com").name("My Nylas Friend")));
+
+		// Update the event with the new values and notify the participants
+		account.events().update(event, true);
 	}
 }
