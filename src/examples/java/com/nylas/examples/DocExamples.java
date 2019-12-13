@@ -1,8 +1,6 @@
 package com.nylas.examples;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Arrays;
 
 import com.nylas.Draft;
@@ -215,5 +213,23 @@ public class DocExamples {
 
 		// Update the event with the new values and notify the participants
 		account.events().update(event, true);
+	}
+	
+	/*
+	 * 2019-12-12 NOTE David Latham:
+	 * NOT TESTED - I have not been able to test this functionality as I cannot get 
+	 * any events to show up in my test "Emailed events" calendar.
+	*/
+	/**
+	 * https://docs.nylas.com/reference#rsvping-to-invitations
+	 */
+	public static void sendRsvpExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
+		// RSVP to an invite. Note that you can only RSVP to invites found in the "Emailed events" calendar.
+		// rsvp() accepts a status and an optional message
+		// If notifyParticipants is true, then the message will be sent via email to all participants
+		account.events().rsvp("{eventId}", "maybe", "{accountId}", "I may attend this event", true);
+		System.out.println("RSVP sent!");
 	}
 }
