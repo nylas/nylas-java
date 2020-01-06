@@ -10,6 +10,7 @@ public class Draft extends Message {
 
 	private String reply_to_message_id;
 	private Integer version;
+	private Tracking tracking;
 	
 	@Override
 	public String getObjectType() {
@@ -24,6 +25,21 @@ public class Draft extends Message {
 		return version;
 	}
 	
+	public Tracking getTracking() {
+		return tracking;
+	}
+
+	/**
+	 * Enable message tracking options.
+	 * @see https://docs.nylas.com/reference#message-tracking-overview
+	 * 
+	 * NOTE - this field is only used when invoking Drafts.send
+	 * tracking information is not persisted when creating or updating drafts to be sent later.
+	 */
+	public void setTracking(Tracking tracking) {
+		this.tracking = tracking;
+	}
+
 	/**
 	 * The subject line of the draft.
 	 */
@@ -143,7 +159,7 @@ public class Draft extends Message {
 				+ getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject + ", from=" + from + ", to=" + to
 				+ ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date=" + date + ", unread=" + unread
 				+ ", starred=" + starred + ", snippet=" + snippet + ", body=" + body + ", files=" + files + ", folder="
-				+ folder + ", labels=" + labels + "]";
+				+ folder + ", labels=" + labels + ", tracking=" + tracking + "]";
 	}
 	
 	

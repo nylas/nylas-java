@@ -31,7 +31,8 @@ public class JsonHelper {
 		}
 	}
 	
-	private static final JsonAdapter<Map<String, Object>> mapAdapter = moshi.<Map<String,Object>>adapter(Map.class);
+	private static final JsonAdapter<Map<String, Object>> mapAdapter
+		= moshi.<Map<String,Object>>adapter(Map.class).indent("  ");
 
 	public static String mapToJson(Map<String, Object> map) {
 		return mapAdapter.toJson(map);

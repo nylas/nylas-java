@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,10 @@ public class Drafts extends RestfulCollection<Draft, DraftQuery> {
 		} else {
 			params = draft.getWritableFields(true);
 			resultType = Message.class;
+		}
+		if (draft.getTracking() != null) {
+			params = new HashMap<>(params);  // mutable copy
+			params.put("tracking", draft.getTracking());
 		}
 		HttpUrl.Builder url = getSendUrl();
 		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);

@@ -7,6 +7,7 @@ import com.nylas.Drafts;
 import com.nylas.Message;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.Tracking;
 
 public class SendDirectExample {
 
@@ -25,6 +26,14 @@ public class SendDirectExample {
 		draft.setBcc(Examples.getNameEmailList(props, "send.bcc.name", "send.bcc.email"));
 		draft.setSubject(props.getProperty("send.subject"));
 		draft.setBody(props.getProperty("send.body"));
+		
+		Tracking tracking = new Tracking();
+		tracking.setOpens(true);
+		tracking.setLinks(true);
+		tracking.setThreadReplies(true);
+		tracking.setPayload("send-direct-example");
+		draft.setTracking(tracking);
+		
 		Message sentMessage = drafts.send(draft);
 		System.out.println("Sent message: " + sentMessage);
 	}

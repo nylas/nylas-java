@@ -38,5 +38,10 @@ public class Tracking {
 	public void setPayload(String payload) {
 		this.payload = payload;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Tracking [links=" + links + ", opens=" + opens + ", thread_replies=" + thread_replies + ", payload="
+				+ payload + "]";
+	}
 }

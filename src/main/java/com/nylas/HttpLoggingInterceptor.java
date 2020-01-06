@@ -145,7 +145,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 	
 	private boolean isPrintableMediaType(MediaType type) {
 		return type != null
-				&& ("text".equals(type.type()) || "application/json".equals(type.toString()));
+				&& ("text".equals(type.type()) || type.toString().startsWith("application/json"));
 	}
 
 }

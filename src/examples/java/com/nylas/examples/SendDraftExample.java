@@ -6,6 +6,7 @@ import com.nylas.Draft;
 import com.nylas.Drafts;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.Tracking;
 
 public class SendDraftExample {
 
@@ -31,6 +32,11 @@ public class SendDraftExample {
 		saved.setSubject(props.getProperty("send.subject"));
 		saved = drafts.update(saved);
 		System.out.println("Updated saved draft: " + saved);
+		
+		Tracking tracking = new Tracking();
+		tracking.setOpens(true);
+		tracking.setPayload("send-draft-example");
+		saved.setTracking(tracking);
 		
 		drafts.send(saved);
 		System.out.println("Sent");
