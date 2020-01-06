@@ -3,7 +3,7 @@ package com.nylas;
 import java.util.Collections;
 import java.util.List;
 
-public class File extends AccountOwnedModel implements Delta.Attributes {
+public class File extends AccountOwnedModel implements JsonObject {
 
 	private String filename;
 	private Integer size;

@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class Message extends AccountOwnedModel implements Delta.Attributes {
+public class Message extends AccountOwnedModel implements JsonObject {
 
 	protected String thread_id;
 	protected String subject;

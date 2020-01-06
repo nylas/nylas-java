@@ -1,6 +1,6 @@
 package com.nylas;
 
-public class Folder extends AccountOwnedModel implements Delta.Attributes {
+public class Folder extends AccountOwnedModel implements JsonObject {
 
 	private String name;
 	private String display_name;

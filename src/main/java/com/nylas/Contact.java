@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Contact extends AccountOwnedModel implements Delta.Attributes {
+public class Contact extends AccountOwnedModel implements JsonObject {
 
 	private String given_name;
 	private String middle_name;

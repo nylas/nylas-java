@@ -7,7 +7,7 @@ import java.util.Map;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
 
-public class Event extends AccountOwnedModel implements Delta.Attributes {
+public class Event extends AccountOwnedModel implements JsonObject {
 
 	private String calendar_id;
 	private String title;

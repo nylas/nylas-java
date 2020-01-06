@@ -3,7 +3,7 @@ package com.nylas;
 import java.util.Collections;
 import java.util.List;
 
-public class Thread extends AccountOwnedModel implements Delta.Attributes {
+public class Thread extends AccountOwnedModel implements JsonObject {
 
 	private String subject;
 	private boolean unread;
