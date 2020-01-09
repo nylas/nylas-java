@@ -66,7 +66,6 @@ public class Notification {
 	public static class ObjectData {
 		private String object;
 		private String account_id;
-		private String namespace_id;
 		private String id;
 		private Attributes attributes;
 		private MessageTrackingData metadata;
@@ -83,10 +82,6 @@ public class Notification {
 		 */
 		public String getAccountId() {
 			return account_id;
-		}
-		
-		public String getNamespaceId() {
-			return namespace_id;
 		}
 		
 		/**
@@ -115,7 +110,7 @@ public class Notification {
 
 		@Override
 		public String toString() {
-			return "ObjectData [objectType=" + object + ", accountId=" + account_id + ", namespaceId=" + namespace_id
+			return "ObjectData [objectType=" + object + ", accountId=" + account_id
 					+ ", id=" + id + ", attributes=" + attributes + ", messageTrackingData=" + metadata + "]";
 		}
 		
