@@ -7,7 +7,7 @@ import okhttp3.HttpUrl;
 import okhttp3.ResponseBody;
 
 /**
- * @see https://docs.nylas.com/reference#contacts
+ * <a href="https://docs.nylas.com/reference#contacts">https://docs.nylas.com/reference#contacts</a>
  */
 public class Contacts extends RestfulCollection<Contact, ContactQuery> {
 
@@ -49,9 +49,10 @@ public class Contacts extends RestfulCollection<Contact, ContactQuery> {
 	 * Download the profile picture for the given contact.
 	 * If the request is successful, returns the raw response body, exposing useful headers
 	 * such as Content-Type and Content-Length.
-	 * 
-	 * The returned ResponseBody must be closed
-	 * @see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed
+	 * <p>
+	 * The returned ResponseBody must be closed:<br>
+	 * <a href="https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed">
+	 * https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed</a>
 	 * 
 	 * @throws RequestFailedException if the given contact does not exist or does not have a profile picture
 	 */

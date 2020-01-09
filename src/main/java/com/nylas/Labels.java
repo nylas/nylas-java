@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @see https://docs.nylas.com/reference#labels
+ * <a href="https://docs.nylas.com/reference#labels">https://docs.nylas.com/reference#labels</a>
  */
 public class Labels extends RestfulCollection<Label, LabelQuery> {
 	

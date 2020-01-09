@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @see https://docs.nylas.com/reference#webhooks
+ * <a href="https://docs.nylas.com/reference#webhooks">https://docs.nylas.com/reference#webhooks</a>
  */
 public class Webhooks extends RestfulCollection<Webhook, UnsupportedQuery> {
 

@@ -31,10 +31,12 @@ public class Draft extends Message {
 
 	/**
 	 * Enable message tracking options.
-	 * @see https://docs.nylas.com/reference#message-tracking-overview
-	 * 
+	 * <p>
 	 * NOTE - this field is only used when invoking Drafts.send
 	 * tracking information is not persisted when creating or updating drafts to be sent later.
+	 * <p>
+	 * <a href="https://docs.nylas.com/reference#message-tracking-overview">
+	 * https://docs.nylas.com/reference#message-tracking-overview</a>
 	 */
 	public void setTracking(Tracking tracking) {
 		this.tracking = tracking;

@@ -2,7 +2,8 @@ package com.nylas;
 
 /**
  * Scope limiting what operations are authorized on what resources
- * @see https://docs.nylas.com/docs/authentication-scopes 
+ * <p>
+ * <a href="https://docs.nylas.com/docs/authentication-scopes">https://docs.nylas.com/docs/authentication-scopes</a>
  */
 public enum Scope {
 

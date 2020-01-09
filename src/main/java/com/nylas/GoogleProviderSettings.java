@@ -7,9 +7,11 @@ import java.util.Map;
 
 /**
  * Provider settings for Google.
- * 
- * @see https://docs.nylas.com/docs/native-authentication#section-provider-specific-settings
- * @see https://docs.nylas.com/docs/native-authentication-setup-for-google-oauth
+ * <p>
+ * <a href="https://docs.nylas.com/docs/native-authentication#section-provider-specific-settings">
+ * https://docs.nylas.com/docs/native-authentication#section-provider-specific-settings</a>
+ * <a href="https://docs.nylas.com/docs/native-authentication-setup-for-google-oauth">
+ * https://docs.nylas.com/docs/native-authentication-setup-for-google-oauth</a>
  */
 public class GoogleProviderSettings extends ProviderSettings {
 

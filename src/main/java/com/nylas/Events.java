@@ -9,7 +9,7 @@ import java.util.Map;
 import okhttp3.HttpUrl;
 
 /**
- * @see https://docs.nylas.com/reference#events
+ * <a href="https://docs.nylas.com/reference#events">https://docs.nylas.com/reference#events</a>
  */
 public class Events extends RestfulCollection<Event, EventQuery>{
 

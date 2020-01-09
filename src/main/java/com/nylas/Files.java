@@ -47,10 +47,11 @@ public class Files extends RestfulCollection<File, FileQuery> {
 	/**
 	 * Download the give file. If the request is successful, returns the raw response body, exposing useful headers
 	 * such as Content-Type and Content-Length.
-	 * 
-	 * The returned ResponseBody must be closed
-	 * @see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed
-	 * 
+	 * <p>
+	 * The returned ResponseBody must be closed:<br>
+	 * <a href="https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed">
+	 * https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed</a>
+	 * <p>
 	 * Alternately, use downloadBytes to buffer the full response in memory.
 	 */
 	public ResponseBody download(String fileId) throws IOException, RequestFailedException {

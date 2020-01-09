@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @see https://docs.nylas.com/reference#folders
+ * <a href="https://docs.nylas.com/reference#folders">https://docs.nylas.com/reference#folders</a>
  */
 public class Folders extends RestfulCollection<Folder, FolderQuery>{
 

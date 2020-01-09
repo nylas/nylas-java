@@ -83,9 +83,10 @@ public class NylasClient {
 	/**
 	 * Download the given url. If the request is successful, returns the raw response body, exposing useful headers
 	 * such as Content-Type and Content-Length.
-	 * 
-	 * The returned ResponseBody must be closed
-	 * @see https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed
+	 * <p>
+	 * The returned ResponseBody must be closed:<br>
+	 * <a href="https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed">
+	 * https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed</a>
 	 */
 	ResponseBody download(String authUser, HttpUrl.Builder url) throws IOException, RequestFailedException {
 		Request request = buildRequest(authUser, url, HttpMethod.GET, null);
