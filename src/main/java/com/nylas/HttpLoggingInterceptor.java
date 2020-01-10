@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +14,6 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import okhttp3.internal.http.HttpHeaders;
 import okio.Buffer;
 import okio.BufferedSource;
@@ -79,17 +79,25 @@ public class HttpLoggingInterceptor implements Interceptor {
 		
 		logHeaders("=>", request.headers());
 		
-		logBody("=>", hasBody, hasBody ? requestBody.contentType() : null, () -> {
-			Buffer buf = new Buffer();
-			requestBody.writeTo(buf);
-			return buf;
-		});
+		if (bodyLogs.isDebugEnabled()) {
+			String message;
+			if (!hasBody) {
+				message = " No request body";
+			} else {
+				MediaType contentType = requestBody.contentType();
+				if (!isPrintableMediaType(contentType)) {
+					message = " Skipped logging request body of type that may not be printable: " + contentType;
+				} else {
+					Buffer buf = new Buffer();
+					requestBody.writeTo(buf);
+					message = bodyBufferToString("", buf, contentType);
+				}
+			}
+			bodyLogs.debug("=>" + message);
+		}
 	}
 	
 	private void logResponse(Response response, long durationMillis) throws IOException {
-		boolean hasBody = HttpHeaders.hasBody(response);
-		ResponseBody responseBody = response.body();
-		MediaType contentType = responseBody == null ? null : responseBody.contentType();
 
 		// Summary
 		if (requestLogs.isDebugEnabled()) {
@@ -101,18 +109,33 @@ public class HttpLoggingInterceptor implements Interceptor {
 		}
 		
 		logHeaders("<=", response.headers());
-		logBody("<=", hasBody, contentType, () -> {
-			BufferedSource source = responseBody.source();
-			source.request(Long.MAX_VALUE);
-			Buffer buf = source.getBuffer().clone();
-			if ("gzip".equalsIgnoreCase(response.headers().get("Content-Encoding"))) {
-				try (GzipSource gzippedResponseBody = new GzipSource(buf)) {
-					buf = new Buffer();
-					buf.writeAll(gzippedResponseBody);
+		
+		if (bodyLogs.isDebugEnabled()) {
+			String message;
+			if (!HttpHeaders.hasBody(response)) {
+				message = " No response body";
+			} else {
+				MediaType contentType = response.body().contentType();
+				if (!isPrintableMediaType(contentType)) {
+					message = " Skipped logging response body of type that may not be printable: " + contentType;
+				} else {
+					BufferedSource source = response.body().source();
+					source.request(Long.MAX_VALUE); // if zipped, may need to buffer all of it
+					Buffer buf = source.getBuffer().clone();
+					String gzippedMessage = "";
+					if ("gzip".equalsIgnoreCase(response.headers().get("Content-Encoding"))) {
+						long gzippedSize = buf.size();
+						try (GzipSource gzippedResponseBody = new GzipSource(buf)) {
+							buf = new Buffer();
+							buf.writeAll(gzippedResponseBody);
+						}
+						gzippedMessage = " (decompressed " + gzippedSize + " bytes to " + buf.size() + " bytes)";
+					}
+					message = bodyBufferToString(gzippedMessage, buf, contentType);
 				}
 			}
-			return buf;
-		});
+			bodyLogs.debug("<=" + message);
+		}
 	}
 
 	private void logHeaders(String direction, Headers headers) {
@@ -131,37 +154,21 @@ public class HttpLoggingInterceptor implements Interceptor {
 		}
 	}
 	
-	static interface BufferProvider {
-		Buffer getBuffer() throws IOException;
-	}
-	private void logBody(String direction, boolean hasBody, MediaType contentType, BufferProvider body)
-			throws IOException {
-		if (bodyLogs.isDebugEnabled()) {
-			String message;
-			if (!hasBody) {
-				message = " No body";
-			} else if (!isPrintableMediaType(contentType)) {
-				message = " Skipped logging body of type that may not be printable: " + contentType;
-			} else {
-				Buffer buf = body.getBuffer();
-				long bytesToLog = buf.size();
-				String truncationMessage = "";
-				if (bytesToLog > maxBodyBytesToLog) {
-					bytesToLog = maxBodyBytesToLog;
-					truncationMessage = "\n(truncated " + buf.size() + " byte body after " + bytesToLog + " bytes)";
-				}
-				Charset charset = contentType.charset(StandardCharsets.UTF_8);
-				String bodyString = buf.readString(bytesToLog, charset);
-				message = "\n" + bodyString + truncationMessage;
-			}
-			bodyLogs.debug(direction + message);
-		}
-	}
-	
 	private boolean isPrintableMediaType(MediaType type) {
 		return type != null
 				&& ("text".equals(type.type()) || type.toString().startsWith("application/json"));
 	}
 
+	private String bodyBufferToString(String prefix, Buffer buf, MediaType contentType) throws EOFException {
+		long bytesToLog = buf.size();
+		String truncationMessage = "";
+		if (bytesToLog > maxBodyBytesToLog) {
+			bytesToLog = maxBodyBytesToLog;
+			truncationMessage = "\n(truncated " + buf.size() + " byte body after " + bytesToLog + " bytes)";
+		}
+		Charset charset = contentType.charset(StandardCharsets.UTF_8);
+		return prefix + "\n" + buf.readString(bytesToLog, charset) + truncationMessage;
+	}
+	
 }
  	 	
