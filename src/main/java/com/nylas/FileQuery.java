@@ -23,4 +23,20 @@ public class FileQuery extends PaginatedQuery<FileQuery> {
 		}
 	}
 	
+	public FileQuery filename(String filename) {
+		this.filename = filename;
+		return this;
+	}
+	
+	public FileQuery messageId(String messageId) {
+		this.messageId = messageId;
+		return this;
+	}
+	
+	public FileQuery contentType(String contentType) {
+		this.contentType = contentType;
+		return this;
+	}
+	
+
 }
