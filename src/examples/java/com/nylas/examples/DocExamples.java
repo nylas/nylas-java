@@ -1,6 +1,8 @@
 package com.nylas.examples;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import com.nylas.Contact;
@@ -18,6 +20,8 @@ import com.nylas.Thread;
 import com.nylas.ThreadQuery;
 import com.nylas.Threads;
 import com.nylas.Webhook;
+
+import okhttp3.ResponseBody;
 
 /**
  * Code examples for the reference doc
@@ -308,5 +312,29 @@ public class DocExamples {
 		webhook.setTriggers(Arrays.asList("event.created", "event.updated"));
 		webhook = application.webhooks().create(webhook);
 		System.out.println(webhook);
+	}
+	
+	/*
+	 * 2019-01-10 NOTE David Latham:
+	 * The python example first fetches a contact object by it's ID, and then downloads the picture.
+	 * In the Java SDK, you don't need to fetch the object in order to download the picture, so it can be done
+	 * in a single request.  To access the url, you do need to get the contact object, however.
+	*/
+	/**
+	 * https://docs.nylas.com/reference#contactsidpicture
+	 */
+	public static void downloadContactPictureExample() throws IOException, RequestFailedException {
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
+		
+		// Stream and save a contact's picture to a local file.
+		// use try-with-resources to make sure the response is properly closed after saving
+		try (ResponseBody picResponse = account.contacts().downloadProfilePicture("{contact_id}")) {
+			Files.copy(picResponse.byteStream(), Paths.get("picture.jpg"));
+		}
+		
+		// You can also access the url where Nylas stores the picture with the pictureUrl attribute
+		Contact contact = account.contacts().get("{contact_id}");
+		contact.getPictureUrl();
 	}
 }
