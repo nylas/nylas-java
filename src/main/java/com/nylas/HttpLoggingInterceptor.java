@@ -14,8 +14,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.internal.http.HttpHeaders;
 import okio.Buffer;
 import okio.BufferedSource;
+import okio.GzipSource;
 
 public class HttpLoggingInterceptor implements Interceptor {
 
@@ -24,7 +26,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 	private static final Logger bodyLogs = LoggerFactory.getLogger("com.nylas.http.Body");
 	
 	private boolean logAuthHeader = false;
-	private int maxBodySize = 20_000;
+	private int maxBodyBytesToLog = 10_000;
 	
 	public boolean isLogAuthHeader() {
 		return logAuthHeader;
@@ -34,39 +36,19 @@ public class HttpLoggingInterceptor implements Interceptor {
 		this.logAuthHeader = logAuthHeader;
 	}
 
-	public int getMaxBodySize() {
-		return maxBodySize;
+	public int getMaxBodyBytesToLog() {
+		return maxBodyBytesToLog;
 	}
 
-	public void setMaxBodySize(int maxBodySize) {
-		this.maxBodySize = maxBodySize;
+	public void setMaxBodyBytesToLog(int maxBodyBytesToLog) {
+		this.maxBodyBytesToLog = maxBodyBytesToLog;
 	}
 
 	@Override
 	public Response intercept(Chain chain) throws IOException {
 		Request request = chain.request();
-		RequestBody requestBody = request.body();
-		long reqBodySize = 0;
-		if (requestBody != null) {
-			reqBodySize = requestBody.contentLength();
-		}
+		logRequest(request);
 		
-		// Request summary
-		if (requestLogs.isDebugEnabled()) {
-			requestLogs.debug("=> " + request.method()
-					+ " " + request.url()
-					+ " reqBodySize=" + reqBodySize
-					);
-		}
-		
-		logHeaders("=>", request.headers());
-		logBody("=>", () -> {
-			Buffer buf = new Buffer();
-			requestBody.writeTo(buf);
-			return buf;
-		}, reqBodySize, requestBody == null ? null : requestBody.contentType());
-
-		// execute request
 		long startNanos = System.nanoTime();
 		Response response = null;
 		try {
@@ -77,33 +59,62 @@ public class HttpLoggingInterceptor implements Interceptor {
 			}
 			throw t;
 		}
-		ResponseBody responseBody = response.body();
-		long resBodySize = responseBody.contentLength();
-		if (resBodySize == -1) {
-			resBodySize = 0;
-		}
+		long durationMillis = (System.nanoTime() - startNanos) / 1_000_000;
+		
+		logResponse(response, durationMillis);
+		return response;
+	}
 
-		// Response summary
+	private void logRequest(Request request) throws IOException {
+		RequestBody requestBody = request.body();
+		boolean hasBody = requestBody != null;
+
+		// Summary
 		if (requestLogs.isDebugEnabled()) {
-			long durationMillis = (System.nanoTime() - startNanos) / 1_000_000;
+			requestLogs.debug("=> " + request.method()
+					+ " " + request.url()
+					+ " reqBodySize=" + (hasBody ? requestBody.contentLength() : 0)
+					);
+		}
+		
+		logHeaders("=>", request.headers());
+		
+		logBody("=>", hasBody, hasBody ? requestBody.contentType() : null, () -> {
+			Buffer buf = new Buffer();
+			requestBody.writeTo(buf);
+			return buf;
+		});
+	}
+	
+	private void logResponse(Response response, long durationMillis) throws IOException {
+		boolean hasBody = HttpHeaders.hasBody(response);
+		ResponseBody responseBody = response.body();
+		MediaType contentType = responseBody == null ? null : responseBody.contentType();
+
+		// Summary
+		if (requestLogs.isDebugEnabled()) {
 			requestLogs.debug("<= " + response.code()
 					+ " " + response.message()
-					+ " resBodySize=" + resBodySize
+					+ " resBodySize=" + HttpHeaders.contentLength(response)
 					+ " durationMs=" + durationMillis
 					);
 		}
 		
-		// Response headers
 		logHeaders("<=", response.headers());
-		logBody("<=", () -> {
+		logBody("<=", hasBody, contentType, () -> {
 			BufferedSource source = responseBody.source();
 			source.request(Long.MAX_VALUE);
-			return source.getBuffer().clone();
-		}, resBodySize, responseBody == null ? null : responseBody.contentType());
-
-		return response;
+			Buffer buf = source.getBuffer().clone();
+			if ("gzip".equalsIgnoreCase(response.headers().get("Content-Encoding"))) {
+				try (GzipSource gzippedResponseBody = new GzipSource(buf)) {
+					buf = new Buffer();
+					buf.writeAll(gzippedResponseBody);
+				}
+			}
+			return buf;
+		});
 	}
-	
+
 	private void logHeaders(String direction, Headers headers) {
 		if (headersLogs.isDebugEnabled()) {
 			StringBuilder headersLog = new StringBuilder().append(direction).append("\n");
@@ -115,6 +126,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 				}
 				headersLog.append("  ").append(name).append(": ").append(value).append("\n");
 			}
+			headersLog.deleteCharAt(headersLog.length()-1);
 			headersLogs.debug(headersLog.toString());
 		}
 	}
@@ -122,24 +134,27 @@ public class HttpLoggingInterceptor implements Interceptor {
 	static interface BufferProvider {
 		Buffer getBuffer() throws IOException;
 	}
-	private void logBody(String direction, BufferProvider body, long bodySize, MediaType contentType)
+	private void logBody(String direction, boolean hasBody, MediaType contentType, BufferProvider body)
 			throws IOException {
 		if (bodyLogs.isDebugEnabled()) {
-			if (bodySize <= 0) {
-				bodyLogs.debug(direction + " No body to log");
-			} else if (bodySize > maxBodySize) {
-				bodyLogs.debug(direction + " Skipped logging body too large (" + bodySize + " > " + maxBodySize + ")");
+			String message;
+			if (!hasBody) {
+				message = " No body";
 			} else if (!isPrintableMediaType(contentType)) {
-				bodyLogs.debug(direction + " Skipped logging body of type that may not be printable: " + contentType);
+				message = " Skipped logging body of type that may not be printable: " + contentType;
 			} else {
 				Buffer buf = body.getBuffer();
-				Charset charset = StandardCharsets.UTF_8;
-				if (contentType != null) {
-					charset = contentType.charset(charset);
+				long bytesToLog = buf.size();
+				String truncationMessage = "";
+				if (bytesToLog > maxBodyBytesToLog) {
+					bytesToLog = maxBodyBytesToLog;
+					truncationMessage = "\n(truncated " + buf.size() + " byte body after " + bytesToLog + " bytes)";
 				}
-				String bodyString = buf.readString(charset);
-				bodyLogs.debug(direction + "\n" + bodyString);
+				Charset charset = contentType.charset(StandardCharsets.UTF_8);
+				String bodyString = buf.readString(bytesToLog, charset);
+				message = "\n" + bodyString + truncationMessage;
 			}
+			bodyLogs.debug(direction + message);
 		}
 	}
 	
