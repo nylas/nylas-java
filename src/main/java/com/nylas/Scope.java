@@ -54,6 +54,11 @@ public enum Scope {
 	CALENDAR_READ_ONLY("calendar.read_only"),
 	
 	/**
+	 * Read available room resources for an account.
+	 */
+	ROOM_RESOURCES_READ_ONLY("room_resources.read_only"),
+	
+	/**
 	 * Read and modify contacts.
 	 */
 	CONTACTS("contacts"),

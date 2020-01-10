@@ -19,7 +19,7 @@ public class HostedAuthUrlExample {
 		String hostedAuthUrl = authentication.urlBuilder()
 			.redirectUri("https://example.com/nylas-redirect")
 			.responseType("code")
-			.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS)
+			.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS, Scope.ROOM_RESOURCES_READ_ONLY)
 			.loginHint(props.getProperty("hosted.login.hint"))
 			.state("example_csrf_token")
 			.buildUrl();

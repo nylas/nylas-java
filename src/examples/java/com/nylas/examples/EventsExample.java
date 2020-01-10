@@ -9,6 +9,7 @@ import com.nylas.EventQuery;
 import com.nylas.Events;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.RoomResource;
 
 public class EventsExample {
 
@@ -57,7 +58,10 @@ public class EventsExample {
 			System.out.println(event);
 		}
 		
-		
+		List<RoomResource> resources = events.roomResources();
+		for (RoomResource resource : resources) {
+			System.out.println(resource);
+		}
 		
 		
 		

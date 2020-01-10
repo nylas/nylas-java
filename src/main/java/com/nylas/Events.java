@@ -1,10 +1,13 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.squareup.moshi.Types;
 
 import okhttp3.HttpUrl;
 
@@ -81,5 +84,11 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 		= Collections.unmodifiableMap(Maps.of("notify_participants", "true"));
 	private static Map<String, String> getExtraQueryParams(boolean notifyParticipants) {
 		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : null;
+	}
+	
+	public List<RoomResource> roomResources() throws IOException, RequestFailedException {
+		HttpUrl.Builder url = client.newUrlBuilder().addPathSegment("resources");
+		Type listType = Types.newParameterizedType(List.class, RoomResource.class);
+		return client.executeGet(authUser, url, listType);
 	}
 }
