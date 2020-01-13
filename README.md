@@ -6,6 +6,20 @@ The Nylas Java SDK provides all of the functionality of the Nylas [REST API](htt
 - Java 8 or above
 - Nylas account and application client id & secret - https://docs.nylas.com/docs/get-your-developer-api-keys 
 
+## Adding the Nylas Java SDK to your build
+
+For projects using Gradle, add the following to your dependencies section of build.gradle:
+
+    implementation("com.nylas.sdk:nylas-java-sdk:1.X.X")
+
+For project Maven, add the following to your POM file:
+
+    <dependency>
+      <groupId>com.nylas.sdk</groupId>
+      <artifactId>nylas-java-sdk</artifactId>
+      <version>1.X.X</version>
+    </dependency>
+
 ## Running Examples
 - Check out the repo
 - Create an example.properties file from the template, and enter your nylas application client id and client secret:
