@@ -1,14 +1,44 @@
 package com.nylas;
 
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.squareup.moshi.JsonAdapter;
 
 public class Notification {
 
+	public static boolean isSignatureValid(String jsonNotification, String clientSecret, String expectedSignature) {
+		try {
+			byte[] expectedBytes = hexStringToByteArray(expectedSignature);
+			Mac mac = Mac.getInstance("HmacSHA256");
+			SecretKeySpec secretKeySpec
+				= new SecretKeySpec(clientSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+			mac.init(secretKeySpec);
+			byte[] sigBytes = mac.doFinal(jsonNotification.getBytes(StandardCharsets.UTF_8));
+			return Arrays.equals(expectedBytes, sigBytes);
+		} catch (GeneralSecurityException e) {
+			throw new RuntimeException(e);  // should never happen
+		}
+	}
+	
 	private static final JsonAdapter<Notification> JSON_ADAPTER =  JsonHelper.moshi().adapter(Notification.class);
 	public static Notification parseNotification(String jsonNotification) {
 		return JsonHelper.fromJsonSafe(JSON_ADAPTER, jsonNotification);
+	}
+	
+	private static byte[] hexStringToByteArray(String s) {
+		int len = s.length();
+		byte[] data = new byte[len / 2];
+		for (int i = 0; i < len; i += 2) {
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+								+ Character.digit(s.charAt(i + 1), 16));
+		}
+		return data;
 	}
 	
 	private List<Delta> deltas;
