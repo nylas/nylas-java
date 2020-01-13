@@ -39,7 +39,7 @@ public class NativeAuthImapExample {
 				.providerSettings(settings)
 				.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS);
 				
-		System.out.println("Making a native authentication request for a Google account.");
+		System.out.println("Making a native authentication request for a custom IMAP account.");
 		String authorizationCode = authRequest.execute();
 		System.out.println("Succeeded.  Returned authorization code: " + authorizationCode);
 		
