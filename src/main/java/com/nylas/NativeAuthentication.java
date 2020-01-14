@@ -105,7 +105,7 @@ public class NativeAuthentication {
 			validate();
 			
 			Moshi moshi = new Moshi.Builder().build();
-			String json = moshi.adapter(AuthRequestBuilder.class).toJson(this);
+			String json = moshi.adapter(AuthRequestBuilder.class).indent("  ").toJson(this);
 			
 			HttpUrl authUrl = application.getClient().newUrlBuilder().addPathSegments("connect/authorize").build();
 			RequestBody body = RequestBody.create(JsonHelper.jsonType(), json);
