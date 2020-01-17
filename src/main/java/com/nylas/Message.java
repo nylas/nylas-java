@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	protected Boolean starred;
 	protected String snippet;
 	protected String body;
-	protected List<File> files = Collections.emptyList();
+	protected List<File> files = new ArrayList<>();  // Draft.attach expects a mutable list
 	protected List<Event> events = Collections.emptyList();
 	protected Folder folder;
 	protected List<Label> labels = Collections.emptyList();
