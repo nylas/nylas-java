@@ -1,11 +1,9 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import com.nylas.NylasClient.HttpMethod;
-import com.squareup.moshi.Types;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -70,9 +68,8 @@ public class Files extends RestfulCollection<File, FileQuery> {
 				.addFormDataPart("file", filename, fileData)
 				.build();
 		HttpUrl.Builder url = getCollectionUrl();
-		Type listType = Types.newParameterizedType(List.class, modelClass);
 		List<File> resultList
-			= client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, listType);
+			= client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, getModelListType());
 		if (resultList.size() != 1) {
 			throw new RuntimeException("Server failed to respond with exactly 1 file object, got " + resultList.size()
 				+ " instead");

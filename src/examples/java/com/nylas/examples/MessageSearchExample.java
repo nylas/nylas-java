@@ -1,7 +1,6 @@
 package com.nylas.examples;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.Message;
 import com.nylas.Messages;
@@ -11,11 +10,9 @@ import com.nylas.NylasClient;
 public class MessageSearchExample {
 	
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
-		
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasAccount account = client.account(accessToken);
+		NylasAccount account = client.account(conf.get("access.token"));
 
 		Messages messages = account.messages();
 		

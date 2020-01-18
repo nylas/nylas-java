@@ -23,6 +23,18 @@ public class GoogleProviderSettings extends ProviderSettings {
 		super("gmail");
 	}
 	
+	public String getGoogleClientId() {
+		return googleClientId;
+	}
+
+	public String getGoogleClientSecret() {
+		return googleClientSecret;
+	}
+
+	public String getGoogleRefreshToken() {
+		return googleRefreshToken;
+	}
+
 	public GoogleProviderSettings googleClientId(String googleClientId) {
 		this.googleClientId = googleClientId;
 		return this;

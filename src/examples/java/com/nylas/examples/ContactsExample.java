@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.Properties;
 
 import com.nylas.Contact;
 import com.nylas.ContactGroup;
@@ -19,10 +18,9 @@ import okhttp3.ResponseBody;
 public class ContactsExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasAccount account = client.account(accessToken);
+		NylasAccount account = client.account(conf.get("access.token"));
 		Contacts contacts = account.contacts();
 		
 		ContactQuery query = new ContactQuery()

@@ -2,7 +2,6 @@ package com.nylas.examples;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
@@ -12,10 +11,9 @@ import com.nylas.Webhooks;
 public class WebhooksExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
-				props.getProperty("nylas.client.secret"));
+		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		Webhooks webhooks = application.webhooks();
 		List<Webhook> webhookList = webhooks.list();
 		for (Webhook webhook : webhookList) {
@@ -25,9 +23,8 @@ public class WebhooksExample {
 		//Webhook webhook = webhooks.get("5jxt7iuly3oi2h7j6d9yehnr9");
 		//System.out.println(webhook);
 		
-		String callbackUrl = props.getProperty("webhook.callback.url");
 		Webhook newWebhook = new Webhook();
-		newWebhook.setCallbackUrl(callbackUrl);
+		newWebhook.setCallbackUrl(conf.get("webhook.callback.url"));
 		newWebhook.setTriggers(Arrays.asList(
 				"account.connected",
 				"account.running",

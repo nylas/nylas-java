@@ -1,26 +1,22 @@
 package com.nylas.examples;
 
-import java.util.Properties;
-
-import com.nylas.NylasApplication;
 import com.nylas.HostedAuthentication;
+import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.Scope;
 
 public class HostedAuthUrlExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
-				props.getProperty("nylas.client.secret"));
+		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		HostedAuthentication authentication = application.hostedAuthentication();
 		String hostedAuthUrl = authentication.urlBuilder()
 			.redirectUri("https://example.com/nylas-redirect")
 			.responseType("code")
 			.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS, Scope.ROOM_RESOURCES_READ_ONLY)
-			.loginHint(props.getProperty("hosted.login.hint"))
+			.loginHint(conf.get("hosted.login.hint"))
 			.state("example_csrf_token")
 			.buildUrl();
 		

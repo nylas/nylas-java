@@ -5,8 +5,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-import com.squareup.moshi.Types;
-
 import okhttp3.HttpUrl;
 import okhttp3.HttpUrl.Builder;
 
@@ -25,7 +23,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 	}
 	
 	protected Type getModelListType() {
-		return Types.newParameterizedType(List.class, modelClass);
+		return JsonHelper.listTypeOf(modelClass);
 	}
 	
 	protected List<M> list() throws IOException, RequestFailedException {
@@ -47,7 +45,7 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		return client.executeGet(authUser, url, listType);
 	}
 
-	private static final Type STRING_LIST_TYPE = Types.newParameterizedType(List.class, String.class);
+	private static final Type STRING_LIST_TYPE = JsonHelper.listTypeOf(String.class);
 	protected List<String> ids(Q query) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl();
 		setQuery(url, query);

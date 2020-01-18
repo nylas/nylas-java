@@ -1,7 +1,6 @@
 package com.nylas.examples;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.Folder;
 import com.nylas.FolderQuery;
@@ -9,19 +8,17 @@ import com.nylas.Folders;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.RequestFailedException;
+import com.nylas.Thread;
 import com.nylas.ThreadQuery;
 import com.nylas.Threads;
-import com.nylas.Thread;
 
 
 public class FoldersExample {
 	
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
-		
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasAccount account = client.account(accessToken);
+		NylasAccount account = client.account(conf.get("access.token"));
 		
 		Folders folders = account.folders();
 		

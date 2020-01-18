@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.squareup.moshi.Types;
-
 import okhttp3.HttpUrl;
 
 /**
@@ -88,7 +86,7 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 	
 	public List<RoomResource> roomResources() throws IOException, RequestFailedException {
 		HttpUrl.Builder url = client.newUrlBuilder().addPathSegment("resources");
-		Type listType = Types.newParameterizedType(List.class, RoomResource.class);
+		Type listType = JsonHelper.listTypeOf(RoomResource.class);
 		return client.executeGet(authUser, url, listType);
 	}
 }

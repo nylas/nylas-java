@@ -1,10 +1,14 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
+
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -20,6 +24,14 @@ public class JsonHelper {
 	
 	public static Moshi moshi() {
 		return moshi;
+	}
+	
+	public static Type listTypeOf(Type type) {
+		return Types.newParameterizedType(List.class, type);
+	}
+	
+	public static <T> JsonAdapter<T> adapter(Type type) {
+		return moshi.adapter(type);
 	}
 	
 	public static <T> T fromJsonSafe(JsonAdapter<T> adapter, String json) {

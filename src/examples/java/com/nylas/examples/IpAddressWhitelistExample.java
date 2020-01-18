@@ -1,18 +1,15 @@
 package com.nylas.examples;
 
-import java.util.Properties;
-
-import com.nylas.NylasApplication;
 import com.nylas.IPAddressWhitelist;
+import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 
 public class IpAddressWhitelistExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
-				props.getProperty("nylas.client.secret"));
+		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		System.out.println("Fetching IP Address whitelist");
 		IPAddressWhitelist ipAddresses = application.fetchIpAddressWhitelist();
 		System.out.println("IP Address whitelist: " + ipAddresses);

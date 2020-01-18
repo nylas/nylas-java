@@ -2,7 +2,6 @@ package com.nylas.examples;
 
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.File;
 import com.nylas.Files;
@@ -12,11 +11,9 @@ import com.nylas.NylasClient;
 public class FilesExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
-		
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasAccount account = client.account(accessToken);
+		NylasAccount account = client.account(conf.get("access.token"));
 		Files files = account.files();
 		List<File> allFiles = files.list();
 		for (File file : allFiles) {

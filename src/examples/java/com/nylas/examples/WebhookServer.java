@@ -3,7 +3,6 @@ package com.nylas.examples;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
-import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +22,9 @@ import com.nylas.Notification;
 public class WebhookServer {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String clientSecret = props.getProperty("nylas.client.secret");
-		Server server = new Server(8080);
-		server.setHandler(new LoggingHandler(clientSecret));
+		ExampleConf conf = new ExampleConf();
+		Server server = new Server(conf.getInt("http.local.port", 5000));
+		server.setHandler(new LoggingHandler(conf.get("nylas.client.secret")));
 		server.start();
 	}
 	

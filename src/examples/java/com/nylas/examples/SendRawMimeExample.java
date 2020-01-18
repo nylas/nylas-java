@@ -1,7 +1,5 @@
 package com.nylas.examples;
 
-import java.util.Properties;
-
 import com.nylas.Drafts;
 import com.nylas.Message;
 import com.nylas.NylasAccount;
@@ -10,12 +8,11 @@ import com.nylas.NylasClient;
 public class SendRawMimeExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
-		String rawMime = props.getProperty("send.rawmime");
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasAccount account = client.account(accessToken);
+		NylasAccount account = client.account(conf.get("access.token"));
 		Drafts drafts = account.drafts();
+		String rawMime = conf.get("send.rawmime");
 		System.out.println("Sending raw mime:");
 		System.out.println(rawMime);
 		System.out.println();

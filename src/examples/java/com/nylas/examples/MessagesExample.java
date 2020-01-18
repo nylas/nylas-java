@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.Message;
 import com.nylas.MessageQuery;
@@ -15,11 +14,9 @@ import com.nylas.NylasClient;
 public class MessagesExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
-		
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasAccount account = client.account(accessToken);
+		NylasAccount account = client.account(conf.get("access.token"));
 
 		Messages messages = account.messages();
 		

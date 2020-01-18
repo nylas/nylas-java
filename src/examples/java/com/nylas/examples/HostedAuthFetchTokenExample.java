@@ -1,22 +1,18 @@
 package com.nylas.examples;
 
-import java.util.Properties;
-
-import com.nylas.NylasApplication;
 import com.nylas.HostedAuthentication;
+import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 
 public class HostedAuthFetchTokenExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
-				props.getProperty("nylas.client.secret"));
+		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		HostedAuthentication authentication = application.hostedAuthentication();
 
-		String authorizationCode = props.getProperty("hosted.auth.code");
+		String authorizationCode = conf.get("hosted.auth.code");
 		System.out.println("Exchanging authorication code for long lived access token.");
 		String token = authentication.fetchToken(authorizationCode).getAccessToken();
 		System.out.println("Authentication successful.  Here is your access token:");

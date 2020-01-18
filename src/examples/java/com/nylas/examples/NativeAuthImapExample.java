@@ -1,7 +1,5 @@
 package com.nylas.examples;
 
-import java.util.Properties;
-
 import com.nylas.AccessToken;
 import com.nylas.AccountDetail;
 import com.nylas.ImapProviderSettings;
@@ -15,27 +13,26 @@ import com.nylas.Scope;
 public class NativeAuthImapExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
+		ExampleConf conf = new ExampleConf();
 
 		ImapProviderSettings settings = new ImapProviderSettings()
-				.imapHost(props.getProperty("imap.host"))
-				.imapPort(Integer.parseInt(props.getProperty("imap.port")))
-				.imapUsername(props.getProperty("imap.username"))
-				.imapPassword(props.getProperty("imap.password"))
-				.smtpHost(props.getProperty("smtp.host"))
-				.smtpPort(Integer.parseInt(props.getProperty("smtp.port")))
-				.smtpUsername(props.getProperty("smtp.username"))
-				.smtpPassword(props.getProperty("smtp.password"))
+				.imapHost(conf.get("imap.host"))
+				.imapPort(Integer.parseInt(conf.get("imap.port")))
+				.imapUsername(conf.get("imap.username"))
+				.imapPassword(conf.get("imap.password"))
+				.smtpHost(conf.get("smtp.host"))
+				.smtpPort(Integer.parseInt(conf.get("smtp.port")))
+				.smtpUsername(conf.get("smtp.username"))
+				.smtpPassword(conf.get("smtp.password"))
 				.sslRequired(true)
 				;
 
 		NylasClient client = new NylasClient();
-		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
-				props.getProperty("nylas.client.secret"));
+		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		NativeAuthentication authentication = application.nativeAuthentication();
 		AuthRequestBuilder authRequest = authentication.authRequest()
-				.name(props.getProperty("imap.name"))
-				.emailAddress(props.getProperty("imap.email"))
+				.name(conf.get("imap.name"))
+				.emailAddress(conf.get("imap.email"))
 				.providerSettings(settings)
 				.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS);
 				

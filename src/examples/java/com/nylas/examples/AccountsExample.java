@@ -1,7 +1,6 @@
 package com.nylas.examples;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.Account;
 import com.nylas.AccountQuery;
@@ -13,10 +12,9 @@ import com.nylas.TokenInfo;
 public class AccountsExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasApplication application = client.application(props.getProperty("nylas.client.id"),
-				props.getProperty("nylas.client.secret"));
+		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		Accounts accounts = application.accounts();
 		AccountQuery query = new AccountQuery()
 				.limit(2)
@@ -30,7 +28,7 @@ public class AccountsExample {
 		Account first = accounts.get(accountList.get(0).getId());
 		System.out.println("first: " + first);
 		
-		String accessToken = props.getProperty("access.token");
+		String accessToken = conf.get("access.token");
 		TokenInfo tokenInfo = accounts.tokenInfo(first.getId(), accessToken);
 		System.out.println("token info: " + tokenInfo);
 		

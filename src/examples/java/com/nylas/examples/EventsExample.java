@@ -1,7 +1,6 @@
 package com.nylas.examples;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.Calendar;
 import com.nylas.Event;
@@ -14,8 +13,8 @@ import com.nylas.RoomResource;
 public class EventsExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
+		ExampleConf conf = new ExampleConf();
+		String accessToken = conf.get("access.token");
 		NylasClient client = new NylasClient();
 		NylasAccount account = client.account(accessToken);
 		Events events = account.events();

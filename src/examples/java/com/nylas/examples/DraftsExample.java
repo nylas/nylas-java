@@ -1,7 +1,6 @@
 package com.nylas.examples;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.nylas.Draft;
 import com.nylas.DraftQuery;
@@ -12,11 +11,9 @@ import com.nylas.NylasClient;
 public class DraftsExample {
 
 	public static void main(String[] args) throws Exception {
-		Properties props = Examples.loadExampleProperties();
-		String accessToken = props.getProperty("access.token");
-		
+		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
-		NylasAccount account = client.account(accessToken);
+		NylasAccount account = client.account(conf.get("access.token"));
 		Drafts drafts = account.drafts();
 		
 		DraftQuery query = new DraftQuery()
