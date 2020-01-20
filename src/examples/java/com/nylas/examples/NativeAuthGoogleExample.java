@@ -25,7 +25,6 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.RequestFailedException;
-import com.nylas.Scope;
 
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -39,6 +38,7 @@ public class NativeAuthGoogleExample {
 
 	private static final String AUTHORIZED_PATH = "/login/google/authorized";
 	private static final String AUTHORIZE_NYLAS_PATH = "/authorize_nylas";
+	private static final String EXAMPLE_CSRF_TOKEN = "UNGUESSABLE_CSRF_TOKEN";
 	
 	private static ExampleConf conf = new ExampleConf();
 	private static HtmlTemplateResponder responder = new HtmlTemplateResponder("/html-templates/native-auth-google");
@@ -74,19 +74,19 @@ public class NativeAuthGoogleExample {
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
 			List<String> scopes = Arrays.asList(
-					"https://www.googleapis.com/auth/gmail.compose",
-					"https://www.googleapis.com/auth/gmail.modify",
-					"https://www.googleapis.com/auth/gmail.labels",
-					"https://www.googleapis.com/auth/gmail.metadata",
-					"https://www.googleapis.com/auth/gmail.send",
-					"https://www.googleapis.com/auth/calendar",
-					"https://www.googleapis.com/auth/contacts",
-					"https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly",
+//					"https://www.googleapis.com/auth/gmail.compose",
+//					"https://www.googleapis.com/auth/gmail.modify",
+//					"https://www.googleapis.com/auth/gmail.labels",
+//					"https://www.googleapis.com/auth/gmail.metadata",
+//					"https://www.googleapis.com/auth/gmail.send",
+//					"https://www.googleapis.com/auth/calendar",
+//					"https://www.googleapis.com/auth/contacts",
+////					"https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly",
 					"https://www.googleapis.com/auth/userinfo.email",
 					"https://www.googleapis.com/auth/userinfo.profile",
-					"https://mail.google.com",
-					"email"
-					);
+//					"https://mail.google.com",
+					"email",
+					"");
 			HttpUrl url = HttpUrl.get("https://accounts.google.com/o/oauth2/v2/auth").newBuilder()
 					.addQueryParameter("client_id", getGoogleClientId())
 					.addQueryParameter("redirect_uri", getOAuthRedirectUri())
@@ -94,6 +94,9 @@ public class NativeAuthGoogleExample {
 					.addQueryParameter("scope", String.join(" ", scopes))
 					.addQueryParameter("access_type", "offline")
 					.addQueryParameter("prompt", "consent")
+					// in a real system, the state parameter should be a unguessable function of the user account
+					// to prevent CSRF attacks
+					.addQueryParameter("state", EXAMPLE_CSRF_TOKEN)
 					.build();
 			
 			Map<String, String> dataModel = ImmutableMap.of("googleAuthUrl", url.toString());
@@ -106,6 +109,15 @@ public class NativeAuthGoogleExample {
 		@Override
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			String code = request.getParameter("code");
+			String state = request.getParameter("state");
+			
+			// in a real system, verify that the returned state matches the expected function of the current user
+			// account.  this prevents a CSRF attack where an attacker can associate the wrong google account to
+			// this customer's user account.
+			if (!EXAMPLE_CSRF_TOKEN.equals(state)) {
+				log.error("Unexpected or missing OAuth state parameter in response: " + state);
+				return;
+			}
 			
 			HttpUrl tokenUrl = HttpUrl.get("https://oauth2.googleapis.com/token");	
 			FormBody params = new FormBody.Builder()
@@ -176,27 +188,28 @@ public class NativeAuthGoogleExample {
 					.name(name)
 					.emailAddress(email)
 					.providerSettings(settings)
-					.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS, Scope.ROOM_RESOURCES_READ_ONLY);
+					//.scopes(Scope.EMAIL)
+					//.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS, Scope.ROOM_RESOURCES_READ_ONLY)
+					;
 					
-			System.out.println("Making a native authentication request for a Google account.");
-			String authorizationCode = authRequest.execute();
-			System.out.println("Succeeded.  Returned authorization code: " + authorizationCode);
-			
-			System.out.println("Using authorization code to request long lived access token.");
-			AccessToken token = authentication.fetchToken(authorizationCode);
-			System.out.println("Succeeded.  Returned token: " + token);
-			
-			System.out.println("Requesting account details with token.");
-			NylasAccount account = nylasClient.account(token.getAccessToken());
 			try {
+				log.info("Making a native authentication request for a Google account.");
+				String authorizationCode = authRequest.execute();
+				log.info("Succeeded.  Returned authorization code: " + authorizationCode);
+				
+				log.info("Using authorization code to request long lived access token.");
+				AccessToken token = authentication.fetchToken(authorizationCode);
+				log.info("Succeeded.  Returned token: " + token);
+				
+				log.info("Requesting account details with token.");
+				NylasAccount account = nylasClient.account(token.getAccessToken());
 				AccountDetail accountDetail = account.fetchAccountByAccessToken();
-				System.out.println("Succeeded. Account detail: " + accountDetail);
+				log.info("Succeeded. Account detail: " + accountDetail);
 
 				responder.respond("step3.ftlh", ImmutableMap.of("accountDetail", accountDetail), response);
 			} catch (RequestFailedException e) {
 				throw new IOException (e);
 			}
-			
 		}
 	}
 	

@@ -28,7 +28,7 @@ public class Notification {
 	
 	private static final JsonAdapter<Notification> JSON_ADAPTER =  JsonHelper.moshi().adapter(Notification.class);
 	public static Notification parseNotification(String jsonNotification) {
-		return JsonHelper.fromJsonSafe(JSON_ADAPTER, jsonNotification);
+		return JsonHelper.fromJsonUnchecked(JSON_ADAPTER, jsonNotification);
 	}
 	
 	private static byte[] hexStringToByteArray(String s) {

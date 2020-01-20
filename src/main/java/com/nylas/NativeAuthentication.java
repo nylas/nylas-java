@@ -8,12 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import com.squareup.moshi.Moshi;
-
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class NativeAuthentication {
 
@@ -101,53 +98,27 @@ public class NativeAuthentication {
 			assertState(settings != null, "Provider Settings required");
 		}
 		
-		public String execute() throws IOException {
+		public String execute() throws IOException, RequestFailedException {
 			validate();
 			
-			Moshi moshi = new Moshi.Builder().build();
-			String json = moshi.adapter(AuthRequestBuilder.class).indent("  ").toJson(this);
-			
 			HttpUrl authUrl = application.getClient().newUrlBuilder().addPathSegments("connect/authorize").build();
+			String json = JsonHelper.adapter(AuthRequestBuilder.class).toJson(this);
 			RequestBody body = RequestBody.create(JsonHelper.jsonType(), json);
+			Request request = new Request.Builder().url(authUrl).post(body).build();
 			
-			Request request = new Request.Builder().url(authUrl)
-					.post(body)
-					.build();
-			
-			try (Response response = application.getClient().getHttpClient().newCall(request).execute()) {
-				if (!response.isSuccessful()) {
-					throw new IOException("Unexpected code " + response);
-				}
-				
-				AuthorizationCode code = moshi.adapter(AuthorizationCode.class).fromJson(response.body().source());
-				return code.getCode();
-			}
+			AuthorizationCode code = application.getClient().executeRequest(request, AuthorizationCode.class);
+			return code.getCode();
 		}
 	}
 	
-	public AccessToken fetchToken(String authorizationCode) throws IOException {
-		
-		HttpUrl tokenUrl = application.getClient().newUrlBuilder().addPathSegments("connect/token").build();
-		
+	public AccessToken fetchToken(String authorizationCode) throws IOException, RequestFailedException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("client_id", application.getClientId());
 		params.put("client_secret", application.getClientSecret());
 		params.put("code", authorizationCode);
 		
-		RequestBody body = JsonHelper.jsonRequestBody(params);
-		Request request = new Request.Builder().url(tokenUrl)
-				.post(body)
-				.build();
-		
-		try (Response response = application.getClient().getHttpClient().newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code " + response);
-			}
-			
-			Moshi moshi = new Moshi.Builder().build();
-			AccessToken token = moshi.adapter(AccessToken.class).fromJson(response.body().source());
-			return token;
-		}
+		HttpUrl.Builder tokenUrl = application.getClient().newUrlBuilder().addPathSegments("connect/token");
+		return application.getClient().executePost(null, tokenUrl, params, AccessToken.class);
 	}
 	
 }

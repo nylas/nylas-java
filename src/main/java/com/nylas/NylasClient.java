@@ -103,7 +103,9 @@ public class NylasClient {
 
 	Request buildRequest(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body) {
 		Request.Builder builder = new Request.Builder().url(url.build());
-		addAuthHeader(builder, authUser);
+		if (authUser != null) {
+			addAuthHeader(builder, authUser);
+		}
 		return builder.method(method.toString(), body).build();
 	}
 	

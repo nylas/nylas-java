@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import com.nylas.NylasClient.HttpMethod;
-
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
@@ -55,9 +53,9 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 	
 	public String getRaw(String messageId) throws IOException, RequestFailedException {
 		HttpUrl.Builder messageUrl = getInstanceUrl(messageId);
-		Request.Builder builder = new Request.Builder().url(messageUrl.build());
+		Request.Builder builder = new Request.Builder().url(messageUrl.build()).get();
 		client.addAuthHeader(builder, authUser);
-		Request request = builder.method(HttpMethod.GET.toString(), null)
+		Request request = builder
 				.addHeader("Accept", "message/rfc822")
 				.build();
 		return client.executeRequest(request, String.class);

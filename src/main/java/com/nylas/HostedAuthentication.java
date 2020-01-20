@@ -1,13 +1,10 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.squareup.moshi.Moshi;
-
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class HostedAuthentication {
 
@@ -21,30 +18,17 @@ public class HostedAuthentication {
 		return new AuthenticationUrlBuilder(application);
 	}
 	
-	public AccessToken fetchToken(String authorizationCode) throws IOException {
+	public AccessToken fetchToken(String authorizationCode) throws IOException, RequestFailedException {
 		
-		HttpUrl tokenUrl = application.getClient().newUrlBuilder().addPathSegments("oauth/token").build();
+		HttpUrl.Builder tokenUrl = application.getClient().newUrlBuilder().addPathSegments("oauth/token");
 		
-		FormBody params = new FormBody.Builder()
-				.add("client_id", application.getClientId())
-				.add("client_secret", application.getClientSecret())
-				.add("grant_type", "authorization_code")
-				.add("code", authorizationCode)
-				.build();
-		
-		Request request = new Request.Builder().url(tokenUrl)
-				.post(params)
-				.build();
-		
-		try (Response response = application.getClient().getHttpClient().newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code " + response);
-			}
-			
-			Moshi moshi = new Moshi.Builder().build();
-			AccessToken token = moshi.adapter(AccessToken.class).fromJson(response.body().source());
-			return token;
-		}
+		Map<String, Object> params = new HashMap<>();
+		params.put("client_id", application.getClientId());
+		params.put("client_secret", application.getClientSecret());
+		params.put("grant_type", "authorization_code");
+		params.put("code", authorizationCode);
+
+		return application.getClient().executePost(null, tokenUrl, params, AccessToken.class);
 	}
 	
 }

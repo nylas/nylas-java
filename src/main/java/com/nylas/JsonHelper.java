@@ -30,11 +30,12 @@ public class JsonHelper {
 		return Types.newParameterizedType(List.class, type);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <T> JsonAdapter<T> adapter(Type type) {
-		return moshi.adapter(type);
+		return (JsonAdapter<T>) moshi.adapter(type).indent("  ");
 	}
 	
-	public static <T> T fromJsonSafe(JsonAdapter<T> adapter, String json) {
+	public static <T> T fromJsonUnchecked(JsonAdapter<T> adapter, String json) {
 		try {
 			return adapter.fromJson(json);
 		} catch (IOException e) {
@@ -50,7 +51,7 @@ public class JsonHelper {
 	}
 	
 	public static Map<String, Object> jsonToMap(String json) {
-		return fromJsonSafe(mapAdapter, json);
+		return fromJsonUnchecked(mapAdapter, json);
 	}
 	
 	private static final MediaType jsonType = MediaType.parse("application/json; charset=utf-8");
