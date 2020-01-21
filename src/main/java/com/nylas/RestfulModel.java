@@ -1,6 +1,8 @@
 package com.nylas;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public abstract class RestfulModel {
@@ -23,6 +25,14 @@ public abstract class RestfulModel {
 	 */
 	Map<String, Object> getWritableFields(@SuppressWarnings("unused") boolean creation) {
 		return Collections.emptyMap();
+	}
+	
+	public static List<String> getIds(Iterable<? extends RestfulModel> models) {
+		List<String> ids = new ArrayList<>();
+		for (RestfulModel model : models) {
+			ids.add(model.getId());
+		}
+		return ids;
 	}
 	
 }

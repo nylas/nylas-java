@@ -1,7 +1,9 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 
@@ -79,5 +81,42 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 	 */
 	public Thread setLabelIds(String threadId, Iterable<String> labelIds) throws IOException, RequestFailedException {
 		return super.update(threadId, Maps.of("label_ids", String.join(",", labelIds)));
+	}
+	
+	private Set<String> getLabelIds(String threadId) throws IOException, RequestFailedException {
+		Thread thread = get(threadId);
+		return new HashSet<>(RestfulModel.getIds(thread.getLabels()));
+	}
+	
+	/**
+	 * Convenience method to add a label to a thread without overwriting any of the existing set.
+	 * 
+	 * First, does a GET for the thread to find the existing ids, then adds the new one
+	 * (if it is not already present).
+	 * @return true if the label was newly added, and false if the thread already had the label 
+	 */
+	public boolean addLabel(String threadId, String labelId) throws IOException, RequestFailedException {
+		Set<String> labelIds = getLabelIds(threadId);
+		if (labelIds.add(labelId)) {
+			setLabelIds(threadId, labelIds);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Convenience method to remove a label from a thread without otherwise changing the existing set.
+	 * 
+	 * First, does a GET for the thread to find the existing ids, then removes the label
+	 * (if it is present).
+	 * @return true if the label was removed, and false if the thread did not have the label 
+	 */
+	public boolean removeLabel(String threadId, String labelId) throws IOException, RequestFailedException {
+		Set<String> labelIds = getLabelIds(threadId);
+		if (labelIds.remove(labelId)) {
+			setLabelIds(threadId, labelIds);
+			return true;
+		}
+		return false;
 	}
 }

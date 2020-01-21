@@ -44,8 +44,20 @@ public class LabelsExample {
 		String messageId = messageList.get(0).getId();
 		Message message = messages.setLabelIds(messageId, Arrays.asList(newLabel.getId()));
 		System.out.println("labelled message: " + message);
-	
+		
+		Label newLabel2 = labels.create("Another Example Label");
+		System.out.println("created: " + newLabel2);
+		boolean result = messages.addLabel(messageId, newLabel2.getId());
+		System.out.println("attempted to add another label.  success=" + result);
+		
+		result = messages.addLabel(messageId, newLabel2.getId());
+		System.out.println("attempted to add the same one again.  success=" + result);
+		
+		message = messages.get(messageId);
+		System.out.println("added another label to message: " + message);
+		
 		labels.delete(newLabel.getId());
-		System.out.println("deleted");
+		labels.delete(newLabel2.getId());
+		System.out.println("deleted the new labels");
 	}
 }
