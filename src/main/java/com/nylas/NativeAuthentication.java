@@ -70,7 +70,7 @@ public class NativeAuthentication {
 		 * The set of specific scopes being requested.
 		 * Strongly typed.
 		 */
-		public AuthRequestBuilder scopes(Scope... scopes) {
+		public AuthRequestBuilder scopes(Iterable<Scope> scopes) {
 			StringJoiner joiner = new StringJoiner(",");
 			for (Scope scope : scopes) {
 				joiner.add(scope.getName());

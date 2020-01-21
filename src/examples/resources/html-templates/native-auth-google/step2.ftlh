@@ -8,7 +8,7 @@
     <code>${refreshToken}</code> <br/>
   </p>
   <p>We have also accessed the Google userinfo endpoint to retrieve your name and email:<br/>
-    ${name} &lt;${email}&gt;
+    ${name!} &lt;${email!}&gt;
   </p>
   <p>
     The next step is to hand them over to Nylas, so that Nylas

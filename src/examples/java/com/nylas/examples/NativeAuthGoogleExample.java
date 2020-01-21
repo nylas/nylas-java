@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.RequestFailedException;
+import com.nylas.Scope;
 
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -45,6 +47,7 @@ public class NativeAuthGoogleExample {
 	private static OkHttpClient httpClient = new OkHttpClient();
 	private static NylasClient nylasClient = new NylasClient();
 	private static String baseUrl;
+	private static List<Scope> scopes = Arrays.asList(Scope.values());
 
 	public static void main(String[] args) throws Exception {
 		int port = conf.getInt("http.local.port", 5000);
@@ -72,30 +75,27 @@ public class NativeAuthGoogleExample {
 	public static class StartServlet extends HttpServlet {
 		@Override
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			Set<String> googleScopes = GoogleProviderSettings.getMatchingGoogleScopes(scopes);
+			// userinfo.email is required for google userinfo endpoint to return email attribute
+			// Nylas also appears to require this when it fetches tokeninfo
+			googleScopes.add("https://www.googleapis.com/auth/userinfo.email");
+			// userinfo.profile is required for google userinfo endpoint to return name attribute
+			// this makes the example nicer in fetching the user name from Google and using it with Nylas, but is not
+			// required by Nylas if you have the user name from somewhere else.
+			googleScopes.add("https://www.googleapis.com/auth/userinfo.profile");
 			
-			List<String> scopes = Arrays.asList(
-//					"https://www.googleapis.com/auth/gmail.compose",
-//					"https://www.googleapis.com/auth/gmail.modify",
-//					"https://www.googleapis.com/auth/gmail.labels",
-//					"https://www.googleapis.com/auth/gmail.metadata",
-//					"https://www.googleapis.com/auth/gmail.send",
-//					"https://www.googleapis.com/auth/calendar",
-//					"https://www.googleapis.com/auth/contacts",
-////					"https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly",
-					"https://www.googleapis.com/auth/userinfo.email",
-					"https://www.googleapis.com/auth/userinfo.profile",
-//					"https://mail.google.com",
-					"email",
-					"");
 			HttpUrl url = HttpUrl.get("https://accounts.google.com/o/oauth2/v2/auth").newBuilder()
 					.addQueryParameter("client_id", getGoogleClientId())
 					.addQueryParameter("redirect_uri", getOAuthRedirectUri())
 					.addQueryParameter("response_type", "code")
-					.addQueryParameter("scope", String.join(" ", scopes))
+					.addQueryParameter("scope", String.join(" ", googleScopes))
 					.addQueryParameter("access_type", "offline")
+					// A user prompt is required for Google to grant the refresh_token in addition to the access_token.
+					// Google may skip the prompt if the user has  previously granted these scopes to this client.
+					// Adding this parameter prompt=consent ensures that the prompt is never skipped.
 					.addQueryParameter("prompt", "consent")
 					// in a real system, the state parameter should be a unguessable function of the user account
-					// to prevent CSRF attacks
+					// or session to prevent CSRF attacks
 					.addQueryParameter("state", EXAMPLE_CSRF_TOKEN)
 					.build();
 			
@@ -112,8 +112,8 @@ public class NativeAuthGoogleExample {
 			String state = request.getParameter("state");
 			
 			// in a real system, verify that the returned state matches the expected function of the current user
-			// account.  this prevents a CSRF attack where an attacker can associate the wrong google account to
-			// this customer's user account.
+			// account/session.  this prevents a CSRF attack where an attacker can associate the wrong google account
+			// to this customer's user account.
 			if (!EXAMPLE_CSRF_TOKEN.equals(state)) {
 				log.error("Unexpected or missing OAuth state parameter in response: " + state);
 				return;
@@ -188,8 +188,7 @@ public class NativeAuthGoogleExample {
 					.name(name)
 					.emailAddress(email)
 					.providerSettings(settings)
-					//.scopes(Scope.EMAIL)
-					//.scopes(Scope.EMAIL, Scope.CALENDAR, Scope.CONTACTS, Scope.ROOM_RESOURCES_READ_ONLY)
+					.scopes(scopes)
 					;
 					
 			try {
