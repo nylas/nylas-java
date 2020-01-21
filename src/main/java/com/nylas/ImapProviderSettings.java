@@ -5,6 +5,13 @@ import static com.nylas.Validations.nullOrEmpty;
 
 import java.util.Map;
 
+/**
+ * Provider settings for generic IMAP providers
+ * 
+ * <p>
+ * <a href="https://docs.nylas.com/docs/native-authentication#section-provider-specific-settings">
+ * https://docs.nylas.com/docs/native-authentication#section-provider-specific-settings</a>
+ */
 public class ImapProviderSettings extends ProviderSettings {
 
 	private String imap_host;
@@ -66,15 +73,14 @@ public class ImapProviderSettings extends ProviderSettings {
 		return this;
 	}
 
-	private void validate() {
+	@Override
+	protected void validate() {
 		// TODO - which fields are required?
 		assertState(!nullOrEmpty(imap_host), "IMAP Host is required");
 	}
 	
 	@Override
 	protected void fillSettings(Map<String, Object> settings) {
-		validate();
-		
 		// IMAP
 		settings.put("imap_host", imap_host);
 		if (imap_port != null) {

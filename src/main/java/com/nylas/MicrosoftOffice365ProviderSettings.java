@@ -60,7 +60,8 @@ public class MicrosoftOffice365ProviderSettings extends ProviderSettings {
 		return this;
 	}
 
-	private void validate() {
+	@Override
+	protected void validate() {
 		assertState(!nullOrEmpty(microsoftClientId), "Microsoft Client ID is required");
 		assertState(!nullOrEmpty(microsoftClientSecret), "Microsoft Client Secret is required");
 		assertState(!nullOrEmpty(microsoftRefreshToken), "Microsoft Refresh Token is required");
@@ -69,8 +70,6 @@ public class MicrosoftOffice365ProviderSettings extends ProviderSettings {
 	
 	@Override
 	protected void fillSettings(Map<String, Object> settings) {
-		validate();
-		
 		settings.put("microsoft_client_id", microsoftClientId);
 		settings.put("microsoft_client_secret", microsoftClientSecret);
 		settings.put("microsoft_refresh_token", microsoftRefreshToken);

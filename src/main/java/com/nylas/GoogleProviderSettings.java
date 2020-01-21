@@ -56,7 +56,8 @@ public class GoogleProviderSettings extends ProviderSettings {
 		return this;
 	}
 
-	private void validate() {
+	@Override
+	protected void validate() {
 		assertState(!nullOrEmpty(googleClientId), "Google Client ID is required");
 		assertState(!nullOrEmpty(googleClientSecret), "Google Client Secret is required");
 		assertState(!nullOrEmpty(googleRefreshToken), "Google Refresh Token is required");
@@ -64,8 +65,6 @@ public class GoogleProviderSettings extends ProviderSettings {
 	
 	@Override
 	protected void fillSettings(Map<String, Object> settings) {
-		validate();
-		
 		settings.put("google_client_id", googleClientId);
 		settings.put("google_client_secret", googleClientSecret);
 		settings.put("google_refresh_token", googleRefreshToken);
