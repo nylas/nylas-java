@@ -75,8 +75,12 @@ public class ImapProviderSettings extends ProviderSettings {
 
 	@Override
 	protected void validate() {
-		// TODO - which fields are required?
 		assertState(!nullOrEmpty(imap_host), "IMAP Host is required");
+		assertState(!nullOrEmpty(imap_username), "IMAP Username is required");
+		assertState(!nullOrEmpty(imap_password), "IMAP Password is required");
+		assertState(!nullOrEmpty(smtp_host), "SMTP Host is required");
+		assertState(!nullOrEmpty(smtp_username), "SMTP Host is required");
+		assertState(!nullOrEmpty(smtp_password), "SMTP Host is required");
 	}
 	
 	@Override
@@ -86,32 +90,21 @@ public class ImapProviderSettings extends ProviderSettings {
 		if (imap_port != null) {
 			settings.put("imap_port", imap_port);
 		}
-		if (!nullOrEmpty(imap_username)) {
-			settings.put("imap_username", imap_username);
-		}
-		if (!nullOrEmpty(imap_password)) {
-			settings.put("imap_password", imap_password);
-		}
+		settings.put("imap_username", imap_username);
+		settings.put("imap_password", imap_password);
 		
 		// SMTP
-		if (!nullOrEmpty(smtp_host)) {
-			settings.put("smtp_host", smtp_host);
-		}
+		settings.put("smtp_host", smtp_host);
 		if (smtp_port != null) {
 			settings.put("smtp_port", smtp_port);
 		}
-		if (!nullOrEmpty(smtp_username)) {
-			settings.put("smtp_username", smtp_username);
-		}
-		if (!nullOrEmpty(smtp_password)) {
-			settings.put("smtp_password", smtp_password);
-		}
+		settings.put("smtp_username", smtp_username);
+		settings.put("smtp_password", smtp_password);
 
 		// SSL
 		if (ssl_required != null) {
 			settings.put("ssl_required", ssl_required);
 		}
 	}
-
 
 }
