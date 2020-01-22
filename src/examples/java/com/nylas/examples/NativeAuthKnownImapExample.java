@@ -1,7 +1,5 @@
 package com.nylas.examples;
 
-import java.util.Arrays;
-
 import com.nylas.AccessToken;
 import com.nylas.AccountDetail;
 import com.nylas.KnownImapProviderSettings;
@@ -30,7 +28,7 @@ public class NativeAuthKnownImapExample {
 				.name(conf.get("known.imap.name"))
 				.emailAddress(email)
 				.providerSettings(settings)
-				.scopes(Arrays.asList(Scope.values()));
+				.scopes(Scope.values());
 				
 		System.out.println("Making a native authentication request for a " + settings.getName() + " account.");
 		String authorizationCode = authRequest.execute();

@@ -1,7 +1,5 @@
 package com.nylas.examples;
 
-import java.util.Arrays;
-
 import com.nylas.AccessToken;
 import com.nylas.AccountDetail;
 import com.nylas.ImapProviderSettings;
@@ -36,7 +34,7 @@ public class NativeAuthImapExample {
 				.name(conf.get("imap.name"))
 				.emailAddress(conf.get("imap.email"))
 				.providerSettings(settings)
-				.scopes(Arrays.asList(Scope.values()));
+				.scopes(Scope.values());
 				
 		System.out.println("Making a native authentication request for a custom IMAP account.");
 		String authorizationCode = authRequest.execute();

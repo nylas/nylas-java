@@ -1,7 +1,5 @@
 package com.nylas.examples;
 
-import java.util.Arrays;
-
 import com.nylas.AccessToken;
 import com.nylas.AccountDetail;
 import com.nylas.CustomProviderSettings;
@@ -31,7 +29,7 @@ public class NativeAuthCustomExample {
 				.name(conf.get("custom.provider.user.name"))
 				.emailAddress(email)
 				.providerSettings(settings)
-				.scopes(Arrays.asList(Scope.values()));
+				.scopes(Scope.values());
 				
 		System.out.println("Making a native authentication request.");
 		String authorizationCode = authRequest.execute();

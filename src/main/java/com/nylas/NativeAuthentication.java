@@ -4,6 +4,7 @@ import static com.nylas.Validations.assertState;
 import static com.nylas.Validations.nullOrEmpty;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -64,6 +65,14 @@ public class NativeAuthentication {
 			this.provider = providerName;
 			this.settings = providerSettings;
 			return this;
+		}
+		
+		/**
+		 * The set of specific scopes being requested.
+		 * Strongly typed.
+		 */
+		public AuthRequestBuilder scopes(Scope... scopes) {
+			return scopes(Arrays.asList(scopes));
 		}
 		
 		/**
