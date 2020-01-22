@@ -20,10 +20,10 @@ public class NativeAuthCustomExample {
 
 		String email = conf.get("custom.provider.email");
 		ProviderSettings settings = new CustomProviderSettings(conf.get("custom.provider.name"))
-				.add("username", email)
-				.add("password", conf.get("custom.provider.password"))
-				;
+				.addAll(conf.getPrefixedEntries("custom.provider.setting."));
 
+		System.out.println("Using custom settings: " + settings);
+		
 		NylasClient client = new NylasClient();
 		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		NativeAuthentication authentication = application.nativeAuthentication();

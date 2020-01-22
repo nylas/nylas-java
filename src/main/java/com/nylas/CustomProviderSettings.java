@@ -24,6 +24,11 @@ public class CustomProviderSettings extends ProviderSettings {
 		return this;
 	}
 	
+	public CustomProviderSettings addAll(Map<String, String> entries) {
+		settings.putAll(entries);
+		return this;
+	}
+	
 	@Override
 	protected void validate() {
 		// nothing to validate 
@@ -33,5 +38,9 @@ public class CustomProviderSettings extends ProviderSettings {
 	protected void fillSettings(Map<String, Object> settings) {
 		settings.putAll(this.settings);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "CustomProviderSettings [providerName=" + getName() + " settings=" + settings + "]";
+	}
 }

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.nylas.NameEmail;
@@ -66,5 +68,33 @@ public class ExampleConf {
 	List<NameEmail> getNameEmailList(String key) {
 		NameEmail nameEmail = getNameEmail(key);
 		return nameEmail == null ? Collections.emptyList() : Arrays.asList(nameEmail);
+	}
+	
+	/**
+	 * Return a map derived from all properties that start with a given prefix.
+	 * The returned map has keys stripped of the prefix.
+	 * <p>
+	 * For example, if these are properties:
+	 * <pre>
+	 * menu.open.color=blue
+	 * menu.open.size=10
+	 * menu.close.color=red
+	 * menu.close.size=5
+	 * </pre>
+	 * then calling getPrefixedEntries("menu.open.") will return a map with these entries:
+	 * <pre>
+	 * color=blue
+	 * size=10
+	 * </pre>
+	 */
+	Map<String, String> getPrefixedEntries(String prefix) {
+		int prefixLength = prefix.length();
+		Map<String, String> entries = new HashMap<>();
+		for (String key : props.stringPropertyNames()) {
+			if (key.startsWith(prefix)) {
+				entries.put(key.substring(prefixLength), props.getProperty(key));
+			}
+		}
+		return entries;
 	}
 }
