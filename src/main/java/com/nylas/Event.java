@@ -95,9 +95,9 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	@Override
 	public String toString() {
-		return "Event [calendar_id=" + calendar_id + ", title=" + title + ", description=" + description + ", when="
-				+ when + ", location=" + location + ", owner=" + owner + ", participants=" + participants + ", status="
-				+ status + ", read_only=" + read_only + ", busy=" + busy + ", recurrence=" + recurrence
+		return "Event [id=" + getId() + ", calendar_id=" + calendar_id + ", title=" + title
+				+ ", when=" + when + ", location=" + location + ", owner=" + owner + ", participants=" + participants
+				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", recurrence=" + recurrence
 				+ ", master_event_id=" + master_event_id + ", original_start_time=" + original_start_time + "]";
 	}
 
