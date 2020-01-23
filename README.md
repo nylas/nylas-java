@@ -1,10 +1,10 @@
-# nylas-java
+# Nylas Java SDK
 
 The Nylas Java SDK provides all of the functionality of the Nylas [REST API](https://docs.nylas.com/reference) in an easy-to-use Java API. With the SDK, you can programmatically access an email account (e.g. Gmail, Yahoo, etc.) and perform functionality such as getting messages and listing message threads.
 
 ## Requirements
 - Java 8 or above
-- Nylas account and application client id & secret - https://docs.nylas.com/docs/get-your-developer-api-keys 
+- [Nylas developer account and application](https://docs.nylas.com/docs/get-your-developer-api-keys) 
 
 ## Adding the SDK to your project
 
@@ -20,7 +20,7 @@ For projects using Maven, add the following to your POM file:
       <version>1.X.X</version>
     </dependency>
 
-## Running Examples
+## Running examples
 - Check out the repo
 - Create an example.properties file from the template, and enter your nylas application client id and client secret:
   - `cp src/examples/resources/example.properties.template src/examples/resources/example.properties`
