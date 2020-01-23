@@ -1,17 +1,45 @@
+######################################################
 # Template for example.properties file.
-# Make a copy of this file and fill in your own values here to run the examples.
-
-# Register a nylas account and then
-# https://docs.nylas.com/docs/get-your-developer-api-keys
+# 
+# MAKE A COPY OF THE FILE called "example.properties"
+# and fill in your own values to run the examples.
 #
+######################################################
+# General config for many examples
+#
+# Your Nylas Application credentials
 nylas.client.id=YOUR_CLIENT_ID_HERE
 nylas.client.secret=YOUR_CLIENT_SECRET_HERE
 
-# Once you have added an email account, if you want to use it in examples
-# list its access token here 
+# Authorized account token to be used in any examples accessing an account
 access.token=YOUR_ACCESS_TOKEN_HERE
 
-# For Native Authentication with a custom IMAP provider fill in account details here
+######################################################
+# Authentication Examples
+
+# Hosted Authentication Example
+hosted.login.hint=
+hosted.auth.code=
+
+# Native Authentication with Google
+# This example uses a web interface to collect additional information
+google.client.id=YOUR_GOOGLE_OAUTH_CLIENT_ID
+google.client.secret=YOUR_GOOGLE_OAUTH_CLIENT_SECRET
+
+# Native Authentication with Microsoft Exchange
+exchange.name=
+exchange.email=
+exchange.password=
+exchange.server=
+
+# Native Authentication with an IMAP provider known by Nylas
+# such as yahoo, aol, or icloud
+known.imap.name=
+known.imap.provider.name=
+known.imap.email=
+known.imap.password=
+
+# Native Authentication with a generic IMAP provider
 imap.name=
 imap.email
 imap.host=
@@ -23,14 +51,19 @@ smtp.port=
 smtp.username=
 smtp.password=
 
-# For Native Authentication with a Google provider fill in account details here
-google.client.id=
-google.client.secret=
-google.refresh.token=
+# Native Authentication for a provider passing any custom fields to Nylas
+custom.provider.name=hotmail
+custom.provider.user.name=Dora the Explorer
+custom.provider.email=msdoratheexplorer@hotmail.com
+custom.provider.setting.username=msdoratheexplorer@hotmail.com
+custom.provider.setting.password=DORAS_SECRET_PASSWORD
+custom.provider.setting.eas_server_host=outlook.com
 
-# For Hosted Authentication fill in details here
-hosted.login.hint=
-hosted.auth.code=
+######################################################
+# Other Examples
+
+# Webhook URL that Nylas can issue a challenge to for the Webhooks Example
+webhook.callback.url=https://c9b03335.ngrok.io/examples/callback
 
 # For sending examples - ok to leave some fields blank as long as their is a to, cc, or bcc
 send.from.name=
