@@ -1,5 +1,8 @@
 package com.nylas;
 
+/**
+ * Access token information for an account returned by Nylas after exchanging the authorization code.
+ */
 public class AccessToken {
 
 	private String access_token;
@@ -8,14 +11,23 @@ public class AccessToken {
 	private String provider;
 	private String token_type;
 
+	/**
+	 * The actual token. This does not expire and should be saved carefully by the application.
+	 */
 	public String getAccessToken() {
 		return access_token;
 	}
 
+	/**
+	 * The ID of the account that this token grants access to. 
+	 */
 	public String getAccountId() {
 		return account_id;
 	}
 
+	/**
+	 * The email address of the account.
+	 */
 	public String getEmailAddress() {
 		return email_address;
 	}

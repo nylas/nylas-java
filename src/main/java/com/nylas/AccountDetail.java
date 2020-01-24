@@ -1,5 +1,8 @@
 package com.nylas;
 
+/**
+ * Information about an account available simply with an access token.
+ */
 public class AccountDetail {
 
 	private String id;

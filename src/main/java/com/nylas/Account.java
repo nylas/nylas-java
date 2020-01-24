@@ -1,5 +1,8 @@
 package com.nylas;
 
+/**
+ * An Account as managed by the Accounts access object for a particular application client_id.
+ */
 public class Account extends AccountOwnedModel {
 
 	private String billing_state;
