@@ -25,6 +25,7 @@ import com.nylas.NativeAuthentication.AuthRequestBuilder;
 import com.nylas.NylasAccount;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
+import com.nylas.ProviderSettings;
 import com.nylas.RequestFailedException;
 import com.nylas.Scope;
 
@@ -179,7 +180,7 @@ public class NativeAuthGoogleExample {
 					conf.get("nylas.client.secret"));
 			NativeAuthentication authentication = application.nativeAuthentication();
 			
-			GoogleProviderSettings settings = new GoogleProviderSettings()
+			ProviderSettings settings = ProviderSettings.google()
 					.googleClientId(getGoogleClientId())
 					.googleClientSecret(getGoogleClientSecret())
 					.googleRefreshToken(refreshToken);

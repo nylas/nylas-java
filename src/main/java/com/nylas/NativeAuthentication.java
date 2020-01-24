@@ -55,15 +55,10 @@ public class NativeAuthentication {
 		
 		/**
 		 * Provider-specific name and configuration.
-		 * Strongly typed.
 		 */
 		public AuthRequestBuilder providerSettings(ProviderSettings providerSettings) {
-			return providerSettings(providerSettings.getName(), providerSettings.getSettings());
-		}
-		
-		public AuthRequestBuilder providerSettings(String providerName, Map<String, Object> providerSettings) {
-			this.provider = providerName;
-			this.settings = providerSettings;
+			this.provider = providerSettings.getName();
+			this.settings = providerSettings.getValidatedSettings();
 			return this;
 		}
 		

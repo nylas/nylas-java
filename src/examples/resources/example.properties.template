@@ -26,38 +26,56 @@ hosted.auth.code=
 google.client.id=YOUR_GOOGLE_OAUTH_CLIENT_ID
 google.client.secret=YOUR_GOOGLE_OAUTH_CLIENT_SECRET
 
-# Native Authentication with Microsoft Exchange
-exchange.name=
-exchange.email=
-exchange.password=
-exchange.server=
+# NativeAuthPasswordExample
+# The password example can attempt to use any of the
+# given providers that require a password for authentication
+# This property selects which one it will run:
+native.auth.provider=yahoo
 
-# Native Authentication with an IMAP provider known by Nylas
-# such as yahoo, aol, or icloud
-known.imap.name=
-known.imap.provider.name=
-known.imap.email=
-known.imap.password=
+# Native Authentication with AOL
+native.auth.aol.name=
+native.auth.aol.email=
+native.auth.aol.password=
+
+# Native Authentication with Hotmail
+native.auth.hotmail.name=Dora the Explorer
+native.auth.hotmail.email=msdoratheexplorer@hotmail.com
+native.auth.hotmail.password=DORAS_SECRET_PASSWORD
+
+# Native Authentication with iCloud
+native.auth.icloud.name=
+native.auth.icloud.email=
+native.auth.icloud.password=
+
+# Native Authentication with Outlook
+native.auth.outlook.name=
+native.auth.outlook.email=
+native.auth.outlook.password=
+
+# Native Authentication with Yahoo
+native.auth.yahoo.name=
+native.auth.yahoo.email=
+native.auth.yahoo.password=
+
+# Native Authentication with Microsoft Exchange
+native.auth.exchange.name=
+native.auth.exchange.email=
+native.auth.exchange.password=
+native.auth.exchange.server=
 
 # Native Authentication with a generic IMAP provider
-imap.name=
-imap.email
-imap.host=
-imap.port=
-imap.username=
-imap.password=
-smtp.host=
-smtp.port=
-smtp.username=
-smtp.password=
-
-# Native Authentication for a provider passing any custom fields to Nylas
-custom.provider.name=hotmail
-custom.provider.user.name=Dora the Explorer
-custom.provider.email=msdoratheexplorer@hotmail.com
-custom.provider.setting.username=msdoratheexplorer@hotmail.com
-custom.provider.setting.password=DORAS_SECRET_PASSWORD
-custom.provider.setting.eas_server_host=outlook.com
+native.auth.imap.name=SpongeBob
+native.auth.imap.email=spongebob@example.com
+native.auth.imap.password=SPONGEBOB_PASSWORD
+native.auth.imap.host=imap.example.com
+native.auth.imap.port=993
+native.auth.imap.username=spongebob@example.com
+native.auth.imap.password=SPONGEBOB_PASSWORD
+native.auth.imap.ssl.required=true
+native.auth.imap.smtp.host=smtp.example.com
+native.auth.imap.smtp.port=587
+native.auth.imap.smtp.username=spongebob@example.com
+native.auth.imap.smtp.password=SPONGEBOB_PASSWORD=
 
 ######################################################
 # Other Examples

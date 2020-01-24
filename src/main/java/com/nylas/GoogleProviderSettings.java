@@ -1,8 +1,5 @@
 package com.nylas;
 
-import static com.nylas.Validations.assertState;
-import static com.nylas.Validations.nullOrEmpty;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -21,53 +18,30 @@ import java.util.Set;
  */
 public class GoogleProviderSettings extends ProviderSettings {
 
-	private String googleClientId;
-	private String googleClientSecret;
-	private String googleRefreshToken;
-	
-	public GoogleProviderSettings() {
+	protected GoogleProviderSettings() {
 		super("gmail");
 	}
 	
-	public String getGoogleClientId() {
-		return googleClientId;
-	}
-
-	public String getGoogleClientSecret() {
-		return googleClientSecret;
-	}
-
-	public String getGoogleRefreshToken() {
-		return googleRefreshToken;
-	}
-
 	public GoogleProviderSettings googleClientId(String googleClientId) {
-		this.googleClientId = googleClientId;
+		add("google_client_id", googleClientId);
 		return this;
 	}
 	
 	public GoogleProviderSettings googleClientSecret(String googleClientSecret) {
-		this.googleClientSecret = googleClientSecret;
+		add("google_client_secret", googleClientSecret);
 		return this;
 	}
 	
 	public GoogleProviderSettings googleRefreshToken(String googleRefreshToken) {
-		this.googleRefreshToken = googleRefreshToken;
+		add("google_refresh_token", googleRefreshToken);
 		return this;
 	}
 
 	@Override
 	protected void validate() {
-		assertState(!nullOrEmpty(googleClientId), "Google Client ID is required");
-		assertState(!nullOrEmpty(googleClientSecret), "Google Client Secret is required");
-		assertState(!nullOrEmpty(googleRefreshToken), "Google Refresh Token is required");
-	}
-	
-	@Override
-	protected void fillSettings(Map<String, Object> settings) {
-		settings.put("google_client_id", googleClientId);
-		settings.put("google_client_secret", googleClientSecret);
-		settings.put("google_refresh_token", googleRefreshToken);
+		assertSetting("google_client_id", "Google Client ID is required");
+		assertSetting("google_client_secret", "Google Client Secret is required");
+		assertSetting("google_refresh_token", "Google Refresh Token is required");
 	}
 	
 	private static final Map<Scope, List<String>> matchingScopes;

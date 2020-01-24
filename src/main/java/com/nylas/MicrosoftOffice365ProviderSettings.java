@@ -1,10 +1,5 @@
 package com.nylas;
 
-import static com.nylas.Validations.assertState;
-import static com.nylas.Validations.nullOrEmpty;
-
-import java.util.Map;
-
 /**
  * Provider settings for Microsoft Office 365.
  * <p>
@@ -15,65 +10,36 @@ import java.util.Map;
  */
 public class MicrosoftOffice365ProviderSettings extends ProviderSettings {
 
-	private String microsoftClientId;
-	private String microsoftClientSecret;
-	private String microsoftRefreshToken;
-	private String redirectUri;
-	
-	public MicrosoftOffice365ProviderSettings() {
+	protected MicrosoftOffice365ProviderSettings() {
 		super("office365");
-	}
-	
-	public String getMicrosoftClientId() {
-		return microsoftClientId;
-	}
-
-	public String getMicrosoftClientSecret() {
-		return microsoftClientSecret;
-	}
-
-	public String getMicrosoftRefreshToken() {
-		return microsoftRefreshToken;
-	}
-
-	public String getRedirectUri() {
-		return redirectUri;
 	}
 
 	public MicrosoftOffice365ProviderSettings microsoftClientId(String microsoftClientId) {
-		this.microsoftClientId = microsoftClientId;
+		add("microsoft_client_id", microsoftClientId);
 		return this;
 	}
 	
 	public MicrosoftOffice365ProviderSettings microsoftClientSecret(String microsoftClientSecret) {
-		this.microsoftClientSecret = microsoftClientSecret;
+		add("microsoft_client_secret", microsoftClientSecret);
 		return this;
 	}
 	
 	public MicrosoftOffice365ProviderSettings microsoftRefreshToken(String microsoftRefreshToken) {
-		this.microsoftRefreshToken = microsoftRefreshToken;
+		add("microsoft_refresh_token", microsoftRefreshToken);
 		return this;
 	}
 
 	public MicrosoftOffice365ProviderSettings redirectUri(String redirectUri) {
-		this.redirectUri = redirectUri;
+		add("redirect_uri", redirectUri);
 		return this;
 	}
 
 	@Override
 	protected void validate() {
-		assertState(!nullOrEmpty(microsoftClientId), "Microsoft Client ID is required");
-		assertState(!nullOrEmpty(microsoftClientSecret), "Microsoft Client Secret is required");
-		assertState(!nullOrEmpty(microsoftRefreshToken), "Microsoft Refresh Token is required");
-		assertState(!nullOrEmpty(redirectUri), "Redirect URI is required");
-	}
-	
-	@Override
-	protected void fillSettings(Map<String, Object> settings) {
-		settings.put("microsoft_client_id", microsoftClientId);
-		settings.put("microsoft_client_secret", microsoftClientSecret);
-		settings.put("microsoft_refresh_token", microsoftRefreshToken);
-		settings.put("redirect_uri", redirectUri);
+		assertSetting("microsoft_client_id", "Microsoft Client ID is required");
+		assertSetting("microsoft_client_secret", "Microsoft Client Secret is required");
+		assertSetting("microsoft_refresh_token", "Microsoft Refresh Token is required");
+		assertSetting("redirect_uri", "Redirect URI is required");
 	}
 	
 }

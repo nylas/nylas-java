@@ -1,10 +1,5 @@
 package com.nylas;
 
-import static com.nylas.Validations.assertState;
-import static com.nylas.Validations.nullOrEmpty;
-
-import java.util.Map;
-
 /**
  * Provider settings for Microsoft Exchange.
  * <p>
@@ -15,54 +10,28 @@ import java.util.Map;
  */
 public class MicrosoftExchangeProviderSettings extends ProviderSettings {
 
-	private String username;
-	private String password;
-	private String easServerHost;
-	
-	public MicrosoftExchangeProviderSettings() {
+	protected MicrosoftExchangeProviderSettings() {
 		super("exchange");
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getEasServerHost() {
-		return easServerHost;
-	}
-
 	public MicrosoftExchangeProviderSettings username(String username) {
-		this.username = username;
+		add("username", username);
 		return this;
 	}
 	
 	public MicrosoftExchangeProviderSettings password(String password) {
-		this.password = password;
+		add("password", password);
 		return this;
 	}
 	
 	public MicrosoftExchangeProviderSettings easServerHost(String easServerHost) {
-		this.easServerHost = easServerHost;
+		add("eas_server_host", easServerHost);
 		return this;
 	}
 
 	@Override
 	protected void validate() {
-		assertState(!nullOrEmpty(username), "Username is required");
-		assertState(!nullOrEmpty(password), "Password is required");
+		assertSetting("username", "Username is required");
+		assertSetting("password", "Password is required");
 	}
-	
-	@Override
-	protected void fillSettings(Map<String, Object> settings) {
-		settings.put("username", username);
-		settings.put("password", password);
-		if (!nullOrEmpty(easServerHost)) {
-			settings.put("eas_server_host", easServerHost);
-		}
-	}
-	
 }

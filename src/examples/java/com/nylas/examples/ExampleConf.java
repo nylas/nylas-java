@@ -50,12 +50,25 @@ public class ExampleConf {
 		return props.getProperty(key, defaultValue);
 	}
 	
+	boolean contains(String key) {
+		return props.containsKey(key);
+	}
+	
 	int getInt(String key, int defaultValue) {
 		String value = get(key);
 		if (value == null) {
 			return defaultValue;
 		} else {
 			return Integer.parseInt(value);
+		}
+	}
+	
+	boolean getBoolean(String key, boolean defaultValue) {
+		String value = get(key);
+		if (value == null) {
+			return defaultValue;
+		} else {
+			return Boolean.parseBoolean(value);
 		}
 	}
 	
