@@ -15,11 +15,11 @@ If you have a question about the Nylas Communications Platform, please reach out
 # Install
 **Note:** The Nylas Java SDK requires Java 8 or above.
 
-**Install via Gradle**: If you're using Gradle, add the following to your dependencies section of build.gradle:
+**Setup via Gradle**: If you're using Gradle, add the following to your dependencies section of build.gradle:
 
     implementation("com.nylas.sdk:nylas-java-sdk:1.X.X")
 
-**Install via Maven**: For projects using Maven, add the following to your POM file:
+**Setup via Maven**: For projects using Maven, add the following to your POM file:
 
     <dependency>
       <groupId>com.nylas.sdk</groupId>
