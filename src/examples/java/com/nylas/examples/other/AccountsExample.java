@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import com.nylas.Accounts;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.TokenInfo;
+import com.nylas.examples.ExampleConf;
 
 public class AccountsExample {
 

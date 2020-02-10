@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -10,6 +10,7 @@ import com.nylas.MessageQuery;
 import com.nylas.Messages;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.examples.ExampleConf;
 
 public class MessagesExample {
 

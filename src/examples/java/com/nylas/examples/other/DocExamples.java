@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.io.IOException;
 import java.nio.file.Files;

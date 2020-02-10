@@ -1,10 +1,11 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import com.nylas.Draft;
 import com.nylas.Drafts;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.Tracking;
+import com.nylas.examples.ExampleConf;
 
 public class SendDraftExample {
 

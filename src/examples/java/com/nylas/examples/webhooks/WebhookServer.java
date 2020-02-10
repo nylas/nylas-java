@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.webhooks;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,6 +18,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.nylas.Notification;
+import com.nylas.examples.ExampleConf;
 
 public class WebhookServer {
 

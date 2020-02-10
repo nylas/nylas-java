@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.webhooks;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +7,7 @@ import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.Webhook;
 import com.nylas.Webhooks;
+import com.nylas.examples.ExampleConf;
 
 public class WebhooksExample {
 

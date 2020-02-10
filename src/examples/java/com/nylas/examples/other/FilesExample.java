@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -7,6 +7,7 @@ import com.nylas.File;
 import com.nylas.Files;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.examples.ExampleConf;
 
 public class FilesExample {
 

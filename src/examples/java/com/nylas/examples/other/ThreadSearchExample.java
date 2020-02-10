@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.Thread;
 import com.nylas.Threads;
+import com.nylas.examples.ExampleConf;
 
 public class ThreadSearchExample {
 

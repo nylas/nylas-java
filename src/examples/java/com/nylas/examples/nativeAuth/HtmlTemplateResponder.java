@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.nativeAuth;
 
 import java.io.IOException;
 

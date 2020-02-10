@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.nativeAuth;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,6 +11,7 @@ import com.nylas.AccountDetail;
 import com.nylas.ImapProviderSettings;
 import com.nylas.NativeAuthentication;
 import com.nylas.NativeAuthentication.AuthRequestBuilder;
+import com.nylas.examples.ExampleConf;
 import com.nylas.NylasAccount;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;

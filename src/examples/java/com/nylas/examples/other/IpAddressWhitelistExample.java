@@ -1,8 +1,9 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import com.nylas.IPAddressWhitelist;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
+import com.nylas.examples.ExampleConf;
 
 public class IpAddressWhitelistExample {
 

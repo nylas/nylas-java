@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import com.nylas.DraftQuery;
 import com.nylas.Drafts;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.examples.ExampleConf;
 
 public class DraftsExample {
 

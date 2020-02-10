@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import com.nylas.RequestFailedException;
 import com.nylas.Thread;
 import com.nylas.ThreadQuery;
 import com.nylas.Threads;
+import com.nylas.examples.ExampleConf;
 
 
 public class FoldersExample {

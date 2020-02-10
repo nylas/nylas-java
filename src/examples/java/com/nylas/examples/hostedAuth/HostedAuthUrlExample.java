@@ -1,9 +1,10 @@
-package com.nylas.examples;
+package com.nylas.examples.hostedAuth;
 
 import com.nylas.HostedAuthentication;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.Scope;
+import com.nylas.examples.ExampleConf;
 
 public class HostedAuthUrlExample {
 

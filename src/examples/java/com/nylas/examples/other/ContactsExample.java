@@ -1,4 +1,4 @@
-package com.nylas.examples;
+package com.nylas.examples.other;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,6 +12,7 @@ import com.nylas.ContactQuery;
 import com.nylas.Contacts;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.examples.ExampleConf;
 
 import okhttp3.ResponseBody;
 

@@ -15,7 +15,7 @@ public class ExampleConf {
 
 	private final Properties props = new Properties();
 	
-	ExampleConf() {
+	public ExampleConf() {
 		try (final InputStream in = ExampleConf.class.getResourceAsStream("/example.properties")) {
 			props.load(in);
 		} catch (IOException ioe) {
@@ -28,7 +28,7 @@ public class ExampleConf {
 	 * 
 	 * @throws RuntimeException if no such property is found.
 	 */
-	String get(String key) {
+	public String get(String key) {
 		String value = getOrNull(key);
 		if (value == null) {
 			throw new RuntimeException("No example property found for key: " + key);
@@ -39,22 +39,22 @@ public class ExampleConf {
 	/**
 	 * Returns the configuration property for the given key or null if none is found.
 	 */
-	String getOrNull(String key) {
+	public String getOrNull(String key) {
 		return props.getProperty(key);
 	}
 	
 	/**
 	 * Returns the configuration property for the given key or the given default value if none is found.
 	 */
-	String get(String key, String defaultValue) {
+	public String get(String key, String defaultValue) {
 		return props.getProperty(key, defaultValue);
 	}
 	
-	boolean contains(String key) {
+	public boolean contains(String key) {
 		return props.containsKey(key);
 	}
 	
-	int getInt(String key, int defaultValue) {
+	public int getInt(String key, int defaultValue) {
 		String value = get(key);
 		if (value == null) {
 			return defaultValue;
@@ -63,7 +63,7 @@ public class ExampleConf {
 		}
 	}
 	
-	boolean getBoolean(String key, boolean defaultValue) {
+	public boolean getBoolean(String key, boolean defaultValue) {
 		String value = get(key);
 		if (value == null) {
 			return defaultValue;
@@ -72,13 +72,13 @@ public class ExampleConf {
 		}
 	}
 	
-	NameEmail getNameEmail(String key) {
+	public NameEmail getNameEmail(String key) {
 		String name = get(key + ".name", "");
 		String email = get(key + ".email", null);
 		return email == null ? null : new NameEmail(name, email);
 	}
 
-	List<NameEmail> getNameEmailList(String key) {
+	public List<NameEmail> getNameEmailList(String key) {
 		NameEmail nameEmail = getNameEmail(key);
 		return nameEmail == null ? Collections.emptyList() : Arrays.asList(nameEmail);
 	}
@@ -100,7 +100,7 @@ public class ExampleConf {
 	 * size=10
 	 * </pre>
 	 */
-	Map<String, String> getPrefixedEntries(String prefix) {
+	public Map<String, String> getPrefixedEntries(String prefix) {
 		int prefixLength = prefix.length();
 		Map<String, String> entries = new HashMap<>();
 		for (String key : props.stringPropertyNames()) {
