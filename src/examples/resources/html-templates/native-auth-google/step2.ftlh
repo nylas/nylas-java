@@ -5,7 +5,7 @@
 
   <p>Great, you've succesfully connected with Google!
     We have retrieved the authentication code, and exchanged it for an access token and long lived refresh token:<br/>
-    <code>${refreshToken}</code> <br/>
+    <code>${googleRefreshToken}</code> <br/>
   </p>
   <p>We have also accessed the Google userinfo endpoint to retrieve your name and email:<br/>
     ${name!} &lt;${email!}&gt;

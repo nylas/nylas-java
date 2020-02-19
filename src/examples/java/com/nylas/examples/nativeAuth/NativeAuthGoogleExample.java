@@ -132,25 +132,25 @@ public class NativeAuthGoogleExample {
 			
 			Request tokenRequest = new Request.Builder().url(tokenUrl).post(params).build();
 			Map<String, Object> tokenData = executeRequestForJson(tokenRequest);
-			String refreshToken = (String) tokenData.get("refresh_token");
-			String accessToken = (String) tokenData.get("access_token");
+			String googleRefreshToken = (String) tokenData.get("refresh_token");
+			String googleAccessToken = (String) tokenData.get("access_token");
 			
 			HttpUrl userInfoUrl = HttpUrl.get("https://www.googleapis.com/oauth2/v3/userinfo").newBuilder()
-					.addQueryParameter("access_token", accessToken)
+					.addQueryParameter("access_token", googleAccessToken)
 					.build();
 			Map<String, Object> userInfoData = executeRequestForJson(new Request.Builder().url(userInfoUrl).build());
 			String name = (String) userInfoData.get("name");
 			String email = (String) userInfoData.get("email");
 			
 			HttpUrl authorizeNylasUrl = HttpUrl.get(baseUrl + AUTHORIZE_NYLAS_PATH).newBuilder()
-					.addQueryParameter("refresh_token", refreshToken)
+					.addQueryParameter("google_refresh_token", googleRefreshToken)
 					.addQueryParameter("name", name)
 					.addQueryParameter("email", email)
 					.build();
 			
 			Map<String, String> dataModel = ImmutableMap.of(
-					"accessToken", accessToken,
-					"refreshToken", refreshToken,
+					"googleAccessToken", googleAccessToken,
+					"googleRefreshToken", googleRefreshToken,
 					"name", name,
 					"email", email,
 					"authNylasUrl", authorizeNylasUrl.toString());
@@ -172,7 +172,7 @@ public class NativeAuthGoogleExample {
 		@Override
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
-			String refreshToken = request.getParameter("refresh_token");
+			String googleRefreshToken = request.getParameter("google_refresh_token");
 			String name = request.getParameter("name");
 			String email = request.getParameter("email");
 			
@@ -184,7 +184,7 @@ public class NativeAuthGoogleExample {
 			ProviderSettings settings = ProviderSettings.google()
 					.googleClientId(getGoogleClientId())
 					.googleClientSecret(getGoogleClientSecret())
-					.googleRefreshToken(refreshToken);
+					.googleRefreshToken(googleRefreshToken);
 
 			AuthRequestBuilder authRequest = authentication.authRequest()
 					.name(name)
@@ -195,15 +195,15 @@ public class NativeAuthGoogleExample {
 					
 			try {
 				log.info("Making a native authentication request for a Google account.");
-				String authorizationCode = authRequest.execute();
-				log.info("Succeeded.  Returned authorization code: " + authorizationCode);
+				String nylasAuthorizationCode = authRequest.execute();
+				log.info("Succeeded.  Returned authorization code: " + nylasAuthorizationCode);
 				
 				log.info("Using authorization code to request long lived access token.");
-				AccessToken token = authentication.fetchToken(authorizationCode);
-				log.info("Succeeded.  Returned token: " + token);
+				AccessToken nylasAccessToken = authentication.fetchToken(nylasAuthorizationCode);
+				log.info("Succeeded.  Returned token: " + nylasAccessToken);
 				
 				log.info("Requesting account details with token.");
-				NylasAccount account = nylasClient.account(token.getAccessToken());
+				NylasAccount account = nylasClient.account(nylasAccessToken.getAccessToken());
 				AccountDetail accountDetail = account.fetchAccountByAccessToken();
 				log.info("Succeeded. Account detail: " + accountDetail);
 
