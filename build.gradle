@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
-    id 'eclipse'  // necessary for workaround below
+    id 'maven-publish'
+    id 'signing' 
+    id 'eclipse'  // necessary for workaround at bottom
 }
 
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
 
@@ -92,6 +92,73 @@ task createProperties(dependsOn: processResources) {
 
 classes {
     dependsOn createProperties
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+            pom {
+                name = "Nylas Java SDK"
+                description = "Java SDK for the Nylas Communication Platform"
+                url = "https://github.com/nylas/nylas-java"
+                licenses {
+                    license {
+                        name = "MIT"
+                        url = "http://www.opensource.org/licenses/mit-license.php"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "ddlatham"
+                        name = "David Latham"
+                        organization = "Nylas"
+                        organizationUrl = "https://www.nylas.com/"
+                    }
+                }
+                scm {
+                    url = "https://github.com/nylas/nylas-java"
+                    connection = "scm:git:https://github.com/nylas/nylas-java.git"
+                    developerConnection = "scm:git:https://github.com/nylas/nylas-java.git"
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = "$ossrhUser"
+                password = "$ossrhPassword"
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
 
 // workaround for https://github.com/eclipse/buildship/issues/476
