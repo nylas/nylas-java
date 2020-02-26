@@ -79,12 +79,23 @@ task runExample(type: JavaExec) {
     main = project.hasProperty("example") ? project.getProperty("example") : "com.nylas.examples.Examples"
 }
 
+def getGitCommitHash = { ->
+    def buffer = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', 'HEAD'
+        standardOutput = buffer
+    }
+    return buffer.toString().trim()
+}
+
 task createProperties(dependsOn: processResources) {
     doLast {
         mkdir "$buildDir/resources/main"
-        new File("$buildDir/resources/main/version.properties").withWriter { w ->
+        new File("$buildDir/resources/main/build.properties").withWriter { w ->
             Properties p = new Properties()
             p['version'] = project.version.toString()
+            p['commit.hash'] = getGitCommitHash()
+            p['build.timestamp'] = Instant.now().toString()
             p.store w, null
         }
     }
@@ -110,6 +121,12 @@ artifacts {
     archives jar
     archives sourceJar
     archives javadocJar
+}
+
+signing {
+    // Gradle 6.0 cannot sign snapshot builds, should be fixed in 6.2
+    // see https://github.com/gradle/gradle/issues/12070 
+    if (!version.endsWith('SNAPSHOT')) { sign publishing.publications.mavenJava }
 }
 
 publishing {
@@ -155,10 +172,6 @@ publishing {
             }
         }
     }
-}
-
-signing {
-    sign publishing.publications.mavenJava
 }
 
 // workaround for https://github.com/eclipse/buildship/issues/476

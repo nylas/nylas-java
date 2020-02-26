@@ -31,8 +31,7 @@ public class NylasClient {
 		this.baseUrl = HttpUrl.get(baseUrl);
 		
 		httpClient = new OkHttpClient.Builder()
-				.addInterceptor(new UserAgentInterceptor())
-				.addInterceptor(new APIVersionInterceptor())
+				.addInterceptor(new AddVersionHeadersInterceptor())
 				.addNetworkInterceptor(new HttpLoggingInterceptor())
 				.connectTimeout(15, TimeUnit.SECONDS)
 				.readTimeout(15, TimeUnit.SECONDS)
