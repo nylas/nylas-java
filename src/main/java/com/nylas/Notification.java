@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class Notification {
 	}
 
 	public static class Delta {
-		private String date;
+		private Long date;
 		private String type;
 		private String object;
 		private ObjectData object_data;
@@ -61,8 +62,8 @@ public class Notification {
 		/**
 		 * The timestamp of the notification
 		 */
-		public String getDate() {
-			return date;
+		public Instant getDate() {
+			return Instants.toNullableInstant(date);
 		}
 		
 		/**
@@ -88,7 +89,7 @@ public class Notification {
 
 		@Override
 		public String toString() {
-			return "Delta [date=" + date + ", trigger=" + type + ", objectType=" + object + ", objectData="
+			return "Delta [date=" + getDate() + ", trigger=" + type + ", objectType=" + object + ", objectData="
 					+ object_data + "]";
 		}
 	}
@@ -180,7 +181,7 @@ public class Notification {
 		private String payload;
 		
 		// thread.replied specific fields
-		private String timestamp;
+		private Long timestamp;
 		private String thread_id;
 		private Boolean from_self;
 		private String reply_to_message_id;
@@ -224,8 +225,8 @@ public class Notification {
 		 * 
 		 * Available for thread.replied notifications only
 		 */
-		public String getTimestamp() {
-			return timestamp;
+		public Instant getTimestamp() {
+			return Instants.toNullableInstant(timestamp);
 		}
 		
 		/**
@@ -285,7 +286,7 @@ public class Notification {
 		@Override
 		public String toString() {
 			return "MessageTrackingData [messageId=" + message_id + ", senderAppId=" + sender_app_id + ", payload="
-					+ payload + ", timestamp=" + timestamp + ", threadId=" + thread_id + ", fromSelf=" + from_self
+					+ payload + ", timestamp=" + getTimestamp() + ", threadId=" + thread_id + ", fromSelf=" + from_self
 					+ ", replyToMessageId=" + reply_to_message_id + ", openedCount=" + count + ", linkClickCounts="
 					+ link_data + ", recentClicks=" + recents + "]";
 		}

@@ -1,5 +1,7 @@
 package com.nylas;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,8 +92,8 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return master_event_id;
 	}
 
-	public Long getOriginalStartTime() {
-		return original_start_time;
+	public Instant getOriginalStartTime() {
+		return Instants.toNullableInstant(original_start_time);
 	}
 
 	public static JsonAdapter.Factory getWhenJsonFactory() {
@@ -103,7 +105,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return "Event [id=" + getId() + ", calendar_id=" + calendar_id + ", ical_uid=" + ical_uid + ", title=" + title
 				+ ", when=" + when + ", location=" + location + ", owner=" + owner + ", participants=" + participants
 				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", recurrence=" + recurrence
-				+ ", master_event_id=" + master_event_id + ", original_start_time=" + original_start_time + "]";
+				+ ", master_event_id=" + master_event_id + ", original_start_time=" + getOriginalStartTime() + "]";
 	}
 
 	public void setTitle(String title) {
@@ -168,12 +170,12 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		
 		/** For deserialization only */ public Time() {}
 		
-		public Time(long time) {
-			this.time = time;
+		public Time(Instant time) {
+			this.time = time.getEpochSecond();
 		}
 		
-		public long getTime() {
-			return time;
+		public Instant getTime() {
+			return Instant.ofEpochSecond(time);
 		}
 
 		@Override
@@ -183,7 +185,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 		@Override
 		public String toString() {
-			return "Time [time=" + time + "]";
+			return "Time [time=" + getTime() + "]";
 		}
 	}
 
@@ -194,17 +196,17 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 		/** For deserialization only */ public Timespan() {}
 
-		public Timespan(long startTime, long endTime) {
-			this.start_time = startTime;
-			this.end_time = endTime;
+		public Timespan(Instant startTime, Instant endTime) {
+			this.start_time = startTime.getEpochSecond();
+			this.end_time = endTime.getEpochSecond();
 		}
 
-		public long getStartTime() {
-			return start_time;
+		public Instant getStartTime() {
+			return Instant.ofEpochSecond(start_time);
 		}
 
-		public long getEndTime() {
-			return end_time;
+		public Instant getEndTime() {
+			return Instant.ofEpochSecond(end_time);
 		}
 
 		@Override
@@ -214,7 +216,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 		@Override
 		public String toString() {
-			return "Timespan [start_time=" + start_time + ", end_time=" + end_time + "]";
+			return "Timespan [start_time=" + getStartTime() + ", end_time=" + getEndTime() + "]";
 		}
 	}
 
@@ -224,12 +226,12 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 		/** For deserialization only */ public Date() {}
 
-		public Date(String date) {
-			this.date = date;
+		public Date(LocalDate date) {
+			this.date = date.toString();
 		}
 
-		public String getDate() {
-			return date;
+		public LocalDate getDate() {
+			return LocalDate.parse(date);
 		}
 
 		@Override
@@ -250,17 +252,17 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		
 		/** For deserialization only */ public Datespan() {}
 
-		public Datespan(String startDate, String endDate) {
-			this.start_date = startDate;
-			this.end_date = endDate;
+		public Datespan(LocalDate startDate, LocalDate endDate) {
+			this.start_date = startDate.toString();
+			this.end_date = endDate.toString();
 		}
 
-		public String getStartDate() {
-			return start_date;
+		public LocalDate getStartDate() {
+			return LocalDate.parse(start_date);
 		}
 
-		public String getEndDate() {
-			return end_date;
+		public LocalDate getEndDate() {
+			return LocalDate.parse(end_date);
 		}
 
 		@Override

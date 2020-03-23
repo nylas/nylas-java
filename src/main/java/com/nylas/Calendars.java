@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -42,17 +43,17 @@ public class Calendars extends RestfulCollection<Calendar, CalendarQuery>{
 		return super.count(query);
 	}
 	
-	public List<FreeBusy> checkFreeBusy(long startTime, long endTime, String email)
+	public List<FreeBusy> checkFreeBusy(Instant startTime, Instant endTime, String email)
 			throws IOException, RequestFailedException {
 		return checkFreeBusy(startTime, endTime, Arrays.asList(email));
 	}
 	
-	public List<FreeBusy> checkFreeBusy(long startTime, long endTime, List<String> emails)
+	public List<FreeBusy> checkFreeBusy(Instant startTime, Instant endTime, List<String> emails)
 			throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl().addPathSegment("free-busy");
 		Map<String, Object> params = new HashMap<>();
-		params.put("start_time", startTime);
-		params.put("end_time", endTime);
+		params.put("start_time", startTime.getEpochSecond());
+		params.put("end_time", endTime.getEpochSecond());
 		params.put("emails", emails);
 		return client.executePost(authUser, url, params, JsonHelper.listTypeOf(FreeBusy.class));
 	}

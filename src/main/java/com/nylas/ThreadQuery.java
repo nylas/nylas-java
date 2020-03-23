@@ -17,10 +17,10 @@ public class ThreadQuery extends PaginatedQuery<ThreadQuery> {
 	private Boolean unread;
 	private Boolean starred;
 	private String filename;
-	private Long lastMessageBefore;
-	private Long lastMessageAfter;
-	private Long startedBefore;
-	private Long startedAfter;
+	private Instant lastMessageBefore;
+	private Instant lastMessageAfter;
+	private Instant startedBefore;
+	private Instant startedAfter;
 	
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
@@ -57,16 +57,16 @@ public class ThreadQuery extends PaginatedQuery<ThreadQuery> {
 			url.addQueryParameter("filename", filename);
 		}
 		if (lastMessageBefore != null) {
-			url.addQueryParameter("last_message_before", lastMessageBefore.toString());
+			url.addQueryParameter("last_message_before", Instants.formatEpochSecond(lastMessageBefore));
 		}
 		if (lastMessageAfter != null) {
-			url.addQueryParameter("last_message_after", lastMessageAfter.toString());
+			url.addQueryParameter("last_message_after", Instants.formatEpochSecond(lastMessageAfter));
 		}
 		if (startedBefore != null) {
-			url.addQueryParameter("started_before", startedBefore.toString());
+			url.addQueryParameter("started_before", Instants.formatEpochSecond(startedBefore));
 		}
 		if (startedAfter != null) {
-			url.addQueryParameter("started_after", startedAfter.toString());
+			url.addQueryParameter("started_after", Instants.formatEpochSecond(startedAfter));
 		}
 	}
 	
@@ -131,41 +131,24 @@ public class ThreadQuery extends PaginatedQuery<ThreadQuery> {
 		return this;
 	}
 	
-	public ThreadQuery lastMessageBefore(long lastMessageBefore) {
+	public ThreadQuery lastMessageBefore(Instant lastMessageBefore) {
 		this.lastMessageBefore = lastMessageBefore;
 		return this;
 	}
 	
-	public ThreadQuery lastMessageBefore(Instant lastMessageBefore) {
-		return lastMessageBefore(lastMessageBefore.getEpochSecond());
-	}
-	
-	public ThreadQuery lastMessageAfter(long lastMessageAfter) {
+	public ThreadQuery lastMessageAfter(Instant lastMessageAfter) {
 		this.lastMessageAfter = lastMessageAfter;
 		return this;
 	}
 	
-	public ThreadQuery lastMessageAfter(Instant lastMessageAfter) {
-		return lastMessageAfter(lastMessageAfter.getEpochSecond());
-	}
-	
-	public ThreadQuery startedBefore(long startedBefore) {
+	public ThreadQuery startedBefore(Instant startedBefore) {
 		this.startedBefore = startedBefore;
 		return this;
 	}
 	
-	public ThreadQuery startedBefore(Instant startedBefore) {
-		return startedBefore(startedBefore.getEpochSecond());
-	}
-	
-	public ThreadQuery startedAfter(long startedAfter) {
+	public ThreadQuery startedAfter(Instant startedAfter) {
 		this.startedAfter = startedAfter;
 		return this;
 	}
-	
-	public ThreadQuery startedAfter(Instant startedAfter) {
-		return startedAfter(startedAfter.getEpochSecond());
-	}
-	
 
 }

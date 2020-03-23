@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,20 +45,20 @@ public class Thread extends AccountOwnedModel implements JsonObject {
 		return starred;
 	}
 
-	public Long getLastMessageTimestamp() {
-		return last_message_timestamp;
+	public Instant getLastMessageTimestamp() {
+		return Instants.toNullableInstant(last_message_timestamp);
 	}
 
-	public Long getLastMessageReceivedTimestamp() {
-		return last_message_received_timestamp;
+	public Instant getLastMessageReceivedTimestamp() {
+		return Instants.toNullableInstant(last_message_received_timestamp);
 	}
 
-	public Long getLastMessageSentTimestamp() {
-		return last_message_sent_timestamp;
+	public Instant getLastMessageSentTimestamp() {
+		return Instants.toNullableInstant(last_message_sent_timestamp);
 	}
 
-	public Long getFirstMessageTimestamp() {
-		return first_message_timestamp;
+	public Instant getFirstMessageTimestamp() {
+		return Instants.toNullableInstant(first_message_timestamp);
 	}
 
 	public List<NameEmail> getParticipants() {
@@ -132,9 +133,9 @@ public class Thread extends AccountOwnedModel implements JsonObject {
 	public String toString() {
 		return "Thread [id=" + getId() + ", account_id=" + getAccountId() + 
 				",subject=" + subject + ", unread=" + unread + ", starred=" + starred
-				+ ", last_message_timestamp=" + last_message_timestamp + ", last_message_received_timestamp="
-				+ last_message_received_timestamp + ", last_message_sent_timestamp=" + last_message_sent_timestamp
-				+ ", first_message_timestamp=" + first_message_timestamp + ", participants=" + participants
+				+ ", last_message_timestamp=" + getLastMessageTimestamp() + ", last_message_received_timestamp="
+				+ getLastMessageReceivedTimestamp() + ", last_message_sent_timestamp=" + getLastMessageSentTimestamp()
+				+ ", first_message_timestamp=" + getFirstMessageTimestamp() + ", participants=" + participants
 				+ ", snippet=" + snippet + ", version=" + version + ", folders=" + folders + ", labels=" + labels
 				+ ", has_attachments=" + has_attachments + ", message_ids=" + message_ids + ", draft_ids=" + draft_ids
 				+ ", messages=" + messages + ", drafts=" + drafts + "]";

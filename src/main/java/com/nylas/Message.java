@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,8 +61,8 @@ public class Message extends AccountOwnedModel implements JsonObject {
 		return reply_to;
 	}
 
-	public Long getDate() {
-		return date;
+	public Instant getDate() {
+		return Instants.toNullableInstant(date);
 	}
 
 	public Boolean getUnread() {
@@ -107,7 +108,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	public String toString() {
 		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject="
 				+ subject + ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to
-				+ ", date=" + date + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet
+				+ ", date=" + getDate() + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet
 				+ ", body.length=" + body.length() + ", files=" + files + ", events=" + events + ", folder=" + folder
 				+ ", labels=" + labels + ", headers=" + headers + "]";
 	}

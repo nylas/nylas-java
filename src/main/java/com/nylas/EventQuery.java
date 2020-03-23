@@ -13,10 +13,10 @@ public class EventQuery extends PaginatedQuery<EventQuery> {
 	private String title;
 	private String description;
 	private String location;
-	private Long startsBefore;
-	private Long startsAfter;
-	private Long endsBefore;
-	private Long endsAfter;
+	private Instant startsBefore;
+	private Instant startsAfter;
+	private Instant endsBefore;
+	private Instant endsAfter;
 
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
@@ -44,16 +44,16 @@ public class EventQuery extends PaginatedQuery<EventQuery> {
 			url.addQueryParameter("location", location);
 		}
 		if (startsBefore != null) {
-			url.addQueryParameter("starts_before", startsBefore.toString());
+			url.addQueryParameter("starts_before", Instants.formatEpochSecond(startsBefore));
 		}
 		if (startsAfter != null) {
-			url.addQueryParameter("starts_after", startsAfter.toString());
+			url.addQueryParameter("starts_after", Instants.formatEpochSecond(startsAfter));
 		}
 		if (endsBefore != null) {
-			url.addQueryParameter("ends_before", endsBefore.toString());
+			url.addQueryParameter("ends_before", Instants.formatEpochSecond(endsBefore));
 		}
 		if (endsAfter != null) {
-			url.addQueryParameter("ends_after", endsAfter.toString());
+			url.addQueryParameter("ends_after", Instants.formatEpochSecond(endsAfter));
 		}
 	}
 	
@@ -92,40 +92,24 @@ public class EventQuery extends PaginatedQuery<EventQuery> {
 		return this;
 	}
 	
-	public EventQuery startsBefore(long startsBefore) {
+	public EventQuery startsBefore(Instant startsBefore) {
 		this.startsBefore = startsBefore;
 		return this;
 	}
 	
-	public EventQuery startsBefore(Instant startsBefore) {
-		return startsBefore(startsBefore.getEpochSecond());
-	}
-	
-	public EventQuery startsAfter(long startsAfter) {
+	public EventQuery startsAfter(Instant startsAfter) {
 		this.startsAfter = startsAfter;
 		return this;
 	}
 	
-	public EventQuery startsAfter(Instant startsAfter) {
-		return startsAfter(startsAfter.getEpochSecond());
-	}
-	
-	public EventQuery endsBefore(long endsBefore) {
+	public EventQuery endsBefore(Instant endsBefore) {
 		this.endsBefore = endsBefore;
 		return this;
 	}
 	
-	public EventQuery endsBefore(Instant endsBefore) {
-		return endsBefore(endsBefore.getEpochSecond());
-	}
-	
-	public EventQuery endsAfter(long endsAfter) {
+	public EventQuery endsAfter(Instant endsAfter) {
 		this.endsAfter = endsAfter;
 		return this;
-	}
-	
-	public EventQuery endsAfter(Instant endsAfter) {
-		return endsAfter(endsAfter.getEpochSecond());
 	}
 	
 }

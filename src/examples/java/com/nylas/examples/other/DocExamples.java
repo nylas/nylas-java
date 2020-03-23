@@ -3,6 +3,8 @@ package com.nylas.examples.other;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import com.nylas.Contact;
@@ -195,10 +197,10 @@ public class DocExamples {
 		// The event "when" (date/time) can be set as one of 4 types.
 		// For details: https://docs.nylas.com/reference#event-subobjects
 		Event.When when = null;
-		when = new Event.Date("2020-01-01");
-		when = new Event.Datespan("2019-08-29", "2019-09-01");
-		when = new Event.Time(1408875644L);
-		when = new Event.Timespan(1409594400L, 1409598000L);
+		when = new Event.Date(LocalDate.parse("2020-01-01"));
+		when = new Event.Datespan(LocalDate.parse("2019-08-29"), LocalDate.parse("2019-09-01"));
+		when = new Event.Time(Instant.ofEpochSecond(1408875644L));
+		when = new Event.Timespan(Instant.ofEpochSecond(1409594400L), Instant.ofEpochSecond(1409598000L));
 				
 		// Create a new event object
 		// Provide the appropriate id for a calendar to add the event to a specific calendar

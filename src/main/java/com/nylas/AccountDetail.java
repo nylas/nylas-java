@@ -1,5 +1,7 @@
 package com.nylas;
 
+import java.time.Instant;
+
 /**
  * Information about an account available simply with an access token.
  */
@@ -37,16 +39,15 @@ public class AccountDetail {
 		return sync_state;
 	}
 	
-	public Long getLinkedAt() {
-		return linked_at;
+	public Instant getLinkedAt() {
+		return Instant.ofEpochSecond(linked_at);
 	}
 
 	@Override
 	public String toString() {
-		return "AccountDetail [id=" + id + ", name=" + name + ", email_address=" + email_address + ", provider=" + provider
-				+ ", organization_unit=" + organization_unit + ", sync_state=" + sync_state + ", linked_at=" + linked_at
-				+ "]";
+		return "AccountDetail [id=" + id + ", name=" + name + ", email_address=" + email_address
+				+ ", provider=" + provider + ", organization_unit=" + organization_unit + ", sync_state=" + sync_state
+				+ ", linked_at=" + getLinkedAt() + "]";
 	}
-	
 	
 }

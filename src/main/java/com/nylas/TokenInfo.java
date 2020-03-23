@@ -1,5 +1,7 @@
 package com.nylas;
 
+import java.time.Instant;
+
 public class TokenInfo {
 
 	private Long created_at;
@@ -7,12 +9,12 @@ public class TokenInfo {
 	private String scopes;
 	private String state;
 	
-	public Long getCreatedAt() {
-		return created_at;
+	public Instant getCreatedAt() {
+		return Instants.toNullableInstant(created_at);
 	}
 	
-	public Long getUpdatedAt() {
-		return updated_at;
+	public Instant getUpdatedAt() {
+		return Instants.toNullableInstant(updated_at);
 	}
 	
 	public String getScopes() {
@@ -25,8 +27,8 @@ public class TokenInfo {
 
 	@Override
 	public String toString() {
-		return "TokenInfo [created_at=" + created_at + ", updated_at=" + updated_at + ", scopes=" + scopes + ", state="
-				+ state + "]";
+		return "TokenInfo [created_at=" + getCreatedAt() + ", updated_at=" + getUpdatedAt() + ", scopes=" + scopes
+				+ ", state=" + state + "]";
 	}
 
 }

@@ -31,8 +31,7 @@ public class CalendarsExample {
 		} else {
 			Instant end = ZonedDateTime.now().toInstant();
 			Instant start = end.minus(30, ChronoUnit.DAYS);
-			List<FreeBusy> freeBusyInfo = calendars.checkFreeBusy(start.getEpochSecond(), end.getEpochSecond(),
-					calendarEmail);
+			List<FreeBusy> freeBusyInfo = calendars.checkFreeBusy(start, end, calendarEmail);
 			for (FreeBusy freeBusy : freeBusyInfo) {
 				System.out.println(freeBusy);
 			}

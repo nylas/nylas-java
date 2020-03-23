@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.time.Instant;
 import java.util.List;
 
 public class IPAddressWhitelist {
@@ -11,13 +12,13 @@ public class IPAddressWhitelist {
 		return ip_addresses;
 	}
 	
-	public Long getUpdatedAt() {
-		return updated_at;
+	public Instant getUpdatedAt() {
+		return Instants.toNullableInstant(updated_at);
 	}
 
 	@Override
 	public String toString() {
-		return "IPAddressWhitelist [ip_addresses=" + ip_addresses + ", updated_at=" + updated_at + "]";
+		return "IPAddressWhitelist [ip_addresses=" + ip_addresses + ", updated_at=" + getUpdatedAt() + "]";
 	}
 	
 }

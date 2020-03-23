@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.time.Instant;
 import java.util.List;
 
 public class FreeBusy {
@@ -29,17 +30,17 @@ public class FreeBusy {
 			return status;
 		}
 		
-		public Long getStartTime() {
-			return start_time;
+		public Instant getStartTime() {
+			return Instants.toNullableInstant(start_time);
 		}
 		
-		public Long getEndTime() {
-			return end_time;
+		public Instant getEndTime() {
+			return Instants.toNullableInstant(end_time);
 		}
 
 		@Override
 		public String toString() {
-			return "TimeSlot [status=" + status + ", start_time=" + start_time + ", end_time=" + end_time + "]";
+			return "TimeSlot [status=" + status + ", start_time=" + getStartTime() + ", end_time=" + getEndTime() + "]";
 		}
 	}
 }

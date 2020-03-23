@@ -7,8 +7,8 @@ import okhttp3.HttpUrl;
 public class MessageQuery extends MessageObjectQuery<MessageQuery> {
 
 	private String from;
-	private Long receivedBefore;
-	private Long receivedAfter;
+	private Instant receivedBefore;
+	private Instant receivedAfter;
 	
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
@@ -18,10 +18,10 @@ public class MessageQuery extends MessageObjectQuery<MessageQuery> {
 			url.addQueryParameter("from", from);
 		}
 		if (receivedBefore != null) {
-			url.addQueryParameter("received_before", receivedBefore.toString());
+			url.addQueryParameter("received_before", Instants.formatEpochSecond(receivedBefore));
 		}
 		if (receivedAfter != null) {
-			url.addQueryParameter("received_after", receivedAfter.toString());
+			url.addQueryParameter("received_after", Instants.formatEpochSecond(receivedAfter));
 		}
 	}
 	
@@ -30,21 +30,13 @@ public class MessageQuery extends MessageObjectQuery<MessageQuery> {
 		return this;
 	}
 	
-	public MessageQuery receivedBefore(long receivedBefore) {
+	public MessageQuery receivedBefore(Instant receivedBefore) {
 		this.receivedBefore = receivedBefore;
 		return this;
 	}
 	
-	public MessageQuery receivedBefore(Instant receivedBefore) {
-		return receivedBefore(receivedBefore.getEpochSecond());
-	}
-	
-	public MessageQuery receivedAfter(long receivedAfter) {
+	public MessageQuery receivedAfter(Instant receivedAfter) {
 		this.receivedAfter = receivedAfter;
 		return this;
-	}
-	
-	public MessageQuery receivedAfter(Instant receivedAfter) {
-		return receivedAfter(receivedAfter.getEpochSecond());
 	}
 }
