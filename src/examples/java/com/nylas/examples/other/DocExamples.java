@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import com.nylas.Contact;
@@ -197,10 +199,12 @@ public class DocExamples {
 		// The event "when" (date/time) can be set as one of 4 types.
 		// For details: https://docs.nylas.com/reference#event-subobjects
 		Event.When when = null;
-		when = new Event.Date(LocalDate.parse("2020-01-01"));
-		when = new Event.Datespan(LocalDate.parse("2019-08-29"), LocalDate.parse("2019-09-01"));
-		when = new Event.Time(Instant.ofEpochSecond(1408875644L));
-		when = new Event.Timespan(Instant.ofEpochSecond(1409594400L), Instant.ofEpochSecond(1409598000L));
+		LocalDate today = LocalDate.now();
+		when = new Event.Date(today);
+		when = new Event.Datespan(today, today.plusDays(1));
+		Instant sixPmUtc = today.atTime(18, 0).toInstant(ZoneOffset.UTC);
+		when = new Event.Time(sixPmUtc);
+		when = new Event.Timespan(sixPmUtc, sixPmUtc.plus(1, ChronoUnit.HOURS));
 				
 		// Create a new event object
 		// Provide the appropriate id for a calendar to add the event to a specific calendar
