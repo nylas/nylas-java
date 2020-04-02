@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * <a href="https://docs.nylas.com/reference#contactgroups">https://docs.nylas.com/reference#contactgroups</a>
+ * <a href="https://docs.nylas.com/reference#contactsgroups">https://docs.nylas.com/reference#contactsgroups</a>
  */
 public class ContactGroups extends RestfulCollection<ContactGroup, UnsupportedQuery> {
 
