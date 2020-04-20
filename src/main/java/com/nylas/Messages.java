@@ -9,19 +9,13 @@ import java.util.Set;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
-public class Messages extends RestfulCollection<Message, MessageQuery> {
+public class Messages extends RestfulDAO<Message> {
 
 	Messages(NylasClient client, String accessToken) {
 		super(client, Message.class, "messages", accessToken);
 	}
 
-	@Override
-	public List<Message> list() throws IOException, RequestFailedException {
-		return super.list();
-	}
-
-	@Override
-	public List<Message> list(MessageQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Message> list(MessageQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 
@@ -30,17 +24,14 @@ public class Messages extends RestfulCollection<Message, MessageQuery> {
 		return super.get(id);
 	}
 
-	@Override
-	public List<Message> expanded(MessageQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Message> expanded(MessageQuery query) throws IOException, RequestFailedException {
 		return super.expanded(query);
 	}
 	
-	@Override
-	public List<String> ids(MessageQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<String> ids(MessageQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
 	
-	@Override
 	public long count(MessageQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}

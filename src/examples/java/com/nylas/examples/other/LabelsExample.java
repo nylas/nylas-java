@@ -21,7 +21,7 @@ public class LabelsExample {
 		NylasAccount account = client.account(conf.get("access.token"));
 
 		Labels labels = account.labels();
-		List<Label> allLabels = labels.list();
+		List<Label> allLabels = labels.listAll();
 		Label inbox = null;
 		for (Label label : allLabels) {
 			System.out.println(label);
@@ -36,7 +36,7 @@ public class LabelsExample {
 		
 		
 		Messages messages = account.messages();
-		List<Message> messageList = messages.list(new MessageQuery().limit(1));
+		List<Message> messageList = messages.list(new MessageQuery().limit(1)).fetchAll();
 		if (messageList.isEmpty()) {
 			System.out.println("No messages");
 			return;

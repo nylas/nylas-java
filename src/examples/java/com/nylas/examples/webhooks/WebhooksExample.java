@@ -16,7 +16,7 @@ public class WebhooksExample {
 		NylasClient client = new NylasClient();
 		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		Webhooks webhooks = application.webhooks();
-		List<Webhook> webhookList = webhooks.list();
+		List<Webhook> webhookList = webhooks.listAll();
 		for (Webhook webhook : webhookList) {
 			System.out.println(webhook);
 		}

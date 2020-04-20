@@ -7,7 +7,7 @@ import okhttp3.HttpUrl;
 /**
  * A shared abstract query object with the filters that work for both Message and Draft objects
  */
-public abstract class MessageObjectQuery<Q extends MessageObjectQuery<Q>> extends PaginatedQuery<Q> {
+public abstract class MessageObjectQuery<Q extends MessageObjectQuery<Q>> extends RestfulQuery<Q> {
 
 	private String subject;
 	private String anyEmail;

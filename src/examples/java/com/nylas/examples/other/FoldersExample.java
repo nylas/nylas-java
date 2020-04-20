@@ -27,7 +27,7 @@ public class FoldersExample {
 				.limit(5)
 				.offset(0);
 		
-		List<Folder> allFolders = folders.list(fQuery);
+		List<Folder> allFolders = folders.list(fQuery).fetchAll();
 		Folder inbox = null;
 		for (Folder folder : allFolders) {
 			System.out.println(folder);
@@ -40,7 +40,7 @@ public class FoldersExample {
 		System.out.println(newFolder);
 		
 		Threads threads = account.threads();
-		List<Thread> threadList = threads.list(new ThreadQuery().limit(1));
+		List<Thread> threadList = threads.list(new ThreadQuery().limit(1)).fetchAll();
 		if (threadList.isEmpty()) {
 			System.out.println("No threads");
 			return;

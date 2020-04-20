@@ -21,7 +21,7 @@ public class AccountsExample {
 				.limit(2)
 				//.offset(10)
 				;
-		List<Account> accountList = accounts.list(query);
+		List<Account> accountList = accounts.list(query).fetchAll();
 		for (Account account : accountList) {
 			System.out.println(account);
 		}

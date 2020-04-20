@@ -5,19 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Threads extends RestfulCollection<Thread, ThreadQuery> {
+public class Threads extends RestfulDAO<Thread> {
 
 	Threads(NylasClient client, String accessToken) {
 		super(client, Thread.class, "threads", accessToken);
 	}
 	
-	@Override
-	public List<Thread> list() throws IOException, RequestFailedException {
-		return super.list();
-	}
-
-	@Override
-	public List<Thread> list(ThreadQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Thread> list(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 
@@ -26,17 +20,14 @@ public class Threads extends RestfulCollection<Thread, ThreadQuery> {
 		return super.get(id);
 	}
 
-	@Override
-	public List<Thread> expanded(ThreadQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Thread> expanded(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.expanded(query);
 	}
 	
-	@Override
-	public List<String> ids(ThreadQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<String> ids(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
 	
-	@Override
 	public long count(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}

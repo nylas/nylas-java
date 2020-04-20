@@ -1,5 +1,5 @@
 package com.nylas;
 
-public class AccountQuery extends PaginatedQuery<AccountQuery> {
+public class AccountQuery extends RestfulQuery<AccountQuery> {
 
 }

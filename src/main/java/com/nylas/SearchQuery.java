@@ -2,7 +2,7 @@ package com.nylas;
 
 import okhttp3.HttpUrl.Builder;
 
-class SearchQuery extends PaginatedQuery<SearchQuery> {
+class SearchQuery extends RestfulQuery<SearchQuery> {
 
 	private String query;
 	

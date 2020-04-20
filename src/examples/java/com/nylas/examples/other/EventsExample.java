@@ -21,7 +21,7 @@ public class EventsExample {
 		Events events = account.events();
 		
 		
-		List<Calendar> calendars = account.calendars().list();
+		List<Calendar> calendars = account.calendars().listAll();
 		Calendar writableCalendar = null;
 		Calendar emailedEvents = null;
 		for (Calendar c : calendars) {

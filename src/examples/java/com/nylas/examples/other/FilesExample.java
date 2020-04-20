@@ -1,12 +1,13 @@
 package com.nylas.examples.other;
 
 import java.nio.file.Paths;
-import java.util.List;
 
 import com.nylas.File;
+import com.nylas.FileQuery;
 import com.nylas.Files;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.RemoteCollection;
 import com.nylas.examples.ExampleConf;
 
 public class FilesExample {
@@ -16,12 +17,12 @@ public class FilesExample {
 		NylasClient client = new NylasClient();
 		NylasAccount account = client.account(conf.get("access.token"));
 		Files files = account.files();
-		List<File> allFiles = files.list();
+		RemoteCollection<File> allFiles = files.list(new FileQuery());
 		for (File file : allFiles) {
 			System.out.println("File: " + file);
 		}
 		
-		File first = allFiles.get(0);
+		File first = allFiles.iterator().next();
 		byte[] fileBytes = files.downloadBytes(first.getId());
 		java.nio.file.Files.write(Paths.get("/tmp/" + first.getFilename()), fileBytes);
 		

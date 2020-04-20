@@ -2,7 +2,7 @@ package com.nylas;
 
 import okhttp3.HttpUrl.Builder;
 
-public class FileQuery extends PaginatedQuery<FileQuery> {
+public class FileQuery extends RestfulQuery<FileQuery> {
 
 	private String filename;
 	private String messageId;

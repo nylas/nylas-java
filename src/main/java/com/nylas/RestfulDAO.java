@@ -8,14 +8,14 @@ import java.util.Map;
 import okhttp3.HttpUrl;
 import okhttp3.HttpUrl.Builder;
 
-public abstract class RestfulCollection<M extends RestfulModel, Q extends RestfulQuery<Q>> {
+public abstract class RestfulDAO<M extends RestfulModel> {
 
 	protected final NylasClient client;
 	protected final Class<M> modelClass;
 	protected final String collectionPath;
 	protected final String authUser;
 	
-	protected RestfulCollection(NylasClient client, Class<M> modelClass, String collectionPath, String authUser) {
+	protected RestfulDAO(NylasClient client, Class<M> modelClass, String collectionPath, String authUser) {
 		this.client = client;
 		this.modelClass = modelClass;
 		this.collectionPath = collectionPath;
@@ -26,39 +26,35 @@ public abstract class RestfulCollection<M extends RestfulModel, Q extends Restfu
 		return JsonHelper.listTypeOf(modelClass);
 	}
 	
-	protected List<M> list() throws IOException, RequestFailedException {
-		return list(null);
+	protected List<M> listAll(RestfulQuery<?> query) throws IOException, RequestFailedException {
+		return list(query).fetchAll();
 	}
 	
-	protected List<M> list(Q query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrl();
-		setQuery(url, query);
-		Type listType = getModelListType();
-		return client.executeGet(authUser, url, listType);
+	protected RemoteCollection<M> list(RestfulQuery<?> query) throws IOException, RequestFailedException {
+		return new RemoteCollection<M>(this, null, getModelListType(), query);
 	}
 	
-	protected List<M> expanded(Q query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrl();
-		setQuery(url, query);
-		setView(url, "expanded");
-		Type listType = getModelListType();
-		return client.executeGet(authUser, url, listType);
+	protected RemoteCollection<M> expanded(RestfulQuery<?> query) throws IOException, RequestFailedException {
+		return new RemoteCollection<M>(this, "expanded", getModelListType(), query);
 	}
 
 	private static final Type STRING_LIST_TYPE = JsonHelper.listTypeOf(String.class);
-	protected List<String> ids(Q query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrl();
-		setQuery(url, query);
-		setView(url, "ids");
-		return client.executeGet(authUser, url, STRING_LIST_TYPE);
+	protected RemoteCollection<String> ids(RestfulQuery<?> query) throws IOException, RequestFailedException {
+		return new RemoteCollection<String>(this, "ids", STRING_LIST_TYPE, query);
 	}
 	
-	protected long count(Q query) throws IOException, RequestFailedException {
+	protected long count(RestfulQuery<?> query) throws IOException, RequestFailedException {
+		Count count = fetchQuery(query, "count", Count.class);
+		return count.getCount();
+	}
+	
+	<T> T fetchQuery(RestfulQuery<?> query, String view, Type resultType) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl();
 		setQuery(url, query);
-		setView(url, "count");
-		Count count = client.executeGet(authUser, url, Count.class);
-		return count.getCount();
+		if (view != null) {
+			setView(url, view);
+		}
+		return client.executeGet(authUser, url, resultType);
 	}
 	
 	protected List<M> search(SearchQuery query) throws IOException, RequestFailedException {

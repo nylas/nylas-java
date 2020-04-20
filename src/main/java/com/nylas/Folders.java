@@ -6,19 +6,17 @@ import java.util.List;
 /**
  * <a href="https://docs.nylas.com/reference#folders">https://docs.nylas.com/reference#folders</a>
  */
-public class Folders extends RestfulCollection<Folder, FolderQuery>{
+public class Folders extends RestfulDAO<Folder> {
 
 	Folders(NylasClient client, String accessToken) {
 		super(client, Folder.class, "folders", accessToken);
 	}
 	
-	@Override
-	public List<Folder> list() throws IOException, RequestFailedException {
-		return super.list();
+	public List<Folder> listAll() throws IOException, RequestFailedException {
+		return super.listAll(new FolderQuery());
 	}
-
-	@Override
-	public List<Folder> list(FolderQuery query) throws IOException, RequestFailedException {
+	
+	public RemoteCollection<Folder> list(FolderQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 

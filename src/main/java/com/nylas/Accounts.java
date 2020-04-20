@@ -2,24 +2,17 @@ package com.nylas;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.HttpUrl;
 
-public class Accounts extends RestfulCollection<Account, AccountQuery> {
+public class Accounts extends RestfulDAO<Account> {
 
 	Accounts(NylasClient client, NylasApplication application) {
 		super(client, Account.class, "a/" + application.getClientId() + "/accounts", application.getClientSecret());
 	}
 
-	@Override
-	public List<Account> list() throws IOException, RequestFailedException {
-		return super.list();
-	}
-
-	@Override
-	public List<Account> list(AccountQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Account> list(AccountQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 

@@ -12,19 +12,13 @@ import okhttp3.HttpUrl;
 /**
  * <a href="https://docs.nylas.com/reference#events">https://docs.nylas.com/reference#events</a>
  */
-public class Events extends RestfulCollection<Event, EventQuery>{
+public class Events extends RestfulDAO<Event> {
 
 	Events(NylasClient client, String accessToken) {
 		super(client, Event.class, "events", accessToken);
 	}
 
-	@Override
-	public List<Event> list() throws IOException, RequestFailedException {
-		return super.list();
-	}
-
-	@Override
-	public List<Event> list(EventQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Event> list(EventQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 
@@ -33,12 +27,10 @@ public class Events extends RestfulCollection<Event, EventQuery>{
 		return super.get(id);
 	}
 
-	@Override
-	public List<String> ids(EventQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<String> ids(EventQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
 
-	@Override
 	public long count(EventQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}

@@ -1,7 +1,6 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.HttpUrl;
 import okhttp3.ResponseBody;
@@ -9,19 +8,13 @@ import okhttp3.ResponseBody;
 /**
  * <a href="https://docs.nylas.com/reference#contacts">https://docs.nylas.com/reference#contacts</a>
  */
-public class Contacts extends RestfulCollection<Contact, ContactQuery> {
+public class Contacts extends RestfulDAO<Contact> {
 
 	Contacts(NylasClient client, String accessToken) {
 		super(client, Contact.class, "contacts", accessToken);
 	}
 	
-	@Override
-	public List<Contact> list() throws IOException, RequestFailedException {
-		return super.list();
-	}
-
-	@Override
-	public List<Contact> list(ContactQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Contact> list(ContactQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 

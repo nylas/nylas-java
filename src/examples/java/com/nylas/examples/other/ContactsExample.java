@@ -86,7 +86,7 @@ public class ContactsExample {
 		System.out.println("deleted");
 		
 		ContactGroups groups = account.contactGroups();
-		for (ContactGroup group : groups.list()) {
+		for (ContactGroup group : groups.listAll()) {
 			System.out.println(group);
 		}
 	}

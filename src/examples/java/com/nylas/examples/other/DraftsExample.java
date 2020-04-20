@@ -34,7 +34,7 @@ public class DraftsExample {
 				//.anyEmail("info@twitter.com")
 				;
 		
-		List<Draft> allDrafts = drafts.list(query);
+		List<Draft> allDrafts = drafts.list(query).fetchAll();
 		for (Draft draft : allDrafts) {
 			System.out.println(draft);
 		}

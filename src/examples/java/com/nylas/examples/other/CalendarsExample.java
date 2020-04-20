@@ -20,7 +20,7 @@ public class CalendarsExample {
 		NylasAccount account = client.account(conf.get("access.token"));
 		Calendars calendars = account.calendars();
 		String calendarEmail = null;
-		for (Calendar calendar : calendars.list()) {
+		for (Calendar calendar : calendars.listAll()) {
 			System.out.println(calendar);
 			if (calendar.getName().contains("@")) {
 				calendarEmail = calendar.getName();

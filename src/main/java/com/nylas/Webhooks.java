@@ -6,19 +6,17 @@ import java.util.List;
 /**
  * <a href="https://docs.nylas.com/reference#webhooks">https://docs.nylas.com/reference#webhooks</a>
  */
-public class Webhooks extends RestfulCollection<Webhook, WebhookQuery> {
+public class Webhooks extends RestfulDAO<Webhook> {
 
 	Webhooks(NylasClient client, NylasApplication application) {
 		super(client, Webhook.class, "a/" + application.getClientId() + "/webhooks", application.getClientSecret());
 	}
 	
-	@Override
-	public List<Webhook> list() throws IOException, RequestFailedException {
-		return super.list();
+	public List<Webhook> listAll() throws IOException, RequestFailedException {
+		return super.listAll(new WebhookQuery());
 	}
-
-	@Override
-	public List<Webhook> list(WebhookQuery query) throws IOException, RequestFailedException {
+	
+	public RemoteCollection<Webhook> list(WebhookQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 

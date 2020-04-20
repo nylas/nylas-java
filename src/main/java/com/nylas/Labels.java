@@ -6,19 +6,17 @@ import java.util.List;
 /**
  * <a href="https://docs.nylas.com/reference#labels">https://docs.nylas.com/reference#labels</a>
  */
-public class Labels extends RestfulCollection<Label, LabelQuery> {
+public class Labels extends RestfulDAO<Label> {
 	
 	Labels(NylasClient client, String accessToken) {
 		super(client, Label.class, "labels", accessToken);
 	}
 	
-	@Override
-	public List<Label> list() throws IOException, RequestFailedException {
-		return super.list();
+	public List<Label> listAll() throws IOException, RequestFailedException {
+		return super.listAll(new LabelQuery());
 	}
-
-	@Override
-	public List<Label> list(LabelQuery query) throws IOException, RequestFailedException {
+	
+	public RemoteCollection<Label> list(LabelQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 

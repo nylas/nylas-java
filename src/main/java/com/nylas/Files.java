@@ -11,19 +11,13 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
-public class Files extends RestfulCollection<File, FileQuery> {
+public class Files extends RestfulDAO<File> {
 
 	Files(NylasClient client, String accessToken) {
 		super(client, File.class, "files", accessToken);
 	}
 	
-	@Override
-	public List<File> list() throws IOException, RequestFailedException {
-		return super.list();
-	}
-
-	@Override
-	public List<File> list(FileQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<File> list(FileQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 
@@ -32,12 +26,10 @@ public class Files extends RestfulCollection<File, FileQuery> {
 		return super.get(id);
 	}
 
-	@Override
-	public List<String> ids(FileQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<String> ids(FileQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
 	
-	@Override
 	public long count(FileQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}

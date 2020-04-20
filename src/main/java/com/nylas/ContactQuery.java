@@ -2,7 +2,7 @@ package com.nylas;
 
 import okhttp3.HttpUrl;
 
-public class ContactQuery extends PaginatedQuery<ContactQuery> {
+public class ContactQuery extends RestfulQuery<ContactQuery> {
 
 	private String email;
 	private String phoneNumber;

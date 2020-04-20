@@ -41,7 +41,7 @@ public class DocExamples {
 		Threads threads = account.threads();
 		
 		// Return all threads found in the user's inbox 
-		threads.list();
+		threads.list(new ThreadQuery());
 		
 		// Return threads that are filtered by specified arguments
 		// Available filters: subject, to, from, cc, bcc, in, unread,
@@ -55,7 +55,8 @@ public class DocExamples {
 		threads.search("swag@nylas.com");
 		
 		// Return the most recent thread
-		Thread thread = threads.list(new ThreadQuery().limit(1)).get(0);
+		Thread thread = threads.list(new ThreadQuery().limit(1)).iterator().next();
+		// or  thread = threads.list(new ThreadQuery().limit(1)).fetchAll().get(0);
 		
 		// The following attributes are available for the thread object
 		thread.getSubject();

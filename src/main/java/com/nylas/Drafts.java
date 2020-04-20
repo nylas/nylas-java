@@ -3,7 +3,6 @@ package com.nylas;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.nylas.NylasClient.HttpMethod;
@@ -12,19 +11,13 @@ import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class Drafts extends RestfulCollection<Draft, DraftQuery> {
+public class Drafts extends RestfulDAO<Draft> {
 
 	Drafts(NylasClient client, String accessToken) {
 		super(client, Draft.class, "drafts", accessToken);
 	}
 	
-	@Override
-	public List<Draft> list() throws IOException, RequestFailedException {
-		return super.list();
-	}
-
-	@Override
-	public List<Draft> list(DraftQuery query) throws IOException, RequestFailedException {
+	public RemoteCollection<Draft> list(DraftQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
 
