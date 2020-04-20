@@ -43,6 +43,10 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 		return new RemoteCollection<String>(this, "ids", STRING_LIST_TYPE, query);
 	}
 	
+	protected RemoteCollection<M> search(SearchQuery query) throws IOException, RequestFailedException {
+		return new RemoteCollection<M>(this, null, getModelListType(), query);
+	}
+	
 	protected long count(RestfulQuery<?> query) throws IOException, RequestFailedException {
 		Count count = fetchQuery(query, "count", Count.class);
 		return count.getCount();
@@ -55,13 +59,6 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 			setView(url, view);
 		}
 		return client.executeGet(authUser, url, resultType);
-	}
-	
-	protected List<M> search(SearchQuery query) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = getCollectionUrl().addPathSegment("search");
-		setQuery(url, query);
-		Type listType = getModelListType();
-		return client.executeGet(authUser, url, listType);
 	}
 	
 	protected M get(String id) throws IOException, RequestFailedException {

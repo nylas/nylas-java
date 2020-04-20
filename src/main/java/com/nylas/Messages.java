@@ -3,7 +3,6 @@ package com.nylas;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import okhttp3.HttpUrl;
@@ -36,11 +35,11 @@ public class Messages extends RestfulDAO<Message> {
 		return super.count(query);
 	}
 	
-	public List<Message> search(String query) throws IOException, RequestFailedException {
+	public RemoteCollection<Message> search(String query) throws IOException, RequestFailedException {
 		return super.search(new SearchQuery(query));
 	}
 	
-	public List<Message> search(String query, int limit, int offset) throws IOException, RequestFailedException {
+	public RemoteCollection<Message> search(String query, int limit, int offset) throws IOException, RequestFailedException {
 		return super.search(new SearchQuery(query, limit, offset));
 	}
 	

@@ -2,7 +2,6 @@ package com.nylas;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Threads extends RestfulDAO<Thread> {
@@ -32,11 +31,11 @@ public class Threads extends RestfulDAO<Thread> {
 		return super.count(query);
 	}
 	
-	public List<Thread> search(String query) throws IOException, RequestFailedException {
+	public RemoteCollection<Thread> search(String query) throws IOException, RequestFailedException {
 		return super.search(new SearchQuery(query));
 	}
 	
-	public List<Thread> search(String query, int limit, int offset) throws IOException, RequestFailedException {
+	public RemoteCollection<Thread> search(String query, int limit, int offset) throws IOException, RequestFailedException {
 		return super.search(new SearchQuery(query, limit, offset));
 	}
 	

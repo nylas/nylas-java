@@ -20,6 +20,8 @@ class SearchQuery extends RestfulQuery<SearchQuery> {
 	public void addParameters(Builder url) {
 		super.addParameters(url);  // must call through
 		
+		url.addPathSegment("search");
+		
 		if (query != null) {
 			url.addQueryParameter("q", query);
 		}

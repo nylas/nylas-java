@@ -1,9 +1,8 @@
 package com.nylas.examples.other;
 
-import java.util.List;
-
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.RemoteCollection;
 import com.nylas.Thread;
 import com.nylas.Threads;
 import com.nylas.examples.ExampleConf;
@@ -18,7 +17,7 @@ public class ThreadSearchExample {
 		Threads threads = account.threads();
 		
 		// search
-		List<Thread> results = threads.search("kohl's", 5, 0);
+		RemoteCollection<Thread> results = threads.search("kohl's");
 		for (Thread thread : results) {
 			System.out.println(thread);
 		}	
