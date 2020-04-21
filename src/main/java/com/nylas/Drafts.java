@@ -17,6 +17,10 @@ public class Drafts extends RestfulDAO<Draft> {
 		super(client, Draft.class, "drafts", accessToken);
 	}
 	
+	public RemoteCollection<Draft> list() throws IOException, RequestFailedException {
+		return list(new DraftQuery());
+	}
+	
 	public RemoteCollection<Draft> list(DraftQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}

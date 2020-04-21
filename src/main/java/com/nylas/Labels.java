@@ -1,7 +1,6 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * <a href="https://docs.nylas.com/reference#labels">https://docs.nylas.com/reference#labels</a>
@@ -12,8 +11,8 @@ public class Labels extends RestfulDAO<Label> {
 		super(client, Label.class, "labels", accessToken);
 	}
 	
-	public List<Label> listAll() throws IOException, RequestFailedException {
-		return super.listAll(new LabelQuery());
+	public RemoteCollection<Label> list() throws IOException, RequestFailedException {
+		return list(new LabelQuery());
 	}
 	
 	public RemoteCollection<Label> list(LabelQuery query) throws IOException, RequestFailedException {

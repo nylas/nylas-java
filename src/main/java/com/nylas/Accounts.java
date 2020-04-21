@@ -12,6 +12,10 @@ public class Accounts extends RestfulDAO<Account> {
 		super(client, Account.class, "a/" + application.getClientId() + "/accounts", application.getClientSecret());
 	}
 
+	public RemoteCollection<Account> list() throws IOException, RequestFailedException {
+		return list(new AccountQuery());
+	}
+	
 	public RemoteCollection<Account> list(AccountQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}

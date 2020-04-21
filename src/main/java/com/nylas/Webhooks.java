@@ -1,7 +1,6 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * <a href="https://docs.nylas.com/reference#webhooks">https://docs.nylas.com/reference#webhooks</a>
@@ -12,8 +11,8 @@ public class Webhooks extends RestfulDAO<Webhook> {
 		super(client, Webhook.class, "a/" + application.getClientId() + "/webhooks", application.getClientSecret());
 	}
 	
-	public List<Webhook> listAll() throws IOException, RequestFailedException {
-		return super.listAll(new WebhookQuery());
+	public RemoteCollection<Webhook> list() throws IOException, RequestFailedException {
+		return list(new WebhookQuery());
 	}
 	
 	public RemoteCollection<Webhook> list(WebhookQuery query) throws IOException, RequestFailedException {

@@ -10,6 +10,10 @@ public class Threads extends RestfulDAO<Thread> {
 		super(client, Thread.class, "threads", accessToken);
 	}
 	
+	public RemoteCollection<Thread> list() throws IOException, RequestFailedException {
+		return list(new ThreadQuery());
+	}
+	
 	public RemoteCollection<Thread> list(ThreadQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}

@@ -3,7 +3,6 @@ package com.nylas.examples.other;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import com.nylas.Message;
 import com.nylas.MessageQuery;
@@ -26,20 +25,20 @@ public class MessagesExample {
 		Instant start = end.minus(1, ChronoUnit.DAYS);
 		MessageQuery query = new MessageQuery()
 //				.offset(0)
-//				.limit(2990)
-				.hasAttachment(true)
-//				.receivedAfter(start)
+				.limit(30)
+//				.hasAttachment(true)
+				.receivedAfter(start)
 //				.receivedBefore(end)
 				//.anyEmail("info@twitter.com")
 //				.in("Example Label 2")
 				;
 
 		
-		RemoteCollection<String> ids = messages.ids(query);
-//		ids.chunkSize(2000);
+		RemoteCollection<Message> emails = messages.list(query);
+		emails.chunkSize(10);
 		
-		for (String id : ids) {
-			System.out.println(id);
+		for (Message email : emails) {
+			System.out.println(email);
 		}
 		
 //		List<String> allIds = ids.fetchAll();

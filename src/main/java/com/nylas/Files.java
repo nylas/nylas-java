@@ -17,6 +17,10 @@ public class Files extends RestfulDAO<File> {
 		super(client, File.class, "files", accessToken);
 	}
 	
+	public RemoteCollection<File> list() throws IOException, RequestFailedException {
+		return list(new FileQuery());
+	}
+	
 	public RemoteCollection<File> list(FileQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}

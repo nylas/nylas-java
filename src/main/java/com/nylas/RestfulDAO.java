@@ -2,7 +2,6 @@ package com.nylas;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.HttpUrl;
@@ -24,10 +23,6 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 	
 	protected Type getModelListType() {
 		return JsonHelper.listTypeOf(modelClass);
-	}
-	
-	protected List<M> listAll(RestfulQuery<?> query) throws IOException, RequestFailedException {
-		return list(query).fetchAll();
 	}
 	
 	protected RemoteCollection<M> list(RestfulQuery<?> query) throws IOException, RequestFailedException {

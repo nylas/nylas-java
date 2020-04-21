@@ -8,6 +8,7 @@ import com.nylas.EventQuery;
 import com.nylas.Events;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.RemoteCollection;
 import com.nylas.RoomResource;
 import com.nylas.examples.ExampleConf;
 
@@ -21,7 +22,7 @@ public class EventsExample {
 		Events events = account.events();
 		
 		
-		List<Calendar> calendars = account.calendars().listAll();
+		RemoteCollection<Calendar> calendars = account.calendars().list();
 		Calendar writableCalendar = null;
 		Calendar emailedEvents = null;
 		for (Calendar c : calendars) {

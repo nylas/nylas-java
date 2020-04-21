@@ -1,7 +1,6 @@
 package com.nylas;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * <a href="https://docs.nylas.com/reference#folders">https://docs.nylas.com/reference#folders</a>
@@ -12,8 +11,8 @@ public class Folders extends RestfulDAO<Folder> {
 		super(client, Folder.class, "folders", accessToken);
 	}
 	
-	public List<Folder> listAll() throws IOException, RequestFailedException {
-		return super.listAll(new FolderQuery());
+	public RemoteCollection<Folder> list() throws IOException, RequestFailedException {
+		return list(new FolderQuery());
 	}
 	
 	public RemoteCollection<Folder> list(FolderQuery query) throws IOException, RequestFailedException {

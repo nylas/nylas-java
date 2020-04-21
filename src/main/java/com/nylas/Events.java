@@ -18,6 +18,10 @@ public class Events extends RestfulDAO<Event> {
 		super(client, Event.class, "events", accessToken);
 	}
 
+	public RemoteCollection<Event> list() throws IOException, RequestFailedException {
+		return list(new EventQuery());
+	}
+	
 	public RemoteCollection<Event> list(EventQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}

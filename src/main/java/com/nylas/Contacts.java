@@ -14,6 +14,10 @@ public class Contacts extends RestfulDAO<Contact> {
 		super(client, Contact.class, "contacts", accessToken);
 	}
 	
+	public RemoteCollection<Contact> list() throws IOException, RequestFailedException {
+		return list(new ContactQuery());
+	}
+	
 	public RemoteCollection<Contact> list(ContactQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}

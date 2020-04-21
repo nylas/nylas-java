@@ -1,10 +1,10 @@
 package com.nylas.examples.webhooks;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
+import com.nylas.RemoteCollection;
 import com.nylas.Webhook;
 import com.nylas.Webhooks;
 import com.nylas.examples.ExampleConf;
@@ -16,7 +16,7 @@ public class WebhooksExample {
 		NylasClient client = new NylasClient();
 		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		Webhooks webhooks = application.webhooks();
-		List<Webhook> webhookList = webhooks.listAll();
+		RemoteCollection<Webhook> webhookList = webhooks.list();
 		for (Webhook webhook : webhookList) {
 			System.out.println(webhook);
 		}

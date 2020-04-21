@@ -10,6 +10,7 @@ import com.nylas.MessageQuery;
 import com.nylas.Messages;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.RemoteCollection;
 import com.nylas.examples.ExampleConf;
 
 public class LabelsExample {
@@ -21,7 +22,7 @@ public class LabelsExample {
 		NylasAccount account = client.account(conf.get("access.token"));
 
 		Labels labels = account.labels();
-		List<Label> allLabels = labels.listAll();
+		RemoteCollection<Label> allLabels = labels.list();
 		Label inbox = null;
 		for (Label label : allLabels) {
 			System.out.println(label);

@@ -18,8 +18,8 @@ public class Calendars extends RestfulDAO<Calendar> {
 		super(client, Calendar.class, "calendars", accessToken);
 	}
 
-	public List<Calendar> listAll() throws IOException, RequestFailedException {
-		return super.listAll(new CalendarQuery());
+	public RemoteCollection<Calendar> list() throws IOException, RequestFailedException {
+		return list(new CalendarQuery());
 	}
 	
 	public RemoteCollection<Calendar> list(CalendarQuery query) throws IOException, RequestFailedException {

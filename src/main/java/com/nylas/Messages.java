@@ -14,6 +14,10 @@ public class Messages extends RestfulDAO<Message> {
 		super(client, Message.class, "messages", accessToken);
 	}
 
+	public RemoteCollection<Message> list() throws IOException, RequestFailedException {
+		return list(new MessageQuery());
+	}
+	
 	public RemoteCollection<Message> list(MessageQuery query) throws IOException, RequestFailedException {
 		return super.list(query);
 	}
