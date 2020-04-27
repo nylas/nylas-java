@@ -2,6 +2,7 @@ package com.nylas.examples.nativeAuth;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,13 +23,13 @@ import com.nylas.GoogleProviderSettings;
 import com.nylas.JsonHelper;
 import com.nylas.NativeAuthentication;
 import com.nylas.NativeAuthentication.AuthRequestBuilder;
-import com.nylas.examples.ExampleConf;
 import com.nylas.NylasAccount;
 import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.ProviderSettings;
 import com.nylas.RequestFailedException;
 import com.nylas.Scope;
+import com.nylas.examples.ExampleConf;
 
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -49,7 +50,10 @@ public class NativeAuthGoogleExample {
 	private static OkHttpClient httpClient = new OkHttpClient();
 	private static NylasClient nylasClient = new NylasClient();
 	private static String baseUrl;
-	private static List<Scope> scopes = Arrays.asList(Scope.values());
+	private static Set<Scope> scopes = new HashSet<Scope>() {{
+		addAll(Arrays.asList(Scope.values()));
+		remove(Scope.EMAIL_METADATA);
+	}};
 
 	public static void main(String[] args) throws Exception {
 		int port = conf.getInt("http.local.port", 5000);

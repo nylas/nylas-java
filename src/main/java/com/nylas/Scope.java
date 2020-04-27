@@ -30,6 +30,7 @@ public enum Scope {
 	
 	/**
 	 * Read email metadata including headers and labels/folders, but not the message body or file attachments.
+	 * Note - including this scope for a Google account can remove permission to access message bodies or search.
 	 */
 	EMAIL_METADATA("email.metadata"),
 	
