@@ -123,12 +123,6 @@ artifacts {
     archives javadocJar
 }
 
-signing {
-    // Gradle 6.0 cannot sign snapshot builds, should be fixed in 6.2
-    // see https://github.com/gradle/gradle/issues/12070 
-    if (!version.endsWith('SNAPSHOT')) { sign publishing.publications.mavenJava }
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -172,6 +166,10 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
 
 // workaround for https://github.com/eclipse/buildship/issues/476
