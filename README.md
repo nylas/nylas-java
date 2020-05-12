@@ -17,14 +17,14 @@ If you have a question about the Nylas Communications Platform, please reach out
 
 **Setup via Gradle**: If you're using Gradle, add the following to your dependencies section of build.gradle:
 
-    implementation("com.nylas.sdk:nylas-java-sdk:1.X.X")
+    implementation("com.nylas.sdk:nylas-java-sdk:0.2.0")
 
 **Setup via Maven**: For projects using Maven, add the following to your POM file:
 
     <dependency>
       <groupId>com.nylas.sdk</groupId>
       <artifactId>nylas-java-sdk</artifactId>
-      <version>1.X.X</version>
+      <version>0.2.0</version>
     </dependency>
     
 **Build from source**: To build from source, clone this repo and build the project with Gradle.
