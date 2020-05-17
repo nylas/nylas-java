@@ -62,8 +62,8 @@ dependencies {
     examplesImplementation("com.google.guava:guava:28.2-jre")
     
     // jetty http server for examples that use callbacks 
-    examplesImplementation("org.eclipse.jetty:jetty-server:9.4.25.v20191220")
-    examplesImplementation("org.eclipse.jetty:jetty-servlet:9.4.25.v20191220")
+    examplesImplementation("org.eclipse.jetty:jetty-server:9.4.28.v20200408")
+    examplesImplementation("org.eclipse.jetty:jetty-servlet:9.4.28.v20200408")
     
     // freemarker template library for serving basic html in some examples
     examplesImplementation('org.freemarker:freemarker:2.3.29')
