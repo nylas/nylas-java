@@ -31,21 +31,21 @@ dependencies {
     // Public dependencies
     
     // OkHttp 3 - Http client (without Kotlin dependency of version 4)
-    api("com.squareup.okhttp3:okhttp:3.14.5")
+    api('com.squareup.okhttp3:okhttp:3.14.5')
     
     // Moshi JSON library
-    implementation("com.squareup.moshi:moshi:1.9.2")
-    implementation("com.squareup.moshi:moshi-adapters:1.9.2")
+    implementation('com.squareup.moshi:moshi:1.9.2')
+    implementation('com.squareup.moshi:moshi-adapters:1.9.2')
     
     // SLF4J for logging facade
-    implementation("org.slf4j:slf4j-api:1.7.28")
+    implementation('org.slf4j:slf4j-api:1.7.28')
     
     ///////////////////////////////////
     // Test dependencies
     
     // jUnit 5 for Testing
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.2')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
     
     testRuntimeOnly('org.apache.logging.log4j:log4j-slf4j-impl:2.12.1')
     
@@ -59,11 +59,11 @@ dependencies {
     
     // Guava for examples since it makes all Java better and we don't need to worry about
     // conflicting dependencies downstream for examples
-    examplesImplementation("com.google.guava:guava:28.2-jre")
+    examplesImplementation('com.google.guava:guava:28.2-jre')
     
     // jetty http server for examples that use callbacks 
-    examplesImplementation("org.eclipse.jetty:jetty-server:9.4.28.v20200408")
-    examplesImplementation("org.eclipse.jetty:jetty-servlet:9.4.28.v20200408")
+    examplesImplementation('org.eclipse.jetty:jetty-server:9.4.28.v20200408')
+    examplesImplementation('org.eclipse.jetty:jetty-servlet:9.4.28.v20200408')
     
     // freemarker template library for serving basic html in some examples
     examplesImplementation('org.freemarker:freemarker:2.3.29')
