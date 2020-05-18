@@ -4,6 +4,10 @@
 
 This section contains changes that have been committed but not yet released.
 
+### Changed
+
+ - [BREAKING] Moved AuthenticationUrlBuilder to nested class HostedAuthentication.UrlBuilder
+
 ## [0.2.0] - Released 2020-04-27
 
 This second release aims toward API stability so that we can get to v1.0.0.
