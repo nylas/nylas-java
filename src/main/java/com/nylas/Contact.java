@@ -218,7 +218,7 @@ public class Contact extends AccountOwnedModel implements JsonObject {
 		private String type;
 		private String email;
 		
-		public Email() {}
+		/** For deserialization only */ public Email() {}
 		
 		public Email(String type, String email) {
 			this.type = type;
@@ -243,7 +243,7 @@ public class Contact extends AccountOwnedModel implements JsonObject {
 		private String type;
 		private String im_address;
 		
-		public IMAddress() {}
+		/** For deserialization only */ public IMAddress() {}
 		
 		public IMAddress(String type, String im_address) {
 			this.type = type;
@@ -341,7 +341,7 @@ public class Contact extends AccountOwnedModel implements JsonObject {
 		private String type;
 		private String number;
 
-		public PhoneNumber() {}
+		/** For deserialization only */ public PhoneNumber() {}
 
 		public PhoneNumber(String type, String number) {
 			this.type = type;
@@ -366,7 +366,7 @@ public class Contact extends AccountOwnedModel implements JsonObject {
 		private String type;
 		private String url;
 
-		public WebPage() {}
+		/** For deserialization only */ public WebPage() {}
 
 		public WebPage(String type, String url) {
 			this.type = type;
