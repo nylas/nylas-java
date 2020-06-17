@@ -6,11 +6,17 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Constructor for com.nylas.Event.Recurrence to allow creation of event recurrences. (GH Issue #4)
-
 ### Changed
 
 ### Removed
+
+## [1.0.1] - Released 2020-06-17
+
+Release 1.0.1 to address a major bug.
+
+### Added
+
+- Constructor for com.nylas.Event.Recurrence to allow creation of event recurrences. (GH Issue #4)
 
 ## [1.0.0] - Released 2020-06-13
 
@@ -45,7 +51,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/nylas/nylas-java/releases/tag/v1.0.1
 [1.0.0]: https://github.com/nylas/nylas-java/releases/tag/v1.0.0
 [0.2.0]: https://github.com/nylas/nylas-java/releases/tag/v0.2.0
 [0.1.0]: https://github.com/nylas/nylas-java/releases/tag/v0.1.0
