@@ -4,6 +4,14 @@
 
 This section contains changes that have been committed but not yet released.
 
+### Added
+
+- Constructor for com.nylas.Event.Recurrence to allow creation of event recurrences. (GH Issue #4)
+
+### Changed
+
+### Removed
+
 ## [1.0.0] - Released 2020-06-13
 
 Release 1.0.0 after users have been using it successfully.

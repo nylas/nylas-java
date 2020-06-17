@@ -156,6 +156,13 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		private String timezone;
 		private List<String> rrule;
 		
+		/** For deserialization only */ public Recurrence() {}
+		
+		public Recurrence(String timezone, List<String> rrule) {
+			this.timezone = timezone;
+			this.rrule = rrule;
+		}
+		
 		@Override
 		public String toString() {
 			return "Recurrence [timezone=" + timezone + ", rrule=" + rrule + "]";

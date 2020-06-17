@@ -1,15 +1,21 @@
 package com.nylas.examples.other;
 
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Arrays;
 
 import com.nylas.Calendar;
 import com.nylas.Event;
+import com.nylas.Event.Recurrence;
+import com.nylas.Event.Time;
+import com.nylas.Event.Timespan;
 import com.nylas.EventQuery;
 import com.nylas.Events;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
+import com.nylas.Participant;
 import com.nylas.RemoteCollection;
-import com.nylas.RoomResource;
 import com.nylas.examples.ExampleConf;
 
 public class EventsExample {
@@ -59,46 +65,44 @@ public class EventsExample {
 			System.out.println(event);
 		}
 		
-		List<RoomResource> resources = events.roomResources();
-		for (RoomResource resource : resources) {
-			System.out.println(resource);
-		}
-		
-		
+//		List<RoomResource> resources = events.roomResources();
+//		for (RoomResource resource : resources) {
+//			System.out.println(resource);
+//		}
 		
 		//events.rsvp("2ou66ruo7skqqc85g3za5yx8x", "yes", "7tc4ldy90u7gkbys880h8j2al", "totes!", true);
 
-//		
-//		
-//		long time = LocalDate.now().plusDays(2).atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
-//		Event event = new Event(cal.getId(), new Time(time));
-//		event.setTitle("Surprise Party");
-//		Participant partier = new Participant("hamilton@davelink.net");
-//		partier.name("Alexander Hamilton");
-//
-//		Event created = events.create(event, true);
-//		System.out.println("Created: " + created);
-//		
-//		Participant partier1 = new Participant("hmulligan@avelink.net");
-//		partier1.name("Hercules Mulligan");
-//
-//		Participant partier2 = new Participant("jlaurens@example.com");
-//		partier2.name("John Laurens");
-//
-//		Participant partier3 = new Participant("lafayette@example.com");
-//		partier3.name("Marquis de Lafayette");
-//
-//		created.setDescription("hopping good fun");
-//		created.setWhen(new Timespan(time, time+86400));
-//		created.setTitle("Nonsurprise Party");
-//		created.setBusy(false);
-//		created.setLocation("Lake Merritt");
-//		created.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
-//		Event updated = events.update(created, true);
-//		System.out.println("Updated: " + updated);
-//		
-//		events.delete(updated.getId(), true);
-//		System.out.println("Deleted");
+		
+		Instant time = LocalDate.now().plusDays(2).atStartOfDay(ZoneId.systemDefault()).toInstant();
+		Event event = new Event(writableCalendar.getId(), new Time(time));
+		event.setTitle("Surprise Party");
+		Participant partier = new Participant("hamilton@example.com");
+		partier.name("Alexander Hamilton");
+
+		Event created = events.create(event, true);
+		System.out.println("Created: " + created);
+		
+		Participant partier1 = new Participant("hmulligan@example.com");
+		partier1.name("Hercules Mulligan");
+
+		Participant partier2 = new Participant("jlaurens@example.com");
+		partier2.name("John Laurens");
+
+		Participant partier3 = new Participant("lafayette@example.com");
+		partier3.name("Marquis de Lafayette");
+
+		created.setDescription("hopping good fun");
+		created.setWhen(new Timespan(time, time.plusSeconds(86400)));
+		created.setTitle("Nonsurprise Party");
+		created.setBusy(false);
+		created.setLocation("Lake Merritt");
+		created.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
+		created.setRecurrence(new Recurrence("America/Los_Angeles", Arrays.asList("RRULE:FREQ=WEEKLY;BYDAY=TH")));
+		Event updated = events.update(created, true);
+		System.out.println("Updated: " + updated);
+		
+		events.delete(updated.getId(), true);
+		System.out.println("Deleted");
 		
 	}
 
