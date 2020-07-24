@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Constructors for NylasClient to allow customizing configuration of the HTTP client.
+
 ### Changed
 
 ### Removed

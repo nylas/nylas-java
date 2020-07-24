@@ -16,28 +16,55 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.internal.Util;
 
+/**
+ * The NylasCLient is the entry point to the Java SDK's API.
+ * An instance holds a configured http client pointing to a base URL and is intended to be reused and shared
+ * across threads and time.
+ */
 public class NylasClient {
 
-	private static final String DEFAULT_BASE_URL = "https://api.nylas.com";
+	public static final String DEFAULT_BASE_URL = "https://api.nylas.com";
 	
 	private final HttpUrl baseUrl;
 	private final OkHttpClient httpClient;
 	
+	/**
+	 * Construct a default NylasClient.
+	 */
 	public NylasClient() {
 		this(DEFAULT_BASE_URL);
 	}
 
-	public NylasClient(String baseUrl) {
-		this.baseUrl = HttpUrl.get(baseUrl);
-		
-		httpClient = new OkHttpClient.Builder()
-				.addInterceptor(new AddVersionHeadersInterceptor())
-				.addNetworkInterceptor(new HttpLoggingInterceptor())
-				.connectTimeout(15, TimeUnit.SECONDS)
-				.readTimeout(15, TimeUnit.SECONDS)
-				.writeTimeout(15,  TimeUnit.SECONDS)
-				.build();
+	/**
+	 * Construct a NylasClient with a custom configured HTTP Client.
+	 * Interceptors will be added to include required HTTP headers and for configurable logging.
+	 */
+	public NylasClient(OkHttpClient.Builder httpClientBuilder) {
+		this (DEFAULT_BASE_URL, httpClientBuilder);
 	}
+	
+	/**
+	 * Construct a NylasClient pointed to a custom base URL.
+	 */
+	public NylasClient(String baseUrl) {
+		this(baseUrl, new OkHttpClient.Builder()
+				.connectTimeout(60, TimeUnit.SECONDS)
+				.readTimeout(60, TimeUnit.SECONDS)
+				.writeTimeout(60,  TimeUnit.SECONDS));
+	}
+
+	/**
+	 * Construct a NylasClient with a custom configured HTTP Client pointed to custom base URL.
+	 * Interceptors will be added to include required HTTP headers and for configurable logging.
+	 */
+	public NylasClient(String baseUrl, OkHttpClient.Builder httpClientBuilder) {
+		this.baseUrl = HttpUrl.get(baseUrl);
+		httpClient = httpClientBuilder
+			.addInterceptor(new AddVersionHeadersInterceptor())
+			.addNetworkInterceptor(new HttpLoggingInterceptor())
+			.build();
+	}
+	
 
 	public HttpUrl.Builder newUrlBuilder() {
 		return baseUrl.newBuilder();
