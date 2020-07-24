@@ -1,6 +1,7 @@
 package com.nylas.examples.other;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
@@ -39,11 +40,14 @@ public class ContactsExample {
 		if (hasProfilePicture == null) {
 			System.out.println("No contact has a profile pic");
 		} else {
+			Path profilePicPath = Paths.get(System.getProperty("java.io.tmpdir") + "/contact.profile."
+					+ hasProfilePicture.getId() + ".jpg");
 			try (ResponseBody picResponse = contacts.downloadProfilePicture(hasProfilePicture.getId())) {
 				Files.copy(picResponse.byteStream(),
-						Paths.get("/tmp/contact.profile." + hasProfilePicture.getId() + ".jpg"),
+						profilePicPath,
 						StandardCopyOption.REPLACE_EXISTING);
 			}
+			System.out.println("Downloaded profile pic to " + profilePicPath);
 		}
 		
 		
