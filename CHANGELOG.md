@@ -6,11 +6,17 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Constructors for NylasClient to allow customizing configuration of the HTTP client.
-
 ### Changed
 
 ### Removed
+
+## [1.1.0] - Released 2020-07-28
+
+Release 1.1.0 to customize client HTTP configuration
+
+### Added
+
+- Allow customizing configuration of the HTTP client passed to NylasClient constructor.
 
 ## [1.0.1] - Released 2020-06-17
 
@@ -53,7 +59,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/nylas/nylas-java/releases/tag/v1.1.0
 [1.0.1]: https://github.com/nylas/nylas-java/releases/tag/v1.0.1
 [1.0.0]: https://github.com/nylas/nylas-java/releases/tag/v1.0.0
 [0.2.0]: https://github.com/nylas/nylas-java/releases/tag/v0.2.0
