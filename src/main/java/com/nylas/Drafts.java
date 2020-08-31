@@ -63,6 +63,19 @@ public class Drafts extends RestfulDAO<Draft> {
 	}
 
 	/**
+	 * Delete the given draft from the server.
+	 * Requires that the version of the given draft matches the latest version on the server.
+	 * This can fail if any client (including this one) has updated the draft since this was fetched from the server.
+	 */
+	public void delete(Draft draft) throws IOException, RequestFailedException {
+		if (!draft.hasId()) {
+			throw new IllegalArgumentException("Cannot delete a draft that has not yet been created.");
+		}
+		RequestBody jsonBody = JsonHelper.jsonRequestBody(Maps.of("version", draft.getVersion()));
+		client.executeRequestWithAuth(authUser, getInstanceUrl(draft.getId()), HttpMethod.DELETE, jsonBody, null);
+	}
+	
+	/**
 	 * Sends the given draft.
 	 * 
 	 * Note - If the draft was already saved to the server and has an id, then sends using the server's copy.

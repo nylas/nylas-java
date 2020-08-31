@@ -1,10 +1,12 @@
 package com.nylas.examples.other;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.nylas.Draft;
 import com.nylas.DraftQuery;
 import com.nylas.Drafts;
+import com.nylas.NameEmail;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.examples.ExampleConf;
@@ -95,12 +97,19 @@ public class DraftsExample {
 //		Draft putResult = drafts.put(firstDraft);
 //		System.out.println("put result = " + putResult);
 //		
-//		Draft draft = new Draft();
-//		draft.setTo(Arrays.asList(new NameEmail("dude", "dude@b.com")));
-//		draft.setBody("this is the draft body text");
-//		draft.setSubject("I wonder if this draft will show up in gmail");
-//		Draft created = drafts.create(draft);
-//		System.out.println("post result = " + created);
+		Draft draft = new Draft();
+		draft.setTo(Arrays.asList(new NameEmail("dude", "dude@b.com")));
+		draft.setBody("this is the draft body text");
+		draft.setSubject("I wonder if this draft will show up in gmail");
+		Draft created = drafts.create(draft);
+		System.out.println("post result = " + created);
+		
+		created.setSubject("new subject");
+		Draft updated = drafts.update(created);
+		System.out.println("updated");
+		
+		drafts.delete(updated);
+		System.out.println("deleted");
 	}
 
 }
