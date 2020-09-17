@@ -41,6 +41,7 @@ public class NylasClient {
 	
 	/**
 	 * Construct a default NylasClient.
+	 * To customize, use a Builder instead.
 	 */
 	public NylasClient() {
 		this(DEFAULT_BASE_URL);
@@ -72,6 +73,18 @@ public class NylasClient {
 	 * @deprecated Use a Builder for customization instead
 	 */
 	public NylasClient(String baseUrl, OkHttpClient.Builder httpClientBuilder) {
+		this(httpClientBuilder
+				.protocols(Arrays.asList(Protocol.HTTP_1_1))
+				.addNetworkInterceptor(new HttpLoggingInterceptor()),
+			baseUrl);
+	}
+	
+	/**
+	 * Internal constructor for builder.
+	 * 
+	 * Only adds required version / build info interceptor
+	 */
+	private NylasClient(OkHttpClient.Builder httpClientBuilder, String baseUrl) {
 		this.baseUrl = HttpUrl.get(baseUrl);
 		httpClient = httpClientBuilder
 			.addInterceptor(new AddVersionHeadersInterceptor())  // enforce user agent and build data
@@ -209,7 +222,7 @@ public class NylasClient {
 		}
 		
 		public NylasClient build() {
-			return new NylasClient(baseUrl, httpClient);
+			return new NylasClient(httpClient, baseUrl);
 		}
 	}
 	
