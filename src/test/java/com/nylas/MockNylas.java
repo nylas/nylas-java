@@ -12,7 +12,7 @@ public class MockNylas {
 	MockNylas() {
 		server = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
 		server.start();
-		client = new NylasClient(server.baseUrl());
+		client = new NylasClient.Builder().baseUrl(server.baseUrl()).build();
 	}
 	
 	void cleanup() {

@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +11,7 @@ import com.squareup.moshi.JsonAdapter;
 import okhttp3.Credentials;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -17,7 +19,7 @@ import okhttp3.ResponseBody;
 import okhttp3.internal.Util;
 
 /**
- * The NylasCLient is the entry point to the Java SDK's API.
+ * The NylasClient is the entry point to the Java SDK's API.
  * An instance holds a configured http client pointing to a base URL and is intended to be reused and shared
  * across threads and time.
  */
@@ -27,6 +29,15 @@ public class NylasClient {
 	
 	private final HttpUrl baseUrl;
 	private final OkHttpClient httpClient;
+	
+	private static OkHttpClient.Builder defaultHttpClient() {
+		return new OkHttpClient.Builder()
+				.connectTimeout(60, TimeUnit.SECONDS)
+				.readTimeout(60, TimeUnit.SECONDS)
+				.writeTimeout(60,  TimeUnit.SECONDS)
+				.protocols(Arrays.asList(Protocol.HTTP_1_1))
+				.addNetworkInterceptor(new HttpLoggingInterceptor());
+	}
 	
 	/**
 	 * Construct a default NylasClient.
@@ -38,6 +49,8 @@ public class NylasClient {
 	/**
 	 * Construct a NylasClient with a custom configured HTTP Client.
 	 * Interceptors will be added to include required HTTP headers and for configurable logging.
+	 * 
+	 * @deprecated Use a Builder for customization instead
 	 */
 	public NylasClient(OkHttpClient.Builder httpClientBuilder) {
 		this (DEFAULT_BASE_URL, httpClientBuilder);
@@ -45,27 +58,26 @@ public class NylasClient {
 	
 	/**
 	 * Construct a NylasClient pointed to a custom base URL.
+	 * 
+	 * @deprecated Use a Builder for customization instead
 	 */
 	public NylasClient(String baseUrl) {
-		this(baseUrl, new OkHttpClient.Builder()
-				.connectTimeout(60, TimeUnit.SECONDS)
-				.readTimeout(60, TimeUnit.SECONDS)
-				.writeTimeout(60,  TimeUnit.SECONDS));
+		this(baseUrl, defaultHttpClient());
 	}
-
+	
 	/**
 	 * Construct a NylasClient with a custom configured HTTP Client pointed to custom base URL.
 	 * Interceptors will be added to include required HTTP headers and for configurable logging.
+	 * 
+	 * @deprecated Use a Builder for customization instead
 	 */
 	public NylasClient(String baseUrl, OkHttpClient.Builder httpClientBuilder) {
 		this.baseUrl = HttpUrl.get(baseUrl);
 		httpClient = httpClientBuilder
-			.addInterceptor(new AddVersionHeadersInterceptor())
-			.addNetworkInterceptor(new HttpLoggingInterceptor())
+			.addInterceptor(new AddVersionHeadersInterceptor())  // enforce user agent and build data
 			.build();
 	}
 	
-
 	public HttpUrl.Builder newUrlBuilder() {
 		return baseUrl.newBuilder();
 	}
@@ -160,6 +172,44 @@ public class NylasClient {
 			String responseBody = response.body().string();
 			response.close();
 			throw new RequestFailedException(response.code(), responseBody);
+		}
+	}
+
+	/**
+	 * A NylasClient.Builder allows applications to customize the Nylas http access
+	 * by choosing a different base url or modifying http client options.
+	 */
+	public static class Builder {
+		
+		private String baseUrl = DEFAULT_BASE_URL;
+		private OkHttpClient.Builder httpClient = defaultHttpClient();
+		
+		public Builder baseUrl(String baseUrl) {
+			this.baseUrl = baseUrl;
+			return this;
+		}
+		
+		/**
+		 * Access the OkHttpClient.Builder to allow customization.
+		 * By default the NylasClient configures it as follows:
+		 * 		.protocols(Arrays.asList(Protocol.HTTP_1_1))
+				.connectTimeout(60, TimeUnit.SECONDS)
+				.readTimeout(60, TimeUnit.SECONDS)
+				.writeTimeout(60,  TimeUnit.SECONDS)
+				.addNetworkInterceptor(new HttpLoggingInterceptor()
+		 * 
+		 * The default setting of HTTP/1.1 is to workaround this issue in OkHttp 3
+		 * <a href="https://github.com/square/okhttp/issues/4029>
+		 * https://github.com/square/okhttp/issues/4029</href>
+		 * Applications may override to use HTTP/2.0 if they prefer to
+		 * manage the OkHttpClient shutdown themselves.
+		 */
+		public OkHttpClient.Builder httpClient() {
+			return httpClient;
+		}
+		
+		public NylasClient build() {
+			return new NylasClient(baseUrl, httpClient);
 		}
 	}
 	

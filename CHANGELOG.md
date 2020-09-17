@@ -6,7 +6,12 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- NylasClient.Builder for better customization of NylasClient
+
 ### Changed
+
+- Default NylasClient to use HTTP/1.1 to workaround OkHttp 3 bug.
+- Deprecated non-default NylasClient constructors
 
 ### Removed
 
