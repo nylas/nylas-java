@@ -6,14 +6,21 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+### Changed
+
+### Removed
+
+## [1.3.0] - Released 2020-09-17
+
+### Added
+
+- Added Drafts.delete support
 - NylasClient.Builder for better customization of NylasClient
 
 ### Changed
 
 - Default NylasClient to use HTTP/1.1 to workaround OkHttp 3 bug.
 - Deprecated non-default NylasClient constructors
-
-### Removed
 
 ## [1.1.0] - Released 2020-07-28
 
@@ -64,7 +71,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/nylas/nylas-java/releases/tag/v1.3.0
 [1.1.0]: https://github.com/nylas/nylas-java/releases/tag/v1.1.0
 [1.0.1]: https://github.com/nylas/nylas-java/releases/tag/v1.0.1
 [1.0.0]: https://github.com/nylas/nylas-java/releases/tag/v1.0.0
