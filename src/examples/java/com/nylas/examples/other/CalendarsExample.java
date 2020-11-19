@@ -36,5 +36,23 @@ public class CalendarsExample {
 				System.out.println(freeBusy);
 			}
 		}
+		
+		Calendar newCal = new Calendar();
+		newCal.setName("New Test Calendar");
+		newCal.setDescription("Testing calendar creation");
+		newCal.setLocation("far, far away");
+		newCal.setTimezone("America/Los_Angeles");
+		Calendar created = calendars.create(newCal);
+		System.out.println("Created: " + created);
+		
+		created.setName("New Test Calendar (changed)");
+		created.setDescription("this calendar has been updated!");
+		created.setLocation("nearby");
+		created.setTimezone("America/New_York");
+		Calendar updated = calendars.update(created);
+		System.out.println("Updated: " + updated);
+		
+		calendars.delete(updated.getId());
+		System.out.println("Deleted");
 	}
 }

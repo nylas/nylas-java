@@ -31,6 +31,21 @@ public class Calendars extends RestfulDAO<Calendar> {
 		return super.get(id);
 	}
 
+	@Override
+	public Calendar create(Calendar calendar) throws IOException, RequestFailedException {
+		return super.create(calendar);
+	}
+	
+	@Override
+	public Calendar update(Calendar calendar) throws IOException, RequestFailedException {
+		return super.update(calendar);
+	}
+
+	@Override
+	public void delete(String id) throws IOException, RequestFailedException {
+		super.delete(id);
+	}
+	
 	public RemoteCollection<String> ids(CalendarQuery query) throws IOException, RequestFailedException {
 		return super.ids(query);
 	}
