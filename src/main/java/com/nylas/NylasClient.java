@@ -63,7 +63,7 @@ public class NylasClient {
 	 * @deprecated Use a Builder for customization instead
 	 */
 	public NylasClient(String baseUrl) {
-		this(baseUrl, defaultHttpClient());
+		this(defaultHttpClient(), baseUrl);
 	}
 	
 	/**
