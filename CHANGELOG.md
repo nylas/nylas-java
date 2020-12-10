@@ -6,7 +6,11 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Job status support.  Many objects returned by the server from create and update operations will now include a job status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete operations will directly return job status ids.
+
 ### Changed
+
+- Fix duplicate http logging when using NylasClient constructors (GH Issue #7)
 
 ### Removed
 

@@ -28,9 +28,13 @@ public class Folders extends RestfulDAO<Folder> {
 		return super.create(Maps.of("display_name", displayName));
 	}
 	
+	/**
+	 * Delete the folder with the given id.
+	 * Returns the id of job status for the deletion.
+	 */
 	@Override
-	public void delete(String folderId) throws IOException, RequestFailedException {
-		super.delete(folderId);
+	public String delete(String folderId) throws IOException, RequestFailedException {
+		return super.delete(folderId);
 	}
 	
 	/**

@@ -47,8 +47,12 @@ public class Events extends RestfulDAO<Event> {
 		return super.update(event, getExtraQueryParams(notifyParticipants));
 	}
 	
-	public void delete(String id, boolean notifyParticipants) throws IOException, RequestFailedException {
-		super.delete(id, getExtraQueryParams(notifyParticipants));
+	/**
+	 * Delete the event with the given id.
+	 * Returns the id of job status for the deletion.
+	 */
+	public String delete(String id, boolean notifyParticipants) throws IOException, RequestFailedException {
+		return super.delete(id, getExtraQueryParams(notifyParticipants));
 	}
 
 	/**

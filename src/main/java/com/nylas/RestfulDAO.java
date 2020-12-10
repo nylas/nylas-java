@@ -107,14 +107,19 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 		return client.executePut(authUser, url, params, modelClass);
 	}
 	
-	protected void delete(String id) throws IOException, RequestFailedException {
-		delete(id, null);
+	protected String delete(String id) throws IOException, RequestFailedException {
+		return delete(id, null);
 	}
 	
-	protected void delete(String id, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
+	protected String delete(String id, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getInstanceUrl(id);
 		addQueryParams(url, extraQueryParams);
-		client.executeDelete(authUser, url, null);
+		String result = client.executeDelete(authUser, url, String.class);
+		if (result != null) {
+			return (String) JsonHelper.jsonToMap(result).get("job_status_id");
+		} else {
+			return null;
+		}
 	}
 	
 	protected HttpUrl.Builder getCollectionUrl() {

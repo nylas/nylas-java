@@ -44,7 +44,9 @@ public class WebhooksExample {
 				"calendar.deleted",
 				"event.created",
 				"event.updated",
-				"event.deleted"));
+				"event.deleted",
+				"job.successful",
+				"job.failed"));
 		
 		
 		Webhook created = webhooks.create(newWebhook);

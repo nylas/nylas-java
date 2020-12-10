@@ -1,6 +1,6 @@
 package com.nylas.examples.other;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import com.nylas.File;
 import com.nylas.FileQuery;
@@ -24,7 +24,9 @@ public class FilesExample {
 		
 		File first = allFiles.iterator().next();
 		byte[] fileBytes = files.downloadBytes(first.getId());
-		java.nio.file.Files.write(Paths.get("/tmp/" + first.getFilename()), fileBytes);
+		
+		Path tmpfile = java.nio.file.Files.createTempFile(first.getFilename(), null);
+		java.nio.file.Files.write(tmpfile, fileBytes);
 		
 		File uploaded = files.upload(first.getFilename(), first.getContentType(), fileBytes);
 		System.out.println("Uploaded: " + uploaded);

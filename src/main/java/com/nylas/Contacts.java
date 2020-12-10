@@ -37,9 +37,13 @@ public class Contacts extends RestfulDAO<Contact> {
 		return super.update(contact);
 	}
 
+	/**
+	 * Delete the contact with the given id.
+	 * Returns the id of job status for the deletion.
+	 */
 	@Override
-	public void delete(String id) throws IOException, RequestFailedException {
-		super.delete(id);
+	public String delete(String id) throws IOException, RequestFailedException {
+		return super.delete(id);
 	}
 	
 	/**

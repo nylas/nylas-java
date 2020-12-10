@@ -34,9 +34,14 @@ public class Webhooks extends RestfulDAO<Webhook> {
 		return super.update(webhook);
 	}
 
+	/**
+	 * Delete the webhook with the given id.
+	 * The server does not yet return a job status for webhook deletion,
+	 * so this returns null.
+	 */
 	@Override
-	public void delete(String id) throws IOException, RequestFailedException {
-		super.delete(id);
+	public String delete(String id) throws IOException, RequestFailedException {
+		return super.delete(id);
 	}
 	
 }

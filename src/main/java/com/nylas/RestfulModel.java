@@ -8,6 +8,8 @@ import java.util.Map;
 public abstract class RestfulModel {
 
 	private String id;
+	
+	private String job_status_id;
 
 	public String getId() {
 		return id;
@@ -15,6 +17,15 @@ public abstract class RestfulModel {
 
 	public boolean hasId() {
 		return id != null;
+	}
+	
+	/**
+	 * For model objects that are returned from the Nylas server as part of
+	 * a create or update operation, they may include a job status id to allow
+	 * tracking of when the operation has synced back to the underlying provider.
+	 */
+	public String getJobStatusId() {
+		return job_status_id;
 	}
 	
 	/**

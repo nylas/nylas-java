@@ -41,9 +41,13 @@ public class Calendars extends RestfulDAO<Calendar> {
 		return super.update(calendar);
 	}
 
+	/**
+	 * Delete the calendar with the given id.
+	 * Returns the id of job status for the deletion.
+	 */
 	@Override
-	public void delete(String id) throws IOException, RequestFailedException {
-		super.delete(id);
+	public String delete(String id) throws IOException, RequestFailedException {
+		return super.delete(id);
 	}
 	
 	public RemoteCollection<String> ids(CalendarQuery query) throws IOException, RequestFailedException {

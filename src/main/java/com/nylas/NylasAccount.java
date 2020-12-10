@@ -62,6 +62,10 @@ public class NylasAccount {
 		return new ContactGroups(client, accessToken);
 	}
 	
+	public JobStatuses jobStatuses() {
+		return new JobStatuses(client, accessToken);
+	}
+	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");
 		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
@@ -72,8 +76,4 @@ public class NylasAccount {
 		client.executePost(accessToken, revokeUrl, null, null);
 	}
 
-
-
-
-	
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import com.nylas.Calendar;
 import com.nylas.Calendars;
 import com.nylas.FreeBusy;
+import com.nylas.JobStatus;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.examples.ExampleConf;
@@ -43,16 +44,19 @@ public class CalendarsExample {
 		newCal.setLocation("far, far away");
 		newCal.setTimezone("America/Los_Angeles");
 		Calendar created = calendars.create(newCal);
-		System.out.println("Created: " + created);
+		System.out.println("Created: " + created + " status: " + created.getJobStatusId());
 		
 		created.setName("New Test Calendar (changed)");
 		created.setDescription("this calendar has been updated!");
 		created.setLocation("nearby");
 		created.setTimezone("America/New_York");
 		Calendar updated = calendars.update(created);
-		System.out.println("Updated: " + updated);
+		System.out.println("Updated: " + updated + " status: " + updated.getJobStatusId());
 		
-		calendars.delete(updated.getId());
-		System.out.println("Deleted");
+		String deleteJobStatusId = calendars.delete(updated.getId());
+		System.out.println("Deleted, deleted job status id: " + deleteJobStatusId);
+		
+		JobStatus deleteStatus = account.jobStatuses().get(deleteJobStatusId);
+		System.out.println("Deletion status: " + deleteStatus);
 	}
 }

@@ -73,9 +73,14 @@ public class Files extends RestfulDAO<File> {
 		return resultList.get(0);
 	}
 	
+	/**
+	 * Delete the file with the given id.
+	 * The server does not yet return a job status for file deletion,
+	 * so this returns null.
+	 */
 	@Override
-	public void delete(String folderId) throws IOException, RequestFailedException {
-		super.delete(folderId);
+	public String delete(String fileId) throws IOException, RequestFailedException {
+		return super.delete(fileId);
 	}
 
 }

@@ -28,9 +28,13 @@ public class Labels extends RestfulDAO<Label> {
 		return super.create(Maps.of("display_name", displayName));
 	}
 	
+	/**
+	 * Delete the label with the given id.
+	 * Returns the id of job status for the deletion.
+	 */
 	@Override
-	public void delete(String labelId) throws IOException, RequestFailedException {
-		super.delete(labelId);
+	public String delete(String labelId) throws IOException, RequestFailedException {
+		return super.delete(labelId);
 	}
 	
 	/**
