@@ -6,6 +6,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Calendar create, update, and delete support.
 - Job status support.  Many objects returned by the server from create and update operations will now include a job status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete operations will directly return job status ids.
 
 ### Changed
