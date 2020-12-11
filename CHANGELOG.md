@@ -6,6 +6,14 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+### Changed
+
+### Removed
+
+## [1.4.0] - Released 2020-12-11
+
+### Added
+
 - Calendar create, update, and delete support.
 - Job status support.  Many objects returned by the server from create and update operations will now include a job status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete operations will directly return job status ids.
 
@@ -76,7 +84,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/nylas/nylas-java/releases/tag/v1.4.0
 [1.3.0]: https://github.com/nylas/nylas-java/releases/tag/v1.3.0
 [1.1.0]: https://github.com/nylas/nylas-java/releases/tag/v1.1.0
 [1.0.1]: https://github.com/nylas/nylas-java/releases/tag/v1.0.1
