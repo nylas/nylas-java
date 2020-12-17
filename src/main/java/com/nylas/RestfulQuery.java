@@ -11,21 +11,19 @@ public abstract class RestfulQuery<Q extends RestfulQuery<Q>> implements Cloneab
 	private Integer offset;
 	private Integer limit;
 	
-	// subclasses may override but should call through
-	public void addParameters(HttpUrl.Builder url) {
-		if (offset != null) {
-			url.addQueryParameter("offset", offset.toString());
-		}
-		if (limit != null) {
-			url.addQueryParameter("limit", limit.toString());
-		}
-	}
-	
+	/**
+	 * Specify how many items for the server to skip before returning results.
+	 * Useful for pagination.
+	 */
 	public Q offset(int offset) {
 		this.offset = offset;
 		return self();
 	}
 
+	/**
+	 * Specify how many items for the server to return.
+	 * Useful for pagination.
+	 */
 	public Q limit(int limit) {
 		this.limit = limit;
 		return self();
@@ -40,8 +38,25 @@ public abstract class RestfulQuery<Q extends RestfulQuery<Q>> implements Cloneab
 	}
 	
 	/**
-	 * Return a copy of this query with an updated offset and limit.
+	 * Add url query parameters for the the query.<br/>
+	 * Internal method to will be changing to package private.<br/>
+	 * Subclasses may override but should all through.
 	 */
+	@Deprecated
+	public void addParameters(HttpUrl.Builder url) {
+		if (offset != null) {
+			url.addQueryParameter("offset", offset.toString());
+		}
+		if (limit != null) {
+			url.addQueryParameter("limit", limit.toString());
+		}
+	}
+	
+	/**
+	 * Return a copy of this query with an updated offset and limit.<br/>
+	 * Internal method will be changing to package private.
+	 */
+	@Deprecated
 	public Q copyAtNewOffsetLimit(int newOffset, int newLimit) {
 		try {
 			@SuppressWarnings("unchecked")
