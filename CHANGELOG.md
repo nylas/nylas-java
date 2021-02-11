@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Support for creating and updating Event timezones
+
 ### Changed
 
 ### Removed

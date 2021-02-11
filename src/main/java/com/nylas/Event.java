@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,12 +176,32 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		
 		private long time;
 		
+		// used only for json serialization
+		@SuppressWarnings("unused")
+		private String timezone;
+		
 		/** For deserialization only */ public Time() {}
 		
+		/**
+		 * Construct a Time instance from the given Instant.
+		 * This Time instance will have no timezone.
+		 */
 		public Time(Instant time) {
 			this.time = time.getEpochSecond();
 		}
 		
+		/**
+		 * Construct a Time instance from the given ZonedDateTime.
+		 * This Time instance will have a timezone.
+		 */
+		public Time(ZonedDateTime time) {
+			this.time = time.toEpochSecond();
+			timezone = time.getZone().getId();
+		}
+		
+		/**
+		 * Get the time as an Instant, without timezone information
+		 */
 		public Instant getTime() {
 			return Instant.ofEpochSecond(time);
 		}
@@ -200,18 +221,47 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		
 		private long start_time;
 		private long end_time;
+		
+		// used only for json serialization
+		@SuppressWarnings("unused")
+		private String start_timezone;
+		
+		// used only for json serialization
+		@SuppressWarnings("unused")
+		private String end_timezone;
 
 		/** For deserialization only */ public Timespan() {}
 
+		/**
+		 * Construct a Timespan instance from the given Instants.
+		 * This Timespan instance will have no timezone.
+		 */
 		public Timespan(Instant startTime, Instant endTime) {
 			this.start_time = startTime.getEpochSecond();
 			this.end_time = endTime.getEpochSecond();
 		}
+		
+		/**
+		 * Construct a Timespan instance from the given ZonedDateTimes.
+		 * This Timespan instance will have a timezone.
+		 */
+		public Timespan(ZonedDateTime startTime, ZonedDateTime endTime) {
+			this.start_time = startTime.toEpochSecond();
+			start_timezone = startTime.getZone().getId();
+			this.end_time = endTime.toEpochSecond();
+			end_timezone = endTime.getZone().getId();
+		}
 
+		/**
+		 * Get the start time as an Instant, without timezone information
+		 */
 		public Instant getStartTime() {
 			return Instant.ofEpochSecond(start_time);
 		}
 
+		/**
+		 * Get the end time as an Instant, without timezone information
+		 */
 		public Instant getEndTime() {
 			return Instant.ofEpochSecond(end_time);
 		}
