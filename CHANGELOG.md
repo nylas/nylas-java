@@ -10,6 +10,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
+- Deprecate public use of `RestfulQuery` methods `addParameters` and `copyAtNewOffsetLimit`. They are for internal use only and will be removed from the public API in the future.
+
 ### Removed
 
 ## [1.4.0] - Released 2020-12-11
