@@ -6,13 +6,19 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+### Changed
+
+### Removed
+
+## [1.5.0] - Released 2021-02-25
+
+### Added
+
 - Support for creating and updating Event timezones
 
 ### Changed
 
 - Deprecate public use of `RestfulQuery` methods `addParameters` and `copyAtNewOffsetLimit`. They are for internal use only and will be removed from the public API in the future.
-
-### Removed
 
 ## [1.4.0] - Released 2020-12-11
 
@@ -24,8 +30,6 @@ This section contains changes that have been committed but not yet released.
 ### Changed
 
 - Fix duplicate http logging when using NylasClient constructors (GH Issue #7)
-
-### Removed
 
 ## [1.3.0] - Released 2020-09-17
 
@@ -88,7 +92,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/nylas/nylas-java/releases/tag/v1.5.0
 [1.4.0]: https://github.com/nylas/nylas-java/releases/tag/v1.4.0
 [1.3.0]: https://github.com/nylas/nylas-java/releases/tag/v1.3.0
 [1.1.0]: https://github.com/nylas/nylas-java/releases/tag/v1.1.0
