@@ -45,6 +45,26 @@ Then, follow our guide to [setup your first app and get your API access keys](ht
 
 For code examples that demonstrate how to use this SDK, take a look at our [Java SDK Quickstart Guide](https://docs.nylas.com/docs/quickstart-java).
 
+## Logging
+
+The SDK uses [SLF4J](http://www.slf4j.org) for logging.  Applications using the SDK can
+[choose what logging framework to use with it](http://www.slf4j.org/manual.html#projectDep).
+Common choices are log4j, logback, java.util.logging. If the application doesn't specify any logging framework,
+then SLF4J will emit one warning and then be completely silent.
+
+By default, the HTTP client is configured with the `com.nylas.HttpLoggingInterceptor`
+which provides 3 loggers for HTTP requests that only log at DEBUG level.
+- `com.nylas.http.Summary` logs one line for each request, containing method, URI, and content size
+and one line for each response containing status code, message, content size and duration.
+- `com.nylas.http.Headers` logs the request and response HTTP headers (except Authorization value by default).
+- `com.nylas.http.Body` logs request and response bodies (first 10kB by default).
+
+Enabling or disabling those loggers is done via the logging framework being used.
+For example, if using log4j2 and with an xml configuration file, include this line to enable all three:
+`<Logger name="com.nylas" level="DEBUG"/>`
+
+Configuring the logging of the HTTP Authorization header values and the body size limit can be done by using a 
+`NylasClient.Builder` with a customized `HttpLoggingInterceptor`
 
 # Contributing
 
