@@ -184,7 +184,7 @@ public class NylasClient {
 		if (!response.isSuccessful()) {
 			String responseBody = response.body().string();
 			response.close();
-			throw new RequestFailedException(response.code(), responseBody);
+			throw RequestFailedException.parseErrorResponse(response.code(), responseBody);
 		}
 	}
 

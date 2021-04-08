@@ -8,7 +8,12 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
+- `RequestFailedException` now creates a `Throwable` detail message with the details of the request failure.
+
 ### Removed
+
+- Deprecated `RequestFailedException` methods `getResponseBody` and `getStatus`
+in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 
 ## [1.5.0] - Released 2021-02-25
 
@@ -18,14 +23,17 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
-- Deprecate public use of `RestfulQuery` methods `addParameters` and `copyAtNewOffsetLimit`. They are for internal use only and will be removed from the public API in the future.
+- Deprecated public use of `RestfulQuery` methods `addParameters` and `copyAtNewOffsetLimit`.
+They are for internal use only and will be removed from the public API in the future.
 
 ## [1.4.0] - Released 2020-12-11
 
 ### Added
 
 - Calendar create, update, and delete support.
-- Job status support.  Many objects returned by the server from create and update operations will now include a job status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete operations will directly return job status ids.
+- Job status support.  Many objects returned by the server from create and update operations will now include a job
+status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete
+operations will directly return job status ids.
 
 ### Changed
 
