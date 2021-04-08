@@ -39,8 +39,8 @@ public abstract class RestfulQuery<Q extends RestfulQuery<Q>> implements Cloneab
 	
 	/**
 	 * Add url query parameters for the the query.<br/>
-	 * Internal method to will be changing to package private.<br/>
-	 * Subclasses may override but should all through.
+	 * Internal method will be changing to package private.<br/>
+	 * Subclasses may override but should call through.
 	 */
 	@Deprecated
 	public void addParameters(HttpUrl.Builder url) {
