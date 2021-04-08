@@ -10,10 +10,16 @@ This section contains changes that have been committed but not yet released.
 
 - `RequestFailedException` now creates a `Throwable` detail message with the details of the request failure.
 
-### Removed
+### Deprecated
 
 - Deprecated `RequestFailedException` methods `getResponseBody` and `getStatus`
 in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
+
+### Fixed
+
+### Removed
+
+### Security
 
 ## [1.5.0] - Released 2021-02-25
 
@@ -21,7 +27,7 @@ in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 
 - Support for creating and updating Event timezones
 
-### Changed
+### Deprecated
 
 - Deprecated public use of `RestfulQuery` methods `addParameters` and `copyAtNewOffsetLimit`.
 They are for internal use only and will be removed from the public API in the future.
@@ -35,7 +41,7 @@ They are for internal use only and will be removed from the public API in the fu
 status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete
 operations will directly return job status ids.
 
-### Changed
+### Fixed
 
 - Fix duplicate http logging when using NylasClient constructors (GH Issue #7)
 
@@ -49,6 +55,9 @@ operations will directly return job status ids.
 ### Changed
 
 - Default NylasClient to use HTTP/1.1 to workaround OkHttp 3 bug.
+
+### Deprecated
+
 - Deprecated non-default NylasClient constructors
 
 ## [1.1.0] - Released 2020-07-28
