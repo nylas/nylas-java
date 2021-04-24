@@ -8,18 +8,24 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
-- `RequestFailedException` now creates a `Throwable` detail message with the details of the request failure.
-
 ### Deprecated
-
-- Deprecated `RequestFailedException` methods `getResponseBody` and `getStatus`
-in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 
 ### Fixed
 
 ### Removed
 
 ### Security
+
+## [1.6.0] - Released 2021-04-24
+
+### Changed
+
+- `RequestFailedException` now creates a `Throwable` detail message with the details of the request failure.
+
+### Deprecated
+
+- Deprecated `RequestFailedException` methods `getResponseBody` and `getStatus`
+in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 
 ## [1.5.0] - Released 2021-02-25
 
@@ -109,7 +115,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/nylas/nylas-java/releases/tag/v1.6.0
 [1.5.0]: https://github.com/nylas/nylas-java/releases/tag/v1.5.0
 [1.4.0]: https://github.com/nylas/nylas-java/releases/tag/v1.4.0
 [1.3.0]: https://github.com/nylas/nylas-java/releases/tag/v1.3.0
