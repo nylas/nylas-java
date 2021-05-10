@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Calendar.isPrimary field is now available
+
 ### Changed
 
 ### Deprecated

@@ -10,6 +10,7 @@ public class Calendar extends AccountOwnedModel {
 	private String location;
 	private String timezone;
 	private Boolean read_only;
+	private Boolean is_primary;
 	
 	public String getName() {
 		return name;
@@ -29,6 +30,10 @@ public class Calendar extends AccountOwnedModel {
 
 	public Boolean isReadOnly() {
 		return read_only;
+	}
+	
+	public Boolean isPrimary() {
+		return is_primary;
 	}
 
 	public void setName(String name) {
@@ -60,6 +65,6 @@ public class Calendar extends AccountOwnedModel {
 	@Override
 	public String toString() {
 		return "Calendar [name=" + name + ", description=" + description + ", location=" + location + ", timezone="
-				+ timezone + ", readOnly=" + read_only + "]";
+				+ timezone + ", readOnly=" + read_only + ", isPrimary=" + is_primary + "]";
 	}
 }
