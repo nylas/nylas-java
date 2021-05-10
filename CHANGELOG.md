@@ -12,7 +12,11 @@ This section contains changes that have been committed but not yet released.
 
 ### Deprecated
 
+- Deprecated Threads.setLabelIds method that takes an Iterable in favor for a Collection 
+
 ### Fixed
+
+- Fixed Threads.setLabelIds to convert to JSON list properly 
 
 ### Removed
 

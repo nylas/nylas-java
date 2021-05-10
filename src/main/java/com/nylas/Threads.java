@@ -1,7 +1,10 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Threads extends RestfulDAO<Thread> {
@@ -39,7 +42,8 @@ public class Threads extends RestfulDAO<Thread> {
 		return super.search(new SearchQuery(query));
 	}
 	
-	public RemoteCollection<Thread> search(String query, int limit, int offset) throws IOException, RequestFailedException {
+	public RemoteCollection<Thread> search(String query, int limit, int offset)
+			throws IOException, RequestFailedException {
 		return super.search(new SearchQuery(query, limit, offset));
 	}
 	
@@ -72,9 +76,22 @@ public class Threads extends RestfulDAO<Thread> {
 	
 	/**
 	 * Updates the labels on the given thread, overwriting all previous labels on the thread.
+	 * @deprecated prefer the method that takes a Collection
 	 */
+	@Deprecated
 	public Thread setLabelIds(String threadId, Iterable<String> labelIds) throws IOException, RequestFailedException {
-		return super.update(threadId, Maps.of("label_ids", String.join(",", labelIds)));
+		List<String> labelIdList = new ArrayList<>();
+		for (String labelId : labelIds) {
+			labelIdList.add(labelId);
+		}
+		return setLabelIds(threadId, labelIdList);
+	}
+	
+	/**
+	 * Updates the labels on the given thread, overwriting all previous labels on the thread.
+	 */
+	public Thread setLabelIds(String threadId, Collection<String> labelIds) throws IOException, RequestFailedException {
+		return super.update(threadId, Maps.of("label_ids", labelIds));
 	}
 	
 	private Set<String> getLabelIds(String threadId) throws IOException, RequestFailedException {
