@@ -9,3 +9,6 @@ build
 .project
 .settings
 bin
+
+# Ignore Intellij files
+.idea
