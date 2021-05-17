@@ -23,7 +23,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private String status;
 	private Boolean read_only;
 	private Boolean busy;
-	private Map<String, Object> metadata;
+	private Map<String, String> metadata;
 	
 	private Recurrence recurrence;
 	
@@ -86,7 +86,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return busy;
 	}
 
-	public Map<String, Object> getMetadata() {
+	public Map<String, String> getMetadata() {
 		return metadata;
 	}
 
@@ -138,7 +138,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.busy = busy;
 	}
 
-	public void setMetadata(Map<String, Object> metadata) {
+	public void setMetadata(Map<String, String> metadata) {
 		this.metadata = metadata;
 	}
 
