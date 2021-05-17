@@ -1,6 +1,8 @@
 package com.nylas;
 
 import java.time.Instant;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import okhttp3.HttpUrl;
 
@@ -17,6 +19,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	private Instant startsAfter;
 	private Instant endsBefore;
 	private Instant endsAfter;
+	private String[] metadataKey;
+	private String[] metadataValue;
+	private Map<String, String> metadataPair;
 
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
@@ -54,6 +59,21 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		}
 		if (endsAfter != null) {
 			url.addQueryParameter("ends_after", Instants.formatEpochSecond(endsAfter));
+		}
+		if (metadataKey != null) {
+			for(String key : metadataKey) {
+				url.addQueryParameter("metadata_key", key);
+			}
+		}
+		if (metadataValue != null) {
+			for(String value : metadataValue) {
+				url.addQueryParameter("metadata_value", value);
+			}
+		}
+		if (metadataPair != null) {
+			for (Entry<String, String> pair : metadataPair.entrySet()) {
+				url.addQueryParameter("metadata_pair", String.format("%s:%s", pair.getKey(), pair.getValue()));
+			}
 		}
 	}
 	
@@ -109,6 +129,21 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	
 	public EventQuery endsAfter(Instant endsAfter) {
 		this.endsAfter = endsAfter;
+		return this;
+	}
+
+	public EventQuery metadataKey(String... metadataKey) {
+		this.metadataKey = metadataKey;
+		return this;
+	}
+
+	public EventQuery metadataValue(String... metadataValue) {
+		this.metadataValue = metadataValue;
+		return this;
+	}
+
+	public EventQuery metadataPair(Map<String, String> metadataPair) {
+		this.metadataPair = metadataPair;
 		return this;
 	}
 	
