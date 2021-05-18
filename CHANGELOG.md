@@ -16,7 +16,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
-- Fixed Threads.setLabelIds to convert to JSON list properly 
+- Fixed Threads.setLabelIds to convert to JSON list properly
+- Fixed NullPointerException when deleting event from a virtual calendar
 
 ### Removed
 
