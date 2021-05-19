@@ -7,6 +7,7 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 - Calendar.isPrimary field is now available
+- Event timezones will be checked for valid IANA zone names when created with ZonedDateTime objects 
 
 ### Changed
 

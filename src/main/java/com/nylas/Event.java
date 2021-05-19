@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -172,12 +173,15 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	
 	public static interface When extends JsonObject {}
 	
+	/**
+	 * A single moment in time.
+	 * Commonly used for reminders or alarms.
+	 */
 	public static class Time implements When {
 		
 		private long time;
 		
 		// used only for json serialization
-		@SuppressWarnings("unused")
 		private String timezone;
 		
 		/** For deserialization only */ public Time() {}
@@ -191,12 +195,32 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 		
 		/**
-		 * Construct a Time instance from the given ZonedDateTime.
-		 * This Time instance will have a timezone.
+		 * Construct a Time instance from the given ZonedDateTime
+		 * Note that the given ZonedDateTime must have a ZoneId with a name listed in the IANA time zone database.
+		 * Java ZoneOffset objects (including ZoneOffset.UTC) only have numerical ids and so are invalid.
+		 * The set of legal ZoneId's known by this JVM may not match exactly with the set known by the server.
+		 * 
+		 * @throws IllegalArgumentException if the timezone is not a recognized time zone in this JVM's list
 		 */
 		public Time(ZonedDateTime time) {
 			this.time = time.toEpochSecond();
 			timezone = time.getZone().getId();
+			
+			if (!ZoneId.getAvailableZoneIds().contains(timezone)) {
+				throw new IllegalArgumentException("Time zone \"" + timezone + "\" is not recognized"
+						+ " as a named IANA time zone");
+			}
+		}
+		
+		/**
+		 * Construct a Time instance from the given time and timezone.
+		 * The time field represents a unix timestamp: number of seconds since 1970-01-01 UTC.
+		 * The timezone field can be null or a name from the IANA time zone database.
+		 * This constructor does not check for valid timezone. 
+		 */
+		public Time(long time, String timezone) {
+			this.time = time;
+			this.timezone = timezone;
 		}
 		
 		/**
@@ -217,17 +241,19 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 	}
 
+	/**
+	 * A span of time with a specific beginning and end time.
+	 * Commonly used for a meeting or event with a start and end time.
+	 */
 	public static class Timespan implements When {
 		
 		private long start_time;
 		private long end_time;
 		
 		// used only for json serialization
-		@SuppressWarnings("unused")
 		private String start_timezone;
 		
 		// used only for json serialization
-		@SuppressWarnings("unused")
 		private String end_timezone;
 
 		/** For deserialization only */ public Timespan() {}
@@ -243,15 +269,43 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		
 		/**
 		 * Construct a Timespan instance from the given ZonedDateTimes.
-		 * This Timespan instance will have a timezone.
+		 * Note that the given ZonedDateTimes must have ZoneId with names listed in the IANA time zone database.
+		 * Java ZoneOffset objects (including ZoneOffset.UTC) only have numerical ids and so are invalid.
+		 * The set of legal ZoneId's known by this JVM may not match exactly with the set known by the server.
+		 * 
+		 * @throws IllegalArgumentException if the timezones are not recognized time zones in this JVM's list
 		 */
 		public Timespan(ZonedDateTime startTime, ZonedDateTime endTime) {
 			this.start_time = startTime.toEpochSecond();
 			start_timezone = startTime.getZone().getId();
+			
+			if (!ZoneId.getAvailableZoneIds().contains(start_timezone)) {
+				throw new IllegalArgumentException("Start time zone \"" + start_timezone + "\" is not recognized"
+						+ " as a named IANA time zone");
+			}
+			
 			this.end_time = endTime.toEpochSecond();
 			end_timezone = endTime.getZone().getId();
+			
+			if (!ZoneId.getAvailableZoneIds().contains(end_timezone)) {
+				throw new IllegalArgumentException("End time zone \"" + end_timezone + "\" is not recognized"
+						+ " as a named IANA time zone");
+			}
 		}
 
+		/**
+		 * Construct a Timespan instance from the given times and timezones.
+		 * The start and end time fields represent unix timestamps: number of seconds since 1970-01-01 UTC.
+		 * The start and end timezone fields can be null or names from the IANA time zone database.
+		 * This constructor does not check for valid timezones.
+		 */
+		public Timespan(long startTime, String startTimezone, long endTime, String endTimezone) {
+			this.start_time = startTime;
+			this.start_timezone = startTimezone;
+			this.end_time = endTime;
+			this.end_timezone = endTimezone;
+		}
+		
 		/**
 		 * Get the start time as an Instant, without timezone information
 		 */
@@ -277,6 +331,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 	}
 
+	/**
+	 * A specific date for an event, without a clock-based start or end time.
+	 * Examples are birthdays and holidays.
+	 */
 	public static class Date implements When {
 		
 		private String date;
@@ -302,6 +360,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 	}
 
+	/**
+	 * A span of entire days without specific times.
+	 * Examples are a business quarter or academic semester.
+	 */
 	public static class Datespan implements When {
 		
 		private String start_date;
