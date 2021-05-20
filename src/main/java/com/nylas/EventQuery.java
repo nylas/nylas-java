@@ -1,8 +1,9 @@
 package com.nylas;
 
 import java.time.Instant;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.HttpUrl;
 
@@ -19,9 +20,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	private Instant startsAfter;
 	private Instant endsBefore;
 	private Instant endsAfter;
-	private String[] metadataKey;
-	private String[] metadataValue;
-	private Map<String, String> metadataPair;
+	private List<String> metadataKeys;
+	private List<String> metadataValues;
+	private List<String> metadataPairs;
 
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
@@ -60,19 +61,19 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		if (endsAfter != null) {
 			url.addQueryParameter("ends_after", Instants.formatEpochSecond(endsAfter));
 		}
-		if (metadataKey != null) {
-			for(String key : metadataKey) {
+		if (metadataKeys != null) {
+			for(String key : metadataKeys) {
 				url.addQueryParameter("metadata_key", key);
 			}
 		}
-		if (metadataValue != null) {
-			for(String value : metadataValue) {
+		if (metadataValues != null) {
+			for(String value : metadataValues) {
 				url.addQueryParameter("metadata_value", value);
 			}
 		}
-		if (metadataPair != null) {
-			for (Entry<String, String> pair : metadataPair.entrySet()) {
-				url.addQueryParameter("metadata_pair", String.format("%s:%s", pair.getKey(), pair.getValue()));
+		if (metadataPairs != null) {
+			for(String value : metadataPairs) {
+				url.addQueryParameter("metadata_pair", value);
 			}
 		}
 	}
@@ -132,19 +133,48 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		return this;
 	}
 
+	/**
+	 * Add required metadata key to the query.
+	 * Returned events must include a metadata property with this key.
+	 * This method can accept multiple strings or be invoked multiple times
+	 * for the event to have multiple metadata keys. Each time this is called it
+	 * adds another required value rather than replacing previous required keys.
+	 */
 	public EventQuery metadataKey(String... metadataKey) {
-		this.metadataKey = metadataKey;
+		if (this.metadataKeys == null) {
+			this.metadataKeys = new ArrayList<>();
+		}
+		this.metadataKeys.addAll(Arrays.asList(metadataKey));
 		return this;
 	}
 
+	/**
+	 * Add required metadata value to the query.
+	 * Returned events must include a metadata property with this value.
+	 * This method can accept multiple strings or be invoked multiple times
+	 * for the event to have multiple metadata values. Each time this is called it
+	 * adds another required value rather than replacing previous required values.
+	 */
 	public EventQuery metadataValue(String... metadataValue) {
-		this.metadataValue = metadataValue;
+		if (this.metadataValues == null) {
+			this.metadataValues = new ArrayList<>();
+		}
+		this.metadataValues.addAll(Arrays.asList(metadataValue));
 		return this;
 	}
 
-	public EventQuery metadataPair(Map<String, String> metadataPair) {
-		this.metadataPair = metadataPair;
+	/**
+	 * Add a required metadata key/value pair to the query.
+	 * Returned events must include a metadata property with this key and value.
+	 * This method can be invoked multiple times to require the event to have multiple
+	 * metadata key value pairs.  Each time this is called it adds another required key value pair rather than
+	 * replacing previous required key value pairs.
+	 */
+	public EventQuery metadataPair(String key, String value) {
+		if (this.metadataPairs == null) {
+			this.metadataPairs = new ArrayList<>();
+		}
+		this.metadataPairs.add(key + ":" + value);
 		return this;
 	}
-	
 }
