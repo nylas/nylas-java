@@ -8,9 +8,24 @@ This section contains changes that have been committed but not yet released.
 
 - Calendar.isPrimary field is now available
 - Add `metadata` field in the Event model to support new event metadata
-- Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair`
+- Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair`]
 
 ### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.7.0] - Released 2021-05-19
+
+### Added
+
+- Calendar.isPrimary field is now available
+- Event timezones will be checked for valid IANA zone names when created with ZonedDateTime objects 
 
 ### Deprecated
 
@@ -18,11 +33,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
-- Fixed Threads.setLabelIds to convert to JSON list properly 
-
-### Removed
-
-### Security
+- Fixed Threads.setLabelIds to convert to JSON list properly
+- Fixed NullPointerException when deleting event from a virtual calendar
 
 ## [1.6.0] - Released 2021-04-24
 
@@ -123,7 +135,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/nylas/nylas-java/releases/tag/v1.7.0
 [1.6.0]: https://github.com/nylas/nylas-java/releases/tag/v1.6.0
 [1.5.0]: https://github.com/nylas/nylas-java/releases/tag/v1.5.0
 [1.4.0]: https://github.com/nylas/nylas-java/releases/tag/v1.4.0

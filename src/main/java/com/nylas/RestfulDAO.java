@@ -116,10 +116,12 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 		addQueryParams(url, extraQueryParams);
 		String result = client.executeDelete(authUser, url, String.class);
 		if (result != null) {
-			return (String) JsonHelper.jsonToMap(result).get("job_status_id");
-		} else {
-			return null;
+			Map<String, Object> resultMap = JsonHelper.jsonToMap(result);
+			if (resultMap != null) {
+				return (String) resultMap.get("job_status_id");
+			}
 		}
+		return null;
 	}
 	
 	protected HttpUrl.Builder getCollectionUrl() {
