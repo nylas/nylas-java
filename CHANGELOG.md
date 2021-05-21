@@ -6,7 +6,6 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Calendar.isPrimary field is now available
 - Add `metadata` field in the Event model to support new event metadata
 - Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair`]
 
