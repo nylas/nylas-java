@@ -134,11 +134,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	}
 
 	/**
-	 * Add required metadata key to the query.
-	 * Returned events must include a metadata property with this key.
-	 * This method can accept multiple strings or be invoked multiple times
-	 * for the event to have multiple metadata keys. Each time this is called it
-	 * adds another required value rather than replacing previous required keys.
+	 * Return events with metadata containing a property having the given key.
+	 * 
+	 * If multiple instances of metadata methods are invoked
+	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
+	 * then this query will return events which match ANY one of them.  
 	 */
 	public EventQuery metadataKey(String... metadataKey) {
 		if (this.metadataKeys == null) {
@@ -149,12 +149,12 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	}
 
 	/**
-	 * Add required metadata value to the query.
-	 * Returned events must include a metadata property with this value.
-	 * This method can accept multiple strings or be invoked multiple times
-	 * for the event to have multiple metadata values. Each time this is called it
-	 * adds another required value rather than replacing previous required values.
-	 */
+	 * Return events with metadata containing a property having the given value.
+	 * 
+	 * If multiple instances of metadata methods are invoked
+	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
+	 * then this query will return events which match ANY one of them.  
+ 	*/
 	public EventQuery metadataValue(String... metadataValue) {
 		if (this.metadataValues == null) {
 			this.metadataValues = new ArrayList<>();
@@ -164,11 +164,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	}
 
 	/**
-	 * Add a required metadata key/value pair to the query.
-	 * Returned events must include a metadata property with this key and value.
-	 * This method can be invoked multiple times to require the event to have multiple
-	 * metadata key value pairs.  Each time this is called it adds another required key value pair rather than
-	 * replacing previous required key value pairs.
+	 * Return events with metadata containing a property having the given key-value pair.
+	 * 
+	 * If multiple instances of metadata methods are invoked
+	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
+	 * then this query will return events which match ANY one of them.  
 	 */
 	public EventQuery metadataPair(String key, String value) {
 		if (this.metadataPairs == null) {
