@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.nylas.Contact;
 import com.nylas.Draft;
@@ -220,6 +222,12 @@ public class DocExamples {
 		event.setLocation("My House!");
 		event.setDescription("Let's celebrate our calendar integration!!");
 		event.setBusy(true);
+
+		// Metadata can be added to an event to store extra information and
+		// add custom fields. You can also query on metadata by keys, values, and key-value pairs
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("event_category", "gathering");
+		event.setMetadata(metadata);
 
 		// Participants are added as a list of Participant objects, which require email
 		// and may contain name, status, or comment as well

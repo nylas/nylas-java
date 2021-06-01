@@ -24,6 +24,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private String status;
 	private Boolean read_only;
 	private Boolean busy;
+	private Map<String, String> metadata;
 	
 	private Recurrence recurrence;
 	
@@ -86,6 +87,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return busy;
 	}
 
+	public Map<String, String> getMetadata() {
+		return metadata;
+	}
+
 	public Recurrence getRecurrence() {
 		return recurrence;
 	}
@@ -106,7 +111,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	public String toString() {
 		return "Event [id=" + getId() + ", calendar_id=" + calendar_id + ", ical_uid=" + ical_uid + ", title=" + title
 				+ ", when=" + when + ", location=" + location + ", owner=" + owner + ", participants=" + participants
-				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", recurrence=" + recurrence
+				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", metadata=" + metadata + ", recurrence=" + recurrence
 				+ ", master_event_id=" + master_event_id + ", original_start_time=" + getOriginalStartTime() + "]";
 	}
 
@@ -134,6 +139,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.busy = busy;
 	}
 
+	public void setMetadata(Map<String, String> metadata) {
+		this.metadata = metadata;
+	}
+
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
 	}
@@ -150,6 +159,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "location", getLocation());
 		Maps.putIfNotNull(params, "participants", getParticipants());
 		Maps.putIfNotNull(params, "busy", getBusy());
+		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		return params;
 	}

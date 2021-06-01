@@ -1,6 +1,9 @@
 package com.nylas;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.HttpUrl;
 
@@ -17,6 +20,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	private Instant startsAfter;
 	private Instant endsBefore;
 	private Instant endsAfter;
+	private List<String> metadataKeys;
+	private List<String> metadataValues;
+	private List<String> metadataPairs;
 
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
@@ -54,6 +60,21 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		}
 		if (endsAfter != null) {
 			url.addQueryParameter("ends_after", Instants.formatEpochSecond(endsAfter));
+		}
+		if (metadataKeys != null) {
+			for(String key : metadataKeys) {
+				url.addQueryParameter("metadata_key", key);
+			}
+		}
+		if (metadataValues != null) {
+			for(String value : metadataValues) {
+				url.addQueryParameter("metadata_value", value);
+			}
+		}
+		if (metadataPairs != null) {
+			for(String value : metadataPairs) {
+				url.addQueryParameter("metadata_pair", value);
+			}
 		}
 	}
 	
@@ -111,5 +132,49 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		this.endsAfter = endsAfter;
 		return this;
 	}
-	
+
+	/**
+	 * Return events with metadata containing a property having the given key.
+	 * 
+	 * If multiple instances of metadata methods are invoked
+	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
+	 * then this query will return events which match ANY one of them.  
+	 */
+	public EventQuery metadataKey(String... metadataKey) {
+		if (this.metadataKeys == null) {
+			this.metadataKeys = new ArrayList<>();
+		}
+		this.metadataKeys.addAll(Arrays.asList(metadataKey));
+		return this;
+	}
+
+	/**
+	 * Return events with metadata containing a property having the given value.
+	 * 
+	 * If multiple instances of metadata methods are invoked
+	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
+	 * then this query will return events which match ANY one of them.  
+ 	*/
+	public EventQuery metadataValue(String... metadataValue) {
+		if (this.metadataValues == null) {
+			this.metadataValues = new ArrayList<>();
+		}
+		this.metadataValues.addAll(Arrays.asList(metadataValue));
+		return this;
+	}
+
+	/**
+	 * Return events with metadata containing a property having the given key-value pair.
+	 * 
+	 * If multiple instances of metadata methods are invoked
+	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
+	 * then this query will return events which match ANY one of them.  
+	 */
+	public EventQuery metadataPair(String key, String value) {
+		if (this.metadataPairs == null) {
+			this.metadataPairs = new ArrayList<>();
+		}
+		this.metadataPairs.add(key + ":" + value);
+		return this;
+	}
 }
