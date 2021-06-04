@@ -6,7 +6,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.nylas.Calendar;
 import com.nylas.Event;
@@ -53,7 +55,7 @@ public class EventsExample {
 				.startsAfter(Instant.now())
 				.startsBefore(Instant.now().plus(30, ChronoUnit.DAYS ))
 				.limit(50);
-		
+
 		for (Event event : events.list(query)) {
 			System.out.println("event: " + event);
 		}
@@ -95,6 +97,11 @@ public class EventsExample {
 		created.setLocation("Lake Merritt");
 		created.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
 		created.setRecurrence(new Recurrence(startTz.getId(), Arrays.asList("RRULE:FREQ=WEEKLY;BYDAY=TH")));
+
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("event_category", "gathering");
+		created.setMetadata(metadata);
+
 		Event updated = events.update(created, true);
 		System.out.println("Updated: " + updated);
 		
