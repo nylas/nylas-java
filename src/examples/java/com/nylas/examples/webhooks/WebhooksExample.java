@@ -35,6 +35,7 @@ public class WebhooksExample {
 				"message.created",
 				"message.opened",
 				"message.link_clicked",
+				"message.bounced",
 				"thread.replied",
 				"contact.created",
 				"contact.updated",

@@ -150,6 +150,13 @@ public class Notification {
 	public static class Attributes {
 		private String received_date;
 		private String thread_id;
+
+		// message.bounced specific fields
+		private String message_id;
+		private String original_message_id;
+		private String original_thread_id;
+		private String bounce_reason;
+		private String bounce_diagnostic;
 		
 		/**
 		 * A timestamp indicating when the message was originally received.
@@ -165,9 +172,46 @@ public class Notification {
 			return thread_id;
 		}
 
+		/**
+		 * The message ID of the bounce reply message
+		 */
+		public String getMessageId() {
+			return message_id;
+		}
+
+		/**
+		 * The message ID of the email that was actually bounced
+		 */
+		public String getOriginalMessageId() {
+			return original_message_id;
+		}
+
+		/**
+		 * The thread ID that the bounced message belonged to
+		 */
+		public String getOriginalThreadId() {
+			return original_thread_id;
+		}
+
+		/**
+		 * The reason for the bounce parsed directly from the bounce reply
+		 */
+		public String getBounceReason() {
+			return bounce_reason;
+		}
+
+		/**
+		 * The detailed error message parsed directly from the bounce reply
+		 */
+		public String getBounceDiagnostic() {
+			return bounce_diagnostic;
+		}
+
 		@Override
 		public String toString() {
-			return "Attributes [receivedDate=" + received_date + ", threadId=" + thread_id + "]";
+			return "Attributes [receivedDate=" + received_date + ", threadId=" + thread_id + ", messageId=" + message_id
+					+ ", originalMessageId=" + original_message_id + ", originalThreadId=" + original_thread_id
+					+ ", bounceReason=" + bounce_reason + ", bounceDiagnostic=" + bounce_diagnostic + "]";
 		}
 	}
 	
