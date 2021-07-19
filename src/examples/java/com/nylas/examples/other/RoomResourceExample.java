@@ -9,15 +9,15 @@ import com.nylas.examples.ExampleConf;
 import java.util.List;
 
 public class RoomResourceExample {
-    public static void main(String[] args) throws Exception {
-        ExampleConf conf = new ExampleConf();
-        NylasClient client = new NylasClient();
-        NylasAccount account = client.account(conf.get("access.token"));
+	public static void main(String[] args) throws Exception {
+		ExampleConf conf = new ExampleConf();
+		NylasClient client = new NylasClient();
+		NylasAccount account = client.account(conf.get("access.token"));
 
-        RoomResources roomResource = account.roomResources();
-        List<RoomResource> roomResourceList = roomResource.list();
-        for(RoomResource resource : roomResourceList) {
-            System.out.println(resource);
-        }
-    }
+		RoomResources roomResource = account.roomResources();
+		List<RoomResource> roomResourceList = roomResource.list();
+		for(RoomResource resource : roomResourceList) {
+			System.out.println(resource);
+		}
+	}
 }
