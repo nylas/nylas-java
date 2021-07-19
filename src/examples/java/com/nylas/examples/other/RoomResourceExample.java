@@ -15,7 +15,7 @@ public class RoomResourceExample {
         NylasAccount account = client.account(conf.get("access.token"));
 
         RoomResources roomResource = account.roomResources();
-        List<RoomResource> roomResourceList = roomResource.list().fetchAll();
+        List<RoomResource> roomResourceList = roomResource.list();
         for(RoomResource resource : roomResourceList) {
             System.out.println(resource);
         }

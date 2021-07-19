@@ -1,18 +1,28 @@
 package com.nylas;
 
-import java.io.IOException;
+import okhttp3.HttpUrl;
 
-public class RoomResources extends RestfulDAO<RoomResource> {
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
+
+public class RoomResources {
+	protected final String resourcesPath = "resources";
+	protected final NylasClient client;
+	protected final String accessToken;
 
 	RoomResources(NylasClient client, String accessToken) {
-		super(client, RoomResource.class, "resources", accessToken);
+		this.client = client;
+		this.accessToken = accessToken;
 	}
 
 	/**
 	 * Lists all the room resources associated with the account.
 	 * Note that currently this is the only operation that room resources supports
 	 */
-	public RemoteCollection<RoomResource> list() throws IOException, RequestFailedException {
-		return list(new RoomResourceQuery());
+	public List<RoomResource> list() throws IOException, RequestFailedException {
+		HttpUrl.Builder url = client.newUrlBuilder().addPathSegment(resourcesPath);
+		Type listType = JsonHelper.listTypeOf(RoomResource.class);
+		return client.executeGet(accessToken, url, listType);
 	}
 }

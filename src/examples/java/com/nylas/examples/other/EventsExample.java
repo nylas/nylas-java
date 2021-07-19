@@ -133,11 +133,4 @@ public class EventsExample {
 		}
 	}
 
-	protected static void fetchRoomResources(Events events) throws IOException, RequestFailedException {
-		List<RoomResource> resources = events.roomResources();
-		for (RoomResource resource : resources) {
-			System.out.println(resource);
-		}
-	}
-
 }
