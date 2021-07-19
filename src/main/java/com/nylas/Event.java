@@ -175,6 +175,14 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			this.rrule = rrule;
 		}
 		
+		public String getTimezone() {
+			return timezone;
+		}
+
+		public List<String> getRrule() {
+			return rrule;
+		}
+
 		@Override
 		public String toString() {
 			return "Recurrence [timezone=" + timezone + ", rrule=" + rrule + "]";
