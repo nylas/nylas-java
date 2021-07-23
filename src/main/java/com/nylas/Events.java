@@ -83,10 +83,4 @@ public class Events extends RestfulDAO<Event> {
 	private static Map<String, String> getExtraQueryParams(boolean notifyParticipants) {
 		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : null;
 	}
-	
-	public List<RoomResource> roomResources() throws IOException, RequestFailedException {
-		HttpUrl.Builder url = client.newUrlBuilder().addPathSegment("resources");
-		Type listType = JsonHelper.listTypeOf(RoomResource.class);
-		return client.executeGet(authUser, url, listType);
-	}
 }

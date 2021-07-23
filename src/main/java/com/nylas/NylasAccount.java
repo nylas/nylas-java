@@ -65,6 +65,10 @@ public class NylasAccount {
 	public JobStatuses jobStatuses() {
 		return new JobStatuses(client, accessToken);
 	}
+
+	public RoomResources roomResources() {
+		return new RoomResources(client, accessToken);
+	}
 	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");
