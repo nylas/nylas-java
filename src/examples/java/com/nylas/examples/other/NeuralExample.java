@@ -33,6 +33,9 @@ public class NeuralExample {
 		Contact contact = extractSignature.get(0).getContacts().toContactObject();
 		System.out.println(contact);
 
+		NeuralMessageOptions options = new NeuralMessageOptions(true, false, true, false, true);
+		extractSignature = neural.extractSignature(new String[]{ email.getId() }, true, options);
+
 		// OCR
 		NeuralOcr ocr = neural.ocrRequest( email.getFiles().get(0).getId() );
 		System.out.println(ocr);
