@@ -248,6 +248,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			return Instant.ofEpochSecond(time);
 		}
 
+		public String getTimezone() {
+			return timezone;
+		}
+
 		@Override
 		public String getObjectType() {
 			return "time";
@@ -331,11 +335,19 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			return Instant.ofEpochSecond(start_time);
 		}
 
+		public String getStartTimezone() {
+			return start_timezone;
+		}
+
 		/**
 		 * Get the end time as an Instant, without timezone information
 		 */
 		public Instant getEndTime() {
 			return Instant.ofEpochSecond(end_time);
+		}
+
+		public String getEndTimezone() {
+			return end_timezone;
 		}
 
 		@Override
