@@ -1,15 +1,8 @@
 package com.nylas;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class NeuralCleanConversation extends Message {
 	private String conversation;
 	private String model_version;
-	private static final Pattern imagePattern = Pattern.compile("[(']cid:(.)*[)']");
 
 	public String getConversation() {
 		return conversation;
@@ -17,22 +10,6 @@ public class NeuralCleanConversation extends Message {
 
 	public String getModelVersion() {
 		return model_version;
-	}
-
-	public List<File> extractImages(NylasAccount account) throws RequestFailedException, IOException {
-		List<File> fileList = new ArrayList<>();
-		if(conversation != null) {
-			// After applying the regex, if there are IDs found they would be
-			// in the form of => 'cid:xxxx' (including apostrophes), so we discard
-			// everything before and after the file ID (denoted as xxxx above)
-			Matcher fileIdMatcher = imagePattern.matcher(conversation);
-			while (fileIdMatcher.find()) {
-				String match = fileIdMatcher.group();
-				String fileId = match.substring(5, match.length() - 1);
-				fileList.add(account.files().get(fileId));
-			}
-		}
-		return fileList;
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import com.nylas.examples.ExampleConf;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,6 +55,6 @@ public class NeuralExample {
 		List<NeuralCleanConversation> cleanConversations = neural
 				.cleanConversation(new ArrayList<>(Collections.singletonList(email.getId())));
 		System.out.println(cleanConversations);
-		cleanConversations.get(0).extractImages(account);
+		neural.extractImages(cleanConversations.get(0));
 	}
 }

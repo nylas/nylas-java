@@ -4,16 +4,19 @@ import okhttp3.HttpUrl;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Neural {
 	protected final String neuralPath = "neural";
+	protected final NylasAccount account;
 	protected final NylasClient client;
 	protected final String accessToken;
+	private static final Pattern imagePattern = Pattern.compile("[(']cid:(.)*[)']");
 
-	public Neural(NylasClient client, String accessToken) {
+	public Neural(NylasAccount account, NylasClient client, String accessToken) {
+		this.account = account;
 		this.client = client;
 		this.accessToken = accessToken;
 	}
@@ -57,7 +60,7 @@ public class Neural {
 		return neuralRequest("ocr", body, NeuralOcr.class);
 	}
 
-	public List<NeuralCleanConversation> cleanConversation(String[] messageIds)
+	public List<NeuralCleanConversation> cleanConversation(List<String> messageIds)
 			throws RequestFailedException, IOException {
 		return cleanConversation(messageIds, null);
 	}
@@ -76,6 +79,22 @@ public class Neural {
 		}
 		Type listType = JsonHelper.listTypeOf(NeuralCleanConversation.class);
 		return neuralRequest("conversation", body, listType);
+	}
+
+	public List<File> extractImages(NeuralCleanConversation neuralCleanConversation) throws RequestFailedException, IOException {
+		List<File> fileList = new ArrayList<>();
+		if(neuralCleanConversation.getConversation() != null) {
+			// After applying the regex, if there are IDs found they would be
+			// in the form of => 'cid:xxxx' (including apostrophes), so we discard
+			// everything before and after the file ID (denoted as xxxx above)
+			Matcher fileIdMatcher = imagePattern.matcher(neuralCleanConversation.getConversation());
+			while (fileIdMatcher.find()) {
+				String match = fileIdMatcher.group();
+				String fileId = match.substring(5, match.length() - 1);
+				fileList.add(account.files().get(fileId));
+			}
+		}
+		return fileList;
 	}
 
 	private <T> T neuralRequest(String path, Map<String, Object> body, Type modelClass)

@@ -71,7 +71,7 @@ public class NylasAccount {
 	}
 
 	public Neural neural() {
-		return new Neural(client, accessToken);
+		return new Neural(this, client, accessToken);
   }
 	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
