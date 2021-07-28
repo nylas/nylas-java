@@ -18,7 +18,7 @@ public class Neural {
 		this.accessToken = accessToken;
 	}
 
-	public List<NeuralSentimentAnalysis> sentimentAnalysisMessage(String[] messageIds)
+	public List<NeuralSentimentAnalysis> sentimentAnalysisMessage(List<String> messageIds)
 			throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
 		body.put("message_id", messageIds);
@@ -32,12 +32,12 @@ public class Neural {
 		return neuralRequest("sentiment", body, NeuralSentimentAnalysis.class);
 	}
 
-	public List<NeuralSignatureExtraction> extractSignature(String[] messageIds)
+	public List<NeuralSignatureExtraction> extractSignature(List<String> messageIds)
 			throws RequestFailedException, IOException {
 		return extractSignature(messageIds, null);
 	}
 
-	public List<NeuralSignatureExtraction> extractSignature(String[] messageIds, NeuralMessageOptions options)
+	public List<NeuralSignatureExtraction> extractSignature(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
 		body.put("message_id", messageIds);
@@ -62,7 +62,7 @@ public class Neural {
 		return cleanConversation(messageIds, null);
 	}
 
-	public List<NeuralCleanConversation> cleanConversation(String[] messageIds, NeuralMessageOptions options)
+	public List<NeuralCleanConversation> cleanConversation(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
 		body.put("message_id", messageIds);

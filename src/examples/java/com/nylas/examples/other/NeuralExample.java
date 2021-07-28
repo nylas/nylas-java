@@ -4,6 +4,9 @@ import com.nylas.*;
 import com.nylas.examples.ExampleConf;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class NeuralExample {
@@ -21,7 +24,8 @@ public class NeuralExample {
 		Message email = emails.get(0);
 
 		// Sentiment Analysis
-		List<NeuralSentimentAnalysis> messageAnalysis = neural.sentimentAnalysisMessage(new String[]{ email.getId() });
+		List<NeuralSentimentAnalysis> messageAnalysis = neural
+				.sentimentAnalysisMessage(new ArrayList<>(Collections.singletonList(email.getId())));
 		System.out.println(messageAnalysis.get(0));
 
 		NeuralSentimentAnalysis textAnalysis = neural
@@ -29,7 +33,8 @@ public class NeuralExample {
 		System.out.println(textAnalysis);
 
 		// Signature Extraction
-		List<NeuralSignatureExtraction> extractSignature = neural.extractSignature(new String[]{ email.getId() });
+		List<NeuralSignatureExtraction> extractSignature = neural
+				.extractSignature(new ArrayList<>(Collections.singletonList(email.getId())));
 		System.out.println(extractSignature.get(0));
 		Contact contact = extractSignature.get(0).getContacts().toContactObject();
 		System.out.println(contact);
@@ -41,14 +46,15 @@ public class NeuralExample {
 				.removeConclusionPhrases(false)
 				.imagesAsMarkdown(true)
 				.parseContacts(false);
-		extractSignature = neural.extractSignature(new String[]{ email.getId() }, options);
+		extractSignature = neural.extractSignature(new ArrayList<>(Collections.singletonList(email.getId())), options);
 
 		// OCR
 		NeuralOcr ocr = neural.ocrRequest( email.getFiles().get(0).getId() );
 		System.out.println(ocr);
 
 		// Clean Conversations
-		List<NeuralCleanConversation> cleanConversations = neural.cleanConversation(new String[]{ email.getId() });
+		List<NeuralCleanConversation> cleanConversations = neural
+				.cleanConversation(new ArrayList<>(Collections.singletonList(email.getId())));
 		System.out.println(cleanConversations);
 		cleanConversations.get(0).extractImages(account);
 	}
