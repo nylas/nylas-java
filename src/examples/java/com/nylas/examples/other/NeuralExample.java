@@ -50,6 +50,8 @@ public class NeuralExample {
 		// OCR
 		NeuralOcr ocr = neural.ocrRequest( email.getFiles().get(0).getId() );
 		System.out.println(ocr);
+		ocr = neural.ocrRequest( email.getFiles().get(0).getId(), 2, 3 );
+		System.out.println(ocr);
 
 		// Clean Conversations
 		List<NeuralCleanConversation> cleanConversations = neural
