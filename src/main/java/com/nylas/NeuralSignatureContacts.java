@@ -30,6 +30,10 @@ public class NeuralSignatureContacts {
 		return emails;
 	}
 
+	/**
+	 * Creates a Nylas contact object compatible with the contact endpoints.
+	 * Please note if multiple names were parsed only the first set are used.
+	 */
 	public Contact toContactObject() {
 		Contact contact = new Contact();
 
