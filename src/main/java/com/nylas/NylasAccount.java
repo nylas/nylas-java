@@ -53,7 +53,7 @@ public class NylasAccount {
 	public Events events() {
 		return new Events(client, accessToken);
 	}
-	
+
 	public Contacts contacts() {
 		return new Contacts(client, accessToken);
 	}
@@ -65,12 +65,12 @@ public class NylasAccount {
 	public JobStatuses jobStatuses() {
 		return new JobStatuses(client, accessToken);
 	}
-  
+
 	public RoomResources roomResources() {
 		return new RoomResources(client, accessToken);
 	}
-  
-  public Neural neural() {
+
+	public Neural neural() {
 		return new Neural(client, accessToken);
   }
 	
