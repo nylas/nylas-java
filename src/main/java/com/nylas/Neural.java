@@ -37,12 +37,10 @@ public class Neural {
 		return extractSignature(messageIds, null);
 	}
 
-	public List<NeuralSignatureExtraction> extractSignature(String[] messageIds, Boolean parseContact, NeuralMessageOptions options) throws RequestFailedException, IOException {
+	public List<NeuralSignatureExtraction> extractSignature(String[] messageIds, NeuralMessageOptions options)
+			throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
 		body.put("message_id", messageIds);
-		if(parseContact != null) {
-			body.put("parse_contact", parseContact);
-		}
 		if(options != null) {
 			body.putAll(options.toMap());
 		}
@@ -74,6 +72,11 @@ public class Neural {
 		body.put("message_id", messageIds);
 		if(options != null) {
 			body.putAll(options.toMap());
+
+			// Remove parse_contacts key as this option is only for signature extraction
+			if(body.get("parse_contacts") != null) {
+				body.remove("parse_contacts");
+			}
 		}
 		Type listType = JsonHelper.listTypeOf(NeuralCleanConversation.class);
 		return neuralRequest("conversation", body, listType);
