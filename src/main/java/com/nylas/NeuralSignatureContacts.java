@@ -3,10 +3,10 @@ package com.nylas;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeuralSignatureContact {
+public class NeuralSignatureContacts {
 	private List<String> job_titles;
-	private List<Links> links;
-	private List<Names> names;
+	private List<Link> links;
+	private List<Name> names;
 	private List<String> phone_numbers;
 	private List<String> emails;
 
@@ -14,11 +14,11 @@ public class NeuralSignatureContact {
 		return job_titles;
 	}
 
-	public List<Links> getLinks() {
+	public List<Link> getLinks() {
 		return links;
 	}
 
-	public List<Names> getNames() {
+	public List<Name> getNames() {
 		return names;
 	}
 
@@ -56,7 +56,7 @@ public class NeuralSignatureContact {
 		}
 		if(links != null) {
 			List<Contact.WebPage> webPageList = new ArrayList<>();
-			for(Links link : links) {
+			for(Link link : links) {
 				String description = link.getDescription() != null && !link.getDescription().isEmpty() ?
 						link.getDescription() : "homepage";
 				webPageList.add(new Contact.WebPage(description, link.getUrl()));
@@ -69,12 +69,12 @@ public class NeuralSignatureContact {
 
 	@Override
 	public String toString() {
-		return String.format("NeuralSignatureContact [job_titles=%s, links=%s, names=%s, phone_numbers=%s, emails=%s]",
+		return String.format("NeuralSignatureContacts [job_titles=%s, links=%s, names=%s, phone_numbers=%s, emails=%s]",
 				job_titles, links, names, phone_numbers, emails);
 	}
 }
 
-class Names {
+class Name {
 	private String first_name;
 	private String last_name;
 
@@ -88,12 +88,12 @@ class Names {
 
 	@Override
 	public String toString() {
-		return String.format("Names [first_name=%s, last_name=%s]",
+		return String.format("Name [first_name=%s, last_name=%s]",
 				first_name, last_name);
 	}
 }
 
-class Links {
+class Link {
 	private String description;
 	private String url;
 
@@ -107,7 +107,7 @@ class Links {
 
 	@Override
 	public String toString() {
-		return String.format("Links [description=%s, url=%s]",
+		return String.format("Link [description=%s, url=%s]",
 				description, url);
 	}
 }

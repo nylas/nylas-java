@@ -3,7 +3,7 @@ package com.nylas;
 public class NeuralSignatureExtraction extends Message {
 	private String signature;
 	private String model_version;
-	private NeuralSignatureContact contacts;
+	private NeuralSignatureContacts contacts;
 
 	public String getSignature() {
 		return signature;
@@ -13,7 +13,7 @@ public class NeuralSignatureExtraction extends Message {
 		return model_version;
 	}
 
-	public NeuralSignatureContact getContacts() {
+	public NeuralSignatureContacts getContacts() {
 		return contacts;
 	}
 
