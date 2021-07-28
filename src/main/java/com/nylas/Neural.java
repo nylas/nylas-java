@@ -48,15 +48,11 @@ public class Neural {
 		return neuralRequest("signature", body, listType);
 	}
 
-	public NeuralOcr ocrRequest(String fileId) throws RequestFailedException, IOException {
-		return ocrRequest(fileId, null);
-	}
-
-	public NeuralOcr ocrRequest(String fileId, int[] range) throws RequestFailedException, IOException {
+	public NeuralOcr ocrRequest(String fileId, int... pages) throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
 		body.put("file_id", fileId);
-		if(range != null) {
-			body.put("range", range);
+		if(pages != null) {
+			body.put("pages", pages);
 		}
 		return neuralRequest("ocr", body, NeuralOcr.class);
 	}
