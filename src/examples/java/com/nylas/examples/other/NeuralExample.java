@@ -39,7 +39,7 @@ public class NeuralExample {
 				.ignoreTables(false)
 				.ignoreLinks(true)
 				.removeConclusionPhrases(false)
-				.imagesAsMarkdowns(true)
+				.imagesAsMarkdown(true)
 				.parseContacts(false);
 		extractSignature = neural.extractSignature(new String[]{ email.getId() }, options);
 

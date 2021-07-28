@@ -8,7 +8,7 @@ public class NeuralMessageOptions {
 	private boolean ignore_images;
 	private boolean ignore_tables;
 	private boolean remove_conclusion_phrases;
-	private boolean images_as_markdowns;
+	private boolean images_as_markdown;
 
 	// Neural Signature Contact specific options
 	private boolean parse_contacts;
@@ -33,8 +33,8 @@ public class NeuralMessageOptions {
 		return this;
 	}
 
-	public NeuralMessageOptions imagesAsMarkdowns(boolean imagesAsMarkdowns) {
-		images_as_markdowns = imagesAsMarkdowns;
+	public NeuralMessageOptions imagesAsMarkdown(boolean imagesAsMarkdown) {
+		images_as_markdown = imagesAsMarkdown;
 		return this;
 	}
 
@@ -49,7 +49,7 @@ public class NeuralMessageOptions {
 		Maps.putIfNotNull(map, "ignore_images", ignore_images);
 		Maps.putIfNotNull(map, "ignore_tables", ignore_tables);
 		Maps.putIfNotNull(map, "remove_conclusion_phrases", remove_conclusion_phrases);
-		Maps.putIfNotNull(map, "images_as_markdowns", images_as_markdowns);
+		Maps.putIfNotNull(map, "images_as_markdown", images_as_markdown);
 		Maps.putIfNotNull(map, "parse_contacts", parse_contacts);
 		return map;
 	}
