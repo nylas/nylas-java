@@ -11,40 +11,20 @@ public class NeuralSentimentAnalysis {
 		return account_id;
 	}
 
-	public void setAccountId(String accountId) {
-		this.account_id = accountId;
-	}
-
 	public String getSentiment() {
 		return sentiment;
-	}
-
-	public void setSentiment(String sentiment) {
-		this.sentiment = sentiment;
 	}
 
 	public double getSentimentScore() {
 		return sentiment_score;
 	}
 
-	public void setSentimentScore(double sentimentScore) {
-		this.sentiment_score = sentimentScore;
-	}
-
 	public int getProcessedLength() {
 		return processed_length;
 	}
 
-	public void setProcessedLength(int processedLength) {
-		this.processed_length = processedLength;
-	}
-
 	public String getText() {
 		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
 	}
 
 	@Override

@@ -10,16 +10,8 @@ public class NeuralOcr extends File {
 		return ocr;
 	}
 
-	public void setOcr(List<String> ocr) {
-		this.ocr = ocr;
-	}
-
 	public int getProcessedPages() {
 		return processed_pages;
-	}
-
-	public void setProcessedPages(int processedPages) {
-		this.processed_pages = processedPages;
 	}
 
 	@Override

@@ -14,40 +14,20 @@ public class NeuralSignatureContact {
 		return job_titles;
 	}
 
-	public void setJobTitles(List<String> jobTitles) {
-		this.job_titles = jobTitles;
-	}
-
 	public List<Links> getLinks() {
 		return links;
-	}
-
-	public void setLinks(List<Links> links) {
-		this.links = links;
 	}
 
 	public List<Names> getNames() {
 		return names;
 	}
 
-	public void setNames(List<Names> names) {
-		this.names = names;
-	}
-
 	public List<String> getPhoneNumbers() {
 		return phone_numbers;
 	}
 
-	public void setPhoneNumbers(List<String> phoneNumbers) {
-		this.phone_numbers = phoneNumbers;
-	}
-
 	public List<String> getEmails() {
 		return emails;
-	}
-
-	public void setEmails(List<String> emails) {
-		this.emails = emails;
 	}
 
 	public Contact toContactObject() {

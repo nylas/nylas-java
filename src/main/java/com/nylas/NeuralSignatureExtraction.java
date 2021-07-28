@@ -9,24 +9,12 @@ public class NeuralSignatureExtraction extends Message {
 		return signature;
 	}
 
-	public void setSignature(String signature) {
-		this.signature = signature;
-	}
-
 	public String getModelVersion() {
 		return model_version;
 	}
 
-	public void setModelVersion(String modelVersion) {
-		this.model_version = modelVersion;
-	}
-
 	public NeuralSignatureContact getContacts() {
 		return contacts;
-	}
-
-	public void setContacts(NeuralSignatureContact contacts) {
-		this.contacts = contacts;
 	}
 
 	@Override

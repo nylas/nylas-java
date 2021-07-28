@@ -14,16 +14,8 @@ public class NeuralCleanConversation extends Message {
 		return conversation;
 	}
 
-	public void setConversation(String conversation) {
-		this.conversation = conversation;
-	}
-
 	public String getModelVersion() {
 		return model_version;
-	}
-
-	public void setModelVersion(String modelVersion) {
-		this.model_version = modelVersion;
 	}
 
 	public List<File> extractImages(NylasAccount account) throws RequestFailedException, IOException {
