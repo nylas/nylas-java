@@ -24,7 +24,8 @@ public class NeuralExample {
 		List<NeuralSentimentAnalysis> messageAnalysis = neural.sentimentAnalysisMessage(new String[]{ email.getId() });
 		System.out.println(messageAnalysis.get(0));
 
-		NeuralSentimentAnalysis textAnalysis = neural.sentimentAnalysisText("Hi, thank you so much for reaching out! We can catch up tomorrow.");
+		NeuralSentimentAnalysis textAnalysis = neural
+				.sentimentAnalysisText("Hi, thank you so much for reaching out! We can catch up tomorrow.");
 		System.out.println(textAnalysis);
 
 		// Signature Extraction
