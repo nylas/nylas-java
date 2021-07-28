@@ -11,7 +11,7 @@ This section contains changes that have been committed but not yet released.
 - Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair`]
 - Add support for new `RoomResource` fields
 - Add missing getters for Event.Recurrence fields
-- Add Neural API support
+- Add support for Neural API Sentiment Analysis, OCR, Signature Extraction, and Clean Conversations
 
 ### Changed
 
