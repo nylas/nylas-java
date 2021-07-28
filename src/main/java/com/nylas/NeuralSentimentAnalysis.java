@@ -3,7 +3,7 @@ package com.nylas;
 public class NeuralSentimentAnalysis {
 	private String account_id;
 	private String sentiment;
-	private float sentiment_score;
+	private double sentiment_score;
 	private int processed_length;
 	private String text;
 
@@ -23,11 +23,11 @@ public class NeuralSentimentAnalysis {
 		this.sentiment = sentiment;
 	}
 
-	public float getSentimentScore() {
+	public double getSentimentScore() {
 		return sentiment_score;
 	}
 
-	public void setSentimentScore(float sentimentScore) {
+	public void setSentimentScore(double sentimentScore) {
 		this.sentiment_score = sentimentScore;
 	}
 
