@@ -150,6 +150,12 @@ publishing {
                         organization = "Nylas"
                         organizationUrl = "https://www.nylas.com/"
                     }
+                    developer {
+                        id = "mrashed-dev"
+                        name = "Mostafa Rashed"
+                        organization = "Nylas"
+                        organizationUrl = "https://www.nylas.com/"
+                    }
                 }
                 scm {
                     url = "https://github.com/nylas/nylas-java"

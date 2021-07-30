@@ -6,13 +6,6 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Enabled support for Nylas API v2.2
-- Add Event Metadata support
-- Add support for new `RoomResource` fields
-- Add missing getters for Event.Recurrence fields
-- Add support for Neural API Sentiment Analysis, OCR, Signature Extraction, and Clean Conversations
-- Add getters for Time.timezone, Timespan.start_timezone, Timespan.end_timezone
-
 ### Changed
 
 ### Deprecated
@@ -22,6 +15,17 @@ This section contains changes that have been committed but not yet released.
 ### Removed
 
 ### Security
+
+## [1.8.0] - Released 2021-07-30
+
+### Added
+
+- Enabled support for Nylas API v2.2
+- Add Event Metadata support
+- Add support for new `RoomResource` fields
+- Add missing getters for Event.Recurrence fields
+- Add support for Neural API Sentiment Analysis, OCR, Signature Extraction, and Clean Conversations
+- Add getters for Time.timezone, Timespan.start_timezone, Timespan.end_timezone
 
 ## [1.7.0] - Released 2021-05-19
 
