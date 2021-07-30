@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NeuralMessageOptions {
-	private boolean ignore_links;
-	private boolean ignore_images;
-	private boolean ignore_tables;
-	private boolean remove_conclusion_phrases;
-	private boolean images_as_markdown;
+	private Boolean ignore_links;
+	private Boolean ignore_images;
+	private Boolean ignore_tables;
+	private Boolean remove_conclusion_phrases;
+	private Boolean images_as_markdown;
 
 	// Neural Signature Contact specific options
 	private boolean parse_contacts;
