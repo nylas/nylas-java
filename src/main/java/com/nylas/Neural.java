@@ -20,6 +20,10 @@ public class Neural {
 		this.accessToken = accessToken;
 	}
 
+	/**
+	 * Performs sentiment analysis on a list of messages
+	 * Learn more: https://developer.nylas.com/docs/intelligence/sentiment-analysis/
+	 */
 	public List<NeuralSentimentAnalysis> sentimentAnalysisMessage(List<String> messageIds)
 			throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
@@ -28,6 +32,10 @@ public class Neural {
 		return neuralRequest("sentiment", body, listType);
 	}
 
+	/**
+	 * Performs sentiment analysis on any string
+	 * Learn more: https://developer.nylas.com/docs/intelligence/sentiment-analysis/#analyze-text
+	 */
 	public NeuralSentimentAnalysis sentimentAnalysisText(String text) throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
 		body.put("text", text);
@@ -39,6 +47,11 @@ public class Neural {
 		return extractSignature(messageIds, null);
 	}
 
+	/**
+	 * Extracts signature and any contact information within from emails passed in
+	 * Options can be passed in to control what gets gets cleaned up in the signature
+	 * Learn more: https://developer.nylas.com/docs/intelligence/signature-extraction/
+	 */
 	public List<NeuralSignatureExtraction> extractSignature(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
@@ -50,6 +63,11 @@ public class Neural {
 		return neuralRequest("signature", body, listType);
 	}
 
+	/**
+	 * Performs optical character recognition on a file
+	 * Optionally page numbers can be specified to run OCR on
+	 * Learn more: https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/
+	 */
 	public NeuralOcr ocrRequest(String fileId, int... pages) throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
 		body.put("file_id", fileId);
@@ -64,6 +82,11 @@ public class Neural {
 		return cleanConversation(messageIds, null);
 	}
 
+	/**
+	 * Removes extra information from the email body
+	 * Options can be passed in to control what gets cleaned up in the body
+	 * Learn more: https://developer.nylas.com/docs/intelligence/clean-conversations/
+	 */
 	public List<NeuralCleanConversation> cleanConversation(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
@@ -80,6 +103,10 @@ public class Neural {
 		return neuralRequest("conversation", body, listType);
 	}
 
+	/**
+	 * Parses image file IDs found in the clean conversation object and returns
+	 * an array of File objects returned from the File API
+	 */
 	public List<File> extractImages(NeuralCleanConversation neuralCleanConversation) throws RequestFailedException, IOException {
 		List<File> fileList = new ArrayList<>();
 		if(neuralCleanConversation.getConversation() != null) {

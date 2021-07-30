@@ -32,7 +32,8 @@ public class NeuralSignatureContacts {
 
 	/**
 	 * Creates a Nylas contact object compatible with the contact endpoints.
-	 * Please note if multiple names were parsed only the first set are used.
+	 * Please note if multiple names or multiple job titles were parsed only
+	 * the first set are used.
 	 */
 	public Contact toContactObject() {
 		Contact contact = new Contact();
