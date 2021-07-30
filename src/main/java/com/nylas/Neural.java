@@ -22,7 +22,9 @@ public class Neural {
 
 	/**
 	 * Performs sentiment analysis on a list of messages
-	 * Learn more: https://developer.nylas.com/docs/intelligence/sentiment-analysis/
+	 * <p>
+	 * Learn more: <a href="">
+	 * https://developer.nylas.com/docs/intelligence/sentiment-analysis/</a>
 	 */
 	public List<NeuralSentimentAnalysis> sentimentAnalysisMessage(List<String> messageIds)
 			throws RequestFailedException, IOException {
@@ -34,7 +36,9 @@ public class Neural {
 
 	/**
 	 * Performs sentiment analysis on any string
-	 * Learn more: https://developer.nylas.com/docs/intelligence/sentiment-analysis/#analyze-text
+	 * <p>
+	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/sentiment-analysis/#analyze-text">
+	 * https://developer.nylas.com/docs/intelligence/sentiment-analysis/#analyze-text</a>
 	 */
 	public NeuralSentimentAnalysis sentimentAnalysisText(String text) throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
@@ -49,8 +53,11 @@ public class Neural {
 
 	/**
 	 * Extracts signature and any contact information within from emails passed in
+	 * <p>
 	 * Options can be passed in to control what gets gets cleaned up in the signature
-	 * Learn more: https://developer.nylas.com/docs/intelligence/signature-extraction/
+	 * <p>
+	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/signature-extraction/">
+	 * https://developer.nylas.com/docs/intelligence/signature-extraction/</a>
 	 */
 	public List<NeuralSignatureExtraction> extractSignature(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {
@@ -65,8 +72,11 @@ public class Neural {
 
 	/**
 	 * Performs optical character recognition on a file
+	 * <p>
 	 * Optionally page numbers can be specified to run OCR on
-	 * Learn more: https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/
+	 * <p>
+	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/">
+	 * https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/</a>
 	 */
 	public NeuralOcr ocrRequest(String fileId, int... pages) throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
@@ -84,8 +94,11 @@ public class Neural {
 
 	/**
 	 * Removes extra information from the email body
+	 * <p>
 	 * Options can be passed in to control what gets cleaned up in the body
-	 * Learn more: https://developer.nylas.com/docs/intelligence/clean-conversations/
+	 * <p>
+	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/clean-conversations/">
+	 * https://developer.nylas.com/docs/intelligence/clean-conversations/</a>
 	 */
 	public List<NeuralCleanConversation> cleanConversation(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {

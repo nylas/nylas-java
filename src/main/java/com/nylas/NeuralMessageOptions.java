@@ -5,10 +5,14 @@ import java.util.Map;
 
 /**
  * Object representing configuration options for some Neural endpoints
+ * <p>
  * Currently only signature extraction and clean conversations support these configurations
  *
- * https://developer.nylas.com/docs/intelligence/signature-extraction/#parse-signature-request
- * https://developer.nylas.com/docs/intelligence/clean-conversations/#clean-conversations-configuration
+ * <a href="https://developer.nylas.com/docs/intelligence/signature-extraction/#parse-signature-request">
+ * https://developer.nylas.com/docs/intelligence/signature-extraction/#parse-signature-request</a>
+ * <p>
+ * <a href="https://developer.nylas.com/docs/intelligence/clean-conversations/#clean-conversations-configuration">
+ * https://developer.nylas.com/docs/intelligence/clean-conversations/#clean-conversations-configuration</a>
  */
 public class NeuralMessageOptions {
 	private Boolean ignore_links;
