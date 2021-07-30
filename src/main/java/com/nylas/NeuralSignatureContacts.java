@@ -76,42 +76,42 @@ public class NeuralSignatureContacts {
 		return String.format("NeuralSignatureContacts [job_titles=%s, links=%s, names=%s, phone_numbers=%s, emails=%s]",
 				job_titles, links, names, phone_numbers, emails);
 	}
-}
 
-class Name {
-	private String first_name;
-	private String last_name;
+	public static class Name {
+		private String first_name;
+		private String last_name;
 
-	public String getFirstName() {
-		return first_name;
+		public String getFirstName() {
+			return first_name;
+		}
+
+		public String getLastName() {
+			return last_name;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("Name [first_name=%s, last_name=%s]",
+					first_name, last_name);
+		}
 	}
 
-	public String getLastName() {
-		return last_name;
-	}
+	public static class Link {
+		private String description;
+		private String url;
 
-	@Override
-	public String toString() {
-		return String.format("Name [first_name=%s, last_name=%s]",
-				first_name, last_name);
-	}
-}
+		public String getDescription() {
+			return description;
+		}
 
-class Link {
-	private String description;
-	private String url;
+		public String getUrl() {
+			return url;
+		}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("Link [description=%s, url=%s]",
-				description, url);
+		@Override
+		public String toString() {
+			return String.format("Link [description=%s, url=%s]",
+					description, url);
+		}
 	}
 }
