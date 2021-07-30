@@ -23,7 +23,7 @@ public class Neural {
 	/**
 	 * Performs sentiment analysis on a list of messages
 	 * <p>
-	 * Learn more: <a href="">
+	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/sentiment-analysis/">
 	 * https://developer.nylas.com/docs/intelligence/sentiment-analysis/</a>
 	 */
 	public List<NeuralSentimentAnalysis> sentimentAnalysisMessage(List<String> messageIds)
