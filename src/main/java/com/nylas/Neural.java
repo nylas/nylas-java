@@ -9,11 +9,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Neural {
-	protected final String neuralPath = "neural";
-	protected final NylasAccount account;
-	protected final NylasClient client;
-	protected final String accessToken;
-	private static final Pattern imagePattern = Pattern.compile("[(']cid:(.)*[)']");
+	private final NylasAccount account;
+	private final NylasClient client;
+	private final String accessToken;
+	private static final Pattern IMAGE_PATTERN = Pattern.compile("[(']cid:(.)*[)']");
 
 	public Neural(NylasAccount account, NylasClient client, String accessToken) {
 		this.account = account;
@@ -87,7 +86,7 @@ public class Neural {
 			// After applying the regex, if there are IDs found they would be
 			// in the form of => 'cid:xxxx' (including apostrophes), so we discard
 			// everything before and after the file ID (denoted as xxxx above)
-			Matcher fileIdMatcher = imagePattern.matcher(neuralCleanConversation.getConversation());
+			Matcher fileIdMatcher = IMAGE_PATTERN.matcher(neuralCleanConversation.getConversation());
 			while (fileIdMatcher.find()) {
 				String match = fileIdMatcher.group();
 				String fileId = match.substring(5, match.length() - 1);
@@ -99,7 +98,7 @@ public class Neural {
 
 	private <T> T neuralRequest(String path, Map<String, Object> body, Type modelClass)
 			throws IOException, RequestFailedException {
-		HttpUrl.Builder url = client.newUrlBuilder().addPathSegment(neuralPath).addPathSegment(path);
+		HttpUrl.Builder url = client.newUrlBuilder().addPathSegment("neural").addPathSegment(path);
 		return client.executePut(accessToken, url, body, modelClass);
 	}
 }
