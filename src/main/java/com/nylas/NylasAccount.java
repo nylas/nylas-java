@@ -53,7 +53,7 @@ public class NylasAccount {
 	public Events events() {
 		return new Events(client, accessToken);
 	}
-	
+
 	public Contacts contacts() {
 		return new Contacts(client, accessToken);
 	}
@@ -69,6 +69,10 @@ public class NylasAccount {
 	public RoomResources roomResources() {
 		return new RoomResources(client, accessToken);
 	}
+
+	public Neural neural() {
+		return new Neural(this, client, accessToken);
+  }
 	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");
