@@ -142,7 +142,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/nylas/nylas-java/releases/tag/v1.8.0
 [1.7.0]: https://github.com/nylas/nylas-java/releases/tag/v1.7.0
 [1.6.0]: https://github.com/nylas/nylas-java/releases/tag/v1.6.0
 [1.5.0]: https://github.com/nylas/nylas-java/releases/tag/v1.5.0
