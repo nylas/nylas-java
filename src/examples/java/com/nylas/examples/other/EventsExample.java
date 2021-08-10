@@ -93,15 +93,15 @@ public class EventsExample {
 		metadata.put("event_category", "gathering");
 		created.setMetadata(metadata);
 
-		EventConferencing conferencing = new EventConferencing();
+		Event.Conferencing conferencing = new Event.Conferencing();
 		conferencing.setProvider("Zoom Meeting");
-		EventConferencing.Details details = new EventConferencing.Details();
+		Event.Conferencing.Details details = new Event.Conferencing.Details();
 		details.setMeetingCode("213");
 		details.setPassword("xyz");
 		details.setUrl("https://us02web.zoom.us/j/****************");
 		details.setPhone(Collections.singletonList("+11234567890"));
 		conferencing.setDetails(details);
-		event.setConferencing(conferencing);
+		created.setConferencing(conferencing);
 
 		Event updated = events.update(created, true);
 		System.out.println("Updated: " + updated);
