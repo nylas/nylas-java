@@ -204,7 +204,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		private String provider;
 		private Details details;
 
-		/** For deserialiation only */ public Conferencing() {}
+		/** For deserialization only */ public Conferencing() {}
 
 		public String getProvider() {
 			return provider;
