@@ -25,6 +25,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private Boolean read_only;
 	private Boolean busy;
 	private Map<String, String> metadata;
+	private EventConferencing conferencing;
 	
 	private Recurrence recurrence;
 	
@@ -91,6 +92,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return metadata;
 	}
 
+	public EventConferencing getConferencing() {
+		return conferencing;
+	}
+
 	public Recurrence getRecurrence() {
 		return recurrence;
 	}
@@ -111,8 +116,9 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	public String toString() {
 		return "Event [id=" + getId() + ", calendar_id=" + calendar_id + ", ical_uid=" + ical_uid + ", title=" + title
 				+ ", when=" + when + ", location=" + location + ", owner=" + owner + ", participants=" + participants
-				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", metadata=" + metadata + ", recurrence=" + recurrence
-				+ ", master_event_id=" + master_event_id + ", original_start_time=" + getOriginalStartTime() + "]";
+				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", metadata=" + metadata
+				+ ", recurrence=" + recurrence + ", master_event_id=" + master_event_id + ", conferencing" + conferencing
+				+ ", original_start_time=" + getOriginalStartTime() + "]";
 	}
 
 	public void setTitle(String title) {
@@ -143,6 +149,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.metadata = metadata;
 	}
 
+	public void setConferencing(EventConferencing conferencing) {
+		this.conferencing = conferencing;
+	}
+
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
 	}
@@ -160,6 +170,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "participants", getParticipants());
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
+		Maps.putIfNotNull(params, "conferencing", getConferencing());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		return params;
 	}
