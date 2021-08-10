@@ -25,6 +25,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private Boolean read_only;
 	private Boolean busy;
 	private Map<String, String> metadata;
+	private Conferencing conferencing;
 	
 	private Recurrence recurrence;
 	
@@ -91,6 +92,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return metadata;
 	}
 
+	public Conferencing getConferencing() {
+		return conferencing;
+	}
+
 	public Recurrence getRecurrence() {
 		return recurrence;
 	}
@@ -111,8 +116,9 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	public String toString() {
 		return "Event [id=" + getId() + ", calendar_id=" + calendar_id + ", ical_uid=" + ical_uid + ", title=" + title
 				+ ", when=" + when + ", location=" + location + ", owner=" + owner + ", participants=" + participants
-				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", metadata=" + metadata + ", recurrence=" + recurrence
-				+ ", master_event_id=" + master_event_id + ", original_start_time=" + getOriginalStartTime() + "]";
+				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", metadata=" + metadata
+				+ ", recurrence=" + recurrence + ", master_event_id=" + master_event_id + ", conferencing" + conferencing
+				+ ", original_start_time=" + getOriginalStartTime() + "]";
 	}
 
 	public void setTitle(String title) {
@@ -143,6 +149,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.metadata = metadata;
 	}
 
+	public void setConferencing(Conferencing conferencing) {
+		this.conferencing = conferencing;
+	}
+
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
 	}
@@ -160,6 +170,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "participants", getParticipants());
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
+		Maps.putIfNotNull(params, "conferencing", getConferencing());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		return params;
 	}
@@ -188,7 +199,89 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			return "Recurrence [timezone=" + timezone + ", rrule=" + rrule + "]";
 		}
 	}
-	
+
+	public static class Conferencing {
+		private String provider;
+		private Details details;
+
+		/** For deserialization only */ public Conferencing() {}
+
+		public String getProvider() {
+			return provider;
+		}
+
+		public void setProvider(String provider) {
+			this.provider = provider;
+		}
+
+		public Details getDetails() {
+			return details;
+		}
+
+		public void setDetails(Details details) {
+			this.details = details;
+		}
+
+		@Override
+		public String toString() {
+			return "Conferencing [provider=" + provider + ", details=" + details + "]";
+		}
+
+		public static class Details {
+			private String url;
+			private String password;
+			private String pin;
+			private String meeting_code;
+			private List<String> phone;
+
+			public String getUrl() {
+				return url;
+			}
+
+			public void setUrl(String url) {
+				this.url = url;
+			}
+
+			public String getPassword() {
+				return password;
+			}
+
+			public void setPassword(String password) {
+				this.password = password;
+			}
+
+			public String getPin() {
+				return pin;
+			}
+
+			public void setPin(String pin) {
+				this.pin = pin;
+			}
+
+			public String getMeetingCode() {
+				return meeting_code;
+			}
+
+			public void setMeetingCode(String meetingCode) {
+				this.meeting_code = meetingCode;
+			}
+
+			public List<String> getPhone() {
+				return phone;
+			}
+
+			public void setPhone(List<String> phone) {
+				this.phone = phone;
+			}
+
+			@Override
+			public String toString() {
+				return String.format("Details [url=%s, password=%s, pin=%s, meeting_code=%s, phone=%s]",
+						url, password, pin, meeting_code, phone);
+			}
+		}
+	}
+
 	public static interface When extends JsonObject {}
 	
 	/**

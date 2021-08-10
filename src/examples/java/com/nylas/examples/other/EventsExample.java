@@ -6,23 +6,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.nylas.Calendar;
-import com.nylas.Event;
+import com.nylas.*;
 import com.nylas.Event.Recurrence;
 import com.nylas.Event.Time;
 import com.nylas.Event.Timespan;
-import com.nylas.EventQuery;
-import com.nylas.Events;
-import com.nylas.NylasAccount;
-import com.nylas.NylasClient;
-import com.nylas.Participant;
-import com.nylas.RemoteCollection;
-import com.nylas.RequestFailedException;
-import com.nylas.RoomResource;
 import com.nylas.examples.ExampleConf;
 
 public class EventsExample {
@@ -101,6 +92,16 @@ public class EventsExample {
 		Map<String, String> metadata = new HashMap<>();
 		metadata.put("event_category", "gathering");
 		created.setMetadata(metadata);
+
+		Event.Conferencing conferencing = new Event.Conferencing();
+		conferencing.setProvider("Zoom Meeting");
+		Event.Conferencing.Details details = new Event.Conferencing.Details();
+		details.setMeetingCode("213");
+		details.setPassword("xyz");
+		details.setUrl("https://us02web.zoom.us/j/****************");
+		details.setPhone(Collections.singletonList("+11234567890"));
+		conferencing.setDetails(details);
+		created.setConferencing(conferencing);
 
 		Event updated = events.update(created, true);
 		System.out.println("Updated: " + updated);
