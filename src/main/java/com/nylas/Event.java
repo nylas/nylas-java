@@ -203,6 +203,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	public static class Conferencing {
 		private String provider;
 		private Details details;
+		private Autocreate autocreate;
 
 		/** For deserialization only */ public Conferencing() {}
 
@@ -222,9 +223,18 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			this.details = details;
 		}
 
+		public Autocreate getAutocreate() {
+			return autocreate;
+		}
+
+		public void setAutocreate(Autocreate autocreate) {
+			this.autocreate = autocreate;
+		}
+
 		@Override
 		public String toString() {
-			return "Conferencing [provider=" + provider + ", details=" + details + "]";
+			return String.format("Conferencing [provider=%s, details=%s, autocreate=%s]",
+					provider, details, autocreate);
 		}
 
 		public static class Details {
@@ -278,6 +288,23 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			public String toString() {
 				return String.format("Details [url=%s, password=%s, pin=%s, meeting_code=%s, phone=%s]",
 						url, password, pin, meeting_code, phone);
+			}
+		}
+
+		public static class Autocreate {
+			private Map<String, String> settings;
+
+			public Map<String, String> getSettings() {
+				return settings;
+			}
+
+			public void setSettings(Map<String, String> settings) {
+				this.settings = settings;
+			}
+
+			@Override
+			public String toString() {
+				return String.format("Autocreate [settings=%s]", settings);
 			}
 		}
 	}
