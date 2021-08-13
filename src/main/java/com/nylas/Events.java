@@ -40,6 +40,11 @@ public class Events extends RestfulDAO<Event> {
 	}
 	
 	public Event create(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
+		if(event.getConferencing() != null
+				&& event.getConferencing().getAutocreate() != null
+				&& event.getConferencing().getDetails() != null) {
+			throw new IllegalArgumentException("Cannot set both 'details' and 'autocreate' in conferencing object.");
+		}
 		return super.create(event, getExtraQueryParams(notifyParticipants));
 	}
 	
