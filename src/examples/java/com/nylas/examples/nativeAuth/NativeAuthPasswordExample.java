@@ -63,7 +63,7 @@ public class NativeAuthPasswordExample {
 		return ProviderSettings.exchange()
 				.username(email)
 				.password(password)
-				.easServerHost(conf.get("native.auth.exchange.server"))
+				.exchangeServerHost(conf.get("native.auth.exchange.server"))
 				;
 	}
 	
