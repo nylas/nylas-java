@@ -25,6 +25,15 @@ public class Accounts extends RestfulDAO<Account> {
 		return super.get(id);
 	}
 
+	/**
+	 * Deletes an account. Accounts deleted using this method are immediately unavailable.
+	 * Returns null, since there is no job status for immediate deletion.
+	 */
+	@Override
+	public String delete(String id) throws IOException, RequestFailedException {
+		return super.delete(id);
+	}
+
 	public void downgrade(String accountId) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getInstanceUrl(accountId).addPathSegment("downgrade");
 		client.executePost(authUser, url, null, null);
