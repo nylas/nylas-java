@@ -13,6 +13,8 @@ import okhttp3.RequestBody;
 
 public class Drafts extends RestfulDAO<Draft> {
 
+	private String sendEndpoint = "send";
+	
 	Drafts(NylasClient client, String accessToken) {
 		super(client, Draft.class, "drafts", accessToken);
 	}
@@ -105,10 +107,6 @@ public class Drafts extends RestfulDAO<Draft> {
 		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
 	}
 
-	private HttpUrl.Builder getSendUrl() {
-		return client.newUrlBuilder().addPathSegment("send");
-	}
-
 	/**
 	 * Sends the given mime message with Content-Type: message/rfc822
 	 * @return a Message representing the sent message
@@ -117,6 +115,14 @@ public class Drafts extends RestfulDAO<Draft> {
 		HttpUrl.Builder url = getSendUrl();
 		RequestBody requestBody = RequestBody.create(MediaType.get("message/rfc822"), mimeMessage);
 		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, Message.class);
+	}
+
+	public void setSendEndpoint(String sendEndpoint) {
+		this.sendEndpoint = sendEndpoint;
+	}
+	
+	private HttpUrl.Builder getSendUrl() {
+		return client.newUrlBuilder().addPathSegment(sendEndpoint);
 	}
 	
 }
