@@ -5,8 +5,8 @@ package com.nylas;
  * <p>
  * <a href="https://docs.nylas.com/docs/native-authentication#section-provider-specific-settings">
  * https://docs.nylas.com/docs/native-authentication#section-provider-specific-settings</a>
- * <a href="https://docs.nylas.com/docs/microsoft">
- * https://docs.nylas.com/docs/microsoft</a>
+ * <a href="https://developer.nylas.com/docs/the-basics/provider-guides/microsoft/microsoft-authentication/#native-authentication">
+ * https://developer.nylas.com/docs/the-basics/provider-guides/microsoft/microsoft-authentication/#native-authentication</a>
  */
 public class MicrosoftExchangeProviderSettings extends ProviderSettings {
 
@@ -24,8 +24,16 @@ public class MicrosoftExchangeProviderSettings extends ProviderSettings {
 		return this;
 	}
 	
+	/**
+	 * @deprecated Use exchangeServerHost instead
+	 */
+	@Deprecated
 	public MicrosoftExchangeProviderSettings easServerHost(String easServerHost) {
-		add("eas_server_host", easServerHost);
+		return exchangeServerHost(easServerHost);
+	}
+	
+	public MicrosoftExchangeProviderSettings exchangeServerHost(String exchangeServerHost) {
+		add("exchange_server_host", exchangeServerHost);
 		return this;
 	}
 

@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Deprecated
 
+ - MicrosoftExchangeProviderSettings easServerHost in favor of exchangeServerHost
+
 ### Fixed
 
 ### Removed
