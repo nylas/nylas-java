@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+- Workaround for Send Raw MIME where server gives an error when charset is specified
+
 ### Removed
 
 ### Security
