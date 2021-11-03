@@ -215,12 +215,42 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		private Details details;
 		private Autocreate autocreate;
 
+		/**
+		 * Enumeration containing the different notification types
+		 */
+		public enum ConferencingProviders {
+			ZOOM("Zoom Meeting"),
+			GOOGLE_MEET("Google Meet"),
+			MS_TEAMS("Microsoft Teams"),
+			WEBEX("WebEx"),
+			GOTOMEETING("GoToMeeting"),
+
+			;
+
+			private final String name;
+
+			ConferencingProviders(String name) {
+				this.name = name();
+			}
+
+			public String getName() {
+				return name;
+			}
+		}
+
 		/** For deserialization only */ public Conferencing() {}
 
 		public String getProvider() {
 			return provider;
 		}
 
+		public void setProvider(ConferencingProviders provider) {
+			this.provider = provider.getName();
+		}
+
+		/**
+		 * It is recommended to use the setter with the enumerated values instead.
+		 */
 		public void setProvider(String provider) {
 			this.provider = provider;
 		}

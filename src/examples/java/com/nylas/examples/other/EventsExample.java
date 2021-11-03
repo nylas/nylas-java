@@ -91,7 +91,7 @@ public class EventsExample {
 		created.setMetadata(metadata);
 
 		Event.Conferencing conferencing = new Event.Conferencing();
-		conferencing.setProvider("Zoom Meeting");
+		conferencing.setProvider(Event.Conferencing.ConferencingProviders.ZOOM);
 		Event.Conferencing.Details details = new Event.Conferencing.Details();
 		details.setMeetingCode("213");
 		details.setPassword("xyz");
