@@ -41,6 +41,7 @@ public class AccountsExample {
 		first = accounts.get(accountList.get(0).getId());
 		System.out.println("after upgrade: " + first);
 		
+		//accounts.delete(first.getId());
 		//accounts.revokeAllTokensForAccount(first.getId(), "blahblah");
 	}
 

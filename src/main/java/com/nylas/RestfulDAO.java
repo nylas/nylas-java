@@ -107,10 +107,18 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 		return client.executePut(authUser, url, params, modelClass);
 	}
 	
+	/**
+	 * Delete the object with the given id.
+	 * Returns a job_status_id if available, otherwise returns null.
+	 */
 	protected String delete(String id) throws IOException, RequestFailedException {
 		return delete(id, null);
 	}
 	
+	/**
+	 * Delete the object with the given id using given extra query params.
+	 * Returns a job_status_id if available, otherwise returns null.
+	 */
 	protected String delete(String id, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getInstanceUrl(id);
 		addQueryParams(url, extraQueryParams);

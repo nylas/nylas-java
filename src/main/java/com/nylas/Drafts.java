@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import okhttp3.RequestBody;
 
 public class Drafts extends RestfulDAO<Draft> {
 
+	private String sendEndpoint = "send";
+	
 	Drafts(NylasClient client, String accessToken) {
 		super(client, Draft.class, "drafts", accessToken);
 	}
@@ -105,18 +108,34 @@ public class Drafts extends RestfulDAO<Draft> {
 		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
 	}
 
-	private HttpUrl.Builder getSendUrl() {
-		return client.newUrlBuilder().addPathSegment("send");
-	}
-
 	/**
 	 * Sends the given mime message with Content-Type: message/rfc822
 	 * @return a Message representing the sent message
 	 */
 	public Message sendRawMime(String mimeMessage) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getSendUrl();
-		RequestBody requestBody = RequestBody.create(MediaType.get("message/rfc822"), mimeMessage);
+		/*
+		 * The server has an issue where if the content-type has a charset, for example:
+		 *   Content-Type: message/rfc822; charset=utf-8
+		 *   
+		 * Then it responds with this error:
+		 *  {"message":"400 Bad Request: The browser (or proxy) sent a request that this server could not understand.",
+		 *  "type":"api_error"}
+		 * 
+		 * To workaround that, we pre-encode the text to utf-8. Otherwise, when OkHttp encodes to utf-8
+		 * it also sets the charset, which causes the server error above.
+		 */
+		byte[] messageBytes = mimeMessage.getBytes(StandardCharsets.UTF_8);
+		RequestBody requestBody = RequestBody.create(MediaType.get("message/rfc822"), messageBytes);
 		return client.executeRequestWithAuth(authUser, url, HttpMethod.POST, requestBody, Message.class);
+	}
+
+	public void setSendEndpoint(String sendEndpoint) {
+		this.sendEndpoint = sendEndpoint;
+	}
+	
+	private HttpUrl.Builder getSendUrl() {
+		return client.newUrlBuilder().addPathSegment(sendEndpoint);
 	}
 	
 }

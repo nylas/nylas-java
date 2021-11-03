@@ -6,8 +6,6 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Add support for Event conferencing
-
 ### Changed
 
 ### Deprecated
@@ -17,6 +15,23 @@ This section contains changes that have been committed but not yet released.
 ### Removed
 
 ### Security
+
+## [1.9.1] - Released 2021-09-22
+
+### Fixed
+
+- Workaround for Send Raw MIME where server gives an error when charset is specified
+
+## [1.9.0] - Released 2021-08-30
+
+### Added
+
+- Add support for Event conferencing
+- Add support for Account deletion
+
+### Deprecated
+
+ - MicrosoftExchangeProviderSettings easServerHost in favor of exchangeServerHost
 
 ## [1.8.0] - Released 2021-07-30
 
@@ -144,7 +159,9 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.9.1...HEAD
+[1.9.1]: https://github.com/nylas/nylas-java/releases/tag/v1.9.1
+[1.9.0]: https://github.com/nylas/nylas-java/releases/tag/v1.9.0
 [1.8.0]: https://github.com/nylas/nylas-java/releases/tag/v1.8.0
 [1.7.0]: https://github.com/nylas/nylas-java/releases/tag/v1.7.0
 [1.6.0]: https://github.com/nylas/nylas-java/releases/tag/v1.6.0
