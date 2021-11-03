@@ -52,6 +52,7 @@ public class EventsExample {
 		}
 		
 		basicEventCrud(events, primary);
+		autocreateEvents(events, primary);
 		//overrideRecurringEvent(primary, events);
 		//fetchRoomResources(events);
 		
@@ -59,17 +60,7 @@ public class EventsExample {
 	}
 
 	protected static void basicEventCrud(Events events, Calendar primary) throws IOException, RequestFailedException {
-		ZoneId startTz = ZoneId.of("America/Los_Angeles");
-		ZoneId endTz = ZoneId.of("America/New_York");
-		ZonedDateTime startTime = ZonedDateTime.now(startTz);
-		ZonedDateTime endTime = startTime.plusHours(2).withZoneSameInstant(endTz);
-
-		Event event = new Event(primary.getId(), new Timespan(startTime, endTime));
-		event.setTitle("Surprise Party");
-		Participant partier = new Participant("hamilton@example.com");
-		partier.name("Alexander Hamilton");
-
-		Event created = events.create(event, true);
+		Event created = createBasicEvent(events, primary);
 		System.out.println("Created: " + created);
 		
 		Participant partier1 = new Participant("hmulligan@example.com");
@@ -81,12 +72,15 @@ public class EventsExample {
 		Participant partier3 = new Participant("lafayette@example.com");
 		partier3.name("Marquis de Lafayette");
 
+		ZoneId startTz = ZoneId.of("America/Los_Angeles");
+		ZonedDateTime startTime = ZonedDateTime.now(startTz);
+
 		created.setDescription("hopping good fun");
 		created.setWhen(new Time(startTime)); // this party never ends
 		created.setTitle("Nonsurprise Party");
 		created.setBusy(false);
 		created.setLocation("Lake Merritt");
-		created.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
+		created.setParticipants(Arrays.asList(created.getParticipants().get(0), partier1, partier2, partier3));
 		created.setRecurrence(new Recurrence(startTz.getId(), Arrays.asList("RRULE:FREQ=WEEKLY;BYDAY=TH")));
 
 		Map<String, String> metadata = new HashMap<>();
@@ -106,6 +100,22 @@ public class EventsExample {
 		Event updated = events.update(created, true);
 		System.out.println("Updated: " + updated);
 		
+		events.delete(created.getId(), true);
+		System.out.println("Deleted");
+	}
+
+	protected static void autocreateEvents(Events events, Calendar primary) throws IOException, RequestFailedException {
+		Event created = createBasicEvent(events, primary);
+
+		Event.Conferencing conferencing = new Event.Conferencing();
+		conferencing.setProvider("Zoom Meeting");
+		Event.Conferencing.Autocreate autocreate = new Event.Conferencing.Autocreate();
+		conferencing.setAutocreate(autocreate);
+		created.setConferencing(conferencing);
+
+		Event updated = events.update(created, true);
+		System.out.println("Updated: " + updated);
+
 		events.delete(created.getId(), true);
 		System.out.println("Deleted");
 	}
@@ -132,6 +142,22 @@ public class EventsExample {
 			eventToOverride = events.update(eventToOverride, false);
 			System.out.println("Overrode event instance:" + eventToOverride);
 		}
+	}
+
+	private static Event createBasicEvent(Events events, Calendar primary) throws IOException, RequestFailedException {
+		ZoneId startTz = ZoneId.of("America/Los_Angeles");
+		ZoneId endTz = ZoneId.of("America/New_York");
+		ZonedDateTime startTime = ZonedDateTime.now(startTz);
+		ZonedDateTime endTime = startTime.plusHours(2).withZoneSameInstant(endTz);
+
+		Event event = new Event(primary.getId(), new Timespan(startTime, endTime));
+		event.setTitle("Surprise Party");
+		Participant partier = new Participant("hamilton@example.com");
+		partier.name("Alexander Hamilton");
+
+		Event created = events.create(event, true);
+		System.out.println("Created: " + created);
+		return created;
 	}
 
 }
