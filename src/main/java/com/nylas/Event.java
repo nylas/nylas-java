@@ -26,6 +26,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private Boolean busy;
 	private Map<String, String> metadata;
 	private Conferencing conferencing;
+	private List<Notification> notifications;
 	
 	private Recurrence recurrence;
 	
@@ -96,6 +97,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return conferencing;
 	}
 
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
 	public Recurrence getRecurrence() {
 		return recurrence;
 	}
@@ -153,6 +158,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.conferencing = conferencing;
 	}
 
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
 	}
@@ -171,6 +180,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "conferencing", getConferencing());
+		Maps.putIfNotNull(params, "notifications", getNotifications());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		return params;
 	}
@@ -306,6 +316,84 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			public String toString() {
 				return String.format("Autocreate [settings=%s]", settings);
 			}
+		}
+	}
+
+	public static class Notification {
+		private String type;
+		private String body;
+		private String url;
+		private String subject;
+		private String payload;
+		private String message;
+		private int minutesBeforeEvent;
+
+		/**
+		 * For deserialization only
+		 */
+		public Notification() {
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String getBody() {
+			return body;
+		}
+
+		public void setBody(String body) {
+			this.body = body;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public String getSubject() {
+			return subject;
+		}
+
+		public void setSubject(String subject) {
+			this.subject = subject;
+		}
+
+		public String getPayload() {
+			return payload;
+		}
+
+		public void setPayload(String payload) {
+			this.payload = payload;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public void setMessage(String message) {
+			this.message = message;
+		}
+
+		public int getMinutesBeforeEvent() {
+			return minutesBeforeEvent;
+		}
+
+		public void setMinutesBeforeEvent(int minutesBeforeEvent) {
+			this.minutesBeforeEvent = minutesBeforeEvent;
+		}
+
+		@Override
+		public String toString() {
+			return "Notification [type=" + type + ", body=" + body + ", url=" + url + ", subject=" + subject +
+					", payload=" + payload + ", message=" + message + ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
 		}
 	}
 
