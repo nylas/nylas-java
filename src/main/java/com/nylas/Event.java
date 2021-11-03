@@ -329,6 +329,27 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		private int minutesBeforeEvent;
 
 		/**
+		 * Enumeration containing the different notification types
+		 */
+		public enum NotificationType {
+			EMAIL("email"),
+			SMS("sms"),
+			WEBHOOK("webhook"),
+
+			;
+
+			private final String name;
+
+			NotificationType(String name) {
+				this.name = name();
+			}
+
+			public String getName() {
+				return name;
+			}
+		}
+
+		/**
 		 * For deserialization only
 		 */
 		public Notification() {
@@ -338,6 +359,13 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			return type;
 		}
 
+		public void setType(NotificationType type) {
+			this.type = type.getName();
+		}
+
+		/**
+		 * It is recommended to use the setter with the enumerated values instead.
+		 */
 		public void setType(String type) {
 			this.type = type;
 		}

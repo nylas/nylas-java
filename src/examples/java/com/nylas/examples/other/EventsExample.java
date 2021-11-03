@@ -104,7 +104,7 @@ public class EventsExample {
 		System.out.println("Updated: " + updated);
 
 		Event.Notification notification = new Event.Notification();
-		notification.setType("email");
+		notification.setType(Event.Notification.NotificationType.EMAIL);
 		notification.setMinutesBeforeEvent(60);
 		notification.setSubject("Test Event Notification");
 		notification.setBody("Reminding you about our meeting.");
