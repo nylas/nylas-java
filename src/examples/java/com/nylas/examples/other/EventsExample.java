@@ -62,6 +62,9 @@ public class EventsExample {
 	protected static void basicEventCrud(Events events, Calendar primary) throws IOException, RequestFailedException {
 		Event created = createBasicEvent(events, primary);
 		System.out.println("Created: " + created);
+
+		Participant partier = new Participant("hamilton@example.com");
+		partier.name("Alexander Hamilton");
 		
 		Participant partier1 = new Participant("hmulligan@example.com");
 		partier1.name("Hercules Mulligan");
@@ -80,8 +83,8 @@ public class EventsExample {
 		created.setTitle("Nonsurprise Party");
 		created.setBusy(false);
 		created.setLocation("Lake Merritt");
-		created.setParticipants(Arrays.asList(created.getParticipants().get(0), partier1, partier2, partier3));
-		created.setRecurrence(new Recurrence(startTz.getId(), Arrays.asList("RRULE:FREQ=WEEKLY;BYDAY=TH")));
+		created.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
+		created.setRecurrence(new Recurrence(startTz.getId(), Collections.singletonList("RRULE:FREQ=WEEKLY;BYDAY=TH")));
 
 		Map<String, String> metadata = new HashMap<>();
 		metadata.put("event_category", "gathering");
@@ -99,8 +102,18 @@ public class EventsExample {
 
 		Event updated = events.update(created, true);
 		System.out.println("Updated: " + updated);
+
+		Event.Notification notification = new Event.Notification();
+		notification.setType("email");
+		notification.setMinutesBeforeEvent(60);
+		notification.setSubject("Test Event Notification");
+		notification.setBody("Reminding you about our meeting.");
+		updated.setNotifications(Collections.singletonList(notification));
+
+		updated = events.update(updated, true);
+		System.out.println("Updated: " + updated);
 		
-		events.delete(created.getId(), true);
+		events.delete(updated.getId(), true);
 		System.out.println("Deleted");
 	}
 
@@ -116,7 +129,7 @@ public class EventsExample {
 		Event updated = events.update(created, true);
 		System.out.println("Updated: " + updated);
 
-		events.delete(created.getId(), true);
+		events.delete(updated.getId(), true);
 		System.out.println("Deleted");
 	}
 
@@ -152,8 +165,6 @@ public class EventsExample {
 
 		Event event = new Event(primary.getId(), new Timespan(startTime, endTime));
 		event.setTitle("Surprise Party");
-		Participant partier = new Participant("hamilton@example.com");
-		partier.name("Alexander Hamilton");
 
 		Event created = events.create(event, true);
 		System.out.println("Created: " + created);
