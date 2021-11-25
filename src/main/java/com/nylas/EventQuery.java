@@ -16,6 +16,7 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	private String title;
 	private String description;
 	private String location;
+	private String metadataSearch;
 	private Instant startsBefore;
 	private Instant startsAfter;
 	private Instant endsBefore;
@@ -48,6 +49,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		}
 		if (location != null) {
 			url.addQueryParameter("location", location);
+		}
+		if (metadataSearch != null) {
+			url.addQueryParameter("metadata_search", metadataSearch);
 		}
 		if (startsBefore != null) {
 			url.addQueryParameter("starts_before", Instants.formatEpochSecond(startsBefore));
@@ -112,7 +116,19 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		this.location = location;
 		return this;
 	}
-	
+
+	/**
+	 * Return calendars query with a modifier on the metadata parameters.
+	 *
+	 * If NONE is provided, it will return any calendar that does not match the metadata queried
+	 * If ANY is provided, it will return any calendar with metadata
+	 * If ALL is provided, it will return any calendar that matches all the metadata queried
+	 */
+	public EventQuery metadataSearch(MetadataSearchOptions metadataSearch) {
+		this.metadataSearch = metadataSearch.toString();
+		return this;
+	}
+
 	public EventQuery startsBefore(Instant startsBefore) {
 		this.startsBefore = startsBefore;
 		return this;

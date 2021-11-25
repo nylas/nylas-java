@@ -8,6 +8,7 @@ import java.util.List;
 
 public class CalendarQuery extends RestfulQuery<CalendarQuery> {
 
+	private String metadataSearch;
 	private List<String> metadataKeys;
 	private List<String> metadataValues;
 	private List<String> metadataPairs;
@@ -15,6 +16,9 @@ public class CalendarQuery extends RestfulQuery<CalendarQuery> {
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
 		super.addParameters(url);  // must call through
+		if (metadataSearch != null) {
+			url.addQueryParameter("metadata_search", metadataSearch);
+		}
 		if (metadataKeys != null) {
 			for(String key : metadataKeys) {
 				url.addQueryParameter("metadata_key", key);
@@ -30,6 +34,18 @@ public class CalendarQuery extends RestfulQuery<CalendarQuery> {
 				url.addQueryParameter("metadata_pair", value);
 			}
 		}
+	}
+
+	/**
+	 * Return calendars query with a modifier on the metadata parameters.
+	 *
+	 * If NONE is provided, it will return any calendar that does not match the metadata queried
+	 * If ANY is provided, it will return any calendar with metadata
+	 * If ALL is provided, it will return any calendar that matches all the metadata queried
+	 */
+	public CalendarQuery metadataSearch(MetadataSearchOptions metadataSearch) {
+		this.metadataSearch = metadataSearch.toString();
+		return this;
 	}
 
 	/**

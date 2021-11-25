@@ -8,6 +8,7 @@ import java.util.List;
 
 public class AccountQuery extends RestfulQuery<AccountQuery> {
 
+	private String metadataSearch;
 	private List<String> metadataKeys;
 	private List<String> metadataValues;
 	private List<String> metadataPairs;
@@ -15,6 +16,9 @@ public class AccountQuery extends RestfulQuery<AccountQuery> {
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
 		super.addParameters(url);  // must call through
+		if (metadataSearch != null) {
+			url.addQueryParameter("metadata_search", metadataSearch);
+		}
 		if (metadataKeys != null) {
 			for(String key : metadataKeys) {
 				url.addQueryParameter("metadata_key", key);
@@ -30,6 +34,18 @@ public class AccountQuery extends RestfulQuery<AccountQuery> {
 				url.addQueryParameter("metadata_pair", value);
 			}
 		}
+	}
+
+	/**
+	 * Return accounts query with a modifier on the metadata parameters.
+	 *
+	 * If NONE is provided, it will return any account that does not match the metadata queried
+	 * If ANY is provided, it will return any account with metadata
+	 * If ALL is provided, it will return any account that matches all the metadata queried
+	 */
+	public AccountQuery metadataSearch(MetadataSearchOptions metadataSearch) {
+		this.metadataSearch = metadataSearch.toString();
+		return this;
 	}
 
 	/**
