@@ -3,6 +3,7 @@ package com.nylas;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import okhttp3.HttpUrl;
@@ -91,7 +92,7 @@ public class Messages extends RestfulDAO<Message> {
 			throws IOException, RequestFailedException {
 		return super.update(messageId, Maps.of("label_ids", labelIds));
 	}
-	
+
 	private Set<String> getLabelIds(String messageId) throws IOException, RequestFailedException {
 		Message message = get(messageId);
 		return new HashSet<>(RestfulModel.getIds(message.getLabels()));
@@ -124,6 +125,53 @@ public class Messages extends RestfulDAO<Message> {
 		Set<String> labelIds = getLabelIds(messageId);
 		if (labelIds.remove(labelId)) {
 			setLabelIds(messageId, labelIds);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Updates the metadata on the given message, overwriting all previous metadata on the message.
+	 */
+	public Message setMetadata(String messageId, Map<String, String> metadata)
+			throws IOException, RequestFailedException {
+		return super.update(messageId, Maps.of("metadata", metadata));
+	}
+
+	private Map<String, String> getMetadata(String messageId) throws IOException, RequestFailedException {
+		Message message = get(messageId);
+		return message.getMetadata();
+	}
+
+	/**
+	 * Convenience method to add a metadata pair to a message.
+	 *
+	 * @return true if the metadata was newly added, and false if overwriteIfExists is false the metadata key already exists
+	 */
+	public boolean addMetadata(String messageId, String key, String value, boolean overwriteIfExists)
+			throws IOException, RequestFailedException {
+		Map<String, String> metadata = getMetadata(messageId);
+		if(!overwriteIfExists && metadata.containsKey(key)) {
+			return false;
+		}
+		metadata.put(key, value);
+		setMetadata(messageId, metadata);
+		return true;
+	}
+
+	public boolean addMetadata(String messageId, String key, String value) throws IOException, RequestFailedException {
+		return addMetadata(messageId, key, value, true);
+	}
+
+	/**
+	 * Convenience method to remove a metadata pair from a message.
+	 *
+	 * @return true if the metadata pair was removed, and false if the message did not have the metadata key
+	 */
+	public boolean removeMetadata(String messageId, String key) throws IOException, RequestFailedException {
+		Map<String, String> metadata = getMetadata(messageId);
+		if(metadata.remove(key) != null) {
+			setMetadata(messageId, metadata);
 			return true;
 		}
 		return false;

@@ -59,4 +59,51 @@ public class Accounts extends RestfulDAO<Account> {
 		Map<String, Object> params = Maps.of("access_token", accessToken);
 		return client.executePost(authUser, url, params, TokenInfo.class);
 	}
+
+	/**
+	 * Updates the metadata on the given message, overwriting all previous metadata on the message.
+	 */
+	public Account setMetadata(String accountId, Map<String, String> metadata)
+			throws IOException, RequestFailedException {
+		return super.update(accountId, Maps.of("metadata", metadata));
+	}
+
+	private Map<String, String> getMetadata(String accountId) throws IOException, RequestFailedException {
+		Account account = get(accountId);
+		return account.getMetadata();
+	}
+
+	/**
+	 * Convenience method to add a metadata pair to an account.
+	 *
+	 * @return true if the metadata was newly added, and false if overwriteIfExists is false the metadata key already exists
+	 */
+	public boolean addMetadata(String accountId, String key, String value, boolean overwriteIfExists)
+			throws IOException, RequestFailedException {
+		Map<String, String> metadata = getMetadata(accountId);
+		if(!overwriteIfExists && metadata.containsKey(key)) {
+			return false;
+		}
+		metadata.put(key, value);
+		setMetadata(accountId, metadata);
+		return true;
+	}
+
+	public boolean addMetadata(String accountId, String key, String value) throws IOException, RequestFailedException {
+		return addMetadata(accountId, key, value, true);
+	}
+
+	/**
+	 * Convenience method to remove a metadata pair from an account.
+	 *
+	 * @return true if the metadata pair was removed, and false if the account did not have the metadata key
+	 */
+	public boolean removeMetadata(String accountId, String key) throws IOException, RequestFailedException {
+		Map<String, String> metadata = getMetadata(accountId);
+		if(metadata.remove(key) != null) {
+			setMetadata(accountId, metadata);
+			return true;
+		}
+		return false;
+	}
 }
