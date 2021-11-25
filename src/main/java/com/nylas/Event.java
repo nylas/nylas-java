@@ -22,9 +22,9 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private String status;
 	private Boolean read_only;
 	private Boolean busy;
-	private Map<String, String> metadata;
 	private Conferencing conferencing;
-	private List<Notification> notifications;
+	private Map<String, String> metadata = new HashMap<>();
+	private List<Notification> notifications = new ArrayList<>();
 	private List<Participant> participants = new ArrayList<>();
 	
 	private Recurrence recurrence;
@@ -171,10 +171,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 * @param value The value of the metadata entry
 	 */
 	public void addMetadata(String key, String value) {
-		if(metadata == null) {
-			metadata = new HashMap<>();
-		}
-		metadata.put(key, value);
+		this.metadata.put(key, value);
 	}
 
 	/**
@@ -182,9 +179,6 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 * @param notifications The notification(s) to append to the event's notification list
 	 */
 	public void addNotification(Notification... notifications) {
-		if(this.notifications == null) {
-			this.notifications = new ArrayList<>();
-		}
 		this.notifications.addAll(Arrays.asList(notifications));
 	}
 
