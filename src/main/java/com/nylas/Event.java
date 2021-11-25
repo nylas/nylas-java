@@ -230,7 +230,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			private final String name;
 
 			ConferencingProviders(String name) {
-				this.name = name();
+				this.name = name;
 			}
 
 			public String getName() {
@@ -349,55 +349,39 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 	}
 
-	public static class Notification {
-		private String type;
-		private String body;
-		private String url;
-		private String subject;
-		private String payload;
-		private String message;
-		private int minutesBeforeEvent;
-
-		/**
-		 * Enumeration containing the different notification types
-		 */
-		public enum NotificationType {
-			EMAIL("email"),
-			SMS("sms"),
-			WEBHOOK("webhook"),
-
-			;
-
-			private final String name;
-
-			NotificationType(String name) {
-				this.name = name();
-			}
-
-			public String getName() {
-				return name;
-			}
-		}
+	public static abstract class Notification {
+		protected String type;
+		protected int minutesBeforeEvent;
 
 		/**
 		 * For deserialization only
 		 */
-		public Notification() {
+		public Notification(String type) {
+			this.type = type;
 		}
 
 		public String getType() {
 			return type;
 		}
 
-		public void setType(NotificationType type) {
-			this.type = type.getName();
+		public int getMinutesBeforeEvent() {
+			return minutesBeforeEvent;
 		}
 
+		public void setMinutesBeforeEvent(int minutesBeforeEvent) {
+			this.minutesBeforeEvent = minutesBeforeEvent;
+		}
+	}
+
+	public static class EmailNotification extends Notification {
+		private String body;
+		private String subject;
+
 		/**
-		 * It is recommended to use the setter with the enumerated values instead.
+		 * For deserialization only
 		 */
-		public void setType(String type) {
-			this.type = type;
+		public EmailNotification() {
+			super("email");
 		}
 
 		public String getBody() {
@@ -408,14 +392,6 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			this.body = body;
 		}
 
-		public String getUrl() {
-			return url;
-		}
-
-		public void setUrl(String url) {
-			this.url = url;
-		}
-
 		public String getSubject() {
 			return subject;
 		}
@@ -424,12 +400,21 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			this.subject = subject;
 		}
 
-		public String getPayload() {
-			return payload;
+		@Override
+		public String toString() {
+			return "EmailNotification [type=" + type + ", body=" + body + ", subject=" + subject +
+					", minutesBeforeEvent=" + minutesBeforeEvent + "]";
 		}
+	}
 
-		public void setPayload(String payload) {
-			this.payload = payload;
+	public static class SMSNotification extends Notification {
+		private String message;
+
+		/**
+		 * For deserialization only
+		 */
+		public SMSNotification() {
+			super("sms");
 		}
 
 		public String getMessage() {
@@ -440,23 +425,55 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			this.message = message;
 		}
 
-		public int getMinutesBeforeEvent() {
-			return minutesBeforeEvent;
+		@Override
+		public String toString() {
+			return "SMSNotification [type=" + type + ", message=" + message
+					+ ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+		}
+	}
+
+	public static class WebhookNotification extends Notification {
+		private String url;
+		private String payload;
+
+		/**
+		 * For deserialization only
+		 */
+		public WebhookNotification() {
+			super("webhook");
 		}
 
-		public void setMinutesBeforeEvent(int minutesBeforeEvent) {
-			this.minutesBeforeEvent = minutesBeforeEvent;
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public String getPayload() {
+			return payload;
+		}
+
+		public void setPayload(String payload) {
+			this.payload = payload;
 		}
 
 		@Override
 		public String toString() {
-			return "Notification [type=" + type + ", body=" + body + ", url=" + url + ", subject=" + subject +
-					", payload=" + payload + ", message=" + message + ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+			return "WebhookNotification [type=" + type +", url=" + url + ", payload=" + payload
+					+ ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
 		}
 	}
 
+	public static final JsonAdapter.Factory EVENT_NOTIFICATION_JSON_FACTORY
+			= PolymorphicJsonAdapterFactory.of(Event.Notification.class, "type")
+			.withSubtype(Event.EmailNotification.class, "email")
+			.withSubtype(Event.SMSNotification.class, "sms")
+			.withSubtype(Event.WebhookNotification.class, "webhook");
+
 	public static interface When extends JsonObject {}
-	
+
 	/**
 	 * A single moment in time.
 	 * Commonly used for reminders or alarms.
