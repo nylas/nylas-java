@@ -83,7 +83,6 @@ public class EventsExample {
 		created.setTitle("Nonsurprise Party");
 		created.setBusy(false);
 		created.setLocation("Lake Merritt");
-		created.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
 		created.setRecurrence(new Recurrence(startTz.getId(), Collections.singletonList("RRULE:FREQ=WEEKLY;BYDAY=TH")));
 
 		Map<String, String> metadata = new HashMap<>();
@@ -103,12 +102,12 @@ public class EventsExample {
 		Event updated = events.update(created, true);
 		System.out.println("Updated: " + updated);
 
-		Event.Notification notification = new Event.Notification();
-		notification.setType(Event.Notification.NotificationType.EMAIL);
+		Event.EmailNotification notification = new Event.EmailNotification();
 		notification.setMinutesBeforeEvent(60);
 		notification.setSubject("Test Event Notification");
 		notification.setBody("Reminding you about our meeting.");
 		updated.setNotifications(Collections.singletonList(notification));
+		updated.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
 
 		updated = events.update(updated, true);
 		System.out.println("Updated: " + updated);
