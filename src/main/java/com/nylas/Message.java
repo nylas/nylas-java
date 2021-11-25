@@ -24,6 +24,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	protected List<Event> events = Collections.emptyList();
 	protected Folder folder;
 	protected List<Label> labels = Collections.emptyList();
+	protected Map<String, String> metadata;
 
 	// only available in expanded message view
 	private Map<String, Object> headers = Collections.emptyMap();
@@ -95,6 +96,10 @@ public class Message extends AccountOwnedModel implements JsonObject {
 
 	public List<Label> getLabels() {
 		return labels;
+	}
+
+	public Map<String, String> getMetadata() {
+		return metadata;
 	}
 
 	/**
