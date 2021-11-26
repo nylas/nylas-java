@@ -46,6 +46,12 @@ public class AccountsExample {
 		Map<String, String> metadata = new HashMap<>();
 		metadata.put("account_type", "test");
 		accounts.setMetadata(accountList.get(0).getId(), metadata);
+
+		AccountQuery metadataQuery = new AccountQuery().metadataKey("account_type");
+		List<Account> accountsWithMetadata = accounts.list(metadataQuery).fetchAll();
+		for (Account account : accountsWithMetadata) {
+			System.out.println("found account with 'account_type' metadata: " + account);
+		}
 		
 		//accounts.delete(first.getId());
 		//accounts.revokeAllTokensForAccount(first.getId(), "blahblah");
