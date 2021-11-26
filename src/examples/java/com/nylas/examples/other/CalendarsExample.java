@@ -3,7 +3,9 @@ package com.nylas.examples.other;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.nylas.Calendar;
 import com.nylas.Calendars;
@@ -50,6 +52,9 @@ public class CalendarsExample {
 		created.setDescription("this calendar has been updated!");
 		created.setLocation("nearby");
 		created.setTimezone("America/New_York");
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("calendar_type", "test");
+		created.setMetadata(metadata);
 		Calendar updated = calendars.update(created);
 		System.out.println("Updated: " + updated + " status: " + updated.getJobStatusId());
 		

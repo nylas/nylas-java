@@ -1,6 +1,8 @@
 package com.nylas.examples.other;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.nylas.Account;
 import com.nylas.AccountQuery;
@@ -36,10 +38,14 @@ public class AccountsExample {
 		accounts.downgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
 		System.out.println("after downgrade: " + first);
-		
+
 		accounts.upgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
 		System.out.println("after upgrade: " + first);
+
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("account_type", "test");
+		accounts.setMetadata(accountList.get(0).getId(), metadata);
 		
 		//accounts.delete(first.getId());
 		//accounts.revokeAllTokensForAccount(first.getId(), "blahblah");

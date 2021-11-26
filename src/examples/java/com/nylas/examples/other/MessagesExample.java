@@ -59,9 +59,9 @@ public class MessagesExample {
 //			System.out.println("No messages");
 //			return;
 //		}
-//		
+//
 //		System.out.println("collection size: " + allMessages.size());
-//		
+//
 //		Message firstMessage  = allMessages.get(0);
 //		for (Message message : allMessages) {
 //			System.out.println(message);
@@ -80,5 +80,10 @@ public class MessagesExample {
 //		
 //		String raw = messages.getRaw(firstMessage.getId());
 //		System.out.println("raw: " + raw);
+
+//		Map<String, String> metadata = new HashMap<>();
+//		metadata.put("message_type", "test");
+//		message = messages.setMetadata(firstMessage.getId(), metadata);
+//		System.out.println("set metadata " + message);
 	}
 }
