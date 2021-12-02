@@ -8,6 +8,7 @@ This section contains changes that have been committed but not yet released.
 
 - Add support for automatic meeting details
 - Add support for Event notifications
+- Add support for Component CRUD
 
 ### Changed
 
