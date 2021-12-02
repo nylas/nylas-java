@@ -732,10 +732,34 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 
 			public static class OpeningHours extends Model {
+				/**
+				 * Enumeration containing the different days accepted by the API
+				 */
+				public enum Days {
+					MONDAY('M'),
+					TUESDAY('T'),
+					WEDNESDAY('W'),
+					THURSDAY('R'),
+					FRIDAY('F'),
+					SATURDAY('S'),
+					SUNDAY('N'),
+
+					;
+
+					private final Character day;
+
+					Days(Character day) {
+						this.day = day;
+					}
+
+					public Character getDay() {
+						return day;
+					}
+				}
+
 				private String account_id;
 				private String end;
 				private String start;
-				// TODO::Enum? Ask Tess about the characters for tuesday/thursday
 				private List<Character> days = new ArrayList<>();
 
 				public String getAccountId() {
@@ -770,8 +794,9 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 					this.days = days;
 				}
 
-				public boolean addDays(Character... days) {
-					return Collections.addAll(this.days, days);
+				public boolean addDays(Days... days) {
+					List<Character> dayList = Arrays.stream(days).map(Days::getDay).collect(Collectors.toList());
+					return this.days.addAll(dayList);
 				}
 
 				@Override

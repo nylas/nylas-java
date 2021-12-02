@@ -23,8 +23,6 @@ public class Schedulers extends RestfulDAO<Scheduler> {
 		return HttpUrl.get(SCHEDULER_API_BASE_URL).newBuilder().addPathSegments(collectionPath);
 	}
 
-	// TODO::Review basic methods
-
 	public RemoteCollection<Scheduler> list() throws IOException, RequestFailedException {
 		return list(new SchedulerQuery());
 	}
