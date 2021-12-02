@@ -26,6 +26,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private Boolean busy;
 	private Map<String, String> metadata;
 	private Conferencing conferencing;
+	private List<Notification> notifications;
 	
 	private Recurrence recurrence;
 	
@@ -96,6 +97,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return conferencing;
 	}
 
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
 	public Recurrence getRecurrence() {
 		return recurrence;
 	}
@@ -153,6 +158,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.conferencing = conferencing;
 	}
 
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
 	}
@@ -171,6 +180,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "conferencing", getConferencing());
+		Maps.putIfNotNull(params, "notifications", getNotifications());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		return params;
 	}
@@ -205,12 +215,42 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		private Details details;
 		private Autocreate autocreate;
 
+		/**
+		 * Enumeration containing the different notification types
+		 */
+		public enum ConferencingProviders {
+			ZOOM("Zoom Meeting"),
+			GOOGLE_MEET("Google Meet"),
+			MS_TEAMS("Microsoft Teams"),
+			WEBEX("WebEx"),
+			GOTOMEETING("GoToMeeting"),
+
+			;
+
+			private final String name;
+
+			ConferencingProviders(String name) {
+				this.name = name;
+			}
+
+			public String getName() {
+				return name;
+			}
+		}
+
 		/** For deserialization only */ public Conferencing() {}
 
 		public String getProvider() {
 			return provider;
 		}
 
+		public void setProvider(ConferencingProviders provider) {
+			this.provider = provider.getName();
+		}
+
+		/**
+		 * It is recommended to use the setter with the enumerated values instead.
+		 */
 		public void setProvider(String provider) {
 			this.provider = provider;
 		}
@@ -309,8 +349,131 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 	}
 
+	public static abstract class Notification {
+		protected String type;
+		protected int minutesBeforeEvent;
+
+		/**
+		 * For deserialization only
+		 */
+		public Notification(String type) {
+			this.type = type;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public int getMinutesBeforeEvent() {
+			return minutesBeforeEvent;
+		}
+
+		public void setMinutesBeforeEvent(int minutesBeforeEvent) {
+			this.minutesBeforeEvent = minutesBeforeEvent;
+		}
+	}
+
+	public static class EmailNotification extends Notification {
+		private String body;
+		private String subject;
+
+		/**
+		 * For deserialization only
+		 */
+		public EmailNotification() {
+			super("email");
+		}
+
+		public String getBody() {
+			return body;
+		}
+
+		public void setBody(String body) {
+			this.body = body;
+		}
+
+		public String getSubject() {
+			return subject;
+		}
+
+		public void setSubject(String subject) {
+			this.subject = subject;
+		}
+
+		@Override
+		public String toString() {
+			return "EmailNotification [type=" + type + ", body=" + body + ", subject=" + subject +
+					", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+		}
+	}
+
+	public static class SMSNotification extends Notification {
+		private String message;
+
+		/**
+		 * For deserialization only
+		 */
+		public SMSNotification() {
+			super("sms");
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public void setMessage(String message) {
+			this.message = message;
+		}
+
+		@Override
+		public String toString() {
+			return "SMSNotification [type=" + type + ", message=" + message
+					+ ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+		}
+	}
+
+	public static class WebhookNotification extends Notification {
+		private String url;
+		private String payload;
+
+		/**
+		 * For deserialization only
+		 */
+		public WebhookNotification() {
+			super("webhook");
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public String getPayload() {
+			return payload;
+		}
+
+		public void setPayload(String payload) {
+			this.payload = payload;
+		}
+
+		@Override
+		public String toString() {
+			return "WebhookNotification [type=" + type +", url=" + url + ", payload=" + payload
+					+ ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+		}
+	}
+
+	public static final JsonAdapter.Factory EVENT_NOTIFICATION_JSON_FACTORY
+			= PolymorphicJsonAdapterFactory.of(Event.Notification.class, "type")
+			.withSubtype(Event.EmailNotification.class, "email")
+			.withSubtype(Event.SMSNotification.class, "sms")
+			.withSubtype(Event.WebhookNotification.class, "webhook");
+
 	public static interface When extends JsonObject {}
-	
+
 	/**
 	 * A single moment in time.
 	 * Commonly used for reminders or alarms.
