@@ -923,7 +923,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 
 			public Date getDateAsDate() {
-				return new Date(date * 1000);
+				return date != null ? new Date(date * 1000) : null;
 			}
 
 			public void setUses(Integer uses) {

@@ -30,8 +30,16 @@ public class TimeSlot extends Model {
 		return start;
 	}
 
+	public Date getStartAsDate() {
+		return start != null ? new Date(start * 1000) : null;
+	}
+
 	public Long getEnd() {
 		return end;
+	}
+
+	public Date getEndAsDate() {
+		return end != null ? new Date(end * 1000) : null;
 	}
 
 	public List<String> getEmails() {
@@ -54,8 +62,16 @@ public class TimeSlot extends Model {
 		this.start = start;
 	}
 
+	public void setStart(Date start) {
+		this.start = start.getTime() / 1000;
+	}
+
 	public void setEnd(Long end) {
 		this.end = end;
+	}
+
+	public void setEnd(Date end) {
+		this.end = end.getTime() / 1000;
 	}
 
 	public void setEmails(List<String> emails) {

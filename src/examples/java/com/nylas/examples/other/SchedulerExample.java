@@ -5,10 +5,7 @@ import com.nylas.examples.ExampleConf;
 import com.nylas.scheduler.*;
 import com.nylas.Schedulers;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SchedulerExample {
 
@@ -43,6 +40,14 @@ public class SchedulerExample {
 
 		Scheduler page = schedulers.getPageBySlug(scheduler.getSlug());
 		List<TimeSlot> timeSlots = schedulers.getAvailableTimeSlots(scheduler.getSlug());
+
+		TimeSlot slot = new TimeSlot();
+		slot.setAccountId("test-account-id");
+		slot.setCalendarId("test-calendar-id");
+		slot.setEmails(Collections.singletonList("recipient@example.com"));
+		slot.setHostName("Host");
+		slot.setStart(1636728347L);
+		slot.setEnd(1636728347L);
 
 		BookingRequest bookingRequest = new BookingRequest();
 		Map<String, Object> additionalValues = new HashMap<>();
