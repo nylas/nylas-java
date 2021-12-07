@@ -51,7 +51,7 @@ public class Webhook extends RestfulModel {
 	}
 	
 	@Override
-	protected Map<String, Object> getWritableFields(boolean creation) {
+	Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		if (creation) {
 			Maps.putIfNotNull(params, "callback_url", getCallbackUrl());

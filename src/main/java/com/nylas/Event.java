@@ -167,7 +167,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	}
 
 	@Override
-	protected Map<String, Object> getWritableFields(boolean creation) {
+	Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		if (creation) {
 			Maps.putIfNotNull(params, "calendar_id", getCalendarId());

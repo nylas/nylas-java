@@ -53,7 +53,7 @@ public class Calendar extends AccountOwnedModel {
 	}
 	
 	@Override
-	protected Map<String, Object> getWritableFields(boolean creation) {
+	Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		Maps.putIfNotNull(params, "name", getName());
 		Maps.putIfNotNull(params, "description", getDescription());
