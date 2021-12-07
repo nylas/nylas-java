@@ -1,11 +1,8 @@
 package com.nylas.scheduler;
 
-import com.nylas.Maps;
-import com.nylas.Model;
-
 import java.util.*;
 
-public class TimeSlot extends Model {
+public class TimeSlot {
 
 	private String account_id;
 	private String calendar_id;
@@ -76,18 +73,6 @@ public class TimeSlot extends Model {
 
 	public void setEmails(List<String> emails) {
 		this.emails = emails;
-	}
-
-	@Override
-	protected Map<String, Object> getWritableFields(boolean creation) {
-		Map<String, Object> params = new HashMap<>();
-		Maps.putIfNotNull(params, "account_id", account_id);
-		Maps.putIfNotNull(params, "calendar_id", calendar_id);
-		Maps.putIfNotNull(params, "host_name", host_name);
-		Maps.putIfNotNull(params, "start", start);
-		Maps.putIfNotNull(params, "end", end);
-		Maps.putIfNotNull(params, "emails", emails);
-		return params;
 	}
 
 	@Override

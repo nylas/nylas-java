@@ -1,11 +1,10 @@
 package com.nylas.scheduler;
 
 import com.nylas.Maps;
-import com.nylas.Model;
 
 import java.util.*;
 
-public class BookingRequest extends Model {
+public class BookingRequest {
 
 	private String name;
 	private String email;
@@ -89,7 +88,6 @@ public class BookingRequest extends Model {
 		this.additional_emails = additionalEmails;
 	}
 
-	@Override
 	public Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 
@@ -98,15 +96,20 @@ public class BookingRequest extends Model {
 			additionalValues = Collections.emptyMap();
 		}
 
+		List<String> additionalEmails = this.additional_emails;
+		if(additionalEmails == null) {
+			additionalEmails = Collections.emptyList();
+		}
+
 		Maps.putIfNotNull(params, "name", name);
 		Maps.putIfNotNull(params, "email", email);
 		Maps.putIfNotNull(params, "locale", locale);
 		Maps.putIfNotNull(params, "page_hostname", page_hostname);
 		Maps.putIfNotNull(params, "replaces_booking_hash", replaces_booking_hash);
 		Maps.putIfNotNull(params, "timezone", timezone);
-		Maps.putIfNotNull(params, "slot", slot.getWritableFields(true));
+		Maps.putIfNotNull(params, "slot", slot);
 		Maps.putIfNotNull(params, "additional_values", additionalValues);
-		Maps.putIfNotNull(params, "additional_emails", additional_emails);
+		Maps.putIfNotNull(params, "additional_emails", additionalEmails);
 		return params;
 	}
 

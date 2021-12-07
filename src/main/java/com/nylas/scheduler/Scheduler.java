@@ -3,7 +3,6 @@ package com.nylas.scheduler;
 import com.nylas.AccountOwnedModel;
 import com.nylas.JsonObject;
 import com.nylas.Maps;
-import com.nylas.Model;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -116,13 +115,8 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 	protected Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 
-		if(creation) {
+		if (creation) {
 			Maps.putIfNotNull(params, "access_tokens", access_tokens);
-		}
-
-		Map<String, Object> configWritableFields = null;
-		if(config != null) {
-			configWritableFields = config.getWritableFields(true);
 		}
 
 		Maps.putIfNotNull(params, "app_client_id", app_client_id);
@@ -132,7 +126,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "app_organization_id", app_organization_id);
 		Maps.putIfNotNull(params, "created_at", created_at);
 		Maps.putIfNotNull(params, "modified_at", modified_at);
-		Maps.putIfNotNull(params, "config", configWritableFields);
+		Maps.putIfNotNull(params, "config", config);
 		return params;
 	}
 
@@ -151,7 +145,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				']';
 	}
 
-	public static class Config extends Model {
+	public static class Config {
 
 		private String locale;
 		private String locale_for_guests;
@@ -247,46 +241,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			return true;
 		}
 
-
-		@Override
-		protected Map<String, Object> getWritableFields(boolean creation) {
-			Map<String, Object> params = new HashMap<>();
-
-			Map<String, Object> appearanceWritableFields = null;
-			if(appearance != null) {
-				appearanceWritableFields = appearance.getWritableFields(true);
-			}
-			Map<String, Object> bookingWritableFields = null;
-			if(booking != null) {
-				bookingWritableFields = booking.getWritableFields(true);
-			}
-			Map<String, Object> eventWritableFields = null;
-			if(event != null) {
-				eventWritableFields = event.getWritableFields(true);
-			}
-			Map<String, Object> expireAfterWritableFields = null;
-			if(expire_after != null) {
-				expireAfterWritableFields = expire_after.getWritableFields(true);
-			}
-			List<Map<String, Object>> remindersWritableFields = null;
-			if(!reminders.isEmpty()) {
-				remindersWritableFields = reminders.stream()
-						.map(remindersObj -> remindersObj.getWritableFields(true))
-						.collect(Collectors.toList());
-			}
-
-			Maps.putIfNotNull(params, "locale", locale);
-			Maps.putIfNotNull(params, "locale_for_guests", locale_for_guests);
-			Maps.putIfNotNull(params, "timezone", timezone);
-			Maps.putIfNotNull(params, "appearance", appearanceWritableFields);
-			Maps.putIfNotNull(params, "booking", bookingWritableFields);
-			Maps.putIfNotNull(params, "calendar_ids", calendar_ids);
-			Maps.putIfNotNull(params, "event", eventWritableFields);
-			Maps.putIfNotNull(params, "expire_after", expireAfterWritableFields);
-			Maps.putIfNotNull(params, "reminders", remindersWritableFields);
-			return params;
-		}
-
 		@Override
 		public String toString() {
 			return "Config [" +
@@ -302,7 +256,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 					']';
 		}
 
-		public static class Appearance extends Model {
+		public static class Appearance {
 
 			private String color;
 			private String company_name;
@@ -405,23 +359,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 
 			@Override
-			protected Map<String, Object> getWritableFields(boolean creation) {
-				Map<String, Object> params = new HashMap<>();
-				Maps.putIfNotNull(params, "color", color);
-				Maps.putIfNotNull(params, "company_name", company_name);
-				Maps.putIfNotNull(params, "logo", logo);
-				Maps.putIfNotNull(params, "privacy_policy_redirect", privacy_policy_redirect);
-				Maps.putIfNotNull(params, "submit_text", submit_text);
-				Maps.putIfNotNull(params, "thank_you_redirect", thank_you_redirect);
-				Maps.putIfNotNull(params, "thank_you_text", thank_you_text);
-				Maps.putIfNotNull(params, "thank_you_text_secondary", thank_you_text_secondary);
-				Maps.putIfNotNull(params, "show_autoschedule", show_autoschedule);
-				Maps.putIfNotNull(params, "show_nylas_branding", show_nylas_branding);
-				Maps.putIfNotNull(params, "show_timezone_options", show_timezone_options);
-				return params;
-			}
-
-			@Override
 			public String toString() {
 				return "Appearance [" +
 						"color='" + color + '\'' +
@@ -439,7 +376,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		public static class Booking extends Model {
+		public static class Booking {
 
 			private String scheduling_method;
 			private String cancellation_policy;
@@ -568,39 +505,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 
 			@Override
-			protected Map<String, Object> getWritableFields(boolean creation) {
-				Map<String, Object> params = new HashMap<>();
-
-				List<Map<String, Object>> additionalFieldsWritableFields = null;
-				if(!additional_fields.isEmpty()) {
-					additionalFieldsWritableFields = additional_fields.stream()
-							.map(additionalFields -> additionalFields.getWritableFields(true))
-							.collect(Collectors.toList());
-				}
-				List<Map<String, Object>> openingHoursWritableFields = null;
-				if(!opening_hours.isEmpty()) {
-					openingHoursWritableFields = opening_hours.stream()
-							.map(openingHours -> openingHours.getWritableFields(true))
-							.collect(Collectors.toList());
-				}
-
-				Maps.putIfNotNull(params, "scheduling_method", scheduling_method);
-				Maps.putIfNotNull(params, "cancellation_policy", cancellation_policy);
-				Maps.putIfNotNull(params, "confirmation_method", confirmation_method);
-				Maps.putIfNotNull(params, "available_days_in_future", available_days_in_future);
-				Maps.putIfNotNull(params, "min_booking_notice", min_booking_notice);
-				Maps.putIfNotNull(params, "min_buffer", min_buffer);
-				Maps.putIfNotNull(params, "min_cancellation_notice", min_cancellation_notice);
-				Maps.putIfNotNull(params, "calendar_invite_to_guests", calendar_invite_to_guests);
-				Maps.putIfNotNull(params, "confirmation_emails_to_guests", confirmation_emails_to_guests);
-				Maps.putIfNotNull(params, "confirmation_emails_to_host", confirmation_emails_to_host);
-				Maps.putIfNotNull(params, "name_field_hidden", name_field_hidden);
-				Maps.putIfNotNull(params, "additional_fields", additionalFieldsWritableFields);
-				Maps.putIfNotNull(params, "opening_hours", openingHoursWritableFields);
-				return params;
-			}
-
-			@Override
 			public String toString() {
 				return "Booking [" +
 						"schedulingMethod='" + scheduling_method + '\'' +
@@ -619,7 +523,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 						']';
 			}
 
-			public static class AdditionalFields extends Model {
+			public static class AdditionalFields {
 
 				private String label;
 				private String name;
@@ -703,20 +607,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				}
 
 				@Override
-				protected Map<String, Object> getWritableFields(boolean creation) {
-					Map<String, Object> params = new HashMap<>();
-					Maps.putIfNotNull(params, "label", label);
-					Maps.putIfNotNull(params, "name", name);
-					Maps.putIfNotNull(params, "pattern", pattern);
-					Maps.putIfNotNull(params, "type", type);
-					Maps.putIfNotNull(params, "dropdown_options", dropdown_options);
-					Maps.putIfNotNull(params, "multi_select_options", multi_select_options);
-					Maps.putIfNotNull(params, "order", order);
-					Maps.putIfNotNull(params, "required", required);
-					return params;
-				}
-
-				@Override
 				public String toString() {
 					return "AdditionalFields [" +
 							"label='" + label + '\'' +
@@ -731,7 +621,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				}
 			}
 
-			public static class OpeningHours extends Model {
+			public static class OpeningHours {
 				/**
 				 * Enumeration containing the different days accepted by the API
 				 */
@@ -800,16 +690,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				}
 
 				@Override
-				protected Map<String, Object> getWritableFields(boolean creation) {
-					Map<String, Object> params = new HashMap<>();
-					Maps.putIfNotNull(params, "account_id", account_id);
-					Maps.putIfNotNull(params, "end", end);
-					Maps.putIfNotNull(params, "start", start);
-					Maps.putIfNotNull(params, "days", days);
-					return params;
-				}
-
-				@Override
 				public String toString() {
 					return "OpeningHours [" +
 							"accountId='" + account_id + '\'' +
@@ -821,7 +701,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		public static class Calendar extends Model {
+		public static class Calendar {
 			private String booking;
 			private List<String> availability = new ArrayList<>();
 
@@ -846,14 +726,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 
 			@Override
-			protected Map<String, Object> getWritableFields(boolean creation) {
-				Map<String, Object> params = new HashMap<>();
-				Maps.putIfNotNull(params, "booking", booking);
-				Maps.putIfNotNull(params, "availability", availability);
-				return params;
-			}
-
-			@Override
 			public String toString() {
 				return "Calendar [" +
 						"booking='" + booking + '\'' +
@@ -862,7 +734,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		public static class Event extends Model {
+		public static class Event {
 			private String location;
 			private String title;
 			private Integer duration;
@@ -892,15 +764,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 
 			@Override
-			protected Map<String, Object> getWritableFields(boolean creation) {
-				Map<String, Object> params = new HashMap<>();
-				Maps.putIfNotNull(params, "location", location);
-				Maps.putIfNotNull(params, "title", title);
-				Maps.putIfNotNull(params, "duration", duration);
-				return params;
-			}
-
-			@Override
 			public String toString() {
 				return "Event [" +
 						"location='" + location + '\'' +
@@ -910,7 +773,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		public static class ExpireAfter extends Model {
+		public static class ExpireAfter {
 			private Integer uses;
 			private Long date;
 
@@ -939,14 +802,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 
 			@Override
-			protected Map<String, Object> getWritableFields(boolean creation) {
-				Map<String, Object> params = new HashMap<>();
-				Maps.putIfNotNull(params, "uses", uses);
-				Maps.putIfNotNull(params, "date", date);
-				return params;
-			}
-
-			@Override
 			public String toString() {
 				return "ExpireAfter [" +
 						"uses=" + uses +
@@ -955,7 +810,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		public static class Reminders extends Model {
+		public static class Reminders {
 			private String delivery_method;
 			private String delivery_recipient;
 			private String email_subject;
@@ -1000,17 +855,6 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 
 			public void setTimeBeforeEvent(Integer timeBeforeEvent) {
 				this.time_before_event = timeBeforeEvent;
-			}
-
-			@Override
-			protected Map<String, Object> getWritableFields(boolean creation) {
-				Map<String, Object> params = new HashMap<>();
-				Maps.putIfNotNull(params, "delivery_method", delivery_method);
-				Maps.putIfNotNull(params, "delivery_recipient", delivery_recipient);
-				Maps.putIfNotNull(params, "email_subject", email_subject);
-				Maps.putIfNotNull(params, "webhook_url", webhook_url);
-				Maps.putIfNotNull(params, "time_before_event", time_before_event);
-				return params;
 			}
 
 			@Override
