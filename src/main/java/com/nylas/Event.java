@@ -7,6 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
@@ -172,11 +173,19 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		if (creation) {
 			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
 		}
+
+		List<Map<String, Object>> participantWritableFields = null;
+		if(!participants.isEmpty()) {
+			participantWritableFields = participants.stream()
+					.map(Participant::getWritableFields)
+					.collect(Collectors.toList());
+		}
+
 		Maps.putIfNotNull(params, "when", getWhen());
 		Maps.putIfNotNull(params, "title", getTitle());
 		Maps.putIfNotNull(params, "description", getDescription());
 		Maps.putIfNotNull(params, "location", getLocation());
-		Maps.putIfNotNull(params, "participants", getParticipants());
+		Maps.putIfNotNull(params, "participants", participantWritableFields);
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "conferencing", getConferencing());

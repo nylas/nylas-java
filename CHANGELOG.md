@@ -15,6 +15,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+- Fix bug where updating an event resulted in an API error
+
 ### Removed
 
 ### Security
