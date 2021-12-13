@@ -48,7 +48,7 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
     
     // use log4j logging for tests
-    testRuntimeOnly('org.apache.logging.log4j:log4j-slf4j-impl:2.12.1')
+    testRuntimeOnly('org.apache.logging.log4j:log4j-slf4j-impl:2.15.0')
     
     // use wiremock for mocking the nylas server during tests
     testImplementation('com.github.tomakehurst:wiremock-jre8:2.26.3')
@@ -57,9 +57,9 @@ dependencies {
     // Examples dependencies
     
     // use log4j2 logging for examples
-    examplesImplementation('org.apache.logging.log4j:log4j-api:2.12.1')
-    examplesImplementation('org.apache.logging.log4j:log4j-core:2.12.1')
-    examplesImplementation('org.apache.logging.log4j:log4j-slf4j-impl:2.12.1')
+    examplesImplementation('org.apache.logging.log4j:log4j-api:2.15.0')
+    examplesImplementation('org.apache.logging.log4j:log4j-core:2.15.0')
+    examplesImplementation('org.apache.logging.log4j:log4j-slf4j-impl:2.15.0')
     
     // Guava for examples since it makes all Java better and we don't need to worry about
     // conflicting dependencies downstream for examples
