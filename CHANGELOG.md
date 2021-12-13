@@ -1,5 +1,21 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+This section contains changes that have been committed but not yet released.
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
 ## [1.10.1] - Released 2021-12-13
 
 ### Security
@@ -160,6 +176,7 @@ fetching all via fetchAll method
 
 Initial preview release
 
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.10.1...HEAD
 [1.10.1]: https://github.com/nylas/nylas-java/releases/tag/v1.10.1
 [1.10.0]: https://github.com/nylas/nylas-java/releases/tag/v1.10.0
 [1.9.1]: https://github.com/nylas/nylas-java/releases/tag/v1.9.1
