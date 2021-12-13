@@ -1,21 +1,10 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
-
-This section contains changes that have been committed but not yet released.
-
-### Added
-
-### Changed
-
-### Deprecated
-
-### Fixed
-
-### Removed
+## [1.10.1] - Released 2021-12-13
 
 ### Security
 
+- Address major `log4j` vulnerability, updated `log4j` to v2.15.0
 
 ## [1.10.0] - Released 2021-12-08
 
@@ -171,7 +160,7 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.10.0...HEAD
+[1.10.1]: https://github.com/nylas/nylas-java/releases/tag/v1.10.1
 [1.10.0]: https://github.com/nylas/nylas-java/releases/tag/v1.10.0
 [1.9.1]: https://github.com/nylas/nylas-java/releases/tag/v1.9.1
 [1.9.0]: https://github.com/nylas/nylas-java/releases/tag/v1.9.0
