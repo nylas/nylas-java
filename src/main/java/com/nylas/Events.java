@@ -95,7 +95,9 @@ public class Events extends RestfulDAO<Event> {
 	
 	private static final Map<String, String> NOTIFY_PARTICIPANTS_PARAMS
 		= Collections.unmodifiableMap(Maps.of("notify_participants", "true"));
+	private static final Map<String, String> DONT_NOTIFY_PARTICIPANTS_PARAMS
+		= Collections.unmodifiableMap(Maps.of("notify_participants", "false"));
 	private static Map<String, String> getExtraQueryParams(boolean notifyParticipants) {
-		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : null;
+		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : DONT_NOTIFY_PARTICIPANTS_PARAMS;
 	}
 }
