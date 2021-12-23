@@ -18,6 +18,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Security
 
+- Address major `log4j` vulnerability, updated `log4j` to v2.17.0
+
 ## [1.10.1] - Released 2021-12-13
 
 ### Security
