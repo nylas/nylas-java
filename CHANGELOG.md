@@ -8,6 +8,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
+- Added `false` parameter when `notifyParticipants` is false
+
 ### Deprecated
 
 ### Fixed
