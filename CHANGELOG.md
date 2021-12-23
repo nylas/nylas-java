@@ -8,13 +8,19 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
-- Added `false` parameter when `notifyParticipants` is false
-
 ### Deprecated
 
 ### Fixed
 
 ### Removed
+
+### Security
+
+## [1.10.2] - Released 2021-12-23
+
+### Changed
+
+- Added `false` parameter when `notifyParticipants` is false
 
 ### Security
 
@@ -180,7 +186,8 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.10.1...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.10.2...HEAD
+[1.10.2]: https://github.com/nylas/nylas-java/releases/tag/v1.10.2
 [1.10.1]: https://github.com/nylas/nylas-java/releases/tag/v1.10.1
 [1.10.0]: https://github.com/nylas/nylas-java/releases/tag/v1.10.0
 [1.9.1]: https://github.com/nylas/nylas-java/releases/tag/v1.9.1
