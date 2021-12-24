@@ -100,4 +100,55 @@ public class Events extends RestfulDAO<Event> {
 	private static Map<String, String> getExtraQueryParams(boolean notifyParticipants) {
 		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : DONT_NOTIFY_PARTICIPANTS_PARAMS;
 	}
+
+	/**
+	 * Class representation of the ics_options object used
+	 * for optional configuration during ICS file generation
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	public static class ICSOptions {
+		private String ical_uid;
+		private String method;
+		private String prodid;
+
+		public enum ICSMethod {
+			REQUEST,
+			PUBLISH,
+			REPLY,
+			ADD,
+			CANCEL,
+			REFRESH,
+
+			;
+
+			@Override
+			public String toString() {
+				return super.toString().toLowerCase();
+			}
+		}
+
+		public String getICalUID() {
+			return ical_uid;
+		}
+
+		public String getMethod() {
+			return method;
+		}
+
+		public String getProdId() {
+			return prodid;
+		}
+
+		public void setIcal_uid(String iCalUID) {
+			this.ical_uid = iCalUID;
+		}
+
+		public void setMethod(ICSMethod method) {
+			this.method = method.toString();
+		}
+
+		public void setProdid(String prodId) {
+			this.prodid = prodId;
+		}
+	}
 }
