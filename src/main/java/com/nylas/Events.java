@@ -80,6 +80,70 @@ public class Events extends RestfulDAO<Event> {
 		return client.executePost(authUser, url, params, modelClass);
 	}
 
+
+	/**
+	 * Generate an ICS file server-side, from an Event
+	 * {@code icsOptions} is set to null.
+	 * @see Events#generateICS(String, ICSOptions)
+	 */
+	public String generateICS(String eventId) throws RequestFailedException, IOException {
+		return generateICS(eventId, null);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event ID
+	 * @param eventId The ID of the existing Event to generate an ICS file for
+	 * @param icsOptions Configuration for the ICS file
+	 * @return String for writing directly into an ICS file
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	public String generateICS(String eventId, ICSOptions icsOptions) throws RequestFailedException, IOException {
+		if(eventId == null) {
+			throw new IllegalArgumentException("Must pass in an Event ID to generate an ICS.");
+		}
+		Map<String, Object> params = new HashMap<>();
+		params.put("event_id", eventId);
+		return toICS(params, icsOptions);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event
+	 * {@code icsOptions} is set to null.
+	 * @see Events#generateICS(String, ICSOptions)
+	 */
+	public String generateICS(Event event) throws RequestFailedException, IOException {
+		return generateICS(event, null);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event
+	 * @param event The Event to generate an ICS file for
+	 * @param icsOptions Configuration for the ICS file
+	 * @return String for writing directly into an ICS file
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	public String generateICS(Event event, ICSOptions icsOptions) throws RequestFailedException, IOException {
+		if(event == null || event.getCalendarId() == null) {
+			throw new IllegalArgumentException("Must pass in an Event with a Calendar ID.");
+		}
+		Map<String, Object> eventMap = event.getWritableFields(true);
+		return toICS(eventMap, icsOptions);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event payload
+	 * @param params The Event payload
+	 * @param icsOptions Configuration for the ICS file
+	 * @return String for writing directly into an ICS file
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	private String toICS(Map<String, Object> params, ICSOptions icsOptions) throws RequestFailedException, IOException {
+		HttpUrl.Builder url = getCollectionUrl().addPathSegment("to-ics");
+		Maps.putIfNotNull(params, "ics_options", icsOptions);
+		Map<String, String> response = client.executePost(authUser, url, params, Map.class);
+		return response.get("ics");
+	}
+
 	/**
 	 * Checks that the conferencing field is valid
 	 * An Event cannot have both manual conferencing details
