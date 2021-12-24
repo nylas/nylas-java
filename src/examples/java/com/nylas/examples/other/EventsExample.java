@@ -53,6 +53,8 @@ public class EventsExample {
 		
 		basicEventCrud(events, primary);
 		autocreateEvents(events, primary);
+
+		generateICS(events, primary);
 		//overrideRecurringEvent(primary, events);
 		//fetchRoomResources(events);
 		
@@ -60,7 +62,8 @@ public class EventsExample {
 	}
 
 	protected static void basicEventCrud(Events events, Calendar primary) throws IOException, RequestFailedException {
-		Event created = createBasicEvent(events, primary);
+		Event event = createBasicEvent(events, primary);
+		Event created = events.create(event, true);
 		System.out.println("Created: " + created);
 
 		Participant partier = new Participant("hamilton@example.com");
@@ -117,7 +120,9 @@ public class EventsExample {
 	}
 
 	protected static void autocreateEvents(Events events, Calendar primary) throws IOException, RequestFailedException {
-		Event created = createBasicEvent(events, primary);
+		Event event = createBasicEvent(events, primary);
+		Event created = events.create(event, true);
+		System.out.println("Created: " + created);
 
 		Event.Conferencing conferencing = new Event.Conferencing();
 		conferencing.setProvider("Zoom Meeting");
@@ -156,6 +161,28 @@ public class EventsExample {
 		}
 	}
 
+	protected static void generateICS(Events events, Calendar primary) throws RequestFailedException, IOException {
+		Event event = createBasicEvent(events, primary);
+
+		// You can make an Event from an event that hasn't been created on the API yet
+		String icsFromLocalEvent = events.generateICS(event);
+		System.out.println(icsFromLocalEvent);
+
+		// Or, from a pre-existing event on the API server
+		Event created = events.create(event, true);
+		System.out.println("Created: " + created);
+		String icsFromExistingEventID = events.generateICS(created.getId());
+		System.out.println(icsFromExistingEventID);
+
+		// You can also pass ICS Options for more configuration
+		Events.ICSOptions icsOptions = new Events.ICSOptions();
+		icsOptions.setIcal_uid("test_uuid");
+		icsOptions.setMethod(Events.ICSOptions.ICSMethod.ADD);
+		icsOptions.setProdid("test_prodid");
+		String icsFromExistingEventWithOptions = events.generateICS(created, icsOptions);
+		System.out.println(icsFromExistingEventWithOptions);
+	}
+
 	private static Event createBasicEvent(Events events, Calendar primary) throws IOException, RequestFailedException {
 		ZoneId startTz = ZoneId.of("America/Los_Angeles");
 		ZoneId endTz = ZoneId.of("America/New_York");
@@ -165,9 +192,7 @@ public class EventsExample {
 		Event event = new Event(primary.getId(), new Timespan(startTime, endTime));
 		event.setTitle("Surprise Party");
 
-		Event created = events.create(event, true);
-		System.out.println("Created: " + created);
-		return created;
+		return event;
 	}
 
 }
