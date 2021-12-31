@@ -6,7 +6,11 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Added support for the `forced_password` Hosted Auth setting
+
 ### Changed
+
+- Added missing `EMAIL` scope
 
 ### Deprecated
 
