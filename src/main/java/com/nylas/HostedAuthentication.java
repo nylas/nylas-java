@@ -62,6 +62,7 @@ public class HostedAuthentication {
 		private String scopes = "";
 		private String loginHint = "";
 		private String state = "";
+		private Boolean forcePassword;
 
 		UrlBuilder(NylasApplication app) {
 			this.app = app;
@@ -130,6 +131,15 @@ public class HostedAuthentication {
 			this.state = state;
 			return this;
 		}
+
+		/**
+		 * An optional setting for when using a password or wanting to choose a different
+		 * provider than auto selected
+		 */
+		public UrlBuilder forcePassword(boolean forcePassword) {
+			this.forcePassword = forcePassword;
+			return this;
+		}
 		
 		private void validate() {
 			assertState(!nullOrEmpty(redirectUri), "Redirection URI is required");
@@ -156,6 +166,9 @@ public class HostedAuthentication {
 			}
 			if (!nullOrEmpty(state)) {
 				urlBuilder.addQueryParameter("state", state);
+			}
+			if (forcePassword != null) {
+				urlBuilder.addQueryParameter("force_password", String.valueOf(forcePassword));
 			}
 					
 			return urlBuilder.build().toString();
