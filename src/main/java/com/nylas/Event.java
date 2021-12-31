@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
 
+import static com.nylas.Validations.nullOrEmpty;
+
 public class Event extends AccountOwnedModel implements JsonObject {
 
 	private String calendar_id;
@@ -175,7 +177,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 
 		List<Map<String, Object>> participantWritableFields = null;
-		if(!participants.isEmpty()) {
+		if(!nullOrEmpty(participants)) {
 			participantWritableFields = participants.stream()
 					.map(Participant::getWritableFields)
 					.collect(Collectors.toList());
