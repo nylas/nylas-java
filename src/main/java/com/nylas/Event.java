@@ -4,15 +4,11 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
-
-import static com.nylas.Validations.nullOrEmpty;
 
 public class Event extends AccountOwnedModel implements JsonObject {
 
@@ -23,13 +19,13 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private When when;
 	private String location;
 	private String owner;
-	private List<Participant> participants;
 	private String status;
 	private Boolean read_only;
 	private Boolean busy;
 	private Map<String, String> metadata;
 	private Conferencing conferencing;
 	private List<Notification> notifications;
+	private List<Participant> participants = new ArrayList<>();
 	
 	private Recurrence recurrence;
 	
@@ -177,7 +173,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 
 		List<Map<String, Object>> participantWritableFields = null;
-		if(!nullOrEmpty(participants)) {
+		if(!participants.isEmpty()) {
 			participantWritableFields = participants.stream()
 					.map(Participant::getWritableFields)
 					.collect(Collectors.toList());
