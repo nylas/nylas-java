@@ -165,6 +165,37 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.recurrence = recurrence;
 	}
 
+	/**
+	 * Add single metadata key-value pair to the event
+	 * @param key The key of the metadata entry
+	 * @param value The value of the metadata entry
+	 */
+	public void addMetadata(String key, String value) {
+		if(metadata == null) {
+			metadata = new HashMap<>();
+		}
+		metadata.put(key, value);
+	}
+
+	/**
+	 * Add one (or many) notifications to the event
+	 * @param notifications The notification(s) to append to the event's notification list
+	 */
+	public void addNotification(Notification... notifications) {
+		if(this.notifications == null) {
+			this.notifications = new ArrayList<>();
+		}
+		this.notifications.addAll(Arrays.asList(notifications));
+	}
+
+	/**
+	 * Add one (or many) participants to the event
+	 * @param participants The participant(s) to append to the event's participant list
+	 */
+	public void addParticipants(Participant... participants) {
+		this.participants.addAll(Arrays.asList(participants));
+	}
+
 	@Override
 	Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
