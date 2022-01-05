@@ -62,7 +62,7 @@ public class HostedAuthentication {
 		private String scopes = "";
 		private String loginHint = "";
 		private String state = "";
-		private Boolean forcePassword;
+		private boolean forcePassword = false;
 
 		UrlBuilder(NylasApplication app) {
 			this.app = app;
@@ -167,8 +167,8 @@ public class HostedAuthentication {
 			if (!nullOrEmpty(state)) {
 				urlBuilder.addQueryParameter("state", state);
 			}
-			if (forcePassword != null) {
-				urlBuilder.addQueryParameter("force_password", String.valueOf(forcePassword));
+			if (forcePassword) {
+				urlBuilder.addQueryParameter("force_password", "true");
 			}
 					
 			return urlBuilder.build().toString();
