@@ -19,6 +19,7 @@ public class HostedAuthUrlExample {
 			.scopes(Scope.values())
 			.loginHint(conf.get("hosted.login.hint"))
 			.state("example_csrf_token")
+			.forcePassword(true)
 			.buildUrl();
 		
 		System.out.println("Forward the user to this URL for hosted authentication:");
