@@ -1,5 +1,7 @@
 package com.nylas;
 
+import java.util.List;
+
 class Validations {
 
 	static void assertState(boolean valid, String message) {
@@ -28,6 +30,10 @@ class Validations {
 
 	static boolean nullOrEmpty(String s) {
 		return s == null || s.isEmpty();
+	}
+
+	static boolean nullOrEmpty(List<?> l) {
+		return l == null || l.isEmpty();
 	}
 	
 }

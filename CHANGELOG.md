@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+- Fixed bug where saving an event without participants threw a `NullPointerException`
+
 ### Removed
 
 ### Security
