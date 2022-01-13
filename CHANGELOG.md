@@ -20,6 +20,44 @@ This section contains changes that have been committed but not yet released.
 
 ### Security
 
+## [1.10.3] - Released 2022-01-05
+
+### Added
+
+- Added support for the `forced_password` Hosted Auth setting
+- Added missing `EMAIL` scope
+
+### Fixed
+
+- Fixed bug where saving an event without participants threw a `NullPointerException`
+
+## [1.10.2] - Released 2021-12-23
+
+### Changed
+
+- Added `false` parameter when `notifyParticipants` is false
+
+### Security
+
+- Address major `log4j` vulnerability, updated `log4j` to v2.17.0
+
+## [1.10.1] - Released 2021-12-13
+
+### Security
+
+- Address major `log4j` vulnerability, updated `log4j` to v2.15.0
+
+## [1.10.0] - Released 2021-12-08
+
+### Added
+
+- Add support for automatic meeting details
+- Add support for Event notifications
+
+### Fixed
+
+- Fix bug where updating an event resulted in an API error
+
 ## [1.9.1] - Released 2021-09-22
 
 ### Fixed
@@ -163,7 +201,11 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.9.1...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.10.3...HEAD
+[1.10.3]: https://github.com/nylas/nylas-java/releases/tag/v1.10.3
+[1.10.2]: https://github.com/nylas/nylas-java/releases/tag/v1.10.2
+[1.10.1]: https://github.com/nylas/nylas-java/releases/tag/v1.10.1
+[1.10.0]: https://github.com/nylas/nylas-java/releases/tag/v1.10.0
 [1.9.1]: https://github.com/nylas/nylas-java/releases/tag/v1.9.1
 [1.9.0]: https://github.com/nylas/nylas-java/releases/tag/v1.9.0
 [1.8.0]: https://github.com/nylas/nylas-java/releases/tag/v1.8.0
