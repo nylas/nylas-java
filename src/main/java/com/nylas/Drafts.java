@@ -94,7 +94,7 @@ public class Drafts extends RestfulDAO<Draft> {
 		Type resultType;
 		if (draft.hasId()) {
 			params = Maps.of("draft_id", draft.getId());
-			Maps.putIfNotNull(params, "draft_id", draft.getId());
+			Maps.putIfNotNull(params, "version", draft.getVersion());
 			resultType = null;
 		} else {
 			params = draft.getWritableFields(true);
