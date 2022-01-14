@@ -11,7 +11,7 @@ public class Calendar extends AccountOwnedModel {
 	private String timezone;
 	private Boolean read_only;
 	private Boolean is_primary;
-	private Map<String, String> metadata;
+	private Map<String, String> metadata = new HashMap<>();
 	
 	public String getName() {
 		return name;
@@ -62,29 +62,13 @@ public class Calendar extends AccountOwnedModel {
 	}
 
 	/**
-	 * Convenience method to add a metadata pair to an calendar.
+	 * Add single metadata key-value pair to the event
 	 *
-	 * @return true if the metadata was newly added, and false if overwriteIfExists is false the metadata key already exists
+	 * @param key The key of the metadata entry
+	 * @param value The value of the metadata entry
 	 */
-	public boolean addMetadata(String key, String value, boolean overwriteIfExists) {
-		if(!overwriteIfExists && metadata.containsKey(key)) {
-			return false;
-		}
-		metadata.put(key, value);
-		return true;
-	}
-
-	public boolean addMetadata(String key, String value) {
-		return addMetadata(key, value, true);
-	}
-
-	/**
-	 * Convenience method to remove a metadata pair from an calendar.
-	 *
-	 * @return true if the metadata pair was removed, and false if the calendar did not have the metadata key
-	 */
-	public boolean removeMetadata(String key) {
-		return metadata.remove(key) != null;
+	public void addMetadata(String key, String value) {
+		this.metadata.put(key, value);
 	}
 	
 	@Override

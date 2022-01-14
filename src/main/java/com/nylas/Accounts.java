@@ -74,33 +74,31 @@ public class Accounts extends RestfulDAO<Account> {
 	}
 
 	/**
-	 * Convenience method to add a metadata pair to an account.
+	 * Add single metadata key-value pair to the event
 	 *
-	 * @return true if the metadata was newly added, and false if overwriteIfExists is false the metadata key already exists
+	 * @param key The key of the metadata entry
+	 * @param value The value of the metadata entry
+	 * @return The account object after adding the new metadata
 	 */
-	public boolean addMetadata(String accountId, String key, String value, boolean overwriteIfExists)
-			throws IOException, RequestFailedException {
+	public Account addMetadata(String accountId, String key, String value) throws IOException, RequestFailedException {
 		Map<String, String> metadata = getMetadata(accountId);
-		if(!overwriteIfExists && metadata.containsKey(key)) {
-			return false;
+		if(metadata == null) {
+			metadata = new HashMap<>();
 		}
 		metadata.put(key, value);
-		setMetadata(accountId, metadata);
-		return true;
-	}
-
-	public boolean addMetadata(String accountId, String key, String value) throws IOException, RequestFailedException {
-		return addMetadata(accountId, key, value, true);
+		return setMetadata(accountId, metadata);
 	}
 
 	/**
 	 * Convenience method to remove a metadata pair from an account.
 	 *
-	 * @return true if the metadata pair was removed, and false if the account did not have the metadata key
+	 * @param accountId The ID of the account
+	 * @param key The key to delete
+	 * @return true if the metadata pair was removed, and false no action was taken
 	 */
 	public boolean removeMetadata(String accountId, String key) throws IOException, RequestFailedException {
 		Map<String, String> metadata = getMetadata(accountId);
-		if(metadata.remove(key) != null) {
+		if(metadata != null && metadata.remove(key) != null) {
 			setMetadata(accountId, metadata);
 			return true;
 		}
