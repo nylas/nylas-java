@@ -24,12 +24,10 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	protected List<Event> events = Collections.emptyList();
 	protected Folder folder;
 	protected List<Label> labels = Collections.emptyList();
-	protected Map<String, String> metadata;
+	protected Map<String, String> metadata = Collections.emptyMap();
 
 	// only available in expanded message view
 	private Map<String, Object> headers = Collections.emptyMap();
-
-	protected Map<String,Object> metadata = Collections.emptyMap();
 
 	@Override
 	public String getObjectType() {
@@ -111,10 +109,6 @@ public class Message extends AccountOwnedModel implements JsonObject {
 		return headers;
 	}
 
-
-	public Map<String, Object> getMetadata() {
-		return metadata;
-	}
 	@Override
 	public String toString() {
 		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject="

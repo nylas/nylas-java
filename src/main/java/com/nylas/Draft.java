@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class Draft extends Message {
 
+	protected Map<String, String> metadata = new HashMap<>() ;
 	private String reply_to_message_id;
 	private Integer version;
 	private Tracking tracking;
@@ -134,9 +135,17 @@ public class Draft extends Message {
 		this.thread_id = threadId;
 	}
 
+	public void setMetadata(Map<String, String> metadata) {
+		this.metadata = metadata;
+	}
 
-	public void setMetadata(Map<String, Object> metadata) {
-		this.metadata=metadata;
+	/**
+	 * Add single metadata key-value pair to the event
+	 * @param key The key of the metadata entry
+	 * @param value The value of the metadata entry
+	 */
+	public void addMetadata(String key, String value) {
+		this.metadata.put(key, value);
 	}
 
 	@Override
