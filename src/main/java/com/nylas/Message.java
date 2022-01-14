@@ -29,6 +29,8 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	// only available in expanded message view
 	private Map<String, Object> headers = Collections.emptyMap();
 
+	protected Map<String,Object> metadata = Collections.emptyMap();
+
 	@Override
 	public String getObjectType() {
 		return "message";
@@ -109,6 +111,10 @@ public class Message extends AccountOwnedModel implements JsonObject {
 		return headers;
 	}
 
+
+	public Map<String, Object> getMetadata() {
+		return metadata;
+	}
 	@Override
 	public String toString() {
 		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject="

@@ -134,6 +134,11 @@ public class Draft extends Message {
 		this.thread_id = threadId;
 	}
 
+
+	public void setMetadata(Map<String, Object> metadata) {
+		this.metadata=metadata;
+	}
+
 	@Override
 	protected Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
@@ -145,6 +150,7 @@ public class Draft extends Message {
 		Maps.putIfNotNull(params, "bcc", getBcc());
 		Maps.putIfNotNull(params, "body", getBody());
 		Maps.putIfNotNull(params, "version", getVersion());
+		Maps.putIfNotNull(params, "metadata", getMetadata());
 		List<String> fileIds = getFiles().stream().map(f -> f.getId()).collect(Collectors.toList());
 		params.put("file_ids", fileIds);
 		
