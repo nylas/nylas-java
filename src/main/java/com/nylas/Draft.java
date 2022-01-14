@@ -161,7 +161,7 @@ public class Draft extends Message {
 				+ getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject + ", from=" + from + ", to=" + to
 				+ ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date=" + date + ", unread=" + unread
 				+ ", starred=" + starred + ", snippet=" + snippet + ", body=" + body + ", files=" + files + ", folder="
-				+ folder + ", labels=" + labels + ", tracking=" + tracking + "]";
+				+ folder + ", labels=" + labels + ", tracking=" + tracking + ", metadata=" + metadata + "]";
 	}
 	
 	
