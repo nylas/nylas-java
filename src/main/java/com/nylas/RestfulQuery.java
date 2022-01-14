@@ -68,26 +68,6 @@ public abstract class RestfulQuery<Q extends RestfulQuery<Q>> implements Cloneab
 			throw new RuntimeException("clone contract failure", e);
 		}
 	}
-
-	/**
-	 * Modifier keywords for metadata queries
-	 *
-	 * NONE will return any object that does not match the metadata queried
-	 * ANY will return any account with metadata
-	 * All will return any account that matches all the metadata queried
-	 */
-	public enum MetadataSearchOptions {
-		NONE,
-		ANY,
-		ALL,
-
-		;
-
-		@Override
-		public String toString() {
-			return super.toString().toLowerCase();
-		}
-	}
 	
 	// helper method for fluent builder style without type warnings
 	@SuppressWarnings("unchecked")

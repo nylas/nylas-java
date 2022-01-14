@@ -16,11 +16,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	private String title;
 	private String description;
 	private String location;
-	private String metadataSearch;
 	private Instant startsBefore;
 	private Instant startsAfter;
 	private Instant endsBefore;
 	private Instant endsAfter;
+	private MetadataQuery metadataQuery;
 	private List<String> metadataKeys;
 	private List<String> metadataValues;
 	private List<String> metadataPairs;
@@ -50,9 +50,6 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		if (location != null) {
 			url.addQueryParameter("location", location);
 		}
-		if (metadataSearch != null) {
-			url.addQueryParameter("metadata_search", metadataSearch);
-		}
 		if (startsBefore != null) {
 			url.addQueryParameter("starts_before", Instants.formatEpochSecond(startsBefore));
 		}
@@ -79,6 +76,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 			for(String value : metadataPairs) {
 				url.addQueryParameter("metadata_pair", value);
 			}
+		}
+		if (metadataQuery != null) {
+			metadataQuery.addParameters(url);
 		}
 	}
 	
@@ -117,18 +117,6 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		return this;
 	}
 
-	/**
-	 * Return calendars query with a modifier on the metadata parameters.
-	 *
-	 * If NONE is provided, it will return any calendar that does not match the metadata queried
-	 * If ANY is provided, it will return any calendar with metadata
-	 * If ALL is provided, it will return any calendar that matches all the metadata queried
-	 */
-	public EventQuery metadataSearch(MetadataSearchOptions metadataSearch) {
-		this.metadataSearch = metadataSearch.toString();
-		return this;
-	}
-
 	public EventQuery startsBefore(Instant startsBefore) {
 		this.startsBefore = startsBefore;
 		return this;
@@ -146,6 +134,17 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	
 	public EventQuery endsAfter(Instant endsAfter) {
 		this.endsAfter = endsAfter;
+		return this;
+	}
+
+	/**
+	 * Add a metadata query to the event query.
+	 *
+	 * @param metadataQuery The metadata query.
+	 * @return The Event query with the metadata query set.
+	 */
+	public EventQuery metadataQuery(MetadataQuery metadataQuery) {
+		this.metadataQuery = metadataQuery;
 		return this;
 	}
 
