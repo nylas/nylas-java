@@ -1,6 +1,5 @@
 package com.nylas;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
