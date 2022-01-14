@@ -153,8 +153,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	 * 
 	 * If multiple instances of metadata methods are invoked
 	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
-	 * then this query will return events which match ANY one of them.  
+	 * then this query will return events which match ANY one of them.
+	 *
+	 * @deprecated Use of these metadata methods are replaced by {@link #metadataQuery(MetadataQuery)}
 	 */
+	@Deprecated
 	public EventQuery metadataKey(String... metadataKey) {
 		if (this.metadataKeys == null) {
 			this.metadataKeys = new ArrayList<>();
@@ -168,8 +171,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	 * 
 	 * If multiple instances of metadata methods are invoked
 	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
-	 * then this query will return events which match ANY one of them.  
+	 * then this query will return events which match ANY one of them.
+	 *
+	 * @deprecated Use of these metadata methods are replaced by {@link #metadataQuery(MetadataQuery)}
  	*/
+	@Deprecated
 	public EventQuery metadataValue(String... metadataValue) {
 		if (this.metadataValues == null) {
 			this.metadataValues = new ArrayList<>();
@@ -183,8 +189,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	 * 
 	 * If multiple instances of metadata methods are invoked
 	 * (any combination of calls to metadataKey, metadataValue, or metadataPair),
-	 * then this query will return events which match ANY one of them.  
+	 * then this query will return events which match ANY one of them.
+	 *
+	 * @deprecated Use of these metadata methods are replaced by {@link #metadataQuery(MetadataQuery)}
 	 */
+	@Deprecated
 	public EventQuery metadataPair(String key, String value) {
 		if (this.metadataPairs == null) {
 			this.metadataPairs = new ArrayList<>();
