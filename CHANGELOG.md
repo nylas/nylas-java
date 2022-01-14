@@ -6,6 +6,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Add support for modifying `Folder`
 - Add support for Scheduler API
 
 ### Changed
@@ -71,7 +72,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Deprecated
 
- - MicrosoftExchangeProviderSettings easServerHost in favor of exchangeServerHost
+- MicrosoftExchangeProviderSettings easServerHost in favor of exchangeServerHost
 
 ## [1.8.0] - Released 2021-07-30
 
@@ -89,11 +90,11 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 - Calendar.isPrimary field is now available
-- Event timezones will be checked for valid IANA zone names when created with ZonedDateTime objects 
+- Event timezones will be checked for valid IANA zone names when created with ZonedDateTime objects
 
 ### Deprecated
 
-- Deprecated Threads.setLabelIds method that takes an Iterable in favor for a Collection 
+- Deprecated Threads.setLabelIds method that takes an Iterable in favor for a Collection
 
 ### Fixed
 
@@ -109,7 +110,7 @@ This section contains changes that have been committed but not yet released.
 ### Deprecated
 
 - Deprecated `RequestFailedException` methods `getResponseBody` and `getStatus`
-in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
+  in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 
 ## [1.5.0] - Released 2021-02-25
 
@@ -120,7 +121,7 @@ in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 ### Deprecated
 
 - Deprecated public use of `RestfulQuery` methods `addParameters` and `copyAtNewOffsetLimit`.
-They are for internal use only and will be removed from the public API in the future.
+  They are for internal use only and will be removed from the public API in the future.
 
 ## [1.4.0] - Released 2020-12-11
 
@@ -128,8 +129,8 @@ They are for internal use only and will be removed from the public API in the fu
 
 - Calendar create, update, and delete support.
 - Job status support.  Many objects returned by the server from create and update operations will now include a job
-status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete
-operations will directly return job status ids.
+  status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete
+  operations will directly return job status ids.
 
 ### Fixed
 
@@ -172,7 +173,7 @@ Release 1.0.0 after users have been using it successfully.
 
 ### Changed
 
- - [BREAKING] Moved AuthenticationUrlBuilder to nested class HostedAuthentication.UrlBuilder
+- [BREAKING] Moved AuthenticationUrlBuilder to nested class HostedAuthentication.UrlBuilder
 
 ## [0.2.0] - Released 2020-04-27
 
@@ -186,8 +187,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 ### Changed
 
 - [BREAKING] List/query methods now return objects of type com.nylas.RemoteCollection (instead of java.util.List)
-which support lazy iteration of results fetched from the server in batches of 100 (by default), or eagerly
-fetching all via fetchAll method
+  which support lazy iteration of results fetched from the server in batches of 100 (by default), or eagerly
+  fetching all via fetchAll method
 - [BREAKING] Updated timestamp/date apis to use standard java.time.Instant and java.time.LocalDate
 - Other minor fixes
 

@@ -36,6 +36,11 @@ public class Folders extends RestfulDAO<Folder> {
 	public String delete(String folderId) throws IOException, RequestFailedException {
 		return super.delete(folderId);
 	}
+
+	@Override
+	public Folder update(Folder folder) throws RequestFailedException, IOException {
+		return super.update(folder);
+	}
 	
 	/**
 	 * Change the display name of the given folder.
