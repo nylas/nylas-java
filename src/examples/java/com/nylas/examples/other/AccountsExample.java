@@ -4,12 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.nylas.Account;
-import com.nylas.AccountQuery;
-import com.nylas.Accounts;
-import com.nylas.NylasApplication;
-import com.nylas.NylasClient;
-import com.nylas.TokenInfo;
+import com.nylas.*;
 import com.nylas.examples.ExampleConf;
 
 public class AccountsExample {
@@ -27,14 +22,14 @@ public class AccountsExample {
 		for (Account account : accountList) {
 			System.out.println(account);
 		}
-		
+
 		Account first = accounts.get(accountList.get(0).getId());
 		System.out.println("first: " + first);
-		
+
 		String accessToken = conf.get("access.token");
 		TokenInfo tokenInfo = accounts.tokenInfo(first.getId(), accessToken);
 		System.out.println("token info: " + tokenInfo);
-		
+
 		accounts.downgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
 		System.out.println("after downgrade: " + first);
@@ -47,8 +42,9 @@ public class AccountsExample {
 		metadata.put("account_type", "test");
 		accounts.setMetadata(accountList.get(0).getId(), metadata);
 
-		AccountQuery metadataQuery = new AccountQuery().metadataKey("account_type");
-		List<Account> accountsWithMetadata = accounts.list(metadataQuery).fetchAll();
+		MetadataQuery metadataQuery = new MetadataQuery().metadataKey("account_type");
+		AccountQuery accountQuery = new AccountQuery().metadataQuery(metadataQuery);
+		List<Account> accountsWithMetadata = accounts.list(accountQuery).fetchAll();
 		for (Account account : accountsWithMetadata) {
 			System.out.println("found account with 'account_type' metadata: " + account);
 		}
