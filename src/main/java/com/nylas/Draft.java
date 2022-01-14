@@ -135,7 +135,7 @@ public class Draft extends Message {
 	}
 
 	@Override
-	Map<String, Object> getWritableFields(boolean creation) {
+	protected Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		Maps.putIfNotNull(params, "subject", getSubject());
 		Maps.putIfNotNull(params, "from", getFrom());

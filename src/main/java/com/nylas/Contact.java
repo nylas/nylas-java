@@ -177,7 +177,7 @@ public class Contact extends AccountOwnedModel implements JsonObject {
 	}
 
 	@Override
-	Map<String, Object> getWritableFields(boolean creation) {
+	protected Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		if (creation) {
 			if (groups != null && groups.size() > 0) {
