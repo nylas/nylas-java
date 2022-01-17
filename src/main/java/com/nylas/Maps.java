@@ -16,5 +16,13 @@ public class Maps {
 			map.put(key, val);
 		}
 	}
+
+	static <K,V> void putValueOrDefault(Map<K, V> map, K key, V val, V defaultVal) {
+		if (key != null && val != null) {
+			map.put(key, val);
+		} else if(key != null) {
+			map.put(key, defaultVal);
+		}
+	}
 	
 }
