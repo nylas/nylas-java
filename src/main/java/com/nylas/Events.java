@@ -98,7 +98,7 @@ public class Events extends RestfulDAO<Event> {
 	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
 	 */
 	public String generateICS(String eventId, ICSOptions icsOptions) throws RequestFailedException, IOException {
-		if(eventId == null) {
+		if(Validations.nullOrEmpty(eventId)) {
 			throw new IllegalArgumentException("Must pass in an Event ID to generate an ICS.");
 		}
 		Map<String, Object> params = new HashMap<>();
