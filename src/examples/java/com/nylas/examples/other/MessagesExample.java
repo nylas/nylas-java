@@ -84,5 +84,10 @@ public class MessagesExample {
 //		
 //		String raw = messages.getRaw(firstMessage.getId());
 //		log.info("raw: " + raw);
+
+//		Map<String, String> metadata = new HashMap<>();
+//		metadata.put("message_type", "test");
+//		message = messages.setMetadata(firstMessage.getId(), metadata);
+//		log.info("set metadata " + message);
 	}
 }

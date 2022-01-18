@@ -11,6 +11,7 @@ public class Calendar extends AccountOwnedModel {
 	private String timezone;
 	private Boolean read_only;
 	private Boolean is_primary;
+	private Map<String, String> metadata = new HashMap<>();
 	
 	public String getName() {
 		return name;
@@ -36,6 +37,10 @@ public class Calendar extends AccountOwnedModel {
 		return is_primary;
 	}
 
+	public Map<String, String> getMetadata() {
+		return metadata;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -51,6 +56,20 @@ public class Calendar extends AccountOwnedModel {
 	public void setTimezone(String timezone) {
 		this.timezone = timezone;
 	}
+
+	public void setMetadata(Map<String, String> metadata) {
+		this.metadata = metadata;
+	}
+
+	/**
+	 * Add single metadata key-value pair to the event
+	 *
+	 * @param key The key of the metadata entry
+	 * @param value The value of the metadata entry
+	 */
+	public void addMetadata(String key, String value) {
+		this.metadata.put(key, value);
+	}
 	
 	@Override
 	protected Map<String, Object> getWritableFields(boolean creation) {
@@ -59,12 +78,13 @@ public class Calendar extends AccountOwnedModel {
 		Maps.putIfNotNull(params, "description", getDescription());
 		Maps.putIfNotNull(params, "location", location);
 		Maps.putIfNotNull(params, "timezone", timezone);
+		Maps.putIfNotNull(params, "metadata", metadata);
 		return params;
 	}
 
 	@Override
 	public String toString() {
 		return "Calendar [name=" + name + ", description=" + description + ", location=" + location + ", timezone="
-				+ timezone + ", readOnly=" + read_only + ", isPrimary=" + is_primary + "]";
+				+ timezone + ", readOnly=" + read_only + ", isPrimary=" + is_primary + ", metadata=" + metadata + "]";
 	}
 }

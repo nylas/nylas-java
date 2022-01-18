@@ -30,7 +30,7 @@ public class Folder extends AccountOwnedModel implements JsonObject {
 	}
 
 	@Override
-	Map<String, Object> getWritableFields(boolean creation) {
+	protected Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		Maps.putIfNotNull(params, "name", getName());
 		Maps.putIfNotNull(params, "display_name", getDisplayName());

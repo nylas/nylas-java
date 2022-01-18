@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.nylas.*;
 import com.nylas.examples.ExampleConf;
@@ -51,6 +53,9 @@ public class CalendarsExample {
 		created.setDescription("this calendar has been updated!");
 		created.setLocation("nearby");
 		created.setTimezone("America/New_York");
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("calendar_type", "test");
+		created.setMetadata(metadata);
 		Calendar updated = calendars.update(created);
 		log.info("Updated: " + updated + " status: " + updated.getJobStatusId());
 		
@@ -71,7 +76,7 @@ public class CalendarsExample {
 				.intervalMinutes(10);
 
 		Availability availability = calendars.availability(query);
-		System.out.println(availability.toString());
+		log.info(availability.toString());
 
 		MultipleAvailabilityQuery consecutiveQuery = new MultipleAvailabilityQuery()
 				.durationMinutes(30)
@@ -81,6 +86,6 @@ public class CalendarsExample {
 				.emails(Collections.singletonList(Collections.singletonList("you@example.com")));
 
 		List<List<ConsecutiveAvailability>> consecutiveAvailability = calendars.consecutiveAvailability(consecutiveQuery);
-		System.out.println(consecutiveAvailability.toString());
+		log.info(consecutiveAvailability.toString());
 	}
 }
