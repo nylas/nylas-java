@@ -9,8 +9,12 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.RemoteCollection;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FilesExample {
+
+	private static final Logger log = LogManager.getLogger(FilesExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -19,7 +23,7 @@ public class FilesExample {
 		Files files = account.files();
 		RemoteCollection<File> allFiles = files.list(new FileQuery());
 		for (File file : allFiles) {
-			System.out.println("File: " + file);
+			log.info("File: " + file);
 		}
 		
 		File first = allFiles.iterator().next();
@@ -29,10 +33,10 @@ public class FilesExample {
 		java.nio.file.Files.write(tmpfile, fileBytes);
 		
 		File uploaded = files.upload(first.getFilename(), first.getContentType(), fileBytes);
-		System.out.println("Uploaded: " + uploaded);
+		log.info("Uploaded: " + uploaded);
 		
 		files.delete(uploaded.getId());
-		System.out.println("deleted");
+		log.info("deleted");
 	}
 
 }

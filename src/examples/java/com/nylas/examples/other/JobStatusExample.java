@@ -7,8 +7,12 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.RemoteCollection;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class JobStatusExample {
+
+	private static final Logger log = LogManager.getLogger(JobStatusExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -17,19 +21,19 @@ public class JobStatusExample {
 		JobStatuses jobStatuses = account.jobStatuses();
 		
 		long count = jobStatuses.count(new JobStatusQuery());
-		System.out.println("Job status count: " + count);
+		log.info("Job status count: " + count);
 		
 		JobStatusQuery query = new JobStatusQuery().limit(50);
 		RemoteCollection<JobStatus> allJobStatuses = jobStatuses.list(query);
 		JobStatus lastStatus = null;
 		for (JobStatus jobStatus: allJobStatuses) {
-			System.out.println(jobStatus);
+			log.info(jobStatus);
 			lastStatus = jobStatus;
 		}
 		
 		if (lastStatus != null) {
 			JobStatus jobStatus = jobStatuses.get(lastStatus.getId());
-			System.out.println("status: " + jobStatus);
+			log.info("status: " + jobStatus);
 		}
 		
 	}

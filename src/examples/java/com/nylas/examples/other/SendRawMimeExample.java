@@ -5,8 +5,12 @@ import com.nylas.Message;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SendRawMimeExample {
+
+	private static final Logger log = LogManager.getLogger(SendRawMimeExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -14,11 +18,10 @@ public class SendRawMimeExample {
 		NylasAccount account = client.account(conf.get("access.token"));
 		Drafts drafts = account.drafts();
 		String rawMime = conf.get("send.rawmime");
-		System.out.println("Sending raw mime:");
-		System.out.println(rawMime);
-		System.out.println();
+		log.info("Sending raw mime:");
+		log.info(rawMime);
 		Message sentMessage = drafts.sendRawMime(rawMime);
-		System.out.println("Sent message: " + sentMessage);
+		log.info("Sent message: " + sentMessage);
 	}
 
 }
