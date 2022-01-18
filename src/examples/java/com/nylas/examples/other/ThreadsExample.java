@@ -3,6 +3,7 @@ package com.nylas.examples.other;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
@@ -11,8 +12,12 @@ import com.nylas.Thread;
 import com.nylas.ThreadQuery;
 import com.nylas.Threads;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ThreadsExample {
+
+	private static final Logger log = LogManager.getLogger(ThreadsExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -25,18 +30,12 @@ public class ThreadsExample {
 		ThreadQuery query = new ThreadQuery()
 				.limit(55)
 				.lastMessageAfter(start)
-//				.lastMessageBefore(end)
+				.lastMessageBefore(end)
 				;
-//		List<Thread> allThreads = threads.list(query).chunkSize(10).fetchAll();
-//		System.out.println("result thread count: " + allThreads.size());
-//		for (Thread thread : allThreads) {
-//			System.out.println(thread);
-//		}
-		
-		RemoteCollection<Thread> allThreads = threads.list(query).chunkSize(10);
+		List<Thread> allThreads = threads.list(query).chunkSize(10).fetchAll();
+		log.info("result thread count: " + allThreads.size());
 		for (Thread thread : allThreads) {
-			System.out.println(thread);
+			log.info(thread);
 		}
-
 	}
 }

@@ -6,9 +6,10 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Calendar Availability support
-- Add support for modifying `Folder`
-- Add support for Scheduler API
+- Added support for ICS file generation
+- Added Calendar Availability support
+- Added support for modifying `Folder`
+- Added support for Scheduler API
 
 ### Changed
 

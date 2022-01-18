@@ -9,8 +9,12 @@ import com.nylas.NylasApplication;
 import com.nylas.NylasClient;
 import com.nylas.TokenInfo;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AccountsExample {
+
+	private static final Logger log = LogManager.getLogger(AccountsExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -23,23 +27,23 @@ public class AccountsExample {
 				;
 		List<Account> accountList = accounts.list(query).fetchAll();
 		for (Account account : accountList) {
-			System.out.println(account);
+			log.info(account);
 		}
 		
 		Account first = accounts.get(accountList.get(0).getId());
-		System.out.println("first: " + first);
+		log.info("first: " + first);
 		
 		String accessToken = conf.get("access.token");
 		TokenInfo tokenInfo = accounts.tokenInfo(first.getId(), accessToken);
-		System.out.println("token info: " + tokenInfo);
+		log.info("token info: " + tokenInfo);
 		
 		accounts.downgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
-		System.out.println("after downgrade: " + first);
+		log.info("after downgrade: " + first);
 		
 		accounts.upgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
-		System.out.println("after upgrade: " + first);
+		log.info("after upgrade: " + first);
 		
 		//accounts.delete(first.getId());
 		//accounts.revokeAllTokensForAccount(first.getId(), "blahblah");

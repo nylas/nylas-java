@@ -6,8 +6,12 @@ import com.nylas.RemoteCollection;
 import com.nylas.Thread;
 import com.nylas.Threads;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ThreadSearchExample {
+
+	private static final Logger log = LogManager.getLogger(ThreadSearchExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -19,7 +23,7 @@ public class ThreadSearchExample {
 		// search
 		RemoteCollection<Thread> results = threads.search("kohl's");
 		for (Thread thread : results) {
-			System.out.println(thread);
+			log.info(thread);
 		}	
 	}
 }

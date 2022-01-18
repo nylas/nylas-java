@@ -7,8 +7,12 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.Tracking;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SendDirectExample {
+
+	private static final Logger log = LogManager.getLogger(SendDirectExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -32,7 +36,7 @@ public class SendDirectExample {
 		draft.setTracking(tracking);
 		
 		Message sentMessage = drafts.send(draft);
-		System.out.println("Sent message: " + sentMessage);
+		log.info("Sent message: " + sentMessage);
 	}
 
 }

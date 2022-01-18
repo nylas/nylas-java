@@ -16,8 +16,12 @@ import com.nylas.NylasClient;
 import com.nylas.examples.ExampleConf;
 
 import okhttp3.ResponseBody;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ContactsExample {
+
+	private static final Logger log = LogManager.getLogger(ContactsExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -34,11 +38,11 @@ public class ContactsExample {
 			if (c.getPictureUrl() != null) {
 				hasProfilePicture = c;
 			}
-			System.out.println(c);
+			log.info(c);
 		}
 		
 		if (hasProfilePicture == null) {
-			System.out.println("No contact has a profile pic");
+			log.info("No contact has a profile pic");
 		} else {
 			Path profilePicPath = Paths.get(System.getProperty("java.io.tmpdir") + "/contact.profile."
 					+ hasProfilePicture.getId() + ".jpg");
@@ -47,7 +51,7 @@ public class ContactsExample {
 						profilePicPath,
 						StandardCopyOption.REPLACE_EXISTING);
 			}
-			System.out.println("Downloaded profile pic to " + profilePicPath);
+			log.info("Downloaded profile pic to " + profilePicPath);
 		}
 		
 		
@@ -80,18 +84,18 @@ public class ContactsExample {
 		newContact.setPhysicalAddresses(Arrays.asList(address));
 		
 		Contact created = contacts.create(newContact);
-		System.out.println("Created: " + created);
+		log.info("Created: " + created);
 		
 		created.setGivenName("Icarus (deceased)");
 		Contact updated = contacts.update(created);
-		System.out.println("Updated: " + updated);
+		log.info("Updated: " + updated);
 		
 		contacts.delete(updated.getId());
-		System.out.println("deleted");
+		log.info("deleted");
 		
 		ContactGroups groups = account.contactGroups();
 		for (ContactGroup group : groups.listAll()) {
-			System.out.println(group);
+			log.info(group);
 		}
 	}
 }
