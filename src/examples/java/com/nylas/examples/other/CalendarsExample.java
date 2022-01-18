@@ -1,16 +1,13 @@
 package com.nylas.examples.other;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 
-import com.nylas.Calendar;
-import com.nylas.Calendars;
-import com.nylas.FreeBusy;
-import com.nylas.JobStatus;
-import com.nylas.NylasAccount;
-import com.nylas.NylasClient;
+import com.nylas.*;
 import com.nylas.examples.ExampleConf;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,5 +59,28 @@ public class CalendarsExample {
 		
 		JobStatus deleteStatus = account.jobStatuses().get(deleteJobStatusId);
 		log.info("Deletion status: " + deleteStatus);
+
+		availability(calendars);
+	}
+
+	protected static void availability(Calendars calendars) throws RequestFailedException, IOException {
+		SingleAvailabilityQuery query = new SingleAvailabilityQuery()
+				.durationMinutes(30)
+				.startTime(Instant.now())
+				.endTime(Instant.now().plus(1, ChronoUnit.HOURS))
+				.intervalMinutes(10);
+
+		Availability availability = calendars.availability(query);
+		System.out.println(availability.toString());
+
+		MultipleAvailabilityQuery consecutiveQuery = new MultipleAvailabilityQuery()
+				.durationMinutes(30)
+				.startTime(Instant.now())
+				.endTime(Instant.now().plus(1, ChronoUnit.HOURS))
+				.intervalMinutes(10)
+				.emails(Collections.singletonList(Collections.singletonList("you@example.com")));
+
+		List<List<ConsecutiveAvailability>> consecutiveAvailability = calendars.consecutiveAvailability(consecutiveQuery);
+		System.out.println(consecutiveAvailability.toString());
 	}
 }

@@ -2,14 +2,8 @@ package com.nylas;
 
 import java.util.List;
 
-public class FreeBusy {
-
-	private String email;
+public class Availability {
 	private List<TimeSlot> time_slots;
-	
-	public String getEmail() {
-		return email;
-	}
 
 	public List<TimeSlot> getTimeSlots() {
 		return time_slots;
@@ -17,6 +11,6 @@ public class FreeBusy {
 
 	@Override
 	public String toString() {
-		return "FreeBusy [email=" + email + ", time_slots=" + time_slots + "]";
+		return "Availability [time_slots=" + time_slots + "]";
 	}
 }

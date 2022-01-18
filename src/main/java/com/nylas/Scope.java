@@ -8,6 +8,11 @@ package com.nylas;
 public enum Scope {
 
 	/**
+	 * Read, modify, and send all messages, threads, file attachments, and read email metadata like headers.
+	 */
+	EMAIL("email"),
+
+	/**
 	 * Read and modify all messages, threads, file attachments, and read email metadata like headers.
 	 * Does not include send.
 	 */
