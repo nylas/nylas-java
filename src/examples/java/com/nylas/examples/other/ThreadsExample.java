@@ -3,6 +3,7 @@ package com.nylas.examples.other;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
@@ -29,18 +30,12 @@ public class ThreadsExample {
 		ThreadQuery query = new ThreadQuery()
 				.limit(55)
 				.lastMessageAfter(start)
-//				.lastMessageBefore(end)
+				.lastMessageBefore(end)
 				;
-//		List<Thread> allThreads = threads.list(query).chunkSize(10).fetchAll();
-//		log.info("result thread count: " + allThreads.size());
-//		for (Thread thread : allThreads) {
-//			log.info(thread);
-//		}
-		
-		RemoteCollection<Thread> allThreads = threads.list(query).chunkSize(10);
+		List<Thread> allThreads = threads.list(query).chunkSize(10).fetchAll();
+		log.info("result thread count: " + allThreads.size());
 		for (Thread thread : allThreads) {
 			log.info(thread);
 		}
-
 	}
 }
