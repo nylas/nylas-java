@@ -12,8 +12,12 @@ import com.nylas.JobStatus;
 import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CalendarsExample {
+
+	private static final Logger log = LogManager.getLogger(CalendarsExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -22,19 +26,19 @@ public class CalendarsExample {
 		Calendars calendars = account.calendars();
 		String calendarEmail = null;
 		for (Calendar calendar : calendars.list()) {
-			System.out.println(calendar);
+			log.info(calendar);
 			if (calendar.getName().contains("@")) {
 				calendarEmail = calendar.getName();
 			}
 		}
 		if (calendarEmail == null) {
-			System.out.println("No calendar found with a name that looks like an email");
+			log.info("No calendar found with a name that looks like an email");
 		} else {
 			Instant end = ZonedDateTime.now().toInstant();
 			Instant start = end.minus(30, ChronoUnit.DAYS);
 			List<FreeBusy> freeBusyInfo = calendars.checkFreeBusy(start, end, calendarEmail);
 			for (FreeBusy freeBusy : freeBusyInfo) {
-				System.out.println(freeBusy);
+				log.info(freeBusy);
 			}
 		}
 		
@@ -44,19 +48,19 @@ public class CalendarsExample {
 		newCal.setLocation("far, far away");
 		newCal.setTimezone("America/Los_Angeles");
 		Calendar created = calendars.create(newCal);
-		System.out.println("Created: " + created + " status: " + created.getJobStatusId());
+		log.info("Created: " + created + " status: " + created.getJobStatusId());
 		
 		created.setName("New Test Calendar (changed)");
 		created.setDescription("this calendar has been updated!");
 		created.setLocation("nearby");
 		created.setTimezone("America/New_York");
 		Calendar updated = calendars.update(created);
-		System.out.println("Updated: " + updated + " status: " + updated.getJobStatusId());
+		log.info("Updated: " + updated + " status: " + updated.getJobStatusId());
 		
 		String deleteJobStatusId = calendars.delete(updated.getId());
-		System.out.println("Deleted, deleted job status id: " + deleteJobStatusId);
+		log.info("Deleted, deleted job status id: " + deleteJobStatusId);
 		
 		JobStatus deleteStatus = account.jobStatuses().get(deleteJobStatusId);
-		System.out.println("Deletion status: " + deleteStatus);
+		log.info("Deletion status: " + deleteStatus);
 	}
 }

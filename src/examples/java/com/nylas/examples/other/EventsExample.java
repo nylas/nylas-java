@@ -15,8 +15,12 @@ import com.nylas.Event.Recurrence;
 import com.nylas.Event.Time;
 import com.nylas.Event.Timespan;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class EventsExample {
+
+	private static final Logger log = LogManager.getLogger(EventsExample.class);
 
 	public static void main(String[] args) throws Exception {
 		
@@ -35,10 +39,10 @@ public class EventsExample {
 			}
 		}
 		if (primary == null) {
-			System.out.println("Unable to find primary calendar");
+			log.info("Unable to find primary calendar");
 			return;
 		}
-		System.out.println("Primary calendar: " + primary);
+		log.info("Primary calendar: " + primary);
 		
 		
 		EventQuery query = new EventQuery()
@@ -48,7 +52,7 @@ public class EventsExample {
 				.limit(50);
 
 		for (Event event : events.list(query)) {
-			System.out.println("event: " + event);
+			log.info("event: " + event);
 		}
 		
 		basicEventCrud(events, primary);
@@ -64,7 +68,7 @@ public class EventsExample {
 	protected static void basicEventCrud(Events events, Calendar primary) throws IOException, RequestFailedException {
 		Event event = createBasicEvent(events, primary);
 		Event created = events.create(event, true);
-		System.out.println("Created: " + created);
+		log.info("Created: " + created);
 
 		Participant partier = new Participant("hamilton@example.com");
 		partier.name("Alexander Hamilton");
@@ -103,7 +107,7 @@ public class EventsExample {
 		created.setConferencing(conferencing);
 
 		Event updated = events.update(created, true);
-		System.out.println("Updated: " + updated);
+		log.info("Updated: " + updated);
 
 		Event.EmailNotification notification = new Event.EmailNotification();
 		notification.setMinutesBeforeEvent(60);
@@ -113,16 +117,16 @@ public class EventsExample {
 		updated.setParticipants(Arrays.asList(partier, partier1, partier2, partier3));
 
 		updated = events.update(updated, true);
-		System.out.println("Updated: " + updated);
+		log.info("Updated: " + updated);
 		
 		events.delete(updated.getId(), true);
-		System.out.println("Deleted");
+		log.info("Deleted");
 	}
 
 	protected static void autocreateEvents(Events events, Calendar primary) throws IOException, RequestFailedException {
 		Event event = createBasicEvent(events, primary);
 		Event created = events.create(event, true);
-		System.out.println("Created: " + created);
+		log.info("Created: " + created);
 
 		Event.Conferencing conferencing = new Event.Conferencing();
 		conferencing.setProvider("Zoom Meeting");
@@ -131,10 +135,10 @@ public class EventsExample {
 		created.setConferencing(conferencing);
 
 		Event updated = events.update(created, true);
-		System.out.println("Updated: " + updated);
+		log.info("Updated: " + updated);
 
 		events.delete(updated.getId(), true);
-		System.out.println("Deleted");
+		log.info("Deleted");
 	}
 
 	protected static void overrideRecurringEvent(Calendar calendar, Events events) throws IOException, RequestFailedException {
@@ -152,12 +156,12 @@ public class EventsExample {
 				break;
 			}
 		}
-		System.out.println("Event to override: " + eventToOverride);
+		log.info("Event to override: " + eventToOverride);
 		
 		if (eventToOverride != null) {
 			eventToOverride.setTitle("Altered " + eventToOverride.getTitle());
 			eventToOverride = events.update(eventToOverride, false);
-			System.out.println("Overrode event instance:" + eventToOverride);
+			log.info("Overrode event instance:" + eventToOverride);
 		}
 	}
 
@@ -166,13 +170,13 @@ public class EventsExample {
 
 		// You can make an Event from an event that hasn't been created on the API yet
 		String icsFromLocalEvent = events.generateICS(event);
-		System.out.println(icsFromLocalEvent);
+		log.info(icsFromLocalEvent);
 
 		// Or, from a pre-existing event on the API server
 		Event created = events.create(event, true);
-		System.out.println("Created: " + created);
+		log.info("Created: " + created);
 		String icsFromExistingEventID = events.generateICS(created.getId());
-		System.out.println(icsFromExistingEventID);
+		log.info(icsFromExistingEventID);
 
 		// You can also pass ICS Options for more configuration
 		Events.ICSOptions icsOptions = new Events.ICSOptions();
@@ -180,7 +184,7 @@ public class EventsExample {
 		icsOptions.setMethod(Events.ICSOptions.ICSMethod.ADD);
 		icsOptions.setProdid("test_prodid");
 		String icsFromExistingEventWithOptions = events.generateICS(created, icsOptions);
-		System.out.println(icsFromExistingEventWithOptions);
+		log.info(icsFromExistingEventWithOptions);
 	}
 
 	private static Event createBasicEvent(Events events, Calendar primary) throws IOException, RequestFailedException {

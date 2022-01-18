@@ -2,6 +2,8 @@ package com.nylas.examples.other;
 
 import com.nylas.*;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class NeuralExample {
+
+	private static final Logger log = LogManager.getLogger(NeuralExample.class);
+
 	public static void main(String[] args) throws RequestFailedException, IOException {
 		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
@@ -25,18 +30,18 @@ public class NeuralExample {
 		// Sentiment Analysis
 		List<NeuralSentimentAnalysis> messageAnalysis = neural
 				.sentimentAnalysisMessage(new ArrayList<>(Collections.singletonList(email.getId())));
-		System.out.println(messageAnalysis.get(0));
+		log.info(messageAnalysis.get(0));
 
 		NeuralSentimentAnalysis textAnalysis = neural
 				.sentimentAnalysisText("Hi, thank you so much for reaching out! We can catch up tomorrow.");
-		System.out.println(textAnalysis);
+		log.info(textAnalysis);
 
 		// Signature Extraction
 		List<NeuralSignatureExtraction> extractSignature = neural
 				.extractSignature(new ArrayList<>(Collections.singletonList(email.getId())));
-		System.out.println(extractSignature.get(0));
+		log.info(extractSignature.get(0));
 		Contact contact = extractSignature.get(0).getContacts().toContactObject();
-		System.out.println(contact);
+		log.info(contact);
 
 		NeuralMessageOptions options = new NeuralMessageOptions()
 				.ignoreImages(true)
@@ -49,14 +54,14 @@ public class NeuralExample {
 
 		// OCR
 		NeuralOcr ocr = neural.ocrRequest( email.getFiles().get(0).getId() );
-		System.out.println(ocr);
+		log.info(ocr);
 		ocr = neural.ocrRequest( email.getFiles().get(0).getId(), 2, 3 );
-		System.out.println(ocr);
+		log.info(ocr);
 
 		// Clean Conversations
 		List<NeuralCleanConversation> cleanConversations = neural
 				.cleanConversation(new ArrayList<>(Collections.singletonList(email.getId())));
-		System.out.println(cleanConversations);
+		log.info(cleanConversations);
 		neural.extractImages(cleanConversations.get(0));
 	}
 }
