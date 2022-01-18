@@ -12,10 +12,13 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.RemoteCollection;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LabelsExample {
 
-	
+	private static final Logger log = LogManager.getLogger(LabelsExample.class);
+
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
@@ -25,41 +28,41 @@ public class LabelsExample {
 		RemoteCollection<Label> allLabels = labels.list();
 		Label inbox = null;
 		for (Label label : allLabels) {
-			System.out.println(label);
+			log.info(label);
 			if ("inbox".equals(label.getName())) {
 				inbox = label;
 			}
 		}
-		System.out.println("Inbox label: " + inbox);
+		log.info("Inbox label: " + inbox);
 		
 		Label newLabel = labels.create("Example Label!!");
-		System.out.println("created: " + newLabel);
+		log.info("created: " + newLabel);
 		
 		
 		Messages messages = account.messages();
 		List<Message> messageList = messages.list(new MessageQuery().limit(1)).fetchAll();
 		if (messageList.isEmpty()) {
-			System.out.println("No messages");
+			log.info("No messages");
 			return;
 		}
 		
 		String messageId = messageList.get(0).getId();
 		Message message = messages.setLabelIds(messageId, Arrays.asList(newLabel.getId()));
-		System.out.println("labelled message: " + message);
+		log.info("labelled message: " + message);
 		
 		Label newLabel2 = labels.create("Another Example Label");
-		System.out.println("created: " + newLabel2);
+		log.info("created: " + newLabel2);
 		boolean result = messages.addLabel(messageId, newLabel2.getId());
-		System.out.println("attempted to add another label.  success=" + result);
+		log.info("attempted to add another label.  success=" + result);
 		
 		result = messages.addLabel(messageId, newLabel2.getId());
-		System.out.println("attempted to add the same one again.  success=" + result);
+		log.info("attempted to add the same one again.  success=" + result);
 		
 		message = messages.get(messageId);
-		System.out.println("added another label to message: " + message);
+		log.info("added another label to message: " + message);
 		
 		labels.delete(newLabel.getId());
 		labels.delete(newLabel2.getId());
-		System.out.println("deleted the new labels");
+		log.info("deleted the new labels");
 	}
 }

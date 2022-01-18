@@ -4,9 +4,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
@@ -20,13 +19,13 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private When when;
 	private String location;
 	private String owner;
-	private List<Participant> participants;
 	private String status;
 	private Boolean read_only;
 	private Boolean busy;
-	private Map<String, String> metadata;
 	private Conferencing conferencing;
 	private List<Notification> notifications;
+	private List<Participant> participants = new ArrayList<>();
+	private Map<String, String> metadata = new HashMap<>();
 	
 	private Recurrence recurrence;
 	
@@ -166,17 +165,53 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.recurrence = recurrence;
 	}
 
+	/**
+	 * Add single metadata key-value pair to the event
+	 * @param key The key of the metadata entry
+	 * @param value The value of the metadata entry
+	 */
+	public void addMetadata(String key, String value) {
+		this.metadata.put(key, value);
+	}
+
+	/**
+	 * Add one (or many) notifications to the event
+	 * @param notifications The notification(s) to append to the event's notification list
+	 */
+	public void addNotification(Notification... notifications) {
+		if(this.notifications == null) {
+			this.notifications = new ArrayList<>();
+		}
+		this.notifications.addAll(Arrays.asList(notifications));
+	}
+
+	/**
+	 * Add one (or many) participants to the event
+	 * @param participants The participant(s) to append to the event's participant list
+	 */
+	public void addParticipants(Participant... participants) {
+		this.participants.addAll(Arrays.asList(participants));
+	}
+
 	@Override
-	Map<String, Object> getWritableFields(boolean creation) {
+	protected Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		if (creation) {
 			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
 		}
+
+		List<Map<String, Object>> participantWritableFields = null;
+		if(participants != null && !participants.isEmpty()) {
+			participantWritableFields = participants.stream()
+					.map(Participant::getWritableFields)
+					.collect(Collectors.toList());
+		}
+
 		Maps.putIfNotNull(params, "when", getWhen());
 		Maps.putIfNotNull(params, "title", getTitle());
 		Maps.putIfNotNull(params, "description", getDescription());
 		Maps.putIfNotNull(params, "location", getLocation());
-		Maps.putIfNotNull(params, "participants", getParticipants());
+		Maps.putIfNotNull(params, "participants", participantWritableFields);
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "conferencing", getConferencing());

@@ -6,8 +6,12 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.Tracking;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SendDraftExample {
+
+	private static final Logger log = LogManager.getLogger(SendDraftExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -24,11 +28,11 @@ public class SendDraftExample {
 		draft.setBody(conf.get("send.body"));
 		
 		Draft saved = drafts.create(draft);
-		System.out.println("Initial saved draft: " + saved);
+		log.info("Initial saved draft: " + saved);
 		
 		saved.setSubject(conf.get("send.subject"));
 		saved = drafts.update(saved);
-		System.out.println("Updated saved draft: " + saved);
+		log.info("Updated saved draft: " + saved);
 		
 		Tracking tracking = new Tracking();
 		tracking.setOpens(true);
@@ -36,7 +40,7 @@ public class SendDraftExample {
 		saved.setTracking(tracking);
 		
 		drafts.send(saved);
-		System.out.println("Sent");
+		log.info("Sent");
 	}
 	
 

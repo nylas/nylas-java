@@ -12,9 +12,13 @@ import com.nylas.Thread;
 import com.nylas.ThreadQuery;
 import com.nylas.Threads;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class FoldersExample {
+
+	private static final Logger log = LogManager.getLogger(FoldersExample.class);
 	
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -30,37 +34,40 @@ public class FoldersExample {
 		List<Folder> allFolders = folders.list(fQuery).fetchAll();
 		Folder inbox = null;
 		for (Folder folder : allFolders) {
-			System.out.println(folder);
+			log.info(folder);
 			if ("inbox".equals(folder.getName())) {
 				inbox = folder;
 			}
 		}
-		
+
 		Folder newFolder = folders.create("Example Folder 7");
-		System.out.println(newFolder);
+		log.info(newFolder);
+		newFolder.setDisplayName("My Renamed Folder");
+		Folder updatedFolder = folders.update(newFolder);
+		log.info(updatedFolder);
 		
 		Threads threads = account.threads();
 		List<Thread> threadList = threads.list(new ThreadQuery().limit(1)).fetchAll();
 		if (threadList.isEmpty()) {
-			System.out.println("No threads");
+			log.info("No threads");
 			return;
 		}
 		
 		String threadId = threadList.get(0).getId();
-		
-		Thread thread = threads.setFolderId(threadId, newFolder.getId());
-		System.out.println(thread);
+
+		Thread thread = threads.setFolderId(threadId, updatedFolder.getId());
+		log.info(thread);
 		
 		try {
-			folders.delete(newFolder.getId());
+			folders.delete(updatedFolder.getId());
 		} catch (RequestFailedException rfe) {
-			System.out.println(rfe.getErrorMessage());
+			log.info(rfe.getErrorMessage());
 		}
 		
 		
 		thread = threads.setFolderId(threadId, inbox.getId());
-		System.out.println(thread);
+		log.info(thread);
 		
-		folders.delete(newFolder.getId());
+		folders.delete(updatedFolder.getId());
 	}
 }

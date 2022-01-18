@@ -80,6 +80,70 @@ public class Events extends RestfulDAO<Event> {
 		return client.executePost(authUser, url, params, modelClass);
 	}
 
+
+	/**
+	 * Generate an ICS file server-side, from an Event
+	 * {@code icsOptions} is set to null.
+	 * @see Events#generateICS(String, ICSOptions)
+	 */
+	public String generateICS(String eventId) throws RequestFailedException, IOException {
+		return generateICS(eventId, null);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event ID
+	 * @param eventId The ID of the existing Event to generate an ICS file for
+	 * @param icsOptions Configuration for the ICS file
+	 * @return String for writing directly into an ICS file
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	public String generateICS(String eventId, ICSOptions icsOptions) throws RequestFailedException, IOException {
+		if(Validations.nullOrEmpty(eventId)) {
+			throw new IllegalArgumentException("Must pass in an Event ID to generate an ICS.");
+		}
+		Map<String, Object> params = new HashMap<>();
+		params.put("event_id", eventId);
+		return toICS(params, icsOptions);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event
+	 * {@code icsOptions} is set to null.
+	 * @see Events#generateICS(String, ICSOptions)
+	 */
+	public String generateICS(Event event) throws RequestFailedException, IOException {
+		return generateICS(event, null);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event
+	 * @param event The Event to generate an ICS file for
+	 * @param icsOptions Configuration for the ICS file
+	 * @return String for writing directly into an ICS file
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	public String generateICS(Event event, ICSOptions icsOptions) throws RequestFailedException, IOException {
+		if(event == null || event.getCalendarId() == null) {
+			throw new IllegalArgumentException("Must pass in an Event with a Calendar ID.");
+		}
+		Map<String, Object> eventMap = event.getWritableFields(true);
+		return toICS(eventMap, icsOptions);
+	}
+
+	/**
+	 * Generate an ICS file server-side, from an Event payload
+	 * @param params The Event payload
+	 * @param icsOptions Configuration for the ICS file
+	 * @return String for writing directly into an ICS file
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	private String toICS(Map<String, Object> params, ICSOptions icsOptions) throws RequestFailedException, IOException {
+		HttpUrl.Builder url = getCollectionUrl().addPathSegment("to-ics");
+		Maps.putIfNotNull(params, "ics_options", icsOptions);
+		Map<String, String> response = client.executePost(authUser, url, params, Map.class);
+		return response.get("ics");
+	}
+
 	/**
 	 * Checks that the conferencing field is valid
 	 * An Event cannot have both manual conferencing details
@@ -95,7 +159,60 @@ public class Events extends RestfulDAO<Event> {
 	
 	private static final Map<String, String> NOTIFY_PARTICIPANTS_PARAMS
 		= Collections.unmodifiableMap(Maps.of("notify_participants", "true"));
+	private static final Map<String, String> DONT_NOTIFY_PARTICIPANTS_PARAMS
+		= Collections.unmodifiableMap(Maps.of("notify_participants", "false"));
 	private static Map<String, String> getExtraQueryParams(boolean notifyParticipants) {
-		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : null;
+		return notifyParticipants ? NOTIFY_PARTICIPANTS_PARAMS : DONT_NOTIFY_PARTICIPANTS_PARAMS;
+	}
+
+	/**
+	 * Class representation of the ics_options object used
+	 * for optional configuration during ICS file generation
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/events/to-ics">Generate ICS File</a>
+	 */
+	public static class ICSOptions {
+		private String ical_uid;
+		private String method;
+		private String prodid;
+
+		public enum ICSMethod {
+			REQUEST,
+			PUBLISH,
+			REPLY,
+			ADD,
+			CANCEL,
+			REFRESH,
+
+			;
+
+			@Override
+			public String toString() {
+				return super.toString().toLowerCase();
+			}
+		}
+
+		public String getICalUID() {
+			return ical_uid;
+		}
+
+		public String getMethod() {
+			return method;
+		}
+
+		public String getProdId() {
+			return prodid;
+		}
+
+		public void setIcal_uid(String iCalUID) {
+			this.ical_uid = iCalUID;
+		}
+
+		public void setMethod(ICSMethod method) {
+			this.method = method.toString();
+		}
+
+		public void setProdid(String prodId) {
+			this.prodid = prodId;
+		}
 	}
 }

@@ -34,7 +34,7 @@ public abstract class RestfulModel {
 	 * Default is none, for types that do not allow writes.  Subclasses that
 	 * allow for writes should override and implement
 	 */
-	Map<String, Object> getWritableFields(@SuppressWarnings("unused") boolean creation) {
+	protected Map<String, Object> getWritableFields(@SuppressWarnings("unused") boolean creation) {
 		return Collections.emptyMap();
 	}
 	

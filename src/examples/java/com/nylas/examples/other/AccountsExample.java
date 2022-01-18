@@ -1,16 +1,17 @@
 package com.nylas.examples.other;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.nylas.Account;
-import com.nylas.AccountQuery;
-import com.nylas.Accounts;
-import com.nylas.NylasApplication;
-import com.nylas.NylasClient;
-import com.nylas.TokenInfo;
+import com.nylas.*;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AccountsExample {
+
+	private static final Logger log = LogManager.getLogger(AccountsExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -23,23 +24,34 @@ public class AccountsExample {
 				;
 		List<Account> accountList = accounts.list(query).fetchAll();
 		for (Account account : accountList) {
-			System.out.println(account);
+			log.info(account);
 		}
-		
+
 		Account first = accounts.get(accountList.get(0).getId());
-		System.out.println("first: " + first);
-		
+		log.info("first: " + first);
+
 		String accessToken = conf.get("access.token");
 		TokenInfo tokenInfo = accounts.tokenInfo(first.getId(), accessToken);
-		System.out.println("token info: " + tokenInfo);
-		
+		log.info("token info: " + tokenInfo);
+
 		accounts.downgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
-		System.out.println("after downgrade: " + first);
-		
+		log.info("after downgrade: " + first);
+
 		accounts.upgrade(first.getId());
 		first = accounts.get(accountList.get(0).getId());
-		System.out.println("after upgrade: " + first);
+		log.info("after upgrade: " + first);
+
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("account_type", "test");
+		accounts.setMetadata(accountList.get(0).getId(), metadata);
+
+		MetadataQuery metadataQuery = new MetadataQuery().metadataKey("account_type");
+		AccountQuery accountQuery = new AccountQuery().metadataQuery(metadataQuery);
+		List<Account> accountsWithMetadata = accounts.list(accountQuery).fetchAll();
+		for (Account account : accountsWithMetadata) {
+			log.info("found account with 'account_type' metadata: " + account);
+		}
 		
 		//accounts.delete(first.getId());
 		//accounts.revokeAllTokensForAccount(first.getId(), "blahblah");

@@ -24,6 +24,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	protected List<Event> events = Collections.emptyList();
 	protected Folder folder;
 	protected List<Label> labels = Collections.emptyList();
+	protected Map<String, String> metadata = Collections.emptyMap();
 
 	// only available in expanded message view
 	private Map<String, Object> headers = Collections.emptyMap();
@@ -97,6 +98,10 @@ public class Message extends AccountOwnedModel implements JsonObject {
 		return labels;
 	}
 
+	public Map<String, String> getMetadata() {
+		return metadata;
+	}
+
 	/**
 	 * Return additional RFC2822 headers, only available in expanded view
 	 */
@@ -110,7 +115,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 				+ subject + ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to
 				+ ", date=" + getDate() + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet
 				+ ", body.length=" + body.length() + ", files=" + files + ", events=" + events + ", folder=" + folder
-				+ ", labels=" + labels + ", headers=" + headers + "]";
+				+ ", labels=" + labels + ", headers=" + headers + ", metadata=" + metadata + "]";
 	}
 	
 }

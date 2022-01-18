@@ -6,9 +6,11 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Add support for automatic meeting details
-- Add support for Event notifications
-- Add support for Component CRUD
+- Added support for Component CRUD
+- Added support for ICS file generation
+- Added Calendar Availability support
+- Added support for modifying `Folder`
+- Added support for Scheduler API
 
 ### Changed
 
@@ -19,6 +21,44 @@ This section contains changes that have been committed but not yet released.
 ### Removed
 
 ### Security
+
+## [1.10.3] - Released 2022-01-05
+
+### Added
+
+- Added support for the `forced_password` Hosted Auth setting
+- Added missing `EMAIL` scope
+
+### Fixed
+
+- Fixed bug where saving an event without participants threw a `NullPointerException`
+
+## [1.10.2] - Released 2021-12-23
+
+### Changed
+
+- Added `false` parameter when `notifyParticipants` is false
+
+### Security
+
+- Address major `log4j` vulnerability, updated `log4j` to v2.17.0
+
+## [1.10.1] - Released 2021-12-13
+
+### Security
+
+- Address major `log4j` vulnerability, updated `log4j` to v2.15.0
+
+## [1.10.0] - Released 2021-12-08
+
+### Added
+
+- Add support for automatic meeting details
+- Add support for Event notifications
+
+### Fixed
+
+- Fix bug where updating an event resulted in an API error
 
 ## [1.9.1] - Released 2021-09-22
 
@@ -35,7 +75,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Deprecated
 
- - MicrosoftExchangeProviderSettings easServerHost in favor of exchangeServerHost
+- MicrosoftExchangeProviderSettings easServerHost in favor of exchangeServerHost
 
 ## [1.8.0] - Released 2021-07-30
 
@@ -53,11 +93,11 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 - Calendar.isPrimary field is now available
-- Event timezones will be checked for valid IANA zone names when created with ZonedDateTime objects 
+- Event timezones will be checked for valid IANA zone names when created with ZonedDateTime objects
 
 ### Deprecated
 
-- Deprecated Threads.setLabelIds method that takes an Iterable in favor for a Collection 
+- Deprecated Threads.setLabelIds method that takes an Iterable in favor for a Collection
 
 ### Fixed
 
@@ -73,7 +113,7 @@ This section contains changes that have been committed but not yet released.
 ### Deprecated
 
 - Deprecated `RequestFailedException` methods `getResponseBody` and `getStatus`
-in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
+  in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 
 ## [1.5.0] - Released 2021-02-25
 
@@ -84,7 +124,7 @@ in favor of `getStatusCode`, `getErrorType` and `getErrorMessage`
 ### Deprecated
 
 - Deprecated public use of `RestfulQuery` methods `addParameters` and `copyAtNewOffsetLimit`.
-They are for internal use only and will be removed from the public API in the future.
+  They are for internal use only and will be removed from the public API in the future.
 
 ## [1.4.0] - Released 2020-12-11
 
@@ -92,8 +132,8 @@ They are for internal use only and will be removed from the public API in the fu
 
 - Calendar create, update, and delete support.
 - Job status support.  Many objects returned by the server from create and update operations will now include a job
-status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete
-operations will directly return job status ids.
+  status id which can be used to track the status of syncing those changes back to the provider.  Similarly, delete
+  operations will directly return job status ids.
 
 ### Fixed
 
@@ -136,7 +176,7 @@ Release 1.0.0 after users have been using it successfully.
 
 ### Changed
 
- - [BREAKING] Moved AuthenticationUrlBuilder to nested class HostedAuthentication.UrlBuilder
+- [BREAKING] Moved AuthenticationUrlBuilder to nested class HostedAuthentication.UrlBuilder
 
 ## [0.2.0] - Released 2020-04-27
 
@@ -150,8 +190,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 ### Changed
 
 - [BREAKING] List/query methods now return objects of type com.nylas.RemoteCollection (instead of java.util.List)
-which support lazy iteration of results fetched from the server in batches of 100 (by default), or eagerly
-fetching all via fetchAll method
+  which support lazy iteration of results fetched from the server in batches of 100 (by default), or eagerly
+  fetching all via fetchAll method
 - [BREAKING] Updated timestamp/date apis to use standard java.time.Instant and java.time.LocalDate
 - Other minor fixes
 
@@ -163,7 +203,11 @@ fetching all via fetchAll method
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.9.1...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.10.3...HEAD
+[1.10.3]: https://github.com/nylas/nylas-java/releases/tag/v1.10.3
+[1.10.2]: https://github.com/nylas/nylas-java/releases/tag/v1.10.2
+[1.10.1]: https://github.com/nylas/nylas-java/releases/tag/v1.10.1
+[1.10.0]: https://github.com/nylas/nylas-java/releases/tag/v1.10.0
 [1.9.1]: https://github.com/nylas/nylas-java/releases/tag/v1.9.1
 [1.9.0]: https://github.com/nylas/nylas-java/releases/tag/v1.9.0
 [1.8.0]: https://github.com/nylas/nylas-java/releases/tag/v1.8.0

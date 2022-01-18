@@ -73,6 +73,10 @@ public class NylasAccount {
 	public Neural neural() {
 		return new Neural(this, client, accessToken);
   }
+
+	public Schedulers schedulers() {
+		return new Schedulers(client, accessToken);
+	}
 	
 	public AccountDetail fetchAccountByAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");

@@ -1,5 +1,8 @@
 package com.nylas;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Participant {
 
 	private String name;
@@ -37,6 +40,7 @@ public class Participant {
 		return this;
 	}
 
+	@Deprecated
 	public Participant status(String status) {
 		this.status = status;
 		return this;
@@ -45,6 +49,14 @@ public class Participant {
 	public Participant comment(String comment) {
 		this.comment = comment;
 		return this;
+	}
+
+	Map<String, Object> getWritableFields() {
+		Map<String, Object> params = new HashMap<>();
+		Maps.putIfNotNull(params, "name", name);
+		Maps.putIfNotNull(params, "email", email);
+		Maps.putIfNotNull(params, "comment", comment);
+		return params;
 	}
 
 	@Override

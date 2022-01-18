@@ -11,8 +11,12 @@ import com.nylas.NylasAccount;
 import com.nylas.NylasClient;
 import com.nylas.RemoteCollection;
 import com.nylas.examples.ExampleConf;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MessagesExample {
+
+	private static final Logger log = LogManager.getLogger(MessagesExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
@@ -38,47 +42,52 @@ public class MessagesExample {
 		emails.chunkSize(10);
 		
 		for (Message email : emails) {
-			System.out.println(email);
+			log.info(email);
 		}
 		
 //		List<String> allIds = ids.fetchAll();
-//		System.out.println("size = " + allIds.size());
+//		log.info("size = " + allIds.size());
 		
 		
 		
 		
 		
 //		long count = messages.count(query);
-//		System.out.println("Count: " + count);
+//		log.info("Count: " + count);
 //		
 //		List<String> ids = messages.ids(query).fetchAll();
-//		System.out.println("ids size: " + ids.size());
+//		log.info("ids size: " + ids.size());
 //		
 //		List<Message> allMessages = messages.list(query).fetchAll();
 //		if (allMessages.isEmpty()) {
-//			System.out.println("No messages");
+//			log.info("No messages");
 //			return;
 //		}
 //		
-//		System.out.println("collection size: " + allMessages.size());
+//		log.info("collection size: " + allMessages.size());
 //		
 //		Message firstMessage  = allMessages.get(0);
 //		for (Message message : allMessages) {
-//			System.out.println(message);
+//			log.info(message);
 //		}
 		
 		
 		
 //		Message message = messages.get(firstMessage.getId());
-//		System.out.println("got by id: " + message);
+//		log.info("got by id: " + message);
 //		
 //		message = messages.setUnread(firstMessage.getId(), !firstMessage.getUnread());
-//		System.out.println("toggled unread: " + message);
+//		log.info("toggled unread: " + message);
 //		
 //		message = messages.setStarred(firstMessage.getId(), !firstMessage.getStarred());
-//		System.out.println("toggled starred: " + message);
+//		log.info("toggled starred: " + message);
 //		
 //		String raw = messages.getRaw(firstMessage.getId());
-//		System.out.println("raw: " + raw);
+//		log.info("raw: " + raw);
+
+//		Map<String, String> metadata = new HashMap<>();
+//		metadata.put("message_type", "test");
+//		message = messages.setMetadata(firstMessage.getId(), metadata);
+//		log.info("set metadata " + message);
 	}
 }

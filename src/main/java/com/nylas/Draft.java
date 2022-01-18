@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class Draft extends Message {
 
+	protected Map<String, String> metadata = new HashMap<>() ;
 	private String reply_to_message_id;
 	private Integer version;
 	private Tracking tracking;
@@ -134,8 +135,21 @@ public class Draft extends Message {
 		this.thread_id = threadId;
 	}
 
+	public void setMetadata(Map<String, String> metadata) {
+		this.metadata = metadata;
+	}
+
+	/**
+	 * Add single metadata key-value pair to the event
+	 * @param key The key of the metadata entry
+	 * @param value The value of the metadata entry
+	 */
+	public void addMetadata(String key, String value) {
+		this.metadata.put(key, value);
+	}
+
 	@Override
-	Map<String, Object> getWritableFields(boolean creation) {
+	protected Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
 		Maps.putIfNotNull(params, "subject", getSubject());
 		Maps.putIfNotNull(params, "from", getFrom());
@@ -145,6 +159,7 @@ public class Draft extends Message {
 		Maps.putIfNotNull(params, "bcc", getBcc());
 		Maps.putIfNotNull(params, "body", getBody());
 		Maps.putIfNotNull(params, "version", getVersion());
+		Maps.putIfNotNull(params, "metadata", getMetadata());
 		List<String> fileIds = getFiles().stream().map(f -> f.getId()).collect(Collectors.toList());
 		params.put("file_ids", fileIds);
 		
@@ -161,7 +176,7 @@ public class Draft extends Message {
 				+ getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject + ", from=" + from + ", to=" + to
 				+ ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date=" + date + ", unread=" + unread
 				+ ", starred=" + starred + ", snippet=" + snippet + ", body=" + body + ", files=" + files + ", folder="
-				+ folder + ", labels=" + labels + ", tracking=" + tracking + "]";
+				+ folder + ", labels=" + labels + ", tracking=" + tracking + ", metadata=" + metadata + "]";
 	}
 	
 	

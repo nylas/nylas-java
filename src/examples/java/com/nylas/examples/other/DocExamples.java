@@ -28,11 +28,15 @@ import com.nylas.Threads;
 import com.nylas.Webhook;
 
 import okhttp3.ResponseBody;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Code examples for the reference doc
  */
 public class DocExamples {
+
+	private static final Logger log = LogManager.getLogger(DocExamples.class);
 
 	/**
 	 * https://docs.nylas.com/reference#get-threads
@@ -176,7 +180,7 @@ public class DocExamples {
 		NylasAccount account = client.account("YOUR_ACCESS_TOKEN");
 		String rawMime = ""; // rawMIME should be a MIME-format string with headers and multipart message
 		Message message = account.drafts().sendRawMime(rawMime);
-		System.out.println(message);
+		log.info(message);
 	}
 	
 	/*
@@ -252,7 +256,7 @@ public class DocExamples {
 		// rsvp() accepts a status and an optional message
 		// If notifyParticipants is true, then the message will be sent via email to all participants
 		account.events().rsvp("{eventId}", "maybe", "{accountId}", "I may attend this event", true);
-		System.out.println("RSVP sent!");
+		log.info("RSVP sent!");
 	}
 	
 	/*
@@ -326,7 +330,7 @@ public class DocExamples {
 		webhook.setState("active");
 		webhook.setTriggers(Arrays.asList("event.created", "event.updated"));
 		webhook = application.webhooks().create(webhook);
-		System.out.println(webhook);
+		log.info(webhook);
 	}
 	
 	/*

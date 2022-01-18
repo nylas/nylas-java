@@ -1,5 +1,7 @@
 package com.nylas;
 
+import java.util.Map;
+
 /**
  * An Account as managed by the Accounts access object for a particular application client_id.
  */
@@ -10,6 +12,7 @@ public class Account extends AccountOwnedModel {
 	private String provider;
 	private String sync_state;
 	private Boolean trial;
+	private Map<String, String> metadata;
 	
 	public String getBillingState() {
 		return billing_state;
@@ -31,10 +34,14 @@ public class Account extends AccountOwnedModel {
 		return trial;
 	}
 
+	public Map<String, String> getMetadata() {
+		return metadata;
+	}
+
 	@Override
 	public String toString() {
 		return "Account [id=" + getId() + ", billing_state=" + billing_state + ", email=" + email + ", provider=" + provider
-				+ ", sync_state=" + sync_state + ", trial=" + trial + "]";
+				+ ", sync_state=" + sync_state + ", trial=" + trial + ", metadata=" + metadata + "]";
 	}
 	
 }
