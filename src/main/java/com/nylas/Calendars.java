@@ -72,4 +72,21 @@ public class Calendars extends RestfulDAO<Calendar> {
 		params.put("emails", emails);
 		return client.executePost(authUser, url, params, JsonHelper.listTypeOf(FreeBusy.class));
 	}
+
+	public Availability availability(SingleAvailabilityQuery query) throws IOException, RequestFailedException {
+		if(!query.isValid()) {
+			throw new IllegalArgumentException("Availability query missing one or more required parameters.");
+		}
+		HttpUrl.Builder url = getCollectionUrl().addPathSegment("availability");
+		return client.executePost(authUser, url, query.toMap(), Availability.class);
+	}
+
+	public List<List<ConsecutiveAvailability>> consecutiveAvailability(MultipleAvailabilityQuery query)
+			throws IOException, RequestFailedException {
+		if(!query.isValid()) {
+			throw new IllegalArgumentException("Availability query missing one or more required parameters.");
+		}
+		HttpUrl.Builder url = getCollectionUrl().addPathSegment("availability").addPathSegment("consecutive");
+		return client.executePost(authUser, url, query.toMap(), JsonHelper.listTypeOf(JsonHelper.listTypeOf(ConsecutiveAvailability.class)));
+	}
 }
