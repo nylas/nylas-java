@@ -1,25 +1,14 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
-
-This section contains changes that have been committed but not yet released.
+## [1.11.0] - Released 2022-01-20
 
 ### Added
 
-- Added support for ICS file generation
-- Added Calendar Availability support
+- Added support for `Event` to ICS file generation
+- Added support for calendar availability
 - Added support for modifying `Folder`
 - Added support for Scheduler API
-
-### Changed
-
-### Deprecated
-
-### Fixed
-
-### Removed
-
-### Security
+- Expanded metadata support for `Calendar`, `Account`, `Message`, and `Draft`
 
 ## [1.10.3] - Released 2022-01-05
 
@@ -202,7 +191,7 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.10.3...HEAD
+[1.11.0]: https://github.com/nylas/nylas-java/releases/tag/v1.11.0
 [1.10.3]: https://github.com/nylas/nylas-java/releases/tag/v1.10.3
 [1.10.2]: https://github.com/nylas/nylas-java/releases/tag/v1.10.2
 [1.10.1]: https://github.com/nylas/nylas-java/releases/tag/v1.10.1
