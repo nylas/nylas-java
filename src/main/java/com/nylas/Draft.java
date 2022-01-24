@@ -105,7 +105,12 @@ public class Draft extends Message {
 	public void setFiles(List<File> files) {
 		this.files = files;
 	}
-	
+
+	@Override
+	public Map<String, String> getMetadata() {
+		return metadata;
+	}
+
 	public void attach(File file) {
 		this.files.add(file);
 	}
