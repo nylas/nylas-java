@@ -1,10 +1,7 @@
 package com.nylas;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Message extends AccountOwnedModel implements JsonObject {
 
@@ -24,7 +21,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	protected List<Event> events = Collections.emptyList();
 	protected Folder folder;
 	protected List<Label> labels = Collections.emptyList();
-	protected Map<String, String> metadata = Collections.emptyMap();
+	protected Map<String, String> metadata = new HashMap<>();
 
 	// only available in expanded message view
 	private Map<String, Object> headers = Collections.emptyMap();
