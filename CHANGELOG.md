@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+- Fixed bug where an `IllegalArgumentException` is thrown when deserializing `Draft` with `metadata`
+
 ### Removed
 
 ### Security
