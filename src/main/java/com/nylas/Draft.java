@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class Draft extends Message {
 
-	protected Map<String, String> metadata = new HashMap<>() ;
 	private String reply_to_message_id;
 	private Integer version;
 	private Tracking tracking;
