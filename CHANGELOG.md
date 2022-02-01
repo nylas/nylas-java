@@ -1,22 +1,10 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
-
-This section contains changes that have been committed but not yet released.
-
-### Added
-
-### Changed
-
-### Deprecated
-
-### Fixed
+## [1.11.2] - Released 2022-02-01
 
 ### Removed
 
 - Remove use of `okhttp3.internal` library
-
-### Security
 
 ## [1.11.1] - Released 2022-01-24
 
@@ -215,7 +203,7 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.11.1...HEAD
+[1.11.2]: https://github.com/nylas/nylas-java/releases/tag/v1.11.2
 [1.11.1]: https://github.com/nylas/nylas-java/releases/tag/v1.11.1
 [1.11.0]: https://github.com/nylas/nylas-java/releases/tag/v1.11.0
 [1.10.3]: https://github.com/nylas/nylas-java/releases/tag/v1.10.3
