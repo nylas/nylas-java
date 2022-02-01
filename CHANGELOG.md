@@ -14,6 +14,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Removed
 
+- Remove use of `okhttp3.internal` library
+
 ### Security
 
 ## [1.11.1] - Released 2022-01-24
