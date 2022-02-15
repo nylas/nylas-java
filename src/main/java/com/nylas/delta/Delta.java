@@ -1,5 +1,7 @@
-package com.nylas;
+package com.nylas.delta;
 
+import com.nylas.*;
+import com.nylas.Thread;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
 

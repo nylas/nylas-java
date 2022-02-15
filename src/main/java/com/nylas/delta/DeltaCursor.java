@@ -1,4 +1,6 @@
-package com.nylas;
+package com.nylas.delta;
+
+import com.nylas.AccountOwnedModel;
 
 import java.util.List;
 

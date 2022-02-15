@@ -1,5 +1,8 @@
 package com.nylas;
 
+import com.nylas.delta.Delta;
+import com.nylas.delta.DeltaCursor;
+import com.nylas.delta.DeltaStreamListener;
 import okhttp3.HttpUrl;
 
 import java.io.IOException;
