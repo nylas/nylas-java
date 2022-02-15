@@ -20,6 +20,7 @@ public class JsonHelper {
 		moshi = new Moshi.Builder()
 				.add(Event.WHEN_JSON_FACTORY)
 				.add(Event.EVENT_NOTIFICATION_JSON_FACTORY)
+				.add(Delta.ACCOUNT_OWNED_MODEL_JSON_FACTORY)
 				.build();
 	}
 	
