@@ -25,8 +25,14 @@ public class Deltas {
 		this.accessToken = accessToken;
 	}
 
+	/**
+	 * Get the latest Delta cursor
+	 * @return The latest Delta cursor
+	 * @see <a href="https://developer.nylas.com/docs/api/#post/delta/latest_cursor">Get a Delta Cursor</a>
+	 */
 	public String latestCursor() throws RequestFailedException, IOException {
-		Map<String, String> response = client.executePost(accessToken, deltaEndpoint().addPathSegment("latest_cursor"), null, Map.class);
+		HttpUrl.Builder url = deltaEndpoint().addPathSegment("latest_cursor");
+		Map<String, String> response = client.executePost(accessToken, url, null, Map.class);
 		String cursor = response.get("cursor");
 		if(cursor == null) {
 			throw new RuntimeException("Unexpected response from the API server. Returned 200 but no 'cursor' string found.");
@@ -35,7 +41,21 @@ public class Deltas {
 		return cursor;
 	}
 
+	/**
+	 * Get set of Deltas since the provided cursor
+	 * <br> {@code options} is set to null.
+	 * @see Deltas#since(String, DeltaQueryOptions) 
+	 */
 	public DeltaCursor since(String cursor) throws RequestFailedException, IOException {
+		return since(cursor, null);
+	}
+
+	/**
+	 * Get set of Deltas since the provided cursor
+	 * @param cursor The cursor to query from
+	 * @return A {@link DeltaCursor} object containing the set of cursors since the provider cursor
+	 * @see <a href="https://developer.nylas.com/docs/api/#get/delta">Request Delta Cursors</a>
+	 */
 	public DeltaCursor since(String cursor, DeltaQueryOptions options) throws RequestFailedException, IOException {
 		HttpUrl.Builder url = deltaEndpoint().addQueryParameter("cursor", cursor);
 		if(options != null) {
@@ -45,12 +65,43 @@ public class Deltas {
 		return client.executeGet(accessToken, url, DeltaCursor.class);
 	}
 
+	/**
+	 * Stream Deltas since the provided cursor
+	 * <br> {@code listener} is set to null.
+	 * <br> {@code options} is set to null.
+	 * @see Deltas#stream(String, DeltaStreamListener, DeltaQueryOptions) 
+	 */
 	public List<Delta<? extends AccountOwnedModel>> stream(String cursor) throws RequestFailedException, IOException {
-		return stream(cursor, null);
+		return stream(cursor, null, null);
 	}
 
+	/**
+	 * Stream Deltas since the provided cursor
+	 * <br> {@code listener} is set to null.
+	 * @see Deltas#stream(String, DeltaStreamListener, DeltaQueryOptions)
+	 */
+	public List<Delta<? extends AccountOwnedModel>> stream(String cursor, DeltaQueryOptions options)
+			throws RequestFailedException, IOException {
+		return stream(cursor, null, options);
+	}
+
+	/**
+	 * Stream Deltas since the provided cursor
+	 * <br> {@code options} is set to null.
+	 * @see Deltas#stream(String, DeltaStreamListener, DeltaQueryOptions)
+	 */
 	public List<Delta<? extends AccountOwnedModel>> stream(String cursor, DeltaStreamListener listener)
 			throws RequestFailedException, IOException {
+		return stream(cursor, listener, null);
+	}
+
+	/**
+	 * Stream Deltas since the provided cursor
+	 * @param cursor The cursor to start streaming from
+	 * @param listener An object that implements {@link DeltaStreamListener} to listen on every Delta received
+	 * @return A list of all the {@link Delta} objects captured during the duration of the stream
+	 * @see <a href="https://developer.nylas.com/docs/api#get/delta/streaming">Streaming Deltas</a>
+	 */
 	public List<Delta<? extends AccountOwnedModel>> stream(String cursor, DeltaStreamListener listener, DeltaQueryOptions options)
 			throws RequestFailedException, IOException {
 		List<Delta<? extends AccountOwnedModel>> deltas = new ArrayList<>();
@@ -93,12 +144,43 @@ public class Deltas {
 		return deltas;
 	}
 
+	/**
+	 * Poll for a DeltaCursor since the provided cursor until a delta is received or timeout is reached
+	 * <br> {@code listener} is set to null.
+	 * <br> {@code options} is set to null.
+	 * @see Deltas#longpoll(String, int, DeltaLongPollListener, DeltaQueryOptions)
+	 */
 	public DeltaCursor longpoll(String cursor, int timeout) throws RequestFailedException, IOException {
-		return longpoll(cursor, timeout, null);
+		return longpoll(cursor, timeout, null, null);
 	}
 
+	/**
+	 * Poll for a DeltaCursor since the provided cursor until a delta is received or timeout is reached
+	 * <br> {@code options} is set to null.
+	 * @see Deltas#longpoll(String, int, DeltaLongPollListener, DeltaQueryOptions)
+	 */
 	public DeltaCursor longpoll(String cursor, int timeout, DeltaLongPollListener listener)
 			throws RequestFailedException, IOException {
+		return longpoll(cursor, timeout, listener, null);
+	}
+
+	/**
+	 * Poll for a DeltaCursor since the provided cursor until a delta is received or timeout is reached
+	 * <br> {@code listener} is set to null.
+	 * @see Deltas#longpoll(String, int, DeltaLongPollListener, DeltaQueryOptions)
+	 */
+	public DeltaCursor longpoll(String cursor, int timeout, DeltaQueryOptions options)
+			throws RequestFailedException, IOException {
+		return longpoll(cursor, timeout, null, options);
+	}
+
+	/**
+	 * Poll for a DeltaCursor since the provided cursor until a delta is received or timeout is reached
+	 * @param cursor The cursor to start polling from
+	 * @param listener An object that implements {@link DeltaLongPollListener} to listen for a DeltaCursor
+	 * @return The {@link DeltaCursor} object captured while polling
+	 * @see <a href="https://developer.nylas.com/docs/api/#get/delta/longpoll">Return Long-Polling Deltas</a>
+	 */
 	public DeltaCursor longpoll(String cursor, int timeout, DeltaLongPollListener listener, DeltaQueryOptions options)
 			throws RequestFailedException, IOException {
 		DeltaCursor deltaCursor = null;
