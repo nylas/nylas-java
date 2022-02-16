@@ -53,6 +53,7 @@ public class Deltas {
 	/**
 	 * Get set of Deltas since the provided cursor
 	 * @param cursor The cursor to query from
+	 * @param options Additional options for this Delta query
 	 * @return A {@link DeltaCursor} object containing the set of cursors since the provider cursor
 	 * @see <a href="https://developer.nylas.com/docs/api/#get/delta">Request Delta Cursors</a>
 	 */
@@ -99,6 +100,7 @@ public class Deltas {
 	 * Stream Deltas since the provided cursor
 	 * @param cursor The cursor to start streaming from
 	 * @param listener An object that implements {@link DeltaStreamListener} to listen on every Delta received
+	 * @param options Additional options for this Delta query
 	 * @return A list of all the {@link Delta} objects captured during the duration of the stream
 	 * @see <a href="https://developer.nylas.com/docs/api#get/delta/streaming">Streaming Deltas</a>
 	 */
@@ -177,7 +179,9 @@ public class Deltas {
 	/**
 	 * Poll for a DeltaCursor since the provided cursor until a delta is received or timeout is reached
 	 * @param cursor The cursor to start polling from
+	 * @param timeout The number of seconds to poll for before timing out
 	 * @param listener An object that implements {@link DeltaLongPollListener} to listen for a DeltaCursor
+	 * @param options Additional options for this Delta query
 	 * @return The {@link DeltaCursor} object captured while polling
 	 * @see <a href="https://developer.nylas.com/docs/api/#get/delta/longpoll">Return Long-Polling Deltas</a>
 	 */
