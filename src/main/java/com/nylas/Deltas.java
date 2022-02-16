@@ -1,9 +1,6 @@
 package com.nylas;
 
-import com.nylas.delta.Delta;
-import com.nylas.delta.DeltaCursor;
-import com.nylas.delta.DeltaLongPollListener;
-import com.nylas.delta.DeltaStreamListener;
+import com.nylas.delta.*;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonEncodingException;
 import com.squareup.moshi.Types;
@@ -39,7 +36,12 @@ public class Deltas {
 	}
 
 	public DeltaCursor since(String cursor) throws RequestFailedException, IOException {
+	public DeltaCursor since(String cursor, DeltaQueryOptions options) throws RequestFailedException, IOException {
 		HttpUrl.Builder url = deltaEndpoint().addQueryParameter("cursor", cursor);
+		if(options != null) {
+			options.toMap().forEach(url::addQueryParameter);
+		}
+
 		return client.executeGet(accessToken, url, DeltaCursor.class);
 	}
 
@@ -49,12 +51,17 @@ public class Deltas {
 
 	public List<Delta<? extends AccountOwnedModel>> stream(String cursor, DeltaStreamListener listener)
 			throws RequestFailedException, IOException {
+	public List<Delta<? extends AccountOwnedModel>> stream(String cursor, DeltaStreamListener listener, DeltaQueryOptions options)
+			throws RequestFailedException, IOException {
 		List<Delta<? extends AccountOwnedModel>> deltas = new ArrayList<>();
 		Type deltaAdapterType = Types.newParameterizedType(Delta.class, AccountOwnedModel.class);
 		JsonAdapter<Delta<? extends AccountOwnedModel>> adapter = JsonHelper.moshi().adapter(deltaAdapterType);
 		HttpUrl.Builder url = deltaEndpoint()
 				.addPathSegment("streaming")
 				.addQueryParameter("cursor", cursor);
+		if(options != null) {
+			options.toMap().forEach(url::addQueryParameter);
+		}
 
 		ResponseBody responseBody = client.download(accessToken, url);
 		StringBuilder jsonBuilder = new StringBuilder();
@@ -92,12 +99,17 @@ public class Deltas {
 
 	public DeltaCursor longpoll(String cursor, int timeout, DeltaLongPollListener listener)
 			throws RequestFailedException, IOException {
+	public DeltaCursor longpoll(String cursor, int timeout, DeltaLongPollListener listener, DeltaQueryOptions options)
+			throws RequestFailedException, IOException {
 		DeltaCursor deltaCursor = null;
 		JsonAdapter<DeltaCursor> adapter = JsonHelper.moshi().adapter(DeltaCursor.class);
 		HttpUrl.Builder url = deltaEndpoint()
 				.addPathSegment("longpoll")
 				.addQueryParameter("cursor", cursor)
 				.addQueryParameter("timeout", String.valueOf(timeout));
+		if(options != null) {
+			options.toMap().forEach(url::addQueryParameter);
+		}
 
 		ResponseBody responseBody = client.download(accessToken, url);
 		StringBuilder jsonBuilder = new StringBuilder();
