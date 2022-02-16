@@ -59,7 +59,7 @@ public class Deltas {
 	public DeltaCursor since(String cursor, DeltaQueryOptions options) throws RequestFailedException, IOException {
 		HttpUrl.Builder url = deltaEndpoint().addQueryParameter("cursor", cursor);
 		if(options != null) {
-			options.toMap().forEach(url::addQueryParameter);
+			options.toValidMap().forEach(url::addQueryParameter);
 		}
 
 		return client.executeGet(accessToken, url, DeltaCursor.class);
@@ -111,7 +111,7 @@ public class Deltas {
 				.addPathSegment("streaming")
 				.addQueryParameter("cursor", cursor);
 		if(options != null) {
-			options.toMap().forEach(url::addQueryParameter);
+			options.toValidMap().forEach(url::addQueryParameter);
 		}
 
 		ResponseBody responseBody = client.download(accessToken, url);
@@ -190,7 +190,7 @@ public class Deltas {
 				.addQueryParameter("cursor", cursor)
 				.addQueryParameter("timeout", String.valueOf(timeout));
 		if(options != null) {
-			options.toMap().forEach(url::addQueryParameter);
+			options.toValidMap().forEach(url::addQueryParameter);
 		}
 
 		ResponseBody responseBody = client.download(accessToken, url);
