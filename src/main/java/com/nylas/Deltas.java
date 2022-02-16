@@ -2,6 +2,7 @@ package com.nylas;
 
 import com.nylas.delta.Delta;
 import com.nylas.delta.DeltaCursor;
+import com.nylas.delta.DeltaLongPollListener;
 import com.nylas.delta.DeltaStreamListener;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonEncodingException;
@@ -83,6 +84,48 @@ public class Deltas {
 		}
 
 		return deltas;
+	}
+
+	public DeltaCursor longpoll(String cursor, int timeout) throws RequestFailedException, IOException {
+		return longpoll(cursor, timeout, null);
+	}
+
+	public DeltaCursor longpoll(String cursor, int timeout, DeltaLongPollListener listener)
+			throws RequestFailedException, IOException {
+		DeltaCursor deltaCursor = null;
+		JsonAdapter<DeltaCursor> adapter = JsonHelper.moshi().adapter(DeltaCursor.class);
+		HttpUrl.Builder url = deltaEndpoint()
+				.addPathSegment("longpoll")
+				.addQueryParameter("cursor", cursor)
+				.addQueryParameter("timeout", String.valueOf(timeout));
+
+		ResponseBody responseBody = client.download(accessToken, url);
+		StringBuilder jsonBuilder = new StringBuilder();
+		try {
+			while(!responseBody.source().exhausted()) {
+				Buffer buffer = new Buffer();
+				long count = responseBody.source().read(buffer, 8192);
+				if(count > 1) {
+					String[] jsonStream = buffer.readUtf8().split("\n");
+					for(String json : jsonStream) {
+						jsonBuilder.append(json);
+						try {
+							deltaCursor = adapter.fromJson(jsonBuilder.toString());
+							if(listener != null) {
+								listener.onDeltaCursor(deltaCursor);
+							}
+							jsonBuilder.setLength(0);
+						} catch (JsonEncodingException | EOFException e) {
+							// The JSON was partial, move on to the next string/chunk
+						}
+					}
+				}
+			}
+		} catch (IllegalStateException e) {
+			// Stream was closed, return the deltas we have
+		}
+
+		return deltaCursor;
 	}
 
 	private HttpUrl.Builder deltaEndpoint() {
