@@ -45,6 +45,10 @@ public class NylasApplication {
 	public Webhooks webhooks() {
 		return new Webhooks(client, this);
 	}
+
+	public Components components() {
+		return new Components(client, this);
+	}
 	
 	/**
 	 * Get the application details for this application

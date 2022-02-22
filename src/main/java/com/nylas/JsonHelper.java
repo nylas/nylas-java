@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -20,6 +22,7 @@ public class JsonHelper {
 		moshi = new Moshi.Builder()
 				.add(Event.WHEN_JSON_FACTORY)
 				.add(Event.EVENT_NOTIFICATION_JSON_FACTORY)
+				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
 				.build();
 	}
 	
