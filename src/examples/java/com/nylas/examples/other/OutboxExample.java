@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
 public class OutboxExample {
 
@@ -40,7 +39,7 @@ public class OutboxExample {
 		Date newSendAt = calendar.getTime();
 		outboxMessage = jobStatus.getOriginalData();
 		outboxMessage.setSendAt(newSendAt);
-		jobStatus = outbox.send(outboxMessage);
+		jobStatus = outbox.update(outboxMessage, jobStatus.getJobStatusId());
 		log.info("Outbox message updated, job status: " + jobStatus);
 
 		outbox.delete(jobStatus.getJobStatusId());
