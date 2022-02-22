@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Added Outbox support
+
 ### Changed
 
 ### Deprecated
