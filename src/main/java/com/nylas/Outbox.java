@@ -1,5 +1,6 @@
 package com.nylas;
 
+import com.squareup.moshi.JsonAdapter;
 import okhttp3.HttpUrl;
 
 import com.nylas.NylasClient.AuthMethod;
@@ -85,9 +86,17 @@ public class Outbox {
 	 * SendGrid - Check Authentication and Verification Status
 	 * @see <a href="https://developer.nylas.com/docs/api#get/v2/outbox/onboard/verified_status">Check Authentication and Verification Status</a>
 	 */
-	public Map<String, Object> sendGridVerificationStatus() throws RequestFailedException, IOException {
+	@SuppressWarnings("unchecked")
+	public SendGridVerifiedStatus sendGridVerificationStatus() throws RequestFailedException, IOException {
 		HttpUrl.Builder url = outboxEndpoint().addPathSegment("onboard").addPathSegment("verified_status");
-		return client.executeGet(accessToken, url, Map.class, AuthMethod.BEARER);
+		Map<String, Object> response = client.executeGet(accessToken, url, Map.class, AuthMethod.BEARER);
+		if(response.get("results") == null) {
+			throw new RuntimeException("Verification status not present in response");
+		}
+
+		String resultJson = JsonHelper.mapToJson((Map<String, Object>) response.get("results"));
+		JsonAdapter<SendGridVerifiedStatus> adapter = JsonHelper.moshi().adapter(SendGridVerifiedStatus.class);
+		return adapter.fromJson(resultJson);
 	}
 
 	/**
