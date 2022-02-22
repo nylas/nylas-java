@@ -14,7 +14,6 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.internal.http.HttpHeaders;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.GzipSource;
@@ -108,11 +107,12 @@ public class HttpLoggingInterceptor implements Interceptor {
 	
 	private void logResponse(Response response, long durationMillis) throws IOException {
 
+		long contentLength = getContentLength(response);
 		// Summary
 		if (requestLogs.isDebugEnabled()) {
 			requestLogs.debug("<= " + response.code()
 					+ " " + response.message()
-					+ " resBodySize=" + HttpHeaders.contentLength(response)
+					+ " resBodySize=" + contentLength
 					+ " durationMs=" + durationMillis
 					);
 		}
@@ -121,7 +121,7 @@ public class HttpLoggingInterceptor implements Interceptor {
 		
 		if (bodyLogs.isDebugEnabled()) {
 			String message;
-			if (!HttpHeaders.hasBody(response)) {
+			if (contentLength == -1) {
 				message = " No response body";
 			} else {
 				MediaType contentType = response.body().contentType();
@@ -177,6 +177,13 @@ public class HttpLoggingInterceptor implements Interceptor {
 		}
 		Charset charset = contentType.charset(StandardCharsets.UTF_8);
 		return prefix + "\n" + buf.readString(bytesToLog, charset) + truncationMessage;
+	}
+
+	private long getContentLength(Response response) {
+		if(response.body() == null) {
+			return -1;
+		}
+		return response.body().contentLength();
 	}
 	
 }

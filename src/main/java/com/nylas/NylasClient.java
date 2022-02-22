@@ -16,7 +16,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.Util;
 
 /**
  * The NylasClient is the entry point to the Java SDK's API.
@@ -120,7 +119,7 @@ public class NylasClient {
 	
 	<T> T executePost(String authUser, HttpUrl.Builder url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
-		RequestBody jsonBody = Util.EMPTY_REQUEST;
+		RequestBody jsonBody = RequestBody.create(null, new byte[0]);;
 		if (params != null) {
 			jsonBody = JsonHelper.jsonRequestBody(params);
 		}
