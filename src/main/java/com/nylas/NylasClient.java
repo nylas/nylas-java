@@ -105,6 +105,11 @@ public class NylasClient {
 	public NylasAccount account(String accessToken) {
 		return new NylasAccount(this, accessToken);
 	}
+
+	<T> T executeGet(String authUser, HttpUrl.Builder url, Type resultType, AuthMethod authMethod)
+			throws IOException, RequestFailedException {
+		return executeRequestWithAuth(authUser, url, HttpMethod.GET, null, resultType, authMethod);
+	}
 	
 	<T> T executeGet(String authUser, HttpUrl.Builder url, Type resultType)
 			throws IOException, RequestFailedException {
@@ -119,16 +124,26 @@ public class NylasClient {
 	
 	<T> T executePost(String authUser, HttpUrl.Builder url, Map<String, Object> params, Type resultType)
 			throws IOException, RequestFailedException {
+		return executePost(authUser, url, params, resultType, null);
+	}
+	
+	<T> T executePost(String authUser, HttpUrl.Builder url, Map<String, Object> params, Type resultType, AuthMethod authMethod)
+			throws IOException, RequestFailedException {
 		RequestBody jsonBody = RequestBody.create(null, new byte[0]);;
 		if (params != null) {
 			jsonBody = JsonHelper.jsonRequestBody(params);
 		}
-		return executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType);
+		return executeRequestWithAuth(authUser, url, HttpMethod.POST, jsonBody, resultType, authMethod);
 	}
 	
 	<T> T executeDelete(String authUser, HttpUrl.Builder url, Type resultType)
 			throws IOException, RequestFailedException {
-		return executeRequestWithAuth(authUser, url, HttpMethod.DELETE, null, resultType);
+		return executeRequestWithAuth(authUser, url, HttpMethod.DELETE, null, resultType, null);
+	}
+
+	<T> T executeDelete(String authUser, HttpUrl.Builder url, Type resultType, AuthMethod authMethod)
+			throws IOException, RequestFailedException {
+		return executeRequestWithAuth(authUser, url, HttpMethod.DELETE, null, resultType, authMethod);
 	}
 	
 	/**
@@ -140,7 +155,7 @@ public class NylasClient {
 	 * https://square.github.io/okhttp/4.x/okhttp/okhttp3/-response-body/#the-response-body-must-be-closed</a>
 	 */
 	ResponseBody download(String authUser, HttpUrl.Builder url) throws IOException, RequestFailedException {
-		Request request = buildRequest(authUser, url, HttpMethod.GET, null);
+		Request request = buildRequest(authUser, url, HttpMethod.GET, null, AuthMethod.BASIC);
 		Response response = getHttpClient().newCall(request).execute();
 		throwAndCloseOnFailedRequest(response);
 		return response.body();
@@ -148,20 +163,36 @@ public class NylasClient {
 
 	<T> T executeRequestWithAuth(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body,
 			Type resultType) throws IOException, RequestFailedException {
-		Request request = buildRequest(authUser, url, method, body);
+		return executeRequestWithAuth(authUser, url, method, body, resultType, AuthMethod.BASIC);
+	}
+
+	<T> T executeRequestWithAuth(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body,
+								 Type resultType, AuthMethod authMethod) throws IOException, RequestFailedException {
+		Request request = buildRequest(authUser, url, method, body, authMethod);
 		return executeRequest(request, resultType);
 	}
 
-	Request buildRequest(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body) {
+	Request buildRequest(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body, AuthMethod authMethod) {
 		Request.Builder builder = new Request.Builder().url(url.build());
 		if (authUser != null) {
-			addAuthHeader(builder, authUser);
+			addAuthHeader(builder, authUser, authMethod);
 		}
 		return builder.method(method.toString(), body).build();
 	}
 	
 	void addAuthHeader(Request.Builder request, String authUser) {
-		request.addHeader("Authorization", Credentials.basic(authUser, ""));
+		addAuthHeader(request, authUser, AuthMethod.BASIC);
+	}
+
+	void addAuthHeader(Request.Builder request, String authUser, AuthMethod authMethod) {
+		switch (authMethod) {
+			case BEARER:
+				request.addHeader("Authorization", "Bearer " + authUser);
+				break;
+			case BASIC:
+			default:
+				request.addHeader("Authorization", Credentials.basic(authUser, ""));
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -223,6 +254,12 @@ public class NylasClient {
 		public NylasClient build() {
 			return new NylasClient(httpClient, baseUrl);
 		}
+	}
+
+	static enum AuthMethod {
+		BASIC,
+		BEARER,
+		;
 	}
 	
 	static enum HttpMethod {
