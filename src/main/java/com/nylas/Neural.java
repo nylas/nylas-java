@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.nylas.NeuralCategorizer.Category;
+
 public class Neural {
 	private final NylasAccount account;
 	private final NylasClient client;
@@ -122,6 +124,19 @@ public class Neural {
 	}
 
 	/**
+	 * Categorize a list of messages
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/categorizer/#categorize-message-request/">
+	 * Nylas Docs - Categorizer</a>
+	 */
+	public List<NeuralCategorizer> categorize(List<String> messageIds)
+			throws RequestFailedException, IOException {
+		Map<String, Object> body = new HashMap<>();
+		body.put("message_id", messageIds);
+		Type listType = JsonHelper.listTypeOf(NeuralCategorizer.class);
+		return neuralRequest("categorize", body, listType);
+	}
+
+	/**
 	 * Parses image file IDs found in the clean conversation object and returns
 	 * an array of File objects returned from the File API
 	 */
@@ -139,6 +154,26 @@ public class Neural {
 			}
 		}
 		return fileList;
+	}
+
+	/**
+	 * Re-categorize a message
+	 * @param messageId The message to re-categorize
+	 * @param category The new category (see: {@link Category})
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/categorizer/#categorize-feedback/">
+	 * Nylas Docs - Categorize (Feedback)</a>
+	 */
+	public Map<String, Object> reCategorize(String messageId, Category category)
+			throws RequestFailedException, IOException {
+		Map<String, Object> body = new HashMap<>();
+		body.put("message_id", messageId);
+		body.put("category", category.toString());
+
+		HttpUrl.Builder url = client.newUrlBuilder()
+				.addPathSegment("neural")
+				.addPathSegment("categorize")
+				.addPathSegment("feedback");
+		return client.executePost(accessToken, url, body, Map.class);
 	}
 
 	private <T> T neuralRequest(String path, Map<String, Object> body, Type modelClass)
