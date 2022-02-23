@@ -24,6 +24,7 @@ public class JsonHelper {
 		moshi = new Moshi.Builder()
 				.add(Event.WHEN_JSON_FACTORY)
 				.add(Event.EVENT_NOTIFICATION_JSON_FACTORY)
+				.add(new NeuralCategorizer.CategorizeCustomAdapter())
 				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
 				.build();
 	}
