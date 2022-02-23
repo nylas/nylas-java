@@ -7,7 +7,8 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 - Added support for Component CRUD
-- 
+- Added support for Neural Categorizer
+
 ### Changed
 
 ### Deprecated
