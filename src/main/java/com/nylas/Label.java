@@ -4,7 +4,13 @@ public class Label extends AccountOwnedModel implements JsonObject {
 
 	private String name;
 	private String display_name;
-	
+
+	/** for deserialization only */ public Label() {}
+
+	public Label(String displayName) {
+		this.display_name = displayName;
+	}
+
 	@Override
 	public String getObjectType() {
 		return "label";

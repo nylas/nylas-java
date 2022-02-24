@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.nylas.NeuralCategorizer.Category;
+
 public class Neural {
 	private final NylasAccount account;
 	private final NylasClient client;
@@ -22,9 +24,8 @@ public class Neural {
 
 	/**
 	 * Performs sentiment analysis on a list of messages
-	 * <p>
-	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/sentiment-analysis/">
-	 * https://developer.nylas.com/docs/intelligence/sentiment-analysis/</a>
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/sentiment-analysis/">
+	 * Nylas Docs - Sentiment Analysis</a>
 	 */
 	public List<NeuralSentimentAnalysis> sentimentAnalysisMessage(List<String> messageIds)
 			throws RequestFailedException, IOException {
@@ -36,9 +37,8 @@ public class Neural {
 
 	/**
 	 * Performs sentiment analysis on any string
-	 * <p>
-	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/sentiment-analysis/#analyze-text">
-	 * https://developer.nylas.com/docs/intelligence/sentiment-analysis/#analyze-text</a>
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/sentiment-analysis/#analyze-text">
+	 * Nylas Docs - Sentiment Analysis (Analyze Text)</a>
 	 */
 	public NeuralSentimentAnalysis sentimentAnalysisText(String text) throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
@@ -46,6 +46,11 @@ public class Neural {
 		return neuralRequest("sentiment", body, NeuralSentimentAnalysis.class);
 	}
 
+	/**
+	 * Extracts signature and any contact information within from emails passed in
+	 * <br> {@code options} is set to null.
+	 * @see Neural#extractSignature(List, NeuralMessageOptions)
+	 */
 	public List<NeuralSignatureExtraction> extractSignature(List<String> messageIds)
 			throws RequestFailedException, IOException {
 		return extractSignature(messageIds, null);
@@ -53,11 +58,10 @@ public class Neural {
 
 	/**
 	 * Extracts signature and any contact information within from emails passed in
-	 * <p>
-	 * Options can be passed in to control what gets gets cleaned up in the signature
-	 * <p>
-	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/signature-extraction/">
-	 * https://developer.nylas.com/docs/intelligence/signature-extraction/</a>
+	 * @param messageIds List of emails to extract signatures from
+	 * @param options Optional parameters to control what gets cleaned up in the signature
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/signature-extraction/">
+	 * Nylas Docs - Signature Extraction</a>
 	 */
 	public List<NeuralSignatureExtraction> extractSignature(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {
@@ -72,11 +76,10 @@ public class Neural {
 
 	/**
 	 * Performs optical character recognition on a file
-	 * <p>
-	 * Optionally page numbers can be specified to run OCR on
-	 * <p>
-	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/">
-	 * https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/</a>
+	 * @param fileId The file ID to perform OCR on
+	 * @param pages Optionally page numbers can be specified to run OCR on
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/">
+	 * Nylas Docs - Optical Character Recognition</a>
 	 */
 	public NeuralOcr ocrRequest(String fileId, int... pages) throws RequestFailedException, IOException {
 		Map<String, Object> body = new HashMap<>();
@@ -87,6 +90,11 @@ public class Neural {
 		return neuralRequest("ocr", body, NeuralOcr.class);
 	}
 
+	/**
+	 * Removes extra information from the email body
+	 * <br> {@code options} is set to null.
+	 * @see Neural#cleanConversation(List, NeuralMessageOptions)
+	 */
 	public List<NeuralCleanConversation> cleanConversation(List<String> messageIds)
 			throws RequestFailedException, IOException {
 		return cleanConversation(messageIds, null);
@@ -94,11 +102,10 @@ public class Neural {
 
 	/**
 	 * Removes extra information from the email body
-	 * <p>
-	 * Options can be passed in to control what gets cleaned up in the body
-	 * <p>
-	 * Learn more: <a href="https://developer.nylas.com/docs/intelligence/clean-conversations/">
-	 * https://developer.nylas.com/docs/intelligence/clean-conversations/</a>
+	 * @param messageIds List of emails to clean
+	 * @param options Optional parameters to control what gets cleaned up in the body
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/clean-conversations/">
+	 * Nylas Docs - Clean Conversations</a>
 	 */
 	public List<NeuralCleanConversation> cleanConversation(List<String> messageIds, NeuralMessageOptions options)
 			throws RequestFailedException, IOException {
@@ -114,6 +121,19 @@ public class Neural {
 		}
 		Type listType = JsonHelper.listTypeOf(NeuralCleanConversation.class);
 		return neuralRequest("conversation", body, listType);
+	}
+
+	/**
+	 * Categorize a list of messages
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/categorizer/#categorize-message-request/">
+	 * Nylas Docs - Categorizer</a>
+	 */
+	public List<NeuralCategorizer> categorize(List<String> messageIds)
+			throws RequestFailedException, IOException {
+		Map<String, Object> body = new HashMap<>();
+		body.put("message_id", messageIds);
+		Type listType = JsonHelper.listTypeOf(NeuralCategorizer.class);
+		return neuralRequest("categorize", body, listType);
 	}
 
 	/**
@@ -134,6 +154,26 @@ public class Neural {
 			}
 		}
 		return fileList;
+	}
+
+	/**
+	 * Re-categorize a message
+	 * @param messageId The message to re-categorize
+	 * @param category The new category (see: {@link Category})
+	 * @see <a href="https://developer.nylas.com/docs/intelligence/categorizer/#categorize-feedback/">
+	 * Nylas Docs - Categorize (Feedback)</a>
+	 */
+	public Map<String, Object> reCategorize(String messageId, Category category)
+			throws RequestFailedException, IOException {
+		Map<String, Object> body = new HashMap<>();
+		body.put("message_id", messageId);
+		body.put("category", category.toString());
+
+		HttpUrl.Builder url = client.newUrlBuilder()
+				.addPathSegment("neural")
+				.addPathSegment("categorize")
+				.addPathSegment("feedback");
+		return client.executePost(accessToken, url, body, Map.class);
 	}
 
 	private <T> T neuralRequest(String path, Map<String, Object> body, Type modelClass)
