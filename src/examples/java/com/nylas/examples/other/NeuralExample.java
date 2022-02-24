@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class NeuralExample {
 
@@ -63,5 +64,11 @@ public class NeuralExample {
 				.cleanConversation(new ArrayList<>(Collections.singletonList(email.getId())));
 		log.info(cleanConversations);
 		neural.extractImages(cleanConversations.get(0));
+
+		// Categorize
+		List<NeuralCategorizer> categorizers = neural.categorize(Collections.singletonList(email.getId()));
+		log.info(categorizers);
+		Map<String, Object> reCategorizeResponse = neural.reCategorize(email.getId(), NeuralCategorizer.Category.CONVERSATION);
+		log.info(reCategorizeResponse);
 	}
 }
