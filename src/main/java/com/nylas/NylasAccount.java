@@ -41,7 +41,11 @@ public class NylasAccount {
 	public Drafts drafts() {
 		return new Drafts(client, accessToken);
 	}
-	
+
+	public Outbox outbox() {
+		return new Outbox(client, accessToken);
+	}
+
 	public Files files() {
 		return new Files(client, accessToken);
 	}

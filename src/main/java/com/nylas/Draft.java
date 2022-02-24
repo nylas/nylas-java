@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 public class Draft extends Message {
 
-	private String reply_to_message_id;
-	private Integer version;
-	private Tracking tracking;
+	protected String reply_to_message_id;
+	protected Integer version;
+	protected Tracking tracking;
 	
 	@Override
 	public String getObjectType() {
