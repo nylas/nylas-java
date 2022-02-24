@@ -104,10 +104,10 @@ public class OutboxMessage extends Draft {
 	@Override
 	public String toString() {
 		return "OutboxMessage [reply_to_message_id=" + reply_to_message_id + ", version=" + version + ", account_id="
-				+ getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject + ", from=" + from + ", to=" + to
-				+ ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date=" + date + ", unread=" + unread
-				+ ", starred=" + starred + ", snippet=" + snippet + ", body=" + body + ", files=" + files + ", folder="
-				+ folder + ", labels=" + labels + ", tracking=" + tracking + ", metadata=" + metadata
-				+ ", send_at=" + send_at + ", retry_limit_datetime=" + retry_limit_datetime + "]";
+			+ getAccountId() + ", thread_id=" + thread_id + ", subject=" + subject + ", from=" + from + ", to=" + to
+			+ ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to + ", date=" + date + ", unread=" + unread
+			+ ", starred=" + starred + ", snippet=" + snippet + ", body=" + body + ", files=" + files + ", folder="
+			+ folder + ", labels=" + labels + ", tracking=" + tracking + ", metadata=" + metadata + ", send_at="
+			+ send_at + ", retry_limit_datetime=" + retry_limit_datetime + "]";
 	}
 }

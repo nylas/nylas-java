@@ -15,11 +15,7 @@ public class OutboxJobStatus extends AccountOwnedModel {
 
 	@Override
 	public String toString() {
-		return "OutboxJobStatus [" +
-				"job_status_id='" + getJobStatusId() + '\'' +
-				"account_id='" + getAccountId() + '\'' +
-				", status='" + status + '\'' +
-				", original_data=" + original_data +
-				']';
+		return "OutboxJobStatus [" + "job_status_id='" + getJobStatusId() + '\'' + "account_id='" + getAccountId()
+			+ '\'' + ", status='" + status + '\'' + ", original_data=" + original_data + ']';
 	}
 }

@@ -15,9 +15,7 @@ public class SendGridVerifiedStatus {
 
 	@Override
 	public String toString() {
-		return "SendGridVerifiedStatus [" +
-				"domain_verified=" + domain_verified +
-				", sender_verified=" + sender_verified +
-				']';
+		return "SendGridVerifiedStatus [" + "domain_verified=" + domain_verified + ", sender_verified="
+			+ sender_verified + ']';
 	}
 }

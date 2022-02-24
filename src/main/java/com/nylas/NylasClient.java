@@ -28,6 +28,9 @@ public class NylasClient {
 	
 	private final HttpUrl baseUrl;
 	private final OkHttpClient httpClient;
+
+	enum AuthMethod { BASIC, BEARER }
+	enum HttpMethod { GET, PUT, POST, DELETE, PATCH }
 	
 	private static OkHttpClient.Builder defaultHttpClient() {
 		return new OkHttpClient.Builder()
@@ -173,7 +176,7 @@ public class NylasClient {
 	}
 
 	<T> T executeRequestWithAuth(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body,
-								 Type resultType, AuthMethod authMethod) throws IOException, RequestFailedException {
+			Type resultType, AuthMethod authMethod) throws IOException, RequestFailedException {
 		Request request = buildRequest(authUser, url, method, body, authMethod);
 		return executeRequest(request, resultType);
 	}
@@ -261,20 +264,4 @@ public class NylasClient {
 			return new NylasClient(httpClient, baseUrl);
 		}
 	}
-
-	static enum AuthMethod {
-		BASIC,
-		BEARER,
-		;
-	}
-	
-	static enum HttpMethod {
-		GET,
-		PUT,
-		POST,
-		DELETE,
-		PATCH,
-		;
-	}
-
 }
