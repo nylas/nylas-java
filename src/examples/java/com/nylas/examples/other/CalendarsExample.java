@@ -24,10 +24,14 @@ public class CalendarsExample {
 		NylasAccount account = client.account(conf.get("access.token"));
 		Calendars calendars = account.calendars();
 		String calendarEmail = null;
+		String accountId = null;
+		String calendarId = null;
 		for (Calendar calendar : calendars.list()) {
 			log.info(calendar);
 			if (calendar.getName().contains("@")) {
 				calendarEmail = calendar.getName();
+				accountId = calendar.getAccountId();
+				calendarId = calendar.getId();
 			}
 		}
 		if (calendarEmail == null) {
@@ -35,7 +39,11 @@ public class CalendarsExample {
 		} else {
 			Instant end = ZonedDateTime.now().toInstant();
 			Instant start = end.minus(30, ChronoUnit.DAYS);
-			List<FreeBusy> freeBusyInfo = calendars.checkFreeBusy(start, end, calendarEmail);
+			FreeBusyQuery query = new FreeBusyQuery()
+					.startTime(start.getEpochSecond())
+					.endTime(end.getEpochSecond())
+					.emails(calendarEmail);
+			List<FreeBusy> freeBusyInfo = calendars.checkFreeBusy(query);
 			for (FreeBusy freeBusy : freeBusyInfo) {
 				log.info(freeBusy);
 			}
@@ -48,7 +56,7 @@ public class CalendarsExample {
 		newCal.setTimezone("America/Los_Angeles");
 		Calendar created = calendars.create(newCal);
 		log.info("Created: " + created + " status: " + created.getJobStatusId());
-		
+
 		created.setName("New Test Calendar (changed)");
 		created.setDescription("this calendar has been updated!");
 		created.setLocation("nearby");
@@ -58,22 +66,27 @@ public class CalendarsExample {
 		created.setMetadata(metadata);
 		Calendar updated = calendars.update(created);
 		log.info("Updated: " + updated + " status: " + updated.getJobStatusId());
-		
+
 		String deleteJobStatusId = calendars.delete(updated.getId());
 		log.info("Deleted, deleted job status id: " + deleteJobStatusId);
-		
+
 		JobStatus deleteStatus = account.jobStatuses().get(deleteJobStatusId);
 		log.info("Deletion status: " + deleteStatus);
 
-		availability(calendars);
+		availability(calendars, accountId, calendarId, calendarEmail);
 	}
 
-	protected static void availability(Calendars calendars) throws RequestFailedException, IOException {
+	protected static void availability(Calendars calendars, String accountId, String calendarId, String email)
+			throws RequestFailedException, IOException {
+		FreeBusyCalendars freeBusyCalendars = new FreeBusyCalendars();
+		freeBusyCalendars.setAccountId(accountId);
+		freeBusyCalendars.addCalendarIds(calendarId);
 		SingleAvailabilityQuery query = new SingleAvailabilityQuery()
 				.durationMinutes(30)
 				.startTime(Instant.now())
 				.endTime(Instant.now().plus(1, ChronoUnit.HOURS))
-				.intervalMinutes(10);
+				.intervalMinutes(10)
+				.calendars(freeBusyCalendars);
 
 		Availability availability = calendars.availability(query);
 		log.info(availability.toString());
@@ -83,7 +96,7 @@ public class CalendarsExample {
 				.startTime(Instant.now())
 				.endTime(Instant.now().plus(1, ChronoUnit.HOURS))
 				.intervalMinutes(10)
-				.emails(Collections.singletonList(Collections.singletonList("you@example.com")));
+				.emails(Collections.singletonList(Collections.singletonList(email)));
 
 		List<List<ConsecutiveAvailability>> consecutiveAvailability = calendars.consecutiveAvailability(consecutiveQuery);
 		log.info(consecutiveAvailability.toString());
