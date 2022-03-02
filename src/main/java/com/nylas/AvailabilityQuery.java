@@ -16,8 +16,7 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 	private Long endTime;
 	private List<FreeBusy> freeBusy;
 	private List<OpenHours> openHours;
-	//TODO::Verify calendars structure
-	private List<Map<String, List<String>>> calendars;
+	protected FreeBusyCalendars calendars;
 
 	public Q durationMinutes(int durationMinutes) {
 		this.durationMinutes = durationMinutes;
@@ -59,7 +58,7 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 		return self();
 	}
 
-	public Q calendars(List<Map<String, List<String>>> calendars) {
+	public Q calendars(FreeBusyCalendars calendars) {
 		this.calendars = calendars;
 		return self();
 	}
