@@ -16,7 +16,7 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 	private Long endTime;
 	private List<FreeBusy> freeBusy;
 	private List<OpenHours> openHours;
-	protected FreeBusyCalendars calendars;
+	protected List<FreeBusyCalendars> calendars;
 
 	public Q durationMinutes(int durationMinutes) {
 		this.durationMinutes = durationMinutes;
@@ -58,8 +58,8 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 		return self();
 	}
 
-	public Q calendars(FreeBusyCalendars calendars) {
-		this.calendars = calendars;
+	public Q calendars(FreeBusyCalendars... calendars) {
+		this.calendars = Arrays.asList(calendars);
 		return self();
 	}
 

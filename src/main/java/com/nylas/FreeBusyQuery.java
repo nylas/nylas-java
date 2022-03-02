@@ -7,7 +7,7 @@ public class FreeBusyQuery {
 	private Long startTime;
 	private Long endTime;
 	private List<String> emails;
-	private FreeBusyCalendars calendars;
+	private List<FreeBusyCalendars> calendars;
 
 	public FreeBusyQuery startTime(Long startTime) {
 		this.startTime = startTime;
@@ -24,8 +24,8 @@ public class FreeBusyQuery {
 		return this;
 	}
 
-	public FreeBusyQuery calendars(FreeBusyCalendars calendars) {
-		this.calendars = calendars;
+	public FreeBusyQuery calendars(FreeBusyCalendars... calendars) {
+		this.calendars = Arrays.asList(calendars);
 		return this;
 	}
 
