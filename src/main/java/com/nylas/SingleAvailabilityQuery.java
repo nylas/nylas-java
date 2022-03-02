@@ -36,6 +36,11 @@ public class SingleAvailabilityQuery extends AvailabilityQuery<SingleAvailabilit
 	}
 
 	@Override
+	public boolean isValid() {
+		return super.isValid() && (emails != null || this.calendars != null);
+	}
+
+	@Override
 	public Map<String, Object> toMap() {
 		Map<String, Object> map = super.toMap();
 		Maps.putIfNotNull(map, "emails", emails);

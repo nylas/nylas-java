@@ -21,6 +21,6 @@ public class MultipleAvailabilityQuery extends AvailabilityQuery<MultipleAvailab
 
 	@Override
 	public boolean isValid() {
-		return super.isValid() && emails != null;
+		return super.isValid() && (emails != null || this.calendars != null);
 	}
 }
