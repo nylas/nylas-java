@@ -57,12 +57,26 @@ public class Calendars extends RestfulDAO<Calendar> {
 	public long count(CalendarQuery query) throws IOException, RequestFailedException {
 		return super.count(query);
 	}
-	
+
+	/**
+	 * Check calendar free or busy status for a single email
+	 * @deprecated Replaced by {@link #checkFreeBusy(FreeBusyQuery)}
+	 */
+	@Deprecated
 	public List<FreeBusy> checkFreeBusy(Instant startTime, Instant endTime, String email)
 			throws IOException, RequestFailedException {
 		return checkFreeBusy(startTime, endTime, Arrays.asList(email));
 	}
-	
+
+	/**
+	 * Check calendar free or busy status for a list of emails
+	 * @param startTime Timestamp for the beginning of the free/busy window
+	 * @param endTime Timestamp for the end of the free/busy window
+	 * @param emails Email addresses on the same domain to check
+	 * @return The free/busy timeslots
+	 * @deprecated Replaced by {@link #checkFreeBusy(FreeBusyQuery)}
+	 */
+	@Deprecated
 	public List<FreeBusy> checkFreeBusy(Instant startTime, Instant endTime, List<String> emails)
 			throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl().addPathSegment("free-busy");
@@ -71,6 +85,19 @@ public class Calendars extends RestfulDAO<Calendar> {
 		params.put("end_time", endTime.getEpochSecond());
 		params.put("emails", emails);
 		return client.executePost(authUser, url, params, JsonHelper.listTypeOf(FreeBusy.class));
+	}
+
+	/**
+	 * Check calendar free or busy status
+	 * @param query The free/busy query
+	 * @return The free/busy timeslots
+	 */
+	public List<FreeBusy> checkFreeBusy(FreeBusyQuery query) throws IOException, RequestFailedException {
+		if(!query.isValid()) {
+			throw new IllegalArgumentException("Free Busy query missing one or more required parameters.");
+		}
+		HttpUrl.Builder url = getCollectionUrl().addPathSegment("free-busy");
+		return client.executePost(authUser, url, query.toMap(), JsonHelper.listTypeOf(FreeBusy.class));
 	}
 
 	public Availability availability(SingleAvailabilityQuery query) throws IOException, RequestFailedException {
