@@ -15,6 +15,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Deprecated
 
+- Deprecated `checkFreeBusy(Instant, Instant, List<String>)` and `checkFreeBusy(Instant, Instant, String)` in favour of `checkFreeBusy(FreeBusyQuery)`
+
 ### Fixed
 
 ### Removed
