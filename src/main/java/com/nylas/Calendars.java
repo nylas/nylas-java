@@ -100,6 +100,11 @@ public class Calendars extends RestfulDAO<Calendar> {
 		return client.executePost(authUser, url, query.toMap(), JsonHelper.listTypeOf(FreeBusy.class));
 	}
 
+	/**
+	 * Check multiple calendars to find available time slots for a single meeting
+	 * @param query The single meeting availability query
+	 * @return The availability information; a list of time slots where all participants are available
+	 */
 	public Availability availability(SingleAvailabilityQuery query) throws IOException, RequestFailedException {
 		if(!query.isValid()) {
 			throw new IllegalArgumentException("Availability query missing one or more required parameters.");
@@ -108,6 +113,11 @@ public class Calendars extends RestfulDAO<Calendar> {
 		return client.executePost(authUser, url, query.toMap(), Availability.class);
 	}
 
+	/**
+	 * Check multiple calendars to find availability for multiple meetings with several participants
+	 * @param query The query for multiple meeting availabilities
+	 * @return The availability information; a list of all possible groupings that share time slots
+	 */
 	public List<List<ConsecutiveAvailability>> consecutiveAvailability(MultipleAvailabilityQuery query)
 			throws IOException, RequestFailedException {
 		if(!query.isValid()) {
