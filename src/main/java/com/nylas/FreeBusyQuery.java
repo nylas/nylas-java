@@ -1,5 +1,6 @@
 package com.nylas;
 
+import java.time.Instant;
 import java.util.*;
 
 public class FreeBusyQuery {
@@ -9,8 +10,18 @@ public class FreeBusyQuery {
 	private List<String> emails;
 	private List<FreeBusyCalendars> calendars;
 
+	public FreeBusyQuery startTime(Instant startTime) {
+		this.startTime = startTime.getEpochSecond();
+		return this;
+	}
+
 	public FreeBusyQuery startTime(Long startTime) {
 		this.startTime = startTime;
+		return this;
+	}
+
+	public FreeBusyQuery endTime(Instant endTime) {
+		this.endTime = endTime.getEpochSecond();
 		return this;
 	}
 

@@ -40,8 +40,18 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 		return self();
 	}
 
+	public Q startTime(Long startTime) {
+		this.startTime = startTime;
+		return self();
+	}
+
 	public Q endTime(Instant endTime) {
 		this.endTime = endTime.getEpochSecond();
+		return self();
+	}
+
+	public Q endTime(Long endTime) {
+		this.endTime = endTime;
 		return self();
 	}
 
