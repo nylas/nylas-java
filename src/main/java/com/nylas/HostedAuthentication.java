@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 import okhttp3.HttpUrl;
+import okhttp3.Request;
 
 /**
  * Support for Nylas Hosted Auth.
@@ -46,7 +47,14 @@ public class HostedAuthentication {
 		params.put("grant_type", "authorization_code");
 		params.put("code", authorizationCode);
 
-		return application.getClient().executePost(null, tokenUrl, params, AccessToken.class);
+		// Send JSON accept header to force JSON response from this endpoint
+		Request request = new Request.Builder()
+				.url(tokenUrl.build())
+				.addHeader("Accept", "application/json")
+				.method(NylasClient.HttpMethod.POST.toString(), JsonHelper.jsonRequestBody(params))
+				.build();
+
+		return application.getClient().executeRequest(request, AccessToken.class);
 	}
 	
 	/**
