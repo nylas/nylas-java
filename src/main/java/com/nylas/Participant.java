@@ -7,6 +7,7 @@ public class Participant {
 
 	private String name;
 	private String email;
+	private String phone_number;
 	private String status;
 	private String comment;
 	
@@ -27,6 +28,10 @@ public class Participant {
 		return email;
 	}
 
+	public String getPhoneNumber() {
+		return phone_number;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -37,6 +42,11 @@ public class Participant {
 
 	public Participant name(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public Participant phoneNumber(String phoneNumber) {
+		this.phone_number = phoneNumber;
 		return this;
 	}
 
@@ -55,12 +65,14 @@ public class Participant {
 		Map<String, Object> params = new HashMap<>();
 		Maps.putIfNotNull(params, "name", name);
 		Maps.putIfNotNull(params, "email", email);
+		Maps.putIfNotNull(params, "phone_number", phone_number);
 		Maps.putIfNotNull(params, "comment", comment);
 		return params;
 	}
 
 	@Override
 	public String toString() {
-		return "Participant [name=" + name + ", email=" + email + ", status=" + status + ", comment=" + comment + "]";
+		return "Participant [name=" + name + ", email=" + email + ", phone_number=" + phone_number
+				+ ", status=" + status + ", comment=" + comment + "]";
 	}
 }
