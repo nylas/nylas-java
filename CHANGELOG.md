@@ -16,6 +16,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+- Fix null error message when `HostedAuthentication.fetchToken()` returns an API error
+
 ### Removed
 
 ### Security
