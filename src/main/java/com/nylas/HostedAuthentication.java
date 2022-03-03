@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import com.nylas.NylasClient.HttpMethod;
+import com.nylas.NylasClient.HttpHeaders;
+import com.nylas.NylasClient.MediaType;
+
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
@@ -50,8 +54,8 @@ public class HostedAuthentication {
 		// Send JSON accept header to force JSON response from this endpoint
 		Request request = new Request.Builder()
 				.url(tokenUrl.build())
-				.addHeader("Accept", "application/json")
-				.method(NylasClient.HttpMethod.POST.toString(), JsonHelper.jsonRequestBody(params))
+				.addHeader(HttpHeaders.ACCEPT.name(), MediaType.APPLICATION_JSON.getName())
+				.method(HttpMethod.POST.name(), JsonHelper.jsonRequestBody(params))
 				.build();
 
 		return application.getClient().executeRequest(request, AccessToken.class);
