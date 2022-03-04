@@ -72,7 +72,12 @@ public class Participant {
 
 	@Override
 	public String toString() {
-		return "Participant [name=" + name + ", email=" + email + ", phone_number=" + phone_number
-				+ ", status=" + status + ", comment=" + comment + "]";
+		return "Participant [" +
+				"name=" + name +
+				"email=" + email +
+				"phone_number=" + phone_number +
+				"status=" + status +
+				"comment=" + comment +
+				"]";
 	}
 }
