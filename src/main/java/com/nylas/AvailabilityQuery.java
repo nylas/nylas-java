@@ -97,6 +97,23 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 
 	/**
 	 * Check account and calendar IDs for free/busy status
+	 * <br>
+	 * Note, the mapping should be in the format of accountIds -> List of calendarIds
+	 * @deprecated Replaced by {@link #calendars(FreeBusyCalendars...)}
+	 */
+	@Deprecated
+	public Q calendars(List<Map<String, List<String>>> calendars) {
+		this.calendars = new ArrayList<>();
+		for(Map<String, List<String>> map : calendars) {
+			for(Map.Entry<String, List<String>> entry : map.entrySet()) {
+				this.calendars.add(new FreeBusyCalendars(entry.getKey(), entry.getValue()));
+			}
+		}
+		return self();
+	}
+
+	/**
+	 * Check account and calendar IDs for free/busy status
 	 */
 	public Q calendars(FreeBusyCalendars... calendars) {
 		this.calendars = Arrays.asList(calendars);
