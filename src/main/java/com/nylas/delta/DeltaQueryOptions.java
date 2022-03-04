@@ -13,9 +13,10 @@ import java.util.stream.Collectors;
  */
 public class DeltaQueryOptions {
 
-	private String view;
 	private String include_types;
 	private String excluded_types;
+	private boolean expanded_view = false;
+	private static final String EXPANDED_VIEW_OPTION_VALUE = "expanded";
 
 	public enum Type {
 		CONTACT("contact"),
@@ -40,8 +41,8 @@ public class DeltaQueryOptions {
 		}
 	}
 
-	public DeltaQueryOptions setView(String view) {
-		this.view = view;
+	public DeltaQueryOptions expandedView(boolean expandedView) {
+		this.expanded_view = expandedView;
 		return this;
 	}
 
@@ -69,7 +70,9 @@ public class DeltaQueryOptions {
 	 */
 	public Map<String, String> toMap() {
 		Map<String, String> map = new HashMap<>();
-		Maps.putIfNotNull(map, "view", view);
+		if(expanded_view) {
+			map.put("view", EXPANDED_VIEW_OPTION_VALUE);
+		}
 		Maps.putIfNotNull(map, "include_types", include_types);
 		Maps.putIfNotNull(map, "excluded_types", excluded_types);
 		return map;

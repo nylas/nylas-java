@@ -47,7 +47,7 @@ public class DeltaExample {
 
 		// Long-poll for deltas, with options passed in
 		DeltaQueryOptions options = new DeltaQueryOptions()
-				.setView("expanded")
+				.expandedView(true)
 				.includeTypes(DeltaQueryOptions.Type.EVENT, DeltaQueryOptions.Type.MESSAGE);
 		deltas.longpoll(latestCursor, 30, deltaProcessor, options);
 	}
