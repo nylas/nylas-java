@@ -19,6 +19,7 @@ public class Deltas {
 
 	private final NylasClient client;
 	private final String accessToken;
+	private static final int MAXIMUM_LONGPOLL_TIMEOUT_SECONDS = 1800;
 
 	public Deltas(NylasClient client, String accessToken) {
 		this.client = client;
@@ -55,9 +56,13 @@ public class Deltas {
 	 * @param cursor The cursor to query from
 	 * @param options Additional options for this Delta query
 	 * @return A {@link DeltaCursor} object containing the set of cursors since the provider cursor
+	 * @throws IllegalArgumentException If cursor is null/empty or if options are invalid
 	 * @see <a href="https://developer.nylas.com/docs/api/#get/delta">Request Delta Cursors</a>
 	 */
 	public DeltaCursor since(String cursor, DeltaQueryOptions options) throws RequestFailedException, IOException {
+		if(Validations.nullOrEmpty(cursor)) {
+			throw new IllegalArgumentException("Null or empty cursor passed in.");
+		}
 		HttpUrl.Builder url = deltaEndpoint().addQueryParameter("cursor", cursor);
 		if(options != null) {
 			options.toValidMap().forEach(url::addQueryParameter);
@@ -102,10 +107,14 @@ public class Deltas {
 	 * @param listener An object that implements {@link DeltaStreamListener} to listen on every Delta received
 	 * @param options Additional options for this Delta query
 	 * @return A list of all the {@link Delta} objects captured during the duration of the stream
+	 * @throws IllegalArgumentException If cursor is null/empty or if options are invalid
 	 * @see <a href="https://developer.nylas.com/docs/api#get/delta/streaming">Streaming Deltas</a>
 	 */
 	public List<Delta<? extends AccountOwnedModel>> stream(String cursor, DeltaStreamListener listener, DeltaQueryOptions options)
 			throws RequestFailedException, IOException {
+		if(Validations.nullOrEmpty(cursor)) {
+			throw new IllegalArgumentException("Null or empty cursor passed in.");
+		}
 		List<Delta<? extends AccountOwnedModel>> deltas = new ArrayList<>();
 		Type deltaAdapterType = Types.newParameterizedType(Delta.class, AccountOwnedModel.class);
 		JsonAdapter<Delta<? extends AccountOwnedModel>> adapter = JsonHelper.moshi().adapter(deltaAdapterType);
@@ -179,20 +188,28 @@ public class Deltas {
 	/**
 	 * Poll for a DeltaCursor since the provided cursor until a delta is received or timeout is reached
 	 * @param cursor The cursor to start polling from
-	 * @param timeout The number of seconds to poll for before timing out
+	 * @param timeout The number of seconds to poll for before timing out, maximum is {@value #MAXIMUM_LONGPOLL_TIMEOUT_SECONDS}
 	 * @param listener An object that implements {@link DeltaLongPollListener} to listen for a DeltaCursor
 	 * @param options Additional options for this Delta query
 	 * @return The {@link DeltaCursor} object captured while polling
+	 * @throws IllegalArgumentException If cursor is null/empty, if timeout is invalid, or if options are invalid
 	 * @see <a href="https://developer.nylas.com/docs/api/#get/delta/longpoll">Return Long-Polling Deltas</a>
 	 */
 	public DeltaCursor longpoll(String cursor, int timeout, DeltaLongPollListener listener, DeltaQueryOptions options)
 			throws RequestFailedException, IOException {
+		if(Validations.nullOrEmpty(cursor)) {
+			throw new IllegalArgumentException("Null or empty cursor passed in.");
+		}
 		DeltaCursor deltaCursor = null;
 		JsonAdapter<DeltaCursor> adapter = JsonHelper.moshi().adapter(DeltaCursor.class);
 		HttpUrl.Builder url = deltaEndpoint()
 				.addPathSegment("longpoll")
 				.addQueryParameter("cursor", cursor)
 				.addQueryParameter("timeout", String.valueOf(timeout));
+		if(timeout < 0 || timeout > MAXIMUM_LONGPOLL_TIMEOUT_SECONDS) {
+			throw new IllegalArgumentException(String.format(
+					"Timeout must be a positive value not greater than %d.", MAXIMUM_LONGPOLL_TIMEOUT_SECONDS));
+		}
 		if(options != null) {
 			options.toValidMap().forEach(url::addQueryParameter);
 		}
