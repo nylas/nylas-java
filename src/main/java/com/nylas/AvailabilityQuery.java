@@ -15,61 +15,98 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 	private List<OpenHours> openHours;
 	protected List<FreeBusyCalendars> calendars;
 
+	/**
+	 * The total number of minutes the event should last
+	 */
 	public Q durationMinutes(int durationMinutes) {
 		this.durationMinutes = durationMinutes;
 		return self();
 	}
 
+	/**
+	 * How many minutes it should check for availability
+	 */
 	public Q intervalMinutes(int intervalMinutes) {
 		this.intervalMinutes = intervalMinutes;
 		return self();
 	}
 
+	/**
+	 * The amount of buffer time in minutes that you want around existing meetings
+	 */
 	public Q buffer(int buffer) {
 		this.buffer = buffer;
 		return self();
 	}
 
+	/**
+	 * Availability of EWS calendars for tentative events
+	 */
 	public Q tentativeBusy(boolean tentativeBusy) {
 		this.tentativeBusy = tentativeBusy;
 		return self();
 	}
 
+	/**
+	 * The timestamp for the beginning of the event
+	 */
 	public Q startTime(Instant startTime) {
 		this.startTime = startTime.getEpochSecond();
 		return self();
 	}
 
+	/**
+	 * The timestamp for the beginning of the event
+	 */
 	public Q startTime(Long startTime) {
 		this.startTime = startTime;
 		return self();
 	}
 
+	/**
+	 * The timestamp for the end of the event
+	 */
 	public Q endTime(Instant endTime) {
 		this.endTime = endTime.getEpochSecond();
 		return self();
 	}
 
+	/**
+	 * The timestamp for the end of the event
+	 */
 	public Q endTime(Long endTime) {
 		this.endTime = endTime;
 		return self();
 	}
 
+	/**
+	 * A list of {@link FreeBusy} data for users not in your organization
+	 */
 	public Q freeBusy(List<FreeBusy> freeBusy) {
 		this.freeBusy = freeBusy;
 		return self();
 	}
 
+	/**
+	 * Additional times email accounts are available
+	 */
 	public Q openHours(List<OpenHours> openHours) {
 		this.openHours = openHours;
 		return self();
 	}
 
+	/**
+	 * Check account and calendar IDs for free/busy status
+	 */
 	public Q calendars(FreeBusyCalendars... calendars) {
 		this.calendars = Arrays.asList(calendars);
 		return self();
 	}
 
+	/**
+	 * Checks the validity of the availability query
+	 * @return If the query is valid
+	 */
 	public boolean isValid() {
 		return durationMinutes != null &&
 				intervalMinutes != null &&
@@ -77,6 +114,10 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 				endTime != null;
 	}
 
+	/**
+	 * Converts the availability query to a map
+	 * @return The query as a map
+	 */
 	public Map<String, Object> toMap() {
 		Map<String, Object> map = new HashMap<>();
 		Maps.putIfNotNull(map, "duration_minutes", durationMinutes);

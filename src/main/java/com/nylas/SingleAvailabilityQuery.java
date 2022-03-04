@@ -3,11 +3,22 @@ package com.nylas;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Query builder for checking availability for a single meeting
+ * @see <a href="https://developer.nylas.com/docs/api/#post/calendars/availability">Availability for a Single Meeting</a>
+ */
 public class SingleAvailabilityQuery extends AvailabilityQuery<SingleAvailabilityQuery> {
 
 	private List<String> emails;
 	private String roundRobin;
 
+	/**
+	 * Available round-robin options.
+	 * <br>
+	 * {@link #MAX_AVAILABILITY} will return all time slots where at least one person specified in free/busy, calendars, or emails is available.
+	 * <br>
+	 * {@code #MAX_FAIRNESS} will return time slots where the least recently booked 50% of people are available.
+	 */
 	public enum RoundRobin {
 		MAX_AVAILABILITY("max-availability"),
 		MAX_FAIRNESS("max-fairness"),
@@ -25,11 +36,17 @@ public class SingleAvailabilityQuery extends AvailabilityQuery<SingleAvailabilit
 		}
 	}
 
+	/**
+	 * Emails on the same domain to check
+	 */
 	public SingleAvailabilityQuery emails(List<String> emails) {
 		this.emails = emails;
 		return this;
 	}
 
+	/**
+	 * Finds available meeting times in a round-robin style. Unset returns collective availability.
+	 */
 	public SingleAvailabilityQuery roundRobin(RoundRobin roundRobin) {
 		this.roundRobin = roundRobin.getName();
 		return this;
