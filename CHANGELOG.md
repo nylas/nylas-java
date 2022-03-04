@@ -2,8 +2,6 @@
 
 ## [1.12.0] - Released 2022-03-04
 
-This section contains changes that have been committed but not yet released.
-
 ### Added
 
 - Added support for Component CRUD
@@ -12,14 +10,6 @@ This section contains changes that have been committed but not yet released.
 ### Changed
 
 - Bump supported API version to v2.4
-
-### Deprecated
-
-### Fixed
-
-### Removed
-
-### Security
 
 ## [1.11.2] - Released 2022-02-01
 
