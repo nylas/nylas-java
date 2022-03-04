@@ -11,6 +11,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
+- Bump supported API version to v2.4
+
 ### Deprecated
 
 ### Fixed
