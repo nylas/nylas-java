@@ -149,6 +149,35 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 		return map;
 	}
 
+	void validate() {
+		if(isValid()) {
+			return;
+		}
+
+		String errorMessage = String.format(
+				"Availability query missing one or more required parameters: %s", self().missingParameters().toString());
+		throw new IllegalArgumentException(errorMessage);
+	}
+
+	StringJoiner missingParameters() {
+		StringJoiner missingParams = new StringJoiner(", ");
+
+		if(durationMinutes == null) {
+			missingParams.add("durationMinutes");
+		}
+		if(intervalMinutes == null) {
+			missingParams.add("intervalMinutes");
+		}
+		if(startTime == null) {
+			missingParams.add("startTime");
+		}
+		if(endTime == null) {
+			missingParams.add("endTime");
+		}
+
+		return missingParams;
+	}
+
 	// helper method for fluent builder style without type warnings
 	@SuppressWarnings("unchecked")
 	protected final Q self() {

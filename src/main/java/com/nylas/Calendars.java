@@ -93,9 +93,7 @@ public class Calendars extends RestfulDAO<Calendar> {
 	 * @return The free/busy timeslots
 	 */
 	public List<FreeBusy> checkFreeBusy(FreeBusyQuery query) throws IOException, RequestFailedException {
-		if(!query.isValid()) {
-			throw new IllegalArgumentException("Free Busy query missing one or more required parameters.");
-		}
+		query.validate();
 		HttpUrl.Builder url = getCollectionUrl().addPathSegment("free-busy");
 		return client.executePost(authUser, url, query.toMap(), JsonHelper.listTypeOf(FreeBusy.class));
 	}
@@ -106,9 +104,7 @@ public class Calendars extends RestfulDAO<Calendar> {
 	 * @return The availability information; a list of time slots where all participants are available
 	 */
 	public Availability availability(SingleAvailabilityQuery query) throws IOException, RequestFailedException {
-		if(!query.isValid()) {
-			throw new IllegalArgumentException("Availability query missing one or more required parameters.");
-		}
+		query.validate();
 		HttpUrl.Builder url = getCollectionUrl().addPathSegment("availability");
 		return client.executePost(authUser, url, query.toMap(), Availability.class);
 	}
@@ -120,9 +116,7 @@ public class Calendars extends RestfulDAO<Calendar> {
 	 */
 	public List<List<ConsecutiveAvailability>> consecutiveAvailability(MultipleAvailabilityQuery query)
 			throws IOException, RequestFailedException {
-		if(!query.isValid()) {
-			throw new IllegalArgumentException("Availability query missing one or more required parameters.");
-		}
+		query.validate();
 		HttpUrl.Builder url = getCollectionUrl().addPathSegment("availability").addPathSegment("consecutive");
 		return client.executePost(authUser, url, query.toMap(), JsonHelper.listTypeOf(JsonHelper.listTypeOf(ConsecutiveAvailability.class)));
 	}

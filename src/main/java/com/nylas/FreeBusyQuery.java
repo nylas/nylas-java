@@ -82,4 +82,25 @@ public class FreeBusyQuery {
 		Maps.putValueOrDefault(map, "emails", emails, Collections.emptyList());
 		return map;
 	}
+
+	void validate() {
+		if(isValid()) {
+			return;
+		}
+
+		StringJoiner missingParams = new StringJoiner(", ");
+		if(startTime == null) {
+			missingParams.add("startTime");
+		}
+		if(endTime == null) {
+			missingParams.add("endTime");
+		}
+		if(emails == null && calendars == null) {
+			missingParams.add("one of emails or calendars");
+		}
+
+		String errorMessage = String.format(
+				"Availability query missing one or more required parameters: %s", missingParams);
+		throw new IllegalArgumentException(errorMessage);
+	}
 }

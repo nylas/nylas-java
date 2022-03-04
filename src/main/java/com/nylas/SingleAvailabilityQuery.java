@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Query builder for checking availability for a single meeting
@@ -63,5 +64,14 @@ public class SingleAvailabilityQuery extends AvailabilityQuery<SingleAvailabilit
 		Maps.putIfNotNull(map, "emails", emails);
 		Maps.putIfNotNull(map, "round_robin", roundRobin);
 		return map;
+	}
+
+	@Override
+	StringJoiner missingParameters() {
+		StringJoiner missingParams = super.missingParameters();
+		if(emails == null && calendars == null) {
+			missingParams.add("one of emails or calendars");
+		}
+		return missingParams;
 	}
 }

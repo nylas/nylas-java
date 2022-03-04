@@ -2,6 +2,7 @@ package com.nylas;
 
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * Query builder for checking availability for multiple meetings
@@ -29,5 +30,14 @@ public class MultipleAvailabilityQuery extends AvailabilityQuery<MultipleAvailab
 	@Override
 	public boolean isValid() {
 		return super.isValid() && (emails != null || this.calendars != null);
+	}
+
+	@Override
+	StringJoiner missingParameters() {
+		StringJoiner missingParams = super.missingParameters();
+		if(emails == null && calendars == null) {
+			missingParams.add("one of emails or calendars");
+		}
+		return missingParams;
 	}
 }
