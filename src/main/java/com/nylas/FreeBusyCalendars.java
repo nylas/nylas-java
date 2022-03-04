@@ -9,6 +9,11 @@ public class FreeBusyCalendars {
 	private String account_id;
 	private List<String> calendar_ids = new ArrayList<>();
 
+	public FreeBusyCalendars(String accountId, List<String> calendarIds) {
+		this.account_id = accountId;
+		this.calendar_ids = calendarIds;
+	}
+
 	public String getAccountId() {
 		return account_id;
 	}

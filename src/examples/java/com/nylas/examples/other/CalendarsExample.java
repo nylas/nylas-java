@@ -78,9 +78,7 @@ public class CalendarsExample {
 
 	protected static void availability(Calendars calendars, String accountId, String calendarId, String email)
 			throws RequestFailedException, IOException {
-		FreeBusyCalendars freeBusyCalendars = new FreeBusyCalendars();
-		freeBusyCalendars.setAccountId(accountId);
-		freeBusyCalendars.addCalendarIds(calendarId);
+		FreeBusyCalendars freeBusyCalendars = new FreeBusyCalendars(accountId, Collections.singletonList(calendarId));
 		SingleAvailabilityQuery query = new SingleAvailabilityQuery()
 				.durationMinutes(30)
 				.startTime(Instant.now())
