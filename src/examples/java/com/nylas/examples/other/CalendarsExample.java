@@ -37,43 +37,28 @@ public class CalendarsExample {
 		if (calendarEmail == null) {
 			log.info("No calendar found with a name that looks like an email");
 		} else {
-			Instant end = ZonedDateTime.now().toInstant();
-			Instant start = end.minus(30, ChronoUnit.DAYS);
-			FreeBusyQuery query = new FreeBusyQuery()
-					.startTime(start.getEpochSecond())
-					.endTime(end.getEpochSecond())
-					.emails(calendarEmail);
-			List<FreeBusy> freeBusyInfo = calendars.checkFreeBusy(query);
-			for (FreeBusy freeBusy : freeBusyInfo) {
-				log.info(freeBusy);
-			}
+			log.info("Checking Free/Busy for the next 30 days");
+			checkFreeBusy(calendars, calendarEmail);
+
+			log.info("Checking availability for the next hour");
+			availability(calendars, accountId, calendarId, calendarEmail);
 		}
-		
-		Calendar newCal = new Calendar();
-		newCal.setName("New Test Calendar");
-		newCal.setDescription("Testing calendar creation");
-		newCal.setLocation("far, far away");
-		newCal.setTimezone("America/Los_Angeles");
-		Calendar created = calendars.create(newCal);
-		log.info("Created: " + created + " status: " + created.getJobStatusId());
 
-		created.setName("New Test Calendar (changed)");
-		created.setDescription("this calendar has been updated!");
-		created.setLocation("nearby");
-		created.setTimezone("America/New_York");
-		Map<String, String> metadata = new HashMap<>();
-		metadata.put("calendar_type", "test");
-		created.setMetadata(metadata);
-		Calendar updated = calendars.update(created);
-		log.info("Updated: " + updated + " status: " + updated.getJobStatusId());
+		log.info("Creating a new calendar");
+		createCalendar(account);
+	}
 
-		String deleteJobStatusId = calendars.delete(updated.getId());
-		log.info("Deleted, deleted job status id: " + deleteJobStatusId);
-
-		JobStatus deleteStatus = account.jobStatuses().get(deleteJobStatusId);
-		log.info("Deletion status: " + deleteStatus);
-
-		availability(calendars, accountId, calendarId, calendarEmail);
+	protected static void checkFreeBusy(Calendars calendars, String email) throws RequestFailedException, IOException {
+		Instant end = ZonedDateTime.now().toInstant();
+		Instant start = end.minus(30, ChronoUnit.DAYS);
+		FreeBusyQuery query = new FreeBusyQuery()
+				.startTime(start.getEpochSecond())
+				.endTime(end.getEpochSecond())
+				.emails(email);
+		List<FreeBusy> freeBusyInfo = calendars.checkFreeBusy(query);
+		for (FreeBusy freeBusy : freeBusyInfo) {
+			log.info(freeBusy);
+		}
 	}
 
 	protected static void availability(Calendars calendars, String accountId, String calendarId, String email)
@@ -98,5 +83,32 @@ public class CalendarsExample {
 
 		List<List<ConsecutiveAvailability>> consecutiveAvailability = calendars.consecutiveAvailability(consecutiveQuery);
 		log.info(consecutiveAvailability.toString());
+	}
+
+	protected static void createCalendar(NylasAccount account) throws RequestFailedException, IOException {
+		Calendars calendars = account.calendars();
+		Calendar newCal = new Calendar();
+		newCal.setName("New Test Calendar");
+		newCal.setDescription("Testing calendar creation");
+		newCal.setLocation("far, far away");
+		newCal.setTimezone("America/Los_Angeles");
+		Calendar created = calendars.create(newCal);
+		log.info("Created: " + created + " status: " + created.getJobStatusId());
+
+		created.setName("New Test Calendar (changed)");
+		created.setDescription("this calendar has been updated!");
+		created.setLocation("nearby");
+		created.setTimezone("America/New_York");
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("calendar_type", "test");
+		created.setMetadata(metadata);
+		Calendar updated = calendars.update(created);
+		log.info("Updated: " + updated + " status: " + updated.getJobStatusId());
+
+		String deleteJobStatusId = calendars.delete(updated.getId());
+		log.info("Deleted, deleted job status id: " + deleteJobStatusId);
+
+		JobStatus deleteStatus = account.jobStatuses().get(deleteJobStatusId);
+		log.info("Deletion status: " + deleteStatus);
 	}
 }
