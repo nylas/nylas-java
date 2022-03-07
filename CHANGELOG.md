@@ -9,6 +9,7 @@ This section contains changes that have been committed but not yet released.
 - Added Outbox support
 - Added support for Component CRUD
 - Added support for Neural Categorizer
+- Added field for `phone_number` in `Participant`
 
 ### Changed
 
