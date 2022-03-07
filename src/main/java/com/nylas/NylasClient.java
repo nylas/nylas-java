@@ -31,6 +31,23 @@ public class NylasClient {
 
 	enum AuthMethod { BASIC, BEARER }
 	enum HttpMethod { GET, PUT, POST, DELETE, PATCH }
+	enum HttpHeaders { ACCEPT, AUTHORIZATION }
+	enum MediaType {
+		APPLICATION_JSON("application/json"),
+		MESSAGE_RFC822("message/rfc822"),
+
+		;
+
+		private final String name;
+
+		MediaType(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
 	
 	private static OkHttpClient.Builder defaultHttpClient() {
 		return new OkHttpClient.Builder()
@@ -199,11 +216,11 @@ public class NylasClient {
 	void addAuthHeader(Request.Builder request, String authUser, AuthMethod authMethod) {
 		switch (authMethod) {
 			case BEARER:
-				request.addHeader("Authorization", "Bearer " + authUser);
+				request.addHeader(HttpHeaders.AUTHORIZATION.name(), "Bearer " + authUser);
 				break;
 			case BASIC:
 			default:
-				request.addHeader("Authorization", Credentials.basic(authUser, ""));
+				request.addHeader(HttpHeaders.AUTHORIZATION.name(), Credentials.basic(authUser, ""));
 		}
 	}
 	

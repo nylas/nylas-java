@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.nylas.NylasClient.HttpHeaders;
+import com.nylas.NylasClient.MediaType;
+
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 
@@ -53,7 +56,7 @@ public class Messages extends RestfulDAO<Message> {
 		Request.Builder builder = new Request.Builder().url(messageUrl.build()).get();
 		client.addAuthHeader(builder, authUser);
 		Request request = builder
-				.addHeader("Accept", "message/rfc822")
+				.addHeader(HttpHeaders.ACCEPT.name(), MediaType.MESSAGE_RFC822.getName())
 				.build();
 		return client.executeRequest(request, String.class);
 	}
