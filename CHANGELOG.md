@@ -6,6 +6,20 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+## [1.12.0] - Released 2022-03-08
+
+### Added
+
 - Added Outbox support
 - Added support for Component CRUD
 - Added support for Neural Categorizer
@@ -23,10 +37,6 @@ This section contains changes that have been committed but not yet released.
 ### Fixed
 
 - Fix null error message when `HostedAuthentication.fetchToken()` returns an API error
-
-### Removed
-
-### Security
 
 ## [1.11.2] - Released 2022-02-01
 
@@ -231,7 +241,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.11.2...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/nylas/nylas-java/releases/tag/v1.12.0
 [1.11.2]: https://github.com/nylas/nylas-java/releases/tag/v1.11.2
 [1.11.1]: https://github.com/nylas/nylas-java/releases/tag/v1.11.1
 [1.11.0]: https://github.com/nylas/nylas-java/releases/tag/v1.11.0
