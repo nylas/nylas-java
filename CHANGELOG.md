@@ -9,13 +9,18 @@ This section contains changes that have been committed but not yet released.
 - Added Outbox support
 - Added support for Component CRUD
 - Added support for Neural Categorizer
-- Added support for Delta
+- Added support for Delta]
+- Added field for `phone_number` in `Participant`
 
 ### Changed
+
+- Bump supported API version to v2.4
 
 ### Deprecated
 
 ### Fixed
+
+- Fix null error message when `HostedAuthentication.fetchToken()` returns an API error
 
 ### Removed
 
