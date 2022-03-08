@@ -9,6 +9,7 @@ This section contains changes that have been committed but not yet released.
 - Added Outbox support
 - Added support for Component CRUD
 - Added support for Neural Categorizer
+- Added support for `calendar` field in free-busy, availability, and consecutive availability queries
 - Added field for `phone_number` in `Participant`
 
 ### Changed
@@ -16,6 +17,8 @@ This section contains changes that have been committed but not yet released.
 - Bump supported API version to v2.4
 
 ### Deprecated
+
+- Deprecated `checkFreeBusy(Instant, Instant, List<String>)` and `checkFreeBusy(Instant, Instant, String)` in favour of `checkFreeBusy(FreeBusyQuery)`
 
 ### Fixed
 
