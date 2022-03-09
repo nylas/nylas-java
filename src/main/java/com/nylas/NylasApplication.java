@@ -49,6 +49,10 @@ public class NylasApplication {
 	public Components components() {
 		return new Components(client, this);
 	}
+
+	public Integrations integrations() {
+		return new Integrations(client, this);
+	}
 	
 	/**
 	 * Get the application details for this application
