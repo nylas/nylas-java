@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import com.nylas.NylasClient.HttpMethod;
+
 import okhttp3.HttpUrl;
 import okhttp3.HttpUrl.Builder;
 
@@ -102,9 +104,25 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 	
 	protected M update(String id, Map<String, Object> params, Map<String, String> extraQueryParams)
 			throws IOException, RequestFailedException {
+		return update(id, params, extraQueryParams, HttpMethod.PUT);
+	}
+
+	protected M updatePatch(String id, Map<String, Object> params, Map<String, String> extraQueryParams)
+			throws IOException, RequestFailedException {
+		return update(id, params, extraQueryParams, HttpMethod.PATCH);
+	}
+
+	protected M update(String id, Map<String, Object> params, Map<String, String> extraQueryParams, HttpMethod method)
+			throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getInstanceUrl(id);
 		addQueryParams(url, extraQueryParams);
-		return client.executePut(authUser, url, params, modelClass);
+		switch (method) {
+			case PATCH:
+				return client.executePatch(authUser, url, params, modelClass, authMethod);
+			case PUT:
+			default:
+				return client.executePut(authUser, url, params, modelClass, authMethod);
+		}
 	}
 	
 	/**
