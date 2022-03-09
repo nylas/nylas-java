@@ -29,7 +29,7 @@ public class NylasClient {
 	private final HttpUrl baseUrl;
 	private final OkHttpClient httpClient;
 
-	enum AuthMethod { BASIC, BEARER }
+	enum AuthMethod { BASIC, BASIC_WITH_CREDENTIALS, BEARER }
 	enum HttpMethod { GET, PUT, POST, DELETE, PATCH }
 	enum HttpHeaders { ACCEPT, AUTHORIZATION }
 	enum MediaType {
@@ -223,6 +223,9 @@ public class NylasClient {
 		switch (authMethod) {
 			case BEARER:
 				request.addHeader(HttpHeaders.AUTHORIZATION.name(), "Bearer " + authUser);
+				break;
+			case BASIC_WITH_CREDENTIALS:
+				request.addHeader(HttpHeaders.AUTHORIZATION.name(), "Basic " + authUser);
 				break;
 			case BASIC:
 			default:
