@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import com.nylas.NylasClient.HttpMethod;
+import com.nylas.NylasClient.AuthMethod;
 
 import okhttp3.HttpUrl;
 import okhttp3.HttpUrl.Builder;
@@ -15,6 +16,7 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 	protected final Class<M> modelClass;
 	protected final String collectionPath;
 	protected final String authUser;
+	protected AuthMethod authMethod = AuthMethod.BASIC;
 	
 	protected RestfulDAO(NylasClient client, Class<M> modelClass, String collectionPath, String authUser) {
 		this.client = client;
@@ -55,12 +57,12 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 		if (view != null) {
 			setView(url, view);
 		}
-		return client.executeGet(authUser, url, resultType);
+		return client.executeGet(authUser, url, resultType, authMethod);
 	}
 	
 	protected M get(String id) throws IOException, RequestFailedException {
 		HttpUrl.Builder messageUrl = getInstanceUrl(id);
-		return client.executeGet(authUser, messageUrl, modelClass);
+		return client.executeGet(authUser, messageUrl, modelClass, authMethod);
 	}
 	
 	protected M create(M model) throws IOException, RequestFailedException {
@@ -83,7 +85,7 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 			throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getCollectionUrl();
 		url = addQueryParams(url, extraQueryParams);
-		return client.executePost(authUser, url, params, modelClass);
+		return client.executePost(authUser, url, params, modelClass, authMethod);
 	}
 
 	protected M update(M model) throws IOException, RequestFailedException {
@@ -140,7 +142,7 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 	protected String delete(String id, Map<String, String> extraQueryParams) throws IOException, RequestFailedException {
 		HttpUrl.Builder url = getInstanceUrl(id);
 		addQueryParams(url, extraQueryParams);
-		String result = client.executeDelete(authUser, url, String.class);
+		String result = client.executeDelete(authUser, url, String.class, authMethod);
 		if (result != null) {
 			Map<String, Object> resultMap = JsonHelper.jsonToMap(result);
 			if (resultMap != null) {
