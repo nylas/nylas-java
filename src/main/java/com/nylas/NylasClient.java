@@ -142,6 +142,12 @@ public class NylasClient {
 		return executeRequestWithAuth(authUser, url, HttpMethod.PUT, jsonBody, resultType);
 	}
 
+	<T> T executePut(String authUser, HttpUrl.Builder url, Map<String, Object> params, Type resultType, AuthMethod authMethod)
+			throws IOException, RequestFailedException {
+		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
+		return executeRequestWithAuth(authUser, url, HttpMethod.PUT, jsonBody, resultType, authMethod);
+	}
+
 	<T> T executePatch(String authUser, HttpUrl.Builder url, Map<String, Object> params, Type resultType, AuthMethod authMethod)
 			throws IOException, RequestFailedException {
 		RequestBody jsonBody = JsonHelper.jsonRequestBody(params);
