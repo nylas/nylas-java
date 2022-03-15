@@ -189,7 +189,7 @@ public class NylasClient {
 
 	<T> T executeRequestWithAuth(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body,
 			Type resultType) throws IOException, RequestFailedException {
-		return executeRequestWithAuth(authUser, url, method, body, resultType, AuthMethod.BASIC);
+		return executeRequestWithAuth(authUser, url, method, body, resultType, null);
 	}
 
 	<T> T executeRequestWithAuth(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body,
@@ -200,6 +200,9 @@ public class NylasClient {
 
 	Request buildRequest(String authUser, HttpUrl.Builder url, HttpMethod method, RequestBody body, AuthMethod authMethod) {
 		Request.Builder builder = new Request.Builder().url(url.build());
+		if(authMethod == null) {
+			authMethod = AuthMethod.BASIC;
+		}
 		if (authUser != null) {
 			addAuthHeader(builder, authUser, authMethod);
 		}

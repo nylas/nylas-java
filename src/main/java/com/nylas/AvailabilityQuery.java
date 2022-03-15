@@ -1,10 +1,7 @@
 package com.nylas;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 
@@ -16,54 +13,117 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 	private Long endTime;
 	private List<FreeBusy> freeBusy;
 	private List<OpenHours> openHours;
-	//TODO::Verify calendars structure
-	private List<Map<String, List<String>>> calendars;
+	protected List<FreeBusyCalendars> calendars;
 
+	/**
+	 * The total number of minutes the event should last
+	 */
 	public Q durationMinutes(int durationMinutes) {
 		this.durationMinutes = durationMinutes;
 		return self();
 	}
 
+	/**
+	 * How many minutes it should check for availability
+	 */
 	public Q intervalMinutes(int intervalMinutes) {
 		this.intervalMinutes = intervalMinutes;
 		return self();
 	}
 
+	/**
+	 * The amount of buffer time in minutes that you want around existing meetings
+	 */
 	public Q buffer(int buffer) {
 		this.buffer = buffer;
 		return self();
 	}
 
+	/**
+	 * Availability of EWS calendars for tentative events
+	 */
 	public Q tentativeBusy(boolean tentativeBusy) {
 		this.tentativeBusy = tentativeBusy;
 		return self();
 	}
 
+	/**
+	 * The timestamp for the beginning of the event
+	 */
 	public Q startTime(Instant startTime) {
 		this.startTime = startTime.getEpochSecond();
 		return self();
 	}
 
+	/**
+	 * The timestamp for the beginning of the event
+	 */
+	public Q startTime(Long startTime) {
+		this.startTime = startTime;
+		return self();
+	}
+
+	/**
+	 * The timestamp for the end of the event
+	 */
 	public Q endTime(Instant endTime) {
 		this.endTime = endTime.getEpochSecond();
 		return self();
 	}
 
+	/**
+	 * The timestamp for the end of the event
+	 */
+	public Q endTime(Long endTime) {
+		this.endTime = endTime;
+		return self();
+	}
+
+	/**
+	 * A list of {@link FreeBusy} data for users not in your organization
+	 */
 	public Q freeBusy(List<FreeBusy> freeBusy) {
 		this.freeBusy = freeBusy;
 		return self();
 	}
 
+	/**
+	 * Additional times email accounts are available
+	 */
 	public Q openHours(List<OpenHours> openHours) {
 		this.openHours = openHours;
 		return self();
 	}
 
+	/**
+	 * Check account and calendar IDs for free/busy status
+	 * <br>
+	 * Note, the mapping should be in the format of accountIds -> List of calendarIds
+	 * @deprecated Replaced by {@link #calendars(FreeBusyCalendars...)}
+	 */
+	@Deprecated
 	public Q calendars(List<Map<String, List<String>>> calendars) {
-		this.calendars = calendars;
+		this.calendars = new ArrayList<>();
+		for(Map<String, List<String>> map : calendars) {
+			for(Map.Entry<String, List<String>> entry : map.entrySet()) {
+				this.calendars.add(new FreeBusyCalendars(entry.getKey(), entry.getValue()));
+			}
+		}
 		return self();
 	}
 
+	/**
+	 * Check account and calendar IDs for free/busy status
+	 */
+	public Q calendars(FreeBusyCalendars... calendars) {
+		this.calendars = Arrays.asList(calendars);
+		return self();
+	}
+
+	/**
+	 * Checks the validity of the availability query
+	 * @return If the query is valid
+	 */
 	public boolean isValid() {
 		return durationMinutes != null &&
 				intervalMinutes != null &&
@@ -71,6 +131,10 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 				endTime != null;
 	}
 
+	/**
+	 * Converts the availability query to a map
+	 * @return The query as a map
+	 */
 	public Map<String, Object> toMap() {
 		Map<String, Object> map = new HashMap<>();
 		Maps.putIfNotNull(map, "duration_minutes", durationMinutes);
@@ -83,6 +147,35 @@ abstract class AvailabilityQuery <Q extends AvailabilityQuery <Q>> {
 		Maps.putIfNotNull(map, "calendars", calendars);
 		Maps.putValueOrDefault(map, "free_busy", freeBusy, Collections.emptyList());
 		return map;
+	}
+
+	void validate() {
+		if(isValid()) {
+			return;
+		}
+
+		String errorMessage = String.format(
+				"Availability query missing one or more required parameters: %s", self().missingParameters().toString());
+		throw new IllegalArgumentException(errorMessage);
+	}
+
+	StringJoiner missingParameters() {
+		StringJoiner missingParams = new StringJoiner(", ");
+
+		if(durationMinutes == null) {
+			missingParams.add("durationMinutes");
+		}
+		if(intervalMinutes == null) {
+			missingParams.add("intervalMinutes");
+		}
+		if(startTime == null) {
+			missingParams.add("startTime");
+		}
+		if(endTime == null) {
+			missingParams.add("endTime");
+		}
+
+		return missingParams;
 	}
 
 	// helper method for fluent builder style without type warnings
