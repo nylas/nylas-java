@@ -10,14 +10,16 @@ import java.io.IOException;
 
 class DeltaProcessor implements DeltaStreamListener, DeltaLongPollListener {
 
+	private static final Logger log = LogManager.getLogger(DeltaProcessor.class);
+
 	@Override
 	public void onDelta(Delta<? extends AccountOwnedModel> delta) {
-		System.out.println("Delta received! " + delta);
+		log.info("Delta received! " + delta);
 	}
 
 	@Override
 	public void onDeltaCursor(DeltaCursor deltaCursor) {
-		System.out.println("Delta Cursor received! " + deltaCursor);
+		log.info("Delta Cursor received! " + deltaCursor);
 	}
 }
 
