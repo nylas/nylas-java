@@ -53,6 +53,10 @@ public class NylasApplication {
 	public Integrations integrations() {
 		return new Integrations(client, this);
 	}
+
+	public Grants grants() {
+		return new Grants(client, this);
+	}
 	
 	/**
 	 * Get the application details for this application
