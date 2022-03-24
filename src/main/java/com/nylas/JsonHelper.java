@@ -27,6 +27,8 @@ public class JsonHelper {
 				.add(new NeuralCategorizer.CategorizeCustomAdapter())
 				.add(new Integration.IntegrationCustomAdapter())
 				.add(new Integration.IntegrationListCustomAdapter())
+				.add(new Grant.GrantCustomAdapter())
+				.add(new Grant.GrantListCustomAdapter())
 				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
 				.build();
 	}
