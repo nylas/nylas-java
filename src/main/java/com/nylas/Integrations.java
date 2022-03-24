@@ -1,47 +1,17 @@
 package com.nylas;
 
 import com.nylas.Integration.Provider;
-import okhttp3.HttpUrl;
 
 import com.nylas.NylasClient.AuthMethod;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Map;
 
-public class Integrations extends RestfulDAO<Integration> {
-
-	public enum Region { US, EU }
-	private String appName = "beta";
-	private String region = Region.US.toString().toLowerCase();
-	private static final String endpointPath = "connect/integrations";
-
+public class Integrations extends UASDAO<Integration, Integrations> {
 
 	Integrations(NylasClient client, NylasApplication application) {
-		super(client, Integration.class, endpointPath, Integrations.authBuilder(application));
+		super(client, application, Integration.class, "connect/integrations");
 		this.authMethod = AuthMethod.BASIC_WITH_CREDENTIALS;
-	}
-
-	/**
-	 * Set the name of the application to prefix the URL for all integration calls for this instance
-	 * resulting in something like {@code https://{appName}.us.nylas.com/connect/integrations}
-	 * @param appName The name of the application
-	 * @return The {@link Integrations} object with the url prefixed
-	 */
-	public Integrations appName(String appName) {
-		this.appName = appName;
-		return this;
-	}
-
-	/**
-	 * Set the region to prefix the URL for all integration calls for this instance
-	 * resulting in something like {@code https://beta.{us/eu}.nylas.com/connect/integrations}
-	 * @param region The region
-	 * @return The {@link Integrations} object with the url prefixed
-	 */
-	public Integrations region(Region region) {
-		this.region = region.toString().toLowerCase();
-		return this;
 	}
 
 	/**
@@ -130,17 +100,5 @@ public class Integrations extends RestfulDAO<Integration> {
 	 */
 	public void delete(Provider provider) throws IOException, RequestFailedException {
 		super.delete(provider.toString());
-	}
-
-	protected HttpUrl.Builder getCollectionUrl() {
-		return new HttpUrl.Builder()
-				.scheme("https")
-				.host(String.format("%s.%s.nylas.com", appName, region))
-				.addPathSegments(endpointPath);
-	}
-
-	private static String authBuilder(NylasApplication application) {
-		String credentials = String.format("%s:%s", application.getClientId(), application.getClientSecret());
-		return Base64.getEncoder().encodeToString(credentials.getBytes());
 	}
 }
