@@ -82,6 +82,10 @@ native.auth.imap.smtp.password=SPONGEBOB_PASSWORD=
 # Webhook URL that Nylas can issue a challenge to for the Webhooks Example
 webhook.callback.url=https://c9b03335.ngrok.io/examples/callback
 
+# Zoom credentials for Integrations example
+zoom.client.id=
+zoom.client.secret=
+
 # For sending examples - ok to leave some fields blank as long as their is a to, cc, or bcc
 send.from.name=
 send.from.email=
