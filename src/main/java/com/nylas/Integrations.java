@@ -2,8 +2,6 @@ package com.nylas;
 
 import com.nylas.Integration.Provider;
 
-import com.nylas.NylasClient.AuthMethod;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -11,7 +9,6 @@ public class Integrations extends UASDAO<Integration, Integrations> {
 
 	Integrations(NylasClient client, NylasApplication application) {
 		super(client, application, Integration.class, "connect/integrations");
-		this.authMethod = AuthMethod.BASIC_WITH_CREDENTIALS;
 	}
 
 	/**
