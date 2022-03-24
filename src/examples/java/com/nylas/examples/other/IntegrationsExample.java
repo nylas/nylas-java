@@ -32,6 +32,8 @@ public class IntegrationsExample {
 
 		log.info("Updating the integration");
 		created.setName("Updated Test Zoom Integration");
+		created.setClientId(conf.get("zoom.client.id"));
+		created.setClientSecret(conf.get("zoom.client.secret"));
 		Integration update = integrations.update(created);
 		log.info("Updated: " + update);
 
