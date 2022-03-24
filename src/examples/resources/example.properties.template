@@ -85,6 +85,7 @@ webhook.callback.url=https://c9b03335.ngrok.io/examples/callback
 # Zoom credentials for Integrations example
 zoom.client.id=
 zoom.client.secret=
+zoom.client.refresh_token=
 
 # For sending examples - ok to leave some fields blank as long as their is a to, cc, or bcc
 send.from.name=
