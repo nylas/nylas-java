@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
-public class IntegrationsExample {
+public class UASExample {
 
-	private static final Logger log = LogManager.getLogger(IntegrationsExample.class);
+	private static final Logger log = LogManager.getLogger(UASExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
