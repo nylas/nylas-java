@@ -61,6 +61,10 @@ public class UAS {
 		return new Grants(this.client, this.authUser, buildUASUrl());
 	}
 
+	public UASHostedAuthentication hostedAuthentication() {
+		return new UASHostedAuthentication(this.client, this.authUser, buildUASUrl());
+	}
+
 	private HttpUrl.Builder buildUASUrl() {
 		return new HttpUrl.Builder()
 				.scheme("https")
