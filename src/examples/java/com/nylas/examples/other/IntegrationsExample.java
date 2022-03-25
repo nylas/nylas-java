@@ -18,7 +18,6 @@ public class IntegrationsExample {
 		NylasClient client = new NylasClient();
 		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
 		Integrations integrations = application.uas().integrations();
-		Grants grants = application.uas().grants();
 
 		log.info("Creating a new Zoom integration");
 		Integration integration = new Integration("Test Zoom Integration");
@@ -42,13 +41,17 @@ public class IntegrationsExample {
 		Integration update = integrations.update(created);
 		log.info("Updated: " + update);
 
-		grantsExample(conf, grants);
+		grantsExample(conf, application);
+		hostedAuthenticationExample(conf, application);
 
 		log.info("Deleting integration");
 		integrations.delete(UAS.Provider.ZOOM);
 	}
 
-	private static void grantsExample(ExampleConf conf, Grants grants) throws RequestFailedException, IOException {
+	private static void grantsExample(ExampleConf conf, NylasApplication application)
+			throws RequestFailedException, IOException {
+		Grants grants = application.uas().grants();
+
 		log.info("Creating a new Zoom grant");
 		Map<String, String> settings = Collections.singletonMap("refresh_token", conf.get("zoom.client.refresh_token"));
 		Grant grant = new Grant(UAS.Provider.ZOOM, settings);
@@ -63,5 +66,25 @@ public class IntegrationsExample {
 
 		log.info("Deleting grant");
 		grants.delete(created.getId());
+	}
+
+	private static void hostedAuthenticationExample(ExampleConf conf, NylasApplication application)
+			throws RequestFailedException, IOException {
+		log.info("Making a UAS Hosted Authentication request");
+
+		UASHostedAuthentication hostedAuthentication = application.uas().hostedAuthentication();
+		UASHostedAuthentication.RequestBuilder builder = hostedAuthentication.requestBuilder()
+				.provider(UAS.Provider.ZOOM)
+				.redirectUri("https://www.nylas.com")
+				.settings(Collections.singletonMap("refresh_token", conf.get("zoom.client.refresh_token")))
+				.scope(Collections.singletonList("meeting:write"))
+				.metadata(Collections.singletonMap("SDK Test", "Java SDK"))
+				.loginHint("example@mail.com")
+				.state("my-state")
+				.expiresIn(43200L);
+
+		UASLoginInfo loginInfo = hostedAuthentication.request(builder);
+
+		log.info("Login Information: " + loginInfo);
 	}
 }
