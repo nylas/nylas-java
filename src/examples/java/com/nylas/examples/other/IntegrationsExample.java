@@ -17,8 +17,8 @@ public class IntegrationsExample {
 		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
 		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
-		Integrations integrations = application.integrations();
-		Grants grants = application.grants();
+		Integrations integrations = application.uas().integrations();
+		Grants grants = application.uas().grants();
 
 		log.info("Creating a new Zoom integration");
 		Integration integration = new Integration("Test Zoom Integration");
@@ -26,7 +26,7 @@ public class IntegrationsExample {
 		integration.setClientSecret(conf.get("zoom.client.secret"));
 		integration.addRedirectUris("https://www.nylas.com");
 		integration.setExpiresIn(1209600L);
-		Integration created = integrations.create(integration, Integration.Provider.ZOOM);
+		Integration created = integrations.create(integration, UAS.Provider.ZOOM);
 		log.info("Created: " + created);
 
 		log.info("Listing all integrations:");
@@ -45,13 +45,13 @@ public class IntegrationsExample {
 		grantsExample(conf, grants);
 
 		log.info("Deleting integration");
-		integrations.delete(Integration.Provider.ZOOM);
+		integrations.delete(UAS.Provider.ZOOM);
 	}
 
 	private static void grantsExample(ExampleConf conf, Grants grants) throws RequestFailedException, IOException {
 		log.info("Creating a new Zoom grant");
 		Map<String, String> settings = Collections.singletonMap("refresh_token", conf.get("zoom.client.refresh_token"));
-		Grant grant = new Grant(Integration.Provider.ZOOM, settings);
+		Grant grant = new Grant(UAS.Provider.ZOOM, settings);
 		Grant created = grants.create(grant);
 		log.info("Created: " + created);
 

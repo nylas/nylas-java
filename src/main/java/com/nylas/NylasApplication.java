@@ -50,12 +50,8 @@ public class NylasApplication {
 		return new Components(client, this);
 	}
 
-	public Integrations integrations() {
-		return new Integrations(client, this);
-	}
-
-	public Grants grants() {
-		return new Grants(client, this);
+	public UAS uas() {
+		return new UAS(client, this);
 	}
 	
 	/**

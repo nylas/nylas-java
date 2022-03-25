@@ -4,10 +4,10 @@ import okhttp3.HttpUrl;
 
 import java.io.IOException;
 
-public class Grants extends UASDAO<Grant, Grants> {
+public class Grants extends UASDAO<Grant> {
 
-	Grants(NylasClient client, NylasApplication application) {
-		super(client, application, Grant.class, "connect/grants");
+	Grants(NylasClient client, String authUser, HttpUrl.Builder baseUrl) {
+		super(client, Grant.class, "connect/grants", authUser, baseUrl);
 	}
 
 	/**

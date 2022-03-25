@@ -1,5 +1,7 @@
 package com.nylas;
 
+import com.nylas.UAS.Provider;
+
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
@@ -42,20 +44,6 @@ public class Integration extends RestfulModel {
 	 * Maximum expiresIn value is 10 years
 	 */
 	private static final long MAXIMUM_EXPIRES_IN_SECONDS = 315360000;
-
-	public enum Provider {
-		GOOGLE,
-		MICROSOFT,
-		IMAP,
-		ZOOM,
-
-		;
-
-		@Override
-		public String toString() {
-			return super.toString().toLowerCase();
-		}
-	}
 
 	/** for deserialization only */ public Integration() {}
 

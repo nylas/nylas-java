@@ -1,6 +1,6 @@
 package com.nylas;
 
-import com.nylas.Integration.Provider;
+import com.nylas.UAS.Provider;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;

@@ -1,14 +1,15 @@
 package com.nylas;
 
-import com.nylas.Integration.Provider;
+import com.nylas.UAS.Provider;
+import okhttp3.HttpUrl;
 
 import java.io.IOException;
 import java.util.Map;
 
-public class Integrations extends UASDAO<Integration, Integrations> {
+public class Integrations extends UASDAO<Integration> {
 
-	Integrations(NylasClient client, NylasApplication application) {
-		super(client, application, Integration.class, "connect/integrations");
+	Integrations(NylasClient client, String authUser, HttpUrl.Builder baseUrl) {
+		super(client, Integration.class, "connect/integrations", authUser, baseUrl);
 	}
 
 	/**
