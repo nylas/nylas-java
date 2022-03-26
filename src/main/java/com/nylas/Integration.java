@@ -9,40 +9,29 @@ import com.squareup.moshi.JsonReader;
 import java.io.IOException;
 import java.util.*;
 
+import static com.nylas.Validations.assertState;
+import static com.nylas.Validations.nullOrEmpty;
+
 public class Integration extends RestfulModel {
 
-	/**
-	 * Name of the integration
-	 */
+	/** Name of the integration */
 	private String name;
-	/**
-	 * OAuth provider
-	 */
+	/** OAuth provider */
 	private String provider;
 	/**
 	 * How long authentication will remain valid, in seconds.
 	 * Must be within {@value MINIMUM_EXPIRES_IN_SECONDS} and {@value MAXIMUM_EXPIRES_IN_SECONDS}
 	 */
 	private Long expires_in;
-	/**
-	 * Oauth provider credentials and settings
-	 */
+	/** OAuth provider credentials and settings */
 	private Map<String, String> settings = new HashMap<>();
-	/**
-	 * Allowed redirect URIs (for hosted authentication)
-	 */
+	/** Allowed redirect URIs (for hosted authentication) */
 	private List<String> redirect_uris = new ArrayList<>();
-	/**
-	 * OAuth provider-specific scopes
-	 */
+	/** OAuth provider-specific scopes */
 	private List<String> scope = new ArrayList<>();
-	/**
-	 * Minimum expiresIn value is 1 minute
-	 */
+	/** Minimum {@link #expires_in} value is 1 minute */
 	private static final long MINIMUM_EXPIRES_IN_SECONDS = 60;
-	/**
-	 * Maximum expiresIn value is 10 years
-	 */
+	/** Maximum {@link #expires_in} value is 10 years */
 	private static final long MAXIMUM_EXPIRES_IN_SECONDS = 315360000;
 
 	/** for deserialization only */ public Integration() {}
@@ -202,22 +191,12 @@ public class Integration extends RestfulModel {
 	}
 
 	void validate() {
-		if(isValid()) {
-			return;
-		}
+		String expiresInErrorMessage = String.format("Expires In value must be between %d and %d seconds.",
+				MINIMUM_EXPIRES_IN_SECONDS, MAXIMUM_EXPIRES_IN_SECONDS);
 
-		StringJoiner errorMessage = new StringJoiner(" ");
-
-		errorMessage.add("Integration object is not valid:");
-		if(name == null) {
-			errorMessage.add("Integration missing required field 'name'.");
-		}
-		if(expires_in != null && (expires_in < MINIMUM_EXPIRES_IN_SECONDS || expires_in > MAXIMUM_EXPIRES_IN_SECONDS)) {
-			errorMessage.add(String.format("Integration 'expiresIn' value must be between %d and %d seconds.",
-				MINIMUM_EXPIRES_IN_SECONDS, MAXIMUM_EXPIRES_IN_SECONDS));
-		}
-
-		throw new IllegalArgumentException(errorMessage.toString());
+		assertState(!nullOrEmpty(name), "Name is required");
+		assertState(expires_in == null || (expires_in > MINIMUM_EXPIRES_IN_SECONDS
+						&& expires_in < MAXIMUM_EXPIRES_IN_SECONDS), expiresInErrorMessage);
 	}
 
 	/**

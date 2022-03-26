@@ -25,14 +25,27 @@ public class UASHostedAuthentication {
 		this.endpointUrl = baseUrl.addPathSegments("connect/auth");
 	}
 
+	/**
+	 * Get a new instance of {@link RequestBuilder}
+	 * @return A new instance of {@link RequestBuilder}
+	 */
 	public RequestBuilder requestBuilder() {
 		return new RequestBuilder();
 	}
 
+	/**
+	 * Make a hosted authentication request
+	 * @param hostedAuthRequest The request
+	 * @return The login information
+	 */
 	public UASLoginInfo request(RequestBuilder hostedAuthRequest) throws RequestFailedException, IOException {
 		return client.executePost(authUser, endpointUrl, hostedAuthRequest.build(), UASLoginInfo.class, authMethod);
 	}
 
+	/**
+	 * Builder for a hosted authentication request
+	 * <br> Note that a {@link #provider} and {@link #redirect_uri} need to be set or else an error will be thrown
+	 */
 	public static class RequestBuilder {
 
 		private String provider;
@@ -45,46 +58,55 @@ public class UASHostedAuthentication {
 		private Map<String, String> settings;
 		private Map<String, Object> metadata;
 
+		/** OAuth provider */
 		public RequestBuilder provider(Provider provider) {
 			this.provider = provider.toString();
 			return this;
 		}
 
+		/** The URI for the final redirect */
 		public RequestBuilder redirectUri(String redirectUri) {
 			this.redirect_uri = redirectUri;
 			return this;
 		}
 
+		/** Existing Grant ID to trigger a re-authentication */
 		public RequestBuilder grantId(String grantId) {
 			this.grant_id = grantId;
 			return this;
 		}
 
+		/** Hint to simplify the login flow */
 		public RequestBuilder loginHint(String loginHint) {
 			this.login_hint = loginHint;
 			return this;
 		}
 
+		/** State value to return after authentication flow is completed */
 		public RequestBuilder state(String state) {
 			this.state = state;
 			return this;
 		}
 
+		/** How long this request (and the attached login) ID will remain valid before the link expires */
 		public RequestBuilder expiresIn(long expiresIn) {
 			this.expires_in = expiresIn;
 			return this;
 		}
 
+		/** OAuth provider-specific scopes */
 		public RequestBuilder scope(List<String> scope) {
 			this.scope = scope;
 			return this;
 		}
 
+		/** Settings required by provider */
 		public RequestBuilder settings(Map<String, String> settings) {
 			this.settings = settings;
 			return this;
 		}
 
+		/** Metadata to store as part of the grant */
 		public RequestBuilder metadata(Map<String, Object> metadata) {
 			this.metadata = metadata;
 			return this;

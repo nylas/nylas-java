@@ -11,9 +11,13 @@ import java.util.Map;
 
 public class UASLoginInfo {
 
+	/** Login ID */
 	private String id;
+	/** Final OAuth login url */
 	private String url;
+	/** Date timestamp when this login url expires and is no longer valid */
 	private Long expires_at;
+	/** Details of the requested OAuth */
 	private Request request;
 
 	public String getId() {
@@ -24,7 +28,7 @@ public class UASLoginInfo {
 		return url;
 	}
 
-	public Long getExpires_at() {
+	public Long getExpiresAt() {
 		return expires_at;
 	}
 
@@ -60,14 +64,20 @@ public class UASLoginInfo {
 
 	public static class Request {
 
+		/** Redirect URI that was requested as part of the final hosted OAuth step */
 		private String redirect_uri;
+		/** OAuth provider */
 		private String provider;
+		/** Hint to simplify the login flow */
 		private String login_hint;
+		/** State value to return after authentication flow is completed */
 		private String state;
+		/** Requested scopes for this OAuth */
 		private List<String> scope;
+		/** Metadata stored as part of the request */
 		private Map<String, Object> metadata;
 
-		public String getRedirect_uri() {
+		public String getRedirectUri() {
 			return redirect_uri;
 		}
 
@@ -79,7 +89,7 @@ public class UASLoginInfo {
 			return provider;
 		}
 
-		public String getLogin_hint() {
+		public String getLoginHint() {
 			return login_hint;
 		}
 

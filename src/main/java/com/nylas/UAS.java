@@ -6,12 +6,14 @@ import java.util.Base64;
 
 public class UAS {
 
+	/** Available regions for UAS */
 	public enum Region { US, EU }
 	protected String appName = "beta";
 	protected String region = UAS.Region.US.toString().toLowerCase();
 	protected final NylasClient client;
 	protected final String authUser;
 
+	/** Supported providers for UAS integrations */
 	public enum Provider {
 		GOOGLE,
 		MICROSOFT,
@@ -53,14 +55,29 @@ public class UAS {
 		return this;
 	}
 
+	/**
+	 * Integrations API for integrating a provider to the Nylas application
+	 * @return The Integration API configured with the {@link #appName} and {@link #region}
+	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Integrations">UAS - Integrations</a>
+	 */
 	public Integrations integrations() {
 		return new Integrations(this.client, this.authUser, buildUASUrl());
 	}
 
+	/**
+	 * Native Authentication for the integrated provider
+	 * @return The Grants API configured with the {@link #appName} and {@link #region}
+	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Grants">UAS - Grants</a>
+	 */
 	public Grants grants() {
 		return new Grants(this.client, this.authUser, buildUASUrl());
 	}
 
+	/**
+	 * Hosted Authentication for the integrated provider
+	 * @return Hosted Authentication configured with the {@link #appName} and {@link #region}
+	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Hosted-Auth">UAS - Hosted Auth</a>
+	 */
 	public UASHostedAuthentication hostedAuthentication() {
 		return new UASHostedAuthentication(this.client, this.authUser, buildUASUrl());
 	}

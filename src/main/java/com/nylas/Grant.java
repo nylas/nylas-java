@@ -8,18 +8,32 @@ import com.squareup.moshi.JsonReader;
 import java.io.IOException;
 import java.util.*;
 
+import static com.nylas.Validations.assertState;
+import static com.nylas.Validations.nullOrEmpty;
+
 public class Grant extends RestfulModel {
 
+	/** OAuth Provider */
 	private String provider;
+	/** State value to return after authentication flow is completed  */
 	private String state;
+	/** Email extracted from the provider */
 	private String email;
+	/** End user client IP address. Mostly useful for hosted auth */
 	private String ip;
+	/** If grant is valid or needs re-auth */
 	private String grant_status;
+	/** End user client/browser information */
 	private String user_agent;
+	/** Date timestamp of creation of the grant */
 	private Long created_at;
+	/** Date timestamp of last updated of the grant */
 	private Long updated_at;
+	/** OAuth provider-specific scopes */
 	private List<String> scope = new ArrayList<>();
+	/** Settings required by provider */
 	private Map<String, String> settings = new HashMap<>();
+	/** Metadata to store as part of the grant */
 	private Map<String, Object> metadata = new HashMap<>();
 
 	/** for deserialization only */ public Grant() {}
@@ -115,22 +129,12 @@ public class Grant extends RestfulModel {
 	}
 
 	/**
-	 * Add an OAuth provider setting
-	 * @param metadataKey The name of the setting
-	 * @param metadataValue The value of the setting
+	 * Add metadata to the grant
+	 * @param metadataKey The key of the metadata
+	 * @param metadataValue The value of the metadata
 	 */
 	public void addMetadata(String metadataKey, Object metadataValue) {
 		Maps.putIfNotNull(this.metadata, metadataKey, metadataValue);
-	}
-
-	/**
-	 * Checks if the integration is valid
-	 * <br>
-	 * {@link #name} must be set and, if {@link #expires_in} is set, it must be within expected range
-	 * @return The validity of the integration
-	 */
-	public boolean isValid() {
-		return provider != null && !Validations.nullOrEmpty(this.settings);
 	}
 
 	@Override
@@ -149,7 +153,8 @@ public class Grant extends RestfulModel {
 	@Override
 	public String toString() {
 		return "Grant [" +
-				"provider='" + provider + '\'' +
+				"id='" + this.getId() + '\'' +
+				", provider='" + provider + '\'' +
 				", state='" + state + '\'' +
 				", email='" + email + '\'' +
 				", ip='" + ip + '\'' +
@@ -164,25 +169,12 @@ public class Grant extends RestfulModel {
 	}
 
 	void validate() {
-		if(isValid()) {
-			return;
-		}
-
-		StringJoiner errorMessage = new StringJoiner(" ");
-
-		errorMessage.add("Grant object is not valid:");
-		if(provider == null) {
-			errorMessage.add("Grant missing required field 'provider'.");
-		}
-		if(Validations.nullOrEmpty(this.settings)) {
-			errorMessage.add("Grant missing required field 'settings'.");
-		}
-
-		throw new IllegalArgumentException(errorMessage.toString());
+		assertState(!nullOrEmpty(provider), "Provider is required");
+		assertState(!nullOrEmpty(settings), "Settings are required");
 	}
 
 	/**
-	 * These adapters work around the API returning the integration object within a nested "data" key
+	 * These adapters work around the API returning the grant object within a nested "data" key
 	 */
 	@SuppressWarnings("unchecked")
 	static class GrantCustomAdapter {
