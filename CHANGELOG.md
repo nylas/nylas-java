@@ -16,6 +16,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+- Fixed incorrect property name for `Event.Notification.minutes_before_event`
+
 ### Removed
 
 ### Security
