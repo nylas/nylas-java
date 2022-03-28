@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.util.List;
+import java.util.Map;
 
 class Validations {
 
@@ -34,6 +35,10 @@ class Validations {
 
 	static boolean nullOrEmpty(List<?> l) {
 		return l == null || l.isEmpty();
+	}
+
+	static boolean nullOrEmpty(Map<?, ?> map) {
+		return map == null || map.isEmpty();
 	}
 	
 }

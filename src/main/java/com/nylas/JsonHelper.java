@@ -25,6 +25,11 @@ public class JsonHelper {
 				.add(Event.WHEN_JSON_FACTORY)
 				.add(Event.EVENT_NOTIFICATION_JSON_FACTORY)
 				.add(new NeuralCategorizer.CategorizeCustomAdapter())
+				.add(new Integration.IntegrationCustomAdapter())
+				.add(new Integration.IntegrationListCustomAdapter())
+				.add(new Grant.GrantCustomAdapter())
+				.add(new Grant.GrantListCustomAdapter())
+				.add(new UASLoginInfo.UASLoginInfoCustomAdapter())
 				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
 				.build();
 	}
@@ -53,8 +58,15 @@ public class JsonHelper {
 	private static final JsonAdapter<Map<String, Object>> mapAdapter
 		= moshi.<Map<String,Object>>adapter(Map.class).indent("  ");
 
+	private static final JsonAdapter<List<Object>> listAdapter
+			= moshi.<List<Object>>adapter(List.class).indent("  ");
+
 	public static String mapToJson(Map<String, Object> map) {
 		return mapAdapter.toJson(map);
+	}
+
+	public static String listToJson(List<Object> list) {
+		return listAdapter.toJson(list);
 	}
 	
 	public static Map<String, Object> jsonToMap(String json) {
