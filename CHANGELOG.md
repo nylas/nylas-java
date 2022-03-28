@@ -6,7 +6,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Added Integration API support
+- Added UAS Support (Integrations API, Grants API, UAS Hosted Authentication)
 
 ### Changed
 
