@@ -8,7 +8,7 @@ import okhttp3.Response;
 
 public class AddVersionHeadersInterceptor implements Interceptor {
 
-	private static final String API_VERSION = "2.4";
+	private static final String API_VERSION = "2.5";
 	private static final String COMMIT_HASH = BuildInfo.COMMIT_ID;
 	private static final String USER_AGENT
 		= "Nylas Java SDK " + (BuildInfo.VERSION != null ? BuildInfo.VERSION : "unknown");
