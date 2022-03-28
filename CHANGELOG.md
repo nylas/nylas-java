@@ -7,8 +7,11 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 - Added support for Delta
+- Added UAS Support (Integrations API, Grants API, UAS Hosted Authentication)
 
 ### Changed
+
+- Bump supported API version to v2.5
 
 ### Deprecated
 
