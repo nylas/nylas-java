@@ -98,7 +98,7 @@ public class Grants extends UASDAO<Grant> {
 	 * @return The grant after triggering the sync
 	 */
 	public Grant onDemandSync(String id, Long syncFrom) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = super.getCollectionUrl();
+		HttpUrl.Builder url = super.getInstanceUrl(id).addPathSegment("sync");
 		if(syncFrom != null) {
 			url.addQueryParameter("sync_from", String.valueOf(syncFrom));
 		}
