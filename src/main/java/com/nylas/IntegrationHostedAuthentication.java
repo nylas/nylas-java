@@ -1,6 +1,6 @@
 package com.nylas;
 
-import com.nylas.UAS.Provider;
+import com.nylas.Authentication.Provider;
 import com.nylas.NylasClient.AuthMethod;
 import okhttp3.HttpUrl;
 
@@ -12,14 +12,14 @@ import java.util.Map;
 import static com.nylas.Validations.assertState;
 import static com.nylas.Validations.nullOrEmpty;
 
-public class UASHostedAuthentication {
+public class IntegrationHostedAuthentication {
 
 	private final NylasClient client;
 	private final String authUser;
 	private final HttpUrl.Builder endpointUrl;
 	private static final AuthMethod authMethod = AuthMethod.BASIC_WITH_CREDENTIALS;
 
-	public UASHostedAuthentication(NylasClient client, String authUser, HttpUrl.Builder baseUrl) {
+	public IntegrationHostedAuthentication(NylasClient client, String authUser, HttpUrl.Builder baseUrl) {
 		this.client = client;
 		this.authUser = authUser;
 		this.endpointUrl = baseUrl.addPathSegments("connect/auth");
@@ -38,8 +38,8 @@ public class UASHostedAuthentication {
 	 * @param hostedAuthRequest The request
 	 * @return The login information
 	 */
-	public UASLoginInfo request(RequestBuilder hostedAuthRequest) throws RequestFailedException, IOException {
-		return client.executePost(authUser, endpointUrl, hostedAuthRequest.build(), UASLoginInfo.class, authMethod);
+	public LoginInfo request(RequestBuilder hostedAuthRequest) throws RequestFailedException, IOException {
+		return client.executePost(authUser, endpointUrl, hostedAuthRequest.build(), LoginInfo.class, authMethod);
 	}
 
 	/**

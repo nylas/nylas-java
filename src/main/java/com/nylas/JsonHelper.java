@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nylas.delta.Delta;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.Moshi;
@@ -24,12 +25,13 @@ public class JsonHelper {
 		moshi = new Moshi.Builder()
 				.add(Event.WHEN_JSON_FACTORY)
 				.add(Event.EVENT_NOTIFICATION_JSON_FACTORY)
+        .add(Delta.ACCOUNT_OWNED_MODEL_JSON_FACTORY)
 				.add(new NeuralCategorizer.CategorizeCustomAdapter())
 				.add(new Integration.IntegrationCustomAdapter())
 				.add(new Integration.IntegrationListCustomAdapter())
 				.add(new Grant.GrantCustomAdapter())
 				.add(new Grant.GrantListCustomAdapter())
-				.add(new UASLoginInfo.UASLoginInfoCustomAdapter())
+				.add(new LoginInfo.LoginInfoCustomAdapter())
 				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
 				.build();
 	}

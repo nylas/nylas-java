@@ -4,7 +4,7 @@ import okhttp3.HttpUrl;
 
 import java.io.IOException;
 
-public class Grants extends UASDAO<Grant> {
+public class Grants extends AuthenticationDAO<Grant> {
 
 	Grants(NylasClient client, String authUser, HttpUrl.Builder baseUrl) {
 		super(client, Grant.class, "connect/grants", authUser, baseUrl);
@@ -98,7 +98,7 @@ public class Grants extends UASDAO<Grant> {
 	 * @return The grant after triggering the sync
 	 */
 	public Grant onDemandSync(String id, Long syncFrom) throws IOException, RequestFailedException {
-		HttpUrl.Builder url = super.getCollectionUrl();
+		HttpUrl.Builder url = super.getInstanceUrl(id).addPathSegment("sync");
 		if(syncFrom != null) {
 			url.addQueryParameter("sync_from", String.valueOf(syncFrom));
 		}

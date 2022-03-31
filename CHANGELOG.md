@@ -6,8 +6,9 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Added UAS Support (Integrations API, Grants API, UAS Hosted Authentication)
-- Add `authentication_type` field to `Account`
+- Added support for Delta
+- Added support for new (beta) Integrations authentication (Integrations API, Grants API, Hosted Authentication for Integrations)
+- Added `authentication_type` field to `Account`
 
 ### Changed
 

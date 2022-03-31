@@ -1,6 +1,6 @@
 package com.nylas;
 
-import com.nylas.UAS.Provider;
+import com.nylas.Authentication.Provider;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class UASLoginInfo {
+public class LoginInfo {
 
 	/** Login ID */
 	private String id;
@@ -38,7 +38,7 @@ public class UASLoginInfo {
 
 	@Override
 	public String toString() {
-		return "UASLoginInfo [" +
+		return "LoginInfo [" +
 				"id='" + id + '\'' +
 				", url='" + url + '\'' +
 				", expires_at=" + expires_at +
@@ -47,12 +47,12 @@ public class UASLoginInfo {
 	}
 
 	/**
-	 * This adapter works around the API returning the UAS login info object within a nested "data" key
+	 * This adapter works around the API returning the login info object within a nested "data" key
 	 */
 	@SuppressWarnings("unchecked")
-	static class UASLoginInfoCustomAdapter {
+	static class LoginInfoCustomAdapter {
 		@FromJson
-		UASLoginInfo fromJson(JsonReader reader, JsonAdapter<UASLoginInfo> delegate) throws IOException {
+		LoginInfo fromJson(JsonReader reader, JsonAdapter<LoginInfo> delegate) throws IOException {
 			Map<String, Object> json = JsonHelper.jsonToMap(reader);
 
 			if(json.get("data") != null) {

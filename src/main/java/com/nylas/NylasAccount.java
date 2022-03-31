@@ -74,9 +74,13 @@ public class NylasAccount {
 		return new RoomResources(client, accessToken);
 	}
 
+	public Deltas deltas() {
+		return new Deltas(client, accessToken);
+	}
+
 	public Neural neural() {
 		return new Neural(this, client, accessToken);
-  }
+  	}
 
 	public Schedulers schedulers() {
 		return new Schedulers(client, accessToken);
