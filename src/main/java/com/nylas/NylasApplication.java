@@ -50,8 +50,8 @@ public class NylasApplication {
 		return new Components(client, this);
 	}
 
-	public UAS uas() {
-		return new UAS(client, this);
+	public Authentication authentication() {
+		return new Authentication(client, this);
 	}
 	
 	/**

@@ -6,7 +6,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-- Added UAS Support (Integrations API, Grants API, UAS Hosted Authentication)
+- Added support for new (beta) Integrations authentication (Integrations API, Grants API, Hosted Authentication for Integrations)
 
 ### Changed
 

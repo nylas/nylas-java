@@ -29,7 +29,7 @@ public class JsonHelper {
 				.add(new Integration.IntegrationListCustomAdapter())
 				.add(new Grant.GrantCustomAdapter())
 				.add(new Grant.GrantListCustomAdapter())
-				.add(new UASLoginInfo.UASLoginInfoCustomAdapter())
+				.add(new LoginInfo.UASLoginInfoCustomAdapter())
 				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
 				.build();
 	}

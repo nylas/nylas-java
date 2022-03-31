@@ -4,12 +4,12 @@ import okhttp3.HttpUrl;
 
 import java.util.Base64;
 
-public class UAS {
+public class Authentication {
 
 	/** Available regions for UAS */
 	public enum Region { US, EU }
 	protected String appName = "beta";
-	protected String region = UAS.Region.US.toString().toLowerCase();
+	protected String region = Authentication.Region.US.toString().toLowerCase();
 	protected final NylasClient client;
 	protected final String authUser;
 
@@ -28,9 +28,9 @@ public class UAS {
 		}
 	}
 
-	public UAS(NylasClient client, NylasApplication application) {
+	public Authentication(NylasClient client, NylasApplication application) {
 		this.client = client;
-		this.authUser = UAS.authBuilder(application);
+		this.authUser = Authentication.authBuilder(application);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class UAS {
 	 * @param appName The name of the application
 	 * @return The {@link Integrations} object with the url prefixed
 	 */
-	public UAS appName(String appName) {
+	public Authentication appName(String appName) {
 		this.appName = appName;
 		return this;
 	}
@@ -50,7 +50,7 @@ public class UAS {
 	 * @param region The region
 	 * @return The {@link Integrations} object with the url prefixed
 	 */
-	public UAS region(Region region) {
+	public Authentication region(Region region) {
 		this.region = region.toString().toLowerCase();
 		return this;
 	}
@@ -78,8 +78,8 @@ public class UAS {
 	 * @return Hosted Authentication configured with the {@link #appName} and {@link #region}
 	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Hosted-Auth">UAS - Hosted Auth</a>
 	 */
-	public UASHostedAuthentication hostedAuthentication() {
-		return new UASHostedAuthentication(this.client, this.authUser, buildUASUrl());
+	public IntegrationHostedAuthentication hostedAuthentication() {
+		return new IntegrationHostedAuthentication(this.client, this.authUser, buildUASUrl());
 	}
 
 	private HttpUrl.Builder buildUASUrl() {
