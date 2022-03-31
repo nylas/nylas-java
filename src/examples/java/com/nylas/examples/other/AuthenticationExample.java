@@ -9,15 +9,15 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
-public class UASExample {
+public class AuthenticationExample {
 
-	private static final Logger log = LogManager.getLogger(UASExample.class);
+	private static final Logger log = LogManager.getLogger(AuthenticationExample.class);
 
 	public static void main(String[] args) throws Exception {
 		ExampleConf conf = new ExampleConf();
 		NylasClient client = new NylasClient();
 		NylasApplication application = client.application(conf.get("nylas.client.id"), conf.get("nylas.client.secret"));
-		Integrations integrations = application.uas().integrations();
+		Integrations integrations = application.authentication().integrations();
 
 		log.info("Creating a new Zoom integration");
 		Integration integration = new Integration("Test Zoom Integration");
@@ -25,7 +25,7 @@ public class UASExample {
 		integration.setClientSecret(conf.get("zoom.client.secret"));
 		integration.addRedirectUris("https://www.nylas.com");
 		integration.setExpiresIn(1209600L);
-		Integration created = integrations.create(integration, UAS.Provider.ZOOM);
+		Integration created = integrations.create(integration, Authentication.Provider.ZOOM);
 		log.info("Created: " + created);
 
 		log.info("Listing all integrations:");
@@ -45,16 +45,16 @@ public class UASExample {
 		hostedAuthenticationExample(conf, application);
 
 		log.info("Deleting integration");
-		integrations.delete(UAS.Provider.ZOOM);
+		integrations.delete(Authentication.Provider.ZOOM);
 	}
 
 	private static void grantsExample(ExampleConf conf, NylasApplication application)
 			throws RequestFailedException, IOException {
-		Grants grants = application.uas().grants();
+		Grants grants = application.authentication().grants();
 
 		log.info("Creating a new Zoom grant");
 		Map<String, String> settings = Collections.singletonMap("refresh_token", conf.get("zoom.client.refresh_token"));
-		Grant grant = new Grant(UAS.Provider.ZOOM, settings);
+		Grant grant = new Grant(Authentication.Provider.ZOOM, settings);
 		Grant created = grants.create(grant);
 		log.info("Created: " + created);
 
@@ -70,11 +70,11 @@ public class UASExample {
 
 	private static void hostedAuthenticationExample(ExampleConf conf, NylasApplication application)
 			throws RequestFailedException, IOException {
-		log.info("Making a UAS Hosted Authentication request");
+		log.info("Making a Hosted Authentication request");
 
-		UASHostedAuthentication hostedAuthentication = application.uas().hostedAuthentication();
-		UASHostedAuthentication.RequestBuilder builder = hostedAuthentication.requestBuilder()
-				.provider(UAS.Provider.ZOOM)
+		IntegrationHostedAuthentication hostedAuthentication = application.authentication().hostedAuthentication();
+		IntegrationHostedAuthentication.RequestBuilder builder = hostedAuthentication.requestBuilder()
+				.provider(Authentication.Provider.ZOOM)
 				.redirectUri("https://www.nylas.com")
 				.settings(Collections.singletonMap("refresh_token", conf.get("zoom.client.refresh_token")))
 				.scope(Collections.singletonList("meeting:write"))
@@ -83,7 +83,7 @@ public class UASExample {
 				.state("my-state")
 				.expiresIn(43200L);
 
-		UASLoginInfo loginInfo = hostedAuthentication.request(builder);
+		LoginInfo loginInfo = hostedAuthentication.request(builder);
 
 		log.info("Login Information: " + loginInfo);
 	}
