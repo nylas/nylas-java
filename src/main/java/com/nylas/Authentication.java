@@ -6,14 +6,14 @@ import java.util.Base64;
 
 public class Authentication {
 
-	/** Available regions for UAS */
+	/** Available regions for Authentication */
 	public enum Region { US, EU }
 	protected String appName = "beta";
 	protected String region = Authentication.Region.US.toString().toLowerCase();
 	protected final NylasClient client;
 	protected final String authUser;
 
-	/** Supported providers for UAS integrations */
+	/** Supported providers for integrations */
 	public enum Provider {
 		GOOGLE,
 		MICROSOFT,
@@ -56,33 +56,33 @@ public class Authentication {
 	}
 
 	/**
-	 * Integrations API for integrating a provider to the Nylas application
+	 * (Beta) Integrations API for integrating a provider to the Nylas application
 	 * @return The Integration API configured with the {@link #appName} and {@link #region}
-	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Integrations">UAS - Integrations</a>
+	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Integrations">Integrations (Beta)</a>
 	 */
 	public Integrations integrations() {
-		return new Integrations(this.client, this.authUser, buildUASUrl());
+		return new Integrations(this.client, this.authUser, buildAuthenticationUrl());
 	}
 
 	/**
-	 * Native Authentication for the integrated provider
+	 * (Beta) Native Authentication for the integrated provider
 	 * @return The Grants API configured with the {@link #appName} and {@link #region}
-	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Grants">UAS - Grants</a>
+	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Grants">Grants (Beta)</a>
 	 */
 	public Grants grants() {
-		return new Grants(this.client, this.authUser, buildUASUrl());
+		return new Grants(this.client, this.authUser, buildAuthenticationUrl());
 	}
 
 	/**
-	 * Hosted Authentication for the integrated provider
+	 * (Beta) Hosted Authentication for the integrated provider
 	 * @return Hosted Authentication configured with the {@link #appName} and {@link #region}
-	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Hosted-Auth">UAS - Hosted Auth</a>
+	 * @see <a href="https://developer.nylas.com/docs/api/uas#tag--Hosted-Auth">Hosted Authentication (Beta)</a>
 	 */
 	public IntegrationHostedAuthentication hostedAuthentication() {
-		return new IntegrationHostedAuthentication(this.client, this.authUser, buildUASUrl());
+		return new IntegrationHostedAuthentication(this.client, this.authUser, buildAuthenticationUrl());
 	}
 
-	private HttpUrl.Builder buildUASUrl() {
+	private HttpUrl.Builder buildAuthenticationUrl() {
 		return new HttpUrl.Builder()
 				.scheme("https")
 				.host(String.format("%s.%s.nylas.com", appName, region));

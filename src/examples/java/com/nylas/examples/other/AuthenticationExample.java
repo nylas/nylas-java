@@ -70,7 +70,7 @@ public class AuthenticationExample {
 
 	private static void hostedAuthenticationExample(ExampleConf conf, NylasApplication application)
 			throws RequestFailedException, IOException {
-		log.info("Making a UAS Hosted Authentication request");
+		log.info("Making a Hosted Authentication request");
 
 		IntegrationHostedAuthentication hostedAuthentication = application.authentication().hostedAuthentication();
 		IntegrationHostedAuthentication.RequestBuilder builder = hostedAuthentication.requestBuilder()

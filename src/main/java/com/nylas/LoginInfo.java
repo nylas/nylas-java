@@ -38,7 +38,7 @@ public class LoginInfo {
 
 	@Override
 	public String toString() {
-		return "UASLoginInfo [" +
+		return "LoginInfo [" +
 				"id='" + id + '\'' +
 				", url='" + url + '\'' +
 				", expires_at=" + expires_at +
@@ -47,10 +47,10 @@ public class LoginInfo {
 	}
 
 	/**
-	 * This adapter works around the API returning the UAS login info object within a nested "data" key
+	 * This adapter works around the API returning the login info object within a nested "data" key
 	 */
 	@SuppressWarnings("unchecked")
-	static class UASLoginInfoCustomAdapter {
+	static class LoginInfoCustomAdapter {
 		@FromJson
 		LoginInfo fromJson(JsonReader reader, JsonAdapter<LoginInfo> delegate) throws IOException {
 			Map<String, Object> json = JsonHelper.jsonToMap(reader);
