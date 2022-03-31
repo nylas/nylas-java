@@ -385,8 +385,8 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	}
 
 	public static abstract class Notification {
-		protected String type;
-		protected int minutesBeforeEvent;
+		private final String type;
+		private int minutes_before_event;
 
 		/**
 		 * For deserialization only
@@ -400,11 +400,11 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		}
 
 		public int getMinutesBeforeEvent() {
-			return minutesBeforeEvent;
+			return minutes_before_event;
 		}
 
 		public void setMinutesBeforeEvent(int minutesBeforeEvent) {
-			this.minutesBeforeEvent = minutesBeforeEvent;
+			this.minutes_before_event = minutesBeforeEvent;
 		}
 	}
 
@@ -437,8 +437,8 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 		@Override
 		public String toString() {
-			return "EmailNotification [type=" + type + ", body=" + body + ", subject=" + subject +
-					", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+			return "EmailNotification [type=" + getType() + ", body=" + body + ", subject=" + subject +
+					", minutesBeforeEvent=" + getMinutesBeforeEvent() + "]";
 		}
 	}
 
@@ -462,8 +462,8 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 		@Override
 		public String toString() {
-			return "SMSNotification [type=" + type + ", message=" + message
-					+ ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+			return "SMSNotification [type=" + getType() + ", message=" + message
+					+ ", minutesBeforeEvent=" + getMinutesBeforeEvent() + "]";
 		}
 	}
 
@@ -496,8 +496,8 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 		@Override
 		public String toString() {
-			return "WebhookNotification [type=" + type +", url=" + url + ", payload=" + payload
-					+ ", minutesBeforeEvent=" + minutesBeforeEvent + "]";
+			return "WebhookNotification [type=" + getType() +", url=" + url + ", payload=" + payload
+					+ ", minutesBeforeEvent=" + getMinutesBeforeEvent() + "]";
 		}
 	}
 
