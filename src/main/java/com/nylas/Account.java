@@ -11,6 +11,7 @@ public class Account extends AccountOwnedModel {
 	private String email;
 	private String provider;
 	private String sync_state;
+	private String authentication_type;
 	private Boolean trial;
 	private Map<String, String> metadata;
 	
@@ -29,6 +30,10 @@ public class Account extends AccountOwnedModel {
 	public String getSyncState() {
 		return sync_state;
 	}
+
+	public String getAuthenticationType() {
+		return authentication_type;
+	}
 	
 	public Boolean getTrial() {
 		return trial;
@@ -40,8 +45,15 @@ public class Account extends AccountOwnedModel {
 
 	@Override
 	public String toString() {
-		return "Account [id=" + getId() + ", billing_state=" + billing_state + ", email=" + email + ", provider=" + provider
-				+ ", sync_state=" + sync_state + ", trial=" + trial + ", metadata=" + metadata + "]";
+		return "Account [" +
+				"id='" + getId() + '\'' +
+				", billing_state='" + billing_state + '\'' +
+				", email='" + email + '\'' +
+				", provider='" + provider + '\'' +
+				", sync_state='" + sync_state + '\'' +
+				", authentication_type='" + authentication_type + '\'' +
+				", trial=" + trial +
+				", metadata=" + metadata +
+				']';
 	}
-	
 }
