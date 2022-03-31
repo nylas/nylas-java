@@ -6,6 +6,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+- Added support for Delta
 - Added support for new (beta) Integrations authentication (Integrations API, Grants API, Hosted Authentication for Integrations)
 
 ### Changed
