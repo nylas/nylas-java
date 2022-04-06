@@ -55,6 +55,7 @@ public class AccountsExample {
 		
 		//accounts.delete(first.getId());
 		//accounts.revokeAllTokensForAccount(first.getId(), "blahblah");
+		//accounts.revoke(conf.get("access.token"));
 	}
 
 }
