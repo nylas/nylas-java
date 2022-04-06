@@ -43,6 +43,15 @@ public class Accounts extends RestfulDAO<Account> {
 		HttpUrl.Builder url = getInstanceUrl(accountId).addPathSegment("upgrade");
 		client.executePost(authUser, url, null, null);
 	}
+
+	/**
+	 * Revoke a single access Token
+	 * @param accessToken The access token to revoke
+	 */
+	public void revoke(String accessToken) throws RequestFailedException, IOException {
+		HttpUrl.Builder url = client.newUrlBuilder().addPathSegments("oauth/revoke");
+		client.executePost(accessToken, url, null, null);
+	}
 	
 	public void revokeAllTokensForAccount(String accountId, String keepAccessToken)
 			throws IOException, RequestFailedException {
