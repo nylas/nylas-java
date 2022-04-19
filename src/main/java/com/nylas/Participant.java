@@ -10,6 +10,21 @@ public class Participant {
 	private String phone_number;
 	private String status;
 	private String comment;
+
+	/** Supported values for participant status */
+	public enum Status {
+		YES,
+		NO,
+		MAYBE,
+		NOREPLY,
+
+		;
+
+		@Override
+		public String toString() {
+			return super.toString().toLowerCase();
+		}
+	}
 	
 	/** For deserialiation only */ public Participant() {}
 	
