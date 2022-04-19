@@ -65,6 +65,11 @@ public class Participant {
 		return this;
 	}
 
+	public Participant status(Status status) {
+		this.status = status.toString();
+		return this;
+	}
+
 	@Deprecated
 	public Participant status(String status) {
 		this.status = status;
@@ -76,8 +81,11 @@ public class Participant {
 		return this;
 	}
 
-	Map<String, Object> getWritableFields() {
+	Map<String, Object> getWritableFields(boolean creation) {
 		Map<String, Object> params = new HashMap<>();
+		if (creation) {
+			Maps.putIfNotNull(params, "status", status);
+		}
 		Maps.putIfNotNull(params, "name", name);
 		Maps.putIfNotNull(params, "email", email);
 		Maps.putIfNotNull(params, "phone_number", phone_number);
