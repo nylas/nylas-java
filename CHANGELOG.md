@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Fixed `Participant` status not being sent to the API when set
+
 ### Removed
 
 ### Security
