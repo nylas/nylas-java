@@ -203,7 +203,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		List<Map<String, Object>> participantWritableFields = null;
 		if(participants != null && !participants.isEmpty()) {
 			participantWritableFields = participants.stream()
-					.map(Participant::getWritableFields)
+					.map(participant -> participant.getWritableFields(creation))
 					.collect(Collectors.toList());
 		}
 
