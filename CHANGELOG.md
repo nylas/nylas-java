@@ -1,24 +1,14 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
-
-This section contains changes that have been committed but not yet released.
+## [1.13.1] - Released 2022-04-22
 
 ### Added
 
 * Add missing `order` and `emails` fields in `Availability` and `TimeSlot`
 
-### Changed
-
-### Deprecated
-
 ### Fixed
 
 * Fixed `Participant` status not being sent to the API when set
-
-### Removed
-
-### Security
 
 ## [1.13.0] - Released 2022-03-31
 
@@ -261,7 +251,7 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.13.0...HEAD
+[1.13.1]: https://github.com/nylas/nylas-java/releases/tag/v1.13.1
 [1.13.0]: https://github.com/nylas/nylas-java/releases/tag/v1.13.0
 [1.12.0]: https://github.com/nylas/nylas-java/releases/tag/v1.12.0
 [1.11.2]: https://github.com/nylas/nylas-java/releases/tag/v1.11.2
