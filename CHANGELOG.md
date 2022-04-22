@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Add missing `order` and `emails` fields in `Availability` and `TimeSlot`
+
 ### Changed
 
 ### Deprecated
