@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Add missing fields in Scheduler
+
 ### Changed
 
 ### Deprecated
