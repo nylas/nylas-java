@@ -150,6 +150,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 		private String locale;
 		private String locale_for_guests;
 		private String timezone;
+		private Boolean disable_emails;
 		private Appearance appearance;
 		private Booking booking;
 		private Event event;
@@ -167,6 +168,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 
 		public String getTimezone() {
 			return timezone;
+		}
+
+		public Boolean getDisableEmails() {
+			return disable_emails;
 		}
 
 		public Appearance getAppearance() {
@@ -203,6 +208,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 
 		public void setTimezone(String timezone) {
 			this.timezone = timezone;
+		}
+
+		public void setDisableEmails(Boolean disableEmails) {
+			this.disable_emails = disableEmails;
 		}
 
 		public void setAppearance(Appearance appearance) {
@@ -247,6 +256,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 					"locale='" + locale + '\'' +
 					", localeForGuests='" + locale_for_guests + '\'' +
 					", timezone='" + timezone + '\'' +
+					", disableEmails=" + disable_emails +
 					", appearance=" + appearance +
 					", booking=" + booking +
 					", calendarIds=" + calendar_ids +
@@ -269,6 +279,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			private Boolean show_autoschedule;
 			private Boolean show_nylas_branding;
 			private Boolean show_timezone_options;
+			private Boolean show_week_view;
 
 			public String getColor() {
 				return color;
@@ -312,6 +323,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 
 			public Boolean getShowTimezoneOptions() {
 				return show_timezone_options;
+			}
+
+			public Boolean getShowWeekView() {
+				return show_week_view;
 			}
 
 			public void setColor(String color) {
@@ -358,6 +373,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				this.show_timezone_options = showTimezoneOptions;
 			}
 
+			public void setShowWeekView(Boolean showWeekView) {
+				this.show_week_view = showWeekView;
+			}
+
 			@Override
 			public String toString() {
 				return "Appearance [" +
@@ -372,6 +391,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 						", showAutoschedule=" + show_autoschedule +
 						", showNylasBranding=" + show_nylas_branding +
 						", showTimezoneOptions=" + show_timezone_options +
+						", showWeekView=" + show_week_view +
 						']';
 			}
 		}
@@ -389,6 +409,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			private Boolean confirmation_emails_to_guests;
 			private Boolean confirmation_emails_to_host;
 			private Boolean name_field_hidden;
+			private Boolean additional_guests_hidden;
 			private List<AdditionalFields> additional_fields = new ArrayList<>();
 			private List<OpeningHours> opening_hours = new ArrayList<>();
 
@@ -434,6 +455,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 
 			public Boolean getNameFieldHidden() {
 				return name_field_hidden;
+			}
+
+			public Boolean getAdditionalGuestsHidden() {
+				return additional_guests_hidden;
 			}
 
 			public List<AdditionalFields> getAdditionalFields() {
@@ -488,6 +513,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				this.name_field_hidden = nameFieldHidden;
 			}
 
+			public void setAdditionalGuestsHidden(Boolean additionalGuestsHidden) {
+				this.additional_guests_hidden = additionalGuestsHidden;
+			}
+
 			public void setAdditionalFields(List<AdditionalFields> additionalFields) {
 				this.additional_fields = additionalFields;
 			}
@@ -518,6 +547,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 						", confirmationEmailsToGuests=" + confirmation_emails_to_guests +
 						", confirmationEmailsToHost=" + confirmation_emails_to_host +
 						", nameFieldHidden=" + name_field_hidden +
+						", additionalGuestsHidden=" + additional_guests_hidden +
 						", additionalFields=" + additional_fields +
 						", openingHours=" + opening_hours +
 						']';
