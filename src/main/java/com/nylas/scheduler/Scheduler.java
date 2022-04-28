@@ -768,6 +768,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			private String location;
 			private String title;
 			private Integer duration;
+			private Integer capacity;
 
 			public String getLocation() {
 				return location;
@@ -779,6 +780,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 
 			public Integer getDuration() {
 				return duration;
+			}
+
+			public Integer getCapacity() {
+				return capacity;
 			}
 
 			public void setLocation(String location) {
@@ -793,12 +798,17 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				this.duration = duration;
 			}
 
+			public void setCapacity(Integer capacity) {
+				this.capacity = capacity;
+			}
+
 			@Override
 			public String toString() {
 				return "Event [" +
 						"location='" + location + '\'' +
 						", title='" + title + '\'' +
 						", duration=" + duration +
+						", capacity=" + capacity +
 						']';
 			}
 		}

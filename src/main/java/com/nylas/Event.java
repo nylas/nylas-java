@@ -14,23 +14,24 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	private String calendar_id;
 	private String ical_uid;
+	private String master_event_id;
+	private String event_collection_id;
 	private String title;
 	private String description;
-	private When when;
 	private String location;
 	private String owner;
 	private String status;
+	private Integer capacity;
 	private Boolean read_only;
 	private Boolean busy;
+	private Long original_start_time;
+	private When when;
 	private Conferencing conferencing;
-	private List<Notification> notifications;
+	private Recurrence recurrence;
+	private List<String> round_robin_order = new ArrayList<>();
+	private List<Notification> notifications = new ArrayList<>();
 	private List<Participant> participants = new ArrayList<>();
 	private Map<String, String> metadata = new HashMap<>();
-	
-	private Recurrence recurrence;
-	
-	private String master_event_id;
-	private Long original_start_time;
 	
 	/** for deserialization only */ public Event() {} 
 	
@@ -50,6 +51,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public String getIcalUid() {
 		return ical_uid;
+	}
+
+	public String getEventCollectionId() {
+		return event_collection_id;
 	}
 	
 	public String getTitle() {
@@ -80,6 +85,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return status;
 	}
 
+	public Integer getCapacity() {
+		return capacity;
+	}
+
 	public Boolean getReadOnly() {
 		return read_only;
 	}
@@ -94,6 +103,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public Conferencing getConferencing() {
 		return conferencing;
+	}
+
+	public List<String> getRoundRobinOrder() {
+		return round_robin_order;
 	}
 
 	public List<Notification> getNotifications() {
@@ -118,11 +131,33 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	@Override
 	public String toString() {
-		return "Event [id=" + getId() + ", calendar_id=" + calendar_id + ", ical_uid=" + ical_uid + ", title=" + title
-				+ ", when=" + when + ", location=" + location + ", owner=" + owner + ", participants=" + participants
-				+ ", status=" + status + ", read_only=" + read_only + ", busy=" + busy + ", metadata=" + metadata
-				+ ", recurrence=" + recurrence + ", master_event_id=" + master_event_id + ", conferencing" + conferencing
-				+ ", original_start_time=" + getOriginalStartTime() + "]";
+		return "Event [" +
+				"id='" + getId() + '\'' +
+				", calendar_id='" + calendar_id + '\'' +
+				", ical_uid='" + ical_uid + '\'' +
+				", master_event_id='" + master_event_id + '\'' +
+				", event_collection_id='" + event_collection_id + '\'' +
+				", title='" + title + '\'' +
+				", description='" + description + '\'' +
+				", location='" + location + '\'' +
+				", owner='" + owner + '\'' +
+				", status='" + status + '\'' +
+				", capacity=" + capacity +
+				", read_only=" + read_only +
+				", busy=" + busy +
+				", original_start_time=" + getOriginalStartTime() +
+				", when=" + when +
+				", conferencing=" + conferencing +
+				", recurrence=" + recurrence +
+				", round_robin_order=" + round_robin_order +
+				", notifications=" + notifications +
+				", participants=" + participants +
+				", metadata=" + metadata +
+				']';
+	}
+
+	public void setEventCollectionId(String eventCollectionId) {
+		this.event_collection_id = eventCollectionId;
 	}
 
 	public void setTitle(String title) {
@@ -141,6 +176,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.location = location;
 	}
 
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
 	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
@@ -155,6 +194,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public void setConferencing(Conferencing conferencing) {
 		this.conferencing = conferencing;
+	}
+
+	public void setRoundRobinOrder(List<String> roundRobinOrder) {
+		this.round_robin_order = roundRobinOrder;
 	}
 
 	public void setNotifications(List<Notification> notifications) {

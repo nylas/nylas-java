@@ -12,6 +12,7 @@ public class SingleAvailabilityQuery extends AvailabilityQuery<SingleAvailabilit
 
 	private List<String> emails;
 	private String roundRobin;
+	private String eventCollectionId;
 
 	/**
 	 * Available round-robin options.
@@ -53,6 +54,14 @@ public class SingleAvailabilityQuery extends AvailabilityQuery<SingleAvailabilit
 		return this;
 	}
 
+	/**
+	 * Unique identifier for a collection of events that are created specific for group meeting
+	 */
+	public SingleAvailabilityQuery eventCollectionId(String eventCollectionId) {
+		this.eventCollectionId = eventCollectionId;
+		return this;
+	}
+
 	@Override
 	public boolean isValid() {
 		return super.isValid() && (emails != null || this.calendars != null);
@@ -63,6 +72,7 @@ public class SingleAvailabilityQuery extends AvailabilityQuery<SingleAvailabilit
 		Map<String, Object> map = super.toMap();
 		Maps.putIfNotNull(map, "emails", emails);
 		Maps.putIfNotNull(map, "round_robin", roundRobin);
+		Maps.putIfNotNull(map, "event_collection_id", eventCollectionId);
 		return map;
 	}
 
