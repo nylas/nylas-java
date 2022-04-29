@@ -40,12 +40,12 @@ public class Events extends RestfulDAO<Event> {
 	}
 	
 	public Event create(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
-		validateConferencing(event);
+		event.validate();
 		return super.create(event, getExtraQueryParams(notifyParticipants));
 	}
 	
 	public Event update(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
-		validateConferencing(event);
+		event.validate();
 		return super.update(event, getExtraQueryParams(notifyParticipants));
 	}
 	
@@ -142,19 +142,6 @@ public class Events extends RestfulDAO<Event> {
 		Maps.putIfNotNull(params, "ics_options", icsOptions);
 		Map<String, String> response = client.executePost(authUser, url, params, Map.class);
 		return response.get("ics");
-	}
-
-	/**
-	 * Checks that the conferencing field is valid
-	 * An Event cannot have both manual conferencing details
-	 * and a conference autocreate field.
-	 */
-	private void validateConferencing(Event event) {
-		if(event.getConferencing() != null
-				&& event.getConferencing().getAutocreate() != null
-				&& event.getConferencing().getDetails() != null) {
-			throw new IllegalArgumentException("Cannot set both 'details' and 'autocreate' in conferencing object.");
-		}
 	}
 	
 	private static final Map<String, String> NOTIFY_PARTICIPANTS_PARAMS

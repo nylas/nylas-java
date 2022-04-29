@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
 
+import static com.nylas.Validations.assertState;
+
 public class Event extends AccountOwnedModel implements JsonObject {
 
 	private String calendar_id;
@@ -234,6 +236,22 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 */
 	public void addParticipants(Participant... participants) {
 		this.participants.addAll(Arrays.asList(participants));
+	}
+
+	/**
+	 * Checks the validity of the event
+	 * @return If the event is valid
+	 */
+	public boolean isValid() {
+		return conferencing != null && conferencing.getAutocreate() != null && conferencing.getDetails() != null &&
+				(this.capacity != null && this.participants.size() > this.capacity);
+	}
+
+	void validate() {
+		assertState(conferencing == null || (conferencing.getAutocreate() == null && conferencing.getDetails() == null),
+				"Cannot set both 'details' and 'autocreate' in conferencing object.");
+		assertState(this.capacity == null || (this.participants.size() <= this.capacity),
+				"The number of participants in the event exceeds the set capacity");
 	}
 
 	@Override
