@@ -75,6 +75,7 @@ public class HostedAuthentication {
 		private String loginHint = "";
 		private String state = "";
 		private boolean forcePassword = false;
+		private boolean redirectOnError = false;
 
 		UrlBuilder(NylasApplication app) {
 			this.app = app;
@@ -152,6 +153,15 @@ public class HostedAuthentication {
 			this.forcePassword = forcePassword;
 			return this;
 		}
+
+		/**
+		 * An optional setting that redirects users to the set redirect_uri when encountering
+		 * authentication issues.
+		 */
+		public UrlBuilder redirectOnError(boolean redirectOnError) {
+			this.redirectOnError = redirectOnError;
+			return this;
+		}
 		
 		private void validate() {
 			assertState(!nullOrEmpty(redirectUri), "Redirection URI is required");
@@ -181,6 +191,10 @@ public class HostedAuthentication {
 			}
 			if (forcePassword) {
 				urlBuilder.addQueryParameter("force_password", "true");
+			}
+
+			if (redirectOnError) {
+				urlBuilder.addQueryParameter("redirect_on_error", "true");
 			}
 					
 			return urlBuilder.build().toString();
