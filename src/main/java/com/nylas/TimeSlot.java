@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TimeSlot {
@@ -10,8 +11,8 @@ public class TimeSlot {
 	// The availability endpoint uses these terms instead
 	private Long start;
 	private Long end;
-	private List<String> emails;
 	private Capacity capacity;
+	private final List<String> emails = new ArrayList<>();
 
 	public String getStatus() {
 		return status;
