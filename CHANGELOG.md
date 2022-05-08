@@ -7,7 +7,7 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 * Add missing fields in Scheduler
-* Add support for validation
+* Add support for collective and group events
 
 ### Changed
 
