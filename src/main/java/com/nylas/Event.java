@@ -11,6 +11,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory;
 
 import static com.nylas.Validations.assertState;
+import static com.nylas.Validations.nullOrEmpty;
 
 public class Event extends AccountOwnedModel implements JsonObject {
 
@@ -243,14 +244,14 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 * @return If the event is valid
 	 */
 	public boolean isValid() {
-		return conferencing != null && conferencing.getAutocreate() != null && conferencing.getDetails() != null &&
-				(this.capacity != null && this.participants.size() > this.capacity);
+		return conferencing == null || conferencing.getAutocreate() == null || conferencing.getDetails() == null &&
+				(this.capacity == null || capacity == -1 || nullOrEmpty(this.participants) || this.participants.size() <= this.capacity);
 	}
 
 	void validate() {
-		assertState(conferencing == null || (conferencing.getAutocreate() == null && conferencing.getDetails() == null),
+		assertState(conferencing == null || conferencing.getAutocreate() == null || conferencing.getDetails() == null,
 				"Cannot set both 'details' and 'autocreate' in conferencing object.");
-		assertState(this.capacity == null || (this.participants.size() <= this.capacity),
+		assertState(this.capacity == null || capacity == -1 || nullOrEmpty(this.participants) || this.participants.size() <= this.capacity,
 				"The number of participants in the event exceeds the set capacity");
 	}
 
