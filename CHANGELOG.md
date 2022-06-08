@@ -14,6 +14,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Fixed enum value for `Scheduler.Config.Booking.OpeningHours.Days.Sunday`
+
 ### Removed
 
 ### Security
