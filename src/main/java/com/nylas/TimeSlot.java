@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TimeSlot {
@@ -10,7 +11,8 @@ public class TimeSlot {
 	// The availability endpoint uses these terms instead
 	private Long start;
 	private Long end;
-	private List<String> emails;
+	private Capacity capacity;
+	private final List<String> emails = new ArrayList<>();
 
 	public String getStatus() {
 		return status;
@@ -54,5 +56,32 @@ public class TimeSlot {
 	public String toString() {
 		return "TimeSlot [status=" + status + ", start_time=" + getStartTime() + ", end_time=" + getEndTime()
 				+ ", emails=" + emails + "]";
+	}
+
+	public static class Capacity {
+		private String event_id;
+		private Integer current_capacity;
+		private Integer max_capacity;
+
+		public String getEventId() {
+			return event_id;
+		}
+
+		public Integer getCurrentCapacity() {
+			return current_capacity;
+		}
+
+		public Integer getMaxCapacity() {
+			return max_capacity;
+		}
+
+		@Override
+		public String toString() {
+			return "Capacity [" +
+					"event_id='" + event_id + '\'' +
+					", current_capacity=" + current_capacity +
+					", max_capacity=" + max_capacity +
+					']';
+		}
 	}
 }
