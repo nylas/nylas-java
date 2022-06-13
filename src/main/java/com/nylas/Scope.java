@@ -53,6 +53,11 @@ public enum Scope {
 	 * Read calendars and events.
 	 */
 	CALENDAR_READ_ONLY("calendar.read_only"),
+
+	/**
+	 * EWS accounts should add this scope to access the free/busy endpoint.
+	 */
+	CALENDAR_FREE_BUSY("calendar.free_busy"),
 	
 	/**
 	 * Read available room resources for an account.
