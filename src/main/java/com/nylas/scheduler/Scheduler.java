@@ -662,7 +662,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 					THURSDAY('R'),
 					FRIDAY('F'),
 					SATURDAY('S'),
-					SUNDAY('N'),
+					SUNDAY('U'),
 
 					;
 
