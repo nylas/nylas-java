@@ -8,6 +8,7 @@ This section contains changes that have been committed but not yet released.
 
 * Add missing fields in Scheduler
 * Add support for collective and group events
+* Add support for calendar free-busy scope
 
 ### Changed
 
