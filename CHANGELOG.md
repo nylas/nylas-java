@@ -6,21 +6,28 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-* Add missing fields in Scheduler
-* Add support for collective and group events
-* Add support for calendar free-busy scope
-
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
-* Fixed enum value for `Scheduler.Config.Booking.OpeningHours.Days.Sunday`
-
 ### Removed
 
 ### Security
+
+## [1.14.0] - Released 2022-06-14
+
+### Added
+
+* Add missing fields in Scheduler
+* Add support for collective and group events
+* Add support for calendar free-busy scope
+* Add `redirect_on_error` parameter for Hosted Authentication
+
+### Fixed
+
+* Fixed enum value for `Scheduler.Config.Booking.OpeningHours.Days.Sunday`
 
 ## [1.13.1] - Released 2022-04-22
 
@@ -273,7 +280,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.13.1...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.14.0...HEAD
+[1.14.0]: https://github.com/nylas/nylas-java/releases/tag/v1.14.0
 [1.13.1]: https://github.com/nylas/nylas-java/releases/tag/v1.13.1
 [1.13.0]: https://github.com/nylas/nylas-java/releases/tag/v1.13.0
 [1.12.0]: https://github.com/nylas/nylas-java/releases/tag/v1.12.0
