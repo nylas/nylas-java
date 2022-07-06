@@ -1,11 +1,14 @@
 package com.nylas;
 
+import java.util.Map;
+
 public class JobStatus extends AccountOwnedModel {
 
 	private String action;
 	private Long created_at;
 	private String object;
 	private String status;
+	Map<String, Object> metadata;
 	
 	public String getAction() {
 		return action;
@@ -22,7 +25,11 @@ public class JobStatus extends AccountOwnedModel {
 	public String getStatus() {
 		return status;
 	}
-	
+
+	public Map<String, Object> getMetadata() {
+		return metadata;
+	}
+
 	/**
 	 * Returns the id of this job status object.
 	 * <p>
@@ -54,8 +61,16 @@ public class JobStatus extends AccountOwnedModel {
 
 	@Override
 	public String toString() {
-		return "JobStatus [action=" + action + ", createdAt=" + created_at + ", jobObjectId=" + getJobObjectId()
-				+ ", object=" + object + ", status=" + status+ ", accountId=" + getAccountId() + ", id=" + getId() + "]";
+		return "JobStatus [" +
+				"action='" + action + '\'' +
+				", created_at=" + created_at +
+				", object='" + object + '\'' +
+				", status='" + status + '\'' +
+				", metadata=" + metadata +
+				", jobObjectId=" + getJobObjectId() +
+				", accountId=" + getAccountId() +
+				", id=" + getId() +
+				']';
 	}
 	
 	static class JobStatusJson {
