@@ -8,7 +8,7 @@ public class JobStatus extends AccountOwnedModel {
 	private Long created_at;
 	private String object;
 	private String status;
-	Map<String, Object> metadata;
+	private Map<String, Object> metadata;
 	
 	public String getAction() {
 		return action;
