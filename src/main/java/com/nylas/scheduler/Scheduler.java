@@ -405,6 +405,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 			private Integer min_booking_notice;
 			private Integer min_buffer;
 			private Integer min_cancellation_notice;
+			private Integer interval_minutes;
 			private Boolean calendar_invite_to_guests;
 			private Boolean confirmation_emails_to_guests;
 			private Boolean confirmation_emails_to_host;
@@ -439,6 +440,10 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 
 			public Integer getMinCancellationNotice() {
 				return min_cancellation_notice;
+			}
+
+			public Integer getIntervalMinutes() {
+				return interval_minutes;
 			}
 
 			public Boolean getCalendarInviteToGuests() {
@@ -497,6 +502,13 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 				this.min_cancellation_notice = minCancellationNotice;
 			}
 
+			public void setIntervalMinutes(Integer intervalMinutes) {
+				if(intervalMinutes != null && (intervalMinutes <= 0 || intervalMinutes % 5 != 0)) {
+					throw new IllegalArgumentException("intervalMinutes must be a non-zero positive integer, divisible by 5.");
+				}
+				this.interval_minutes = intervalMinutes;
+			}
+
 			public void setCalendarInviteToGuests(Boolean calendarInviteToGuests) {
 				this.calendar_invite_to_guests = calendarInviteToGuests;
 			}
@@ -543,6 +555,7 @@ public class Scheduler extends AccountOwnedModel implements JsonObject {
 						", minBookingNotice=" + min_booking_notice +
 						", minBuffer=" + min_buffer +
 						", minCancellationNotice=" + min_cancellation_notice +
+						", intervalMinutes=" + interval_minutes +
 						", calendarInviteToGuests=" + calendar_invite_to_guests +
 						", confirmationEmailsToGuests=" + confirmation_emails_to_guests +
 						", confirmationEmailsToHost=" + confirmation_emails_to_host +

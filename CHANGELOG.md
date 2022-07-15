@@ -6,6 +6,7 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Add `interval_minutes` field in Scheduler booking config
 * Add `metadata` field to `JobStatus`
 
 ### Changed
