@@ -6,9 +6,6 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-* Add `interval_minutes` field in Scheduler booking config
-* Add `metadata` field to `JobStatus`
-
 ### Changed
 
 ### Deprecated
@@ -18,6 +15,14 @@ This section contains changes that have been committed but not yet released.
 ### Removed
 
 ### Security
+
+
+## [1.15.0] - Released 2022-07-15
+
+### Added
+
+* Add `interval_minutes` field in Scheduler booking config
+* Add `metadata` field to `JobStatus`
 
 ## [1.14.0] - Released 2022-06-14
 
@@ -283,7 +288,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.14.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/nylas/nylas-java/releases/tag/v1.15.0
 [1.14.0]: https://github.com/nylas/nylas-java/releases/tag/v1.14.0
 [1.13.1]: https://github.com/nylas/nylas-java/releases/tag/v1.13.1
 [1.13.0]: https://github.com/nylas/nylas-java/releases/tag/v1.13.0
