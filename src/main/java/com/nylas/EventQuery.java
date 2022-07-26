@@ -11,11 +11,13 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 
 	private Boolean expandRecurring;
 	private Boolean showCancelled;
+	private Boolean busy;
 	private String eventId;
 	private String calendarId;
 	private String title;
 	private String description;
 	private String location;
+	private String participants;
 	private Instant startsBefore;
 	private Instant startsAfter;
 	private Instant endsBefore;
@@ -35,6 +37,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		if (showCancelled != null) {
 			url.addQueryParameter("show_cancelled", showCancelled.toString());
 		}
+		if (busy != null) {
+			url.addQueryParameter("busy", busy.toString());
+		}
 		if (eventId != null) {
 			url.addQueryParameter("event_id", eventId);
 		}
@@ -49,6 +54,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		}
 		if (location != null) {
 			url.addQueryParameter("location", location);
+		}
+		if (participants != null) {
+			url.addQueryParameter("participants", participants);
 		}
 		if (startsBefore != null) {
 			url.addQueryParameter("starts_before", Instants.formatEpochSecond(startsBefore));
@@ -92,6 +100,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		return this;
 	}
 	
+	public EventQuery busy(Boolean busy) {
+		this.busy = busy;
+		return this;
+	}
+
 	public EventQuery eventId(String eventId) {
 		this.eventId = eventId;
 		return this;
@@ -114,6 +127,11 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	
 	public EventQuery location(String location) {
 		this.location = location;
+		return this;
+	}
+
+	public EventQuery participants(String participants) {
+		this.participants = participants;
 		return this;
 	}
 
