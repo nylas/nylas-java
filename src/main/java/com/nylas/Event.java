@@ -31,6 +31,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private When when;
 	private Conferencing conferencing;
 	private Recurrence recurrence;
+	private Reminders reminders;
 	private List<String> round_robin_order = new ArrayList<>();
 	private List<Notification> notifications = new ArrayList<>();
 	private List<Participant> participants = new ArrayList<>();
@@ -118,6 +119,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public Recurrence getRecurrence() {
 		return recurrence;
+	}
+
+	public Reminders getReminders() {
+		return reminders;
 	}
 
 	public String getMasterEventId() {
@@ -211,6 +216,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.recurrence = recurrence;
 	}
 
+	public void setReminders(Reminders reminders) {
+		this.reminders = reminders;
+	}
+
 	/**
 	 * Add single metadata key-value pair to the event
 	 * @param key The key of the metadata entry
@@ -260,6 +269,11 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Map<String, Object> params = new HashMap<>();
 		if (creation) {
 			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
+			// Reminders, when creating an event, need to be included in the main object
+			if(reminders != null && reminders.reminderMinutes != null && reminders.reminderMethod != null) {
+				params.put("reminder_minutes", String.format("[%d]", reminders.reminderMinutes));
+				params.put("reminder_method", reminders.reminderMethod);
+			}
 		}
 
 		List<Map<String, Object>> participantWritableFields = null;
@@ -443,6 +457,48 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			public String toString() {
 				return String.format("Autocreate [settings=%s]", settings);
 			}
+		}
+	}
+
+	public static class Reminders {
+		private Integer reminderMinutes;
+		private String reminderMethod;
+
+		/**
+		 * Enumeration containing the reminder methods
+		 */
+		public enum ReminderMethod {
+			EMAIL,
+			POPUP,
+			DISPLAY,
+			SOUND,
+
+			;
+
+			@Override
+			public String toString() {
+				return super.toString().toLowerCase();
+			}
+		}
+
+		/** For deserialization only */ public Reminders() {}
+
+		public Reminders(int reminderMinutes, ReminderMethod reminderMethod) {
+			this.reminderMinutes = reminderMinutes;
+			this.reminderMethod = reminderMethod.toString();
+		}
+
+		public Integer getReminderMinutes() {
+			return reminderMinutes;
+		}
+
+		public ReminderMethod reminderMethod() {
+			return ReminderMethod.valueOf(reminderMethod.toUpperCase());
+		}
+
+		@Override
+		public String toString() {
+			return "Reminders [reminderMinutes=" + getReminderMinutes() + ", reminderMethod=" + reminderMethod() + "]";
 		}
 	}
 
