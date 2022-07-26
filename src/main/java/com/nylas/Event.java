@@ -18,12 +18,16 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private String calendar_id;
 	private String ical_uid;
 	private String master_event_id;
+	private String customer_event_id;
 	private String event_collection_id;
 	private String title;
 	private String description;
 	private String location;
 	private String owner;
 	private String status;
+	private String organizer_email;
+	private String organizer_name;
+	private String visibility;
 	private Integer capacity;
 	private Boolean read_only;
 	private Boolean busy;
@@ -79,6 +83,22 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public String getOwner() {
 		return owner;
+	}
+
+	public String getCustomerEventId() {
+		return customer_event_id;
+	}
+
+	public String getOrganizerEmail() {
+		return organizer_email;
+	}
+
+	public String getOrganizerName() {
+		return organizer_name;
+	}
+
+	public String getVisibility() {
+		return visibility;
 	}
 
 	public List<Participant> getParticipants() {
@@ -182,6 +202,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public void setCustomerEventId(String customerEventId) {
+		this.customer_event_id = customerEventId;
 	}
 
 	public void setCapacity(Integer capacity) {
