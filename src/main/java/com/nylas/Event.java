@@ -294,9 +294,9 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		if (creation) {
 			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
 			// Reminders, when creating an event, need to be included in the main object
-			if(reminders != null && reminders.reminderMinutes != null && reminders.reminderMethod != null) {
-				params.put("reminder_minutes", String.format("[%d]", reminders.reminderMinutes));
-				params.put("reminder_method", reminders.reminderMethod);
+			if(reminders != null && reminders.reminder_minutes != null && reminders.reminder_method != null) {
+				params.put("reminder_minutes", String.format("[%d]", reminders.reminder_minutes));
+				params.put("reminder_method", reminders.reminder_method);
 			}
 		}
 
@@ -485,8 +485,8 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	}
 
 	public static class Reminders {
-		private Integer reminderMinutes;
-		private String reminderMethod;
+		private final Integer reminder_minutes;
+		private final String reminder_method;
 
 		/**
 		 * Enumeration containing the reminder methods
@@ -505,24 +505,26 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		/** For deserialization only */ public Reminders() {}
-
 		public Reminders(int reminderMinutes, ReminderMethod reminderMethod) {
-			this.reminderMinutes = reminderMinutes;
-			this.reminderMethod = reminderMethod.toString();
+			this.reminder_minutes = reminderMinutes;
+			this.reminder_method = reminderMethod.toString();
 		}
 
 		public Integer getReminderMinutes() {
-			return reminderMinutes;
+			return reminder_minutes;
 		}
 
-		public ReminderMethod reminderMethod() {
-			return ReminderMethod.valueOf(reminderMethod.toUpperCase());
+		public ReminderMethod getReminderMethod() {
+			try {
+				return ReminderMethod.valueOf(reminder_method.toUpperCase());
+			} catch (IllegalArgumentException | NullPointerException e) {
+				return null;
+			}
 		}
 
 		@Override
 		public String toString() {
-			return "Reminders [reminderMinutes=" + getReminderMinutes() + ", reminderMethod=" + reminderMethod() + "]";
+			return "Reminders [reminderMinutes=" + getReminderMinutes() + ", reminderMethod=" + getReminderMethod() + "]";
 		}
 	}
 
