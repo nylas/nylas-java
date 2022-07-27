@@ -11,11 +11,13 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 
 	private Boolean expandRecurring;
 	private Boolean showCancelled;
+	private Boolean busy;
 	private String eventId;
 	private String calendarId;
 	private String title;
 	private String description;
 	private String location;
+	private String participants;
 	private Instant startsBefore;
 	private Instant startsAfter;
 	private Instant endsBefore;
@@ -35,6 +37,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		if (showCancelled != null) {
 			url.addQueryParameter("show_cancelled", showCancelled.toString());
 		}
+		if (busy != null) {
+			url.addQueryParameter("busy", busy.toString());
+		}
 		if (eventId != null) {
 			url.addQueryParameter("event_id", eventId);
 		}
@@ -49,6 +54,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		}
 		if (location != null) {
 			url.addQueryParameter("location", location);
+		}
+		if (participants != null) {
+			url.addQueryParameter("participants", participants);
 		}
 		if (startsBefore != null) {
 			url.addQueryParameter("starts_before", Instants.formatEpochSecond(startsBefore));
@@ -81,57 +89,110 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 			metadataQuery.addParameters(url);
 		}
 	}
-	
+
+	/**
+	 * Return events matching the specified recurrence. If the recurrence is true, the results will expand single
+	 * recurring events into individual event instances that fall within the requested time range.
+	 */
 	public EventQuery expandRecurring(Boolean expandRecurring) {
 		this.expandRecurring = expandRecurring;
 		return this;
 	}
-	
+
+	/**
+	 * Return events that have a status of cancelled.
+	 * If an event is recurring, then it returns no matter the value of showCancelled.
+	 */
 	public EventQuery showCancelled(Boolean showCancelled) {
 		this.showCancelled = showCancelled;
 		return this;
 	}
-	
+
+	/**
+	 * Returns events with a matching busy status.
+	 */
+	public EventQuery busy(Boolean busy) {
+		this.busy = busy;
+		return this;
+	}
+
+	/**
+	 * Return the event matching the specified event ID.
+	 */
 	public EventQuery eventId(String eventId) {
 		this.eventId = eventId;
 		return this;
 	}
-	
+
+	/**
+	 * Return events belonging to the specified calendar ID.
+	 */
 	public EventQuery calendarId(String calendarId) {
 		this.calendarId = calendarId;
 		return this;
 	}
-	
+
+	/**
+	 * Return events matching the specified title.
+	 */
 	public EventQuery title(String title) {
 		this.title = title;
 		return this;
 	}
-	
+
+	/**
+	 * Return events matching the specified description.
+	 */
 	public EventQuery description(String description) {
 		this.description = description;
 		return this;
 	}
-	
+
+	/**'
+	 * Return events matching the specified location.
+	 */
 	public EventQuery location(String location) {
 		this.location = location;
 		return this;
 	}
 
+	/**'
+	 * Return events containing participant details.
+	 * Can search with participant name, email address, status, phone number, etc.
+	 * This will not search with multiple arguments.
+	 */
+	public EventQuery participants(String participants) {
+		this.participants = participants;
+		return this;
+	}
+
+	/**
+	 * Return events starting before the specified timestamp.
+	 */
 	public EventQuery startsBefore(Instant startsBefore) {
 		this.startsBefore = startsBefore;
 		return this;
 	}
-	
+
+	/**
+	 * Return events starting after the specified timestamp.
+	 */
 	public EventQuery startsAfter(Instant startsAfter) {
 		this.startsAfter = startsAfter;
 		return this;
 	}
-	
+
+	/**
+	 * Return events ending before the specified timestamp.
+	 */
 	public EventQuery endsBefore(Instant endsBefore) {
 		this.endsBefore = endsBefore;
 		return this;
 	}
-	
+
+	/**
+	 * Return events ending after the specified timestamp.
+	 */
 	public EventQuery endsAfter(Instant endsAfter) {
 		this.endsAfter = endsAfter;
 		return this;

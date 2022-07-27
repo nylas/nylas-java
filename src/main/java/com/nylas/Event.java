@@ -18,12 +18,16 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private String calendar_id;
 	private String ical_uid;
 	private String master_event_id;
+	private String customer_event_id;
 	private String event_collection_id;
 	private String title;
 	private String description;
 	private String location;
 	private String owner;
 	private String status;
+	private String organizer_email;
+	private String organizer_name;
+	private String visibility;
 	private Integer capacity;
 	private Boolean read_only;
 	private Boolean busy;
@@ -31,6 +35,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private When when;
 	private Conferencing conferencing;
 	private Recurrence recurrence;
+	private Reminders reminders;
 	private List<String> round_robin_order = new ArrayList<>();
 	private List<Notification> notifications = new ArrayList<>();
 	private List<Participant> participants = new ArrayList<>();
@@ -80,6 +85,22 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return owner;
 	}
 
+	public String getCustomerEventId() {
+		return customer_event_id;
+	}
+
+	public String getOrganizerEmail() {
+		return organizer_email;
+	}
+
+	public String getOrganizerName() {
+		return organizer_name;
+	}
+
+	public String getVisibility() {
+		return visibility;
+	}
+
 	public List<Participant> getParticipants() {
 		return participants;
 	}
@@ -118,6 +139,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public Recurrence getRecurrence() {
 		return recurrence;
+	}
+
+	public Reminders getReminders() {
+		return reminders;
 	}
 
 	public String getMasterEventId() {
@@ -179,6 +204,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.location = location;
 	}
 
+	public void setCustomerEventId(String customerEventId) {
+		this.customer_event_id = customerEventId;
+	}
+
 	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
@@ -209,6 +238,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
+	}
+
+	public void setReminders(Reminders reminders) {
+		this.reminders = reminders;
 	}
 
 	/**
@@ -260,6 +293,11 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Map<String, Object> params = new HashMap<>();
 		if (creation) {
 			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
+			// Reminders, when creating an event, need to be included in the main object
+			if(reminders != null && reminders.reminder_minutes != null && reminders.reminder_method != null) {
+				params.put("reminder_minutes", String.format("[%d]", reminders.reminder_minutes));
+				params.put("reminder_method", reminders.reminder_method);
+			}
 		}
 
 		List<Map<String, Object>> participantWritableFields = null;
@@ -443,6 +481,50 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			public String toString() {
 				return String.format("Autocreate [settings=%s]", settings);
 			}
+		}
+	}
+
+	public static class Reminders {
+		private final Integer reminder_minutes;
+		private final String reminder_method;
+
+		/**
+		 * Enumeration containing the reminder methods
+		 */
+		public enum ReminderMethod {
+			EMAIL,
+			POPUP,
+			DISPLAY,
+			SOUND,
+
+			;
+
+			@Override
+			public String toString() {
+				return super.toString().toLowerCase();
+			}
+		}
+
+		public Reminders(int reminderMinutes, ReminderMethod reminderMethod) {
+			this.reminder_minutes = reminderMinutes;
+			this.reminder_method = reminderMethod.toString();
+		}
+
+		public Integer getReminderMinutes() {
+			return reminder_minutes;
+		}
+
+		public ReminderMethod getReminderMethod() {
+			try {
+				return ReminderMethod.valueOf(reminder_method.toUpperCase());
+			} catch (IllegalArgumentException | NullPointerException e) {
+				return null;
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "Reminders [reminderMinutes=" + getReminderMinutes() + ", reminderMethod=" + getReminderMethod() + "]";
 		}
 	}
 

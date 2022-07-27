@@ -6,6 +6,10 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Add missing event query parameters
+* Add support for Event reminders
+* Add support for additional Event fields
+
 ### Changed
 
 ### Deprecated
