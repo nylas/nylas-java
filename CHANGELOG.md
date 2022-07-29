@@ -1,25 +1,12 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
-
-This section contains changes that have been committed but not yet released.
+## [1.16.0] - Released 2022-07-29
 
 ### Added
 
 * Add missing event query parameters
 * Add support for Event reminders
 * Add support for additional Event fields
-
-### Changed
-
-### Deprecated
-
-### Fixed
-
-### Removed
-
-### Security
-
 
 ## [1.15.0] - Released 2022-07-15
 
@@ -292,7 +279,7 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.15.0...HEAD
+[1.16.0]: https://github.com/nylas/nylas-java/releases/tag/v1.16.0
 [1.15.0]: https://github.com/nylas/nylas-java/releases/tag/v1.15.0
 [1.14.0]: https://github.com/nylas/nylas-java/releases/tag/v1.14.0
 [1.13.1]: https://github.com/nylas/nylas-java/releases/tag/v1.13.1
