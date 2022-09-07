@@ -62,6 +62,7 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 	
 	protected M get(String id) throws IOException, RequestFailedException {
 		HttpUrl.Builder messageUrl = getInstanceUrl(id);
+		setView(messageUrl,"expanded");
 		return client.executeGet(authUser, messageUrl, modelClass, authMethod);
 	}
 	
