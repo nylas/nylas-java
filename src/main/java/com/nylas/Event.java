@@ -300,7 +300,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		List<Map<String, Object>> participantWritableFields = null;
+		List<Map<String, Object>> participantWritableFields = Collections.emptyList();
 		if(participants != null && !participants.isEmpty()) {
 			participantWritableFields = participants.stream()
 					.map(participant -> participant.getWritableFields(creation))
