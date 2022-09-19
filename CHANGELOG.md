@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Add support for getting a single expanded message and thread
+
 ### Changed
 
 ### Deprecated
