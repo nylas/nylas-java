@@ -254,6 +254,13 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	}
 
 	/**
+	 * Remove all metadata from the event
+	 */
+	public void clearMetadata() {
+		this.metadata.clear();
+	}
+
+	/**
 	 * Add one (or many) notifications to the event
 	 * @param notifications The notification(s) to append to the event's notification list
 	 */
@@ -265,11 +272,25 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	}
 
 	/**
+	 * Remove all notifications from the event
+	 */
+	public void clearNotifications() {
+		this.notifications.clear();
+	}
+
+	/**
 	 * Add one (or many) participants to the event
 	 * @param participants The participant(s) to append to the event's participant list
 	 */
 	public void addParticipants(Participant... participants) {
 		this.participants.addAll(Arrays.asList(participants));
+	}
+
+	/**
+	 * Remove all participants from the event
+	 */
+	public void clearParticipants() {
+		this.participants.clear();
 	}
 
 	/**
