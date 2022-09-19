@@ -14,6 +14,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Fixed issue where `Event` participants could never be entirely removed once set
+
 ### Removed
 
 ### Security
