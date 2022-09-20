@@ -11,7 +11,6 @@ import static org.mockito.Mockito.mock;
 
 public class AuthenticationDAOTest {
 
-    private AuthenticationDAO authenticationDAO;
     private NylasClient nylasClient;
 
     private HttpUrl.Builder baseUrl;
@@ -19,7 +18,6 @@ public class AuthenticationDAOTest {
     @BeforeEach
     private void init() {
         nylasClient = mock(NylasClient.class);
-        NylasApplication nylasApplication = mock(NylasApplication.class);
         baseUrl = new HttpUrl.Builder()
                             .scheme("https")
                             .host("test.nylas.com");
