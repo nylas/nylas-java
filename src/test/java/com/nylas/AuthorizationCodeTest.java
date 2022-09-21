@@ -33,6 +33,6 @@ public class AuthorizationCodeTest {
         when(nylasClient.executeRequest(request, AuthorizationCode.class)).thenReturn(authorizationCode);
         AuthorizationCode result = nylasClient.executeRequest(request, AuthorizationCode.class);
 
-        assertEquals(authorizationCode.getCode(), "asdf1234");
+        assertEquals(result.getCode(), "asdf1234");
     }
 }
