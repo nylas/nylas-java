@@ -13,10 +13,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AccessTokenTest {
-    private String TEST_ACCESS_TOKEN = "d964023b-4c66-42ed-abd4-8bd139087136";
-    private String TEST_ACCOUNT_ID = "ls0d9v8adfvbjasdofb90dvlsdv";
-    private String TEST_EMAIL_ADDRESS = "test@nylas.com";
-    private String TEST_PROVIDER = "google";
+    public static String TEST_ACCESS_TOKEN = "d964023b-4c66-42ed-abd4-8bd139087136";
+    public static String TEST_ACCOUNT_ID = "ls0d9v8adfvbjasdofb90dvlsdv";
+    public static String TEST_EMAIL_ADDRESS = "test@nylas.com";
+    public static String TEST_PROVIDER = "google";
 
     private NylasClient nylasClient;
 
