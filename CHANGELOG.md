@@ -6,6 +6,8 @@
 
 * Add support for getting a single expanded message and thread
 
+### Fixed
+
 * Fixed issue where `Event` participants could never be entirely removed once set
 
 ## [1.16.0] - Released 2022-07-29
