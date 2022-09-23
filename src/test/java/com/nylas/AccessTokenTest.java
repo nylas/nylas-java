@@ -13,10 +13,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AccessTokenTest {
-    private String TEST_ACCESS_TOKEN = "d964023b-4c66-42ed-abd4-8bd139087136";
-    private String TEST_ACCOUNT_ID = "ls0d9v8adfvbjasdofb90dvlsdv";
-    private String TEST_EMAIL_ADDRESS = "test@nylas.com";
-    private String TEST_PROVIDER = "google";
+    public static String TEST_ACCESS_TOKEN = "d964023b-4c66-42ed-abd4-8bd139087136";
+    public static String TEST_ACCOUNT_ID = "ls0d9v8adfvbjasdofb90dvlsdv";
+    public static String TEST_EMAIL_ADDRESS = "test@nylas.com";
+    public static String TEST_PROVIDER = "google";
 
     private NylasClient nylasClient;
 
@@ -39,10 +39,14 @@ public class AccessTokenTest {
         when(nylasClient.executeRequest(request, AccessToken.class)).thenReturn(accessToken);
         AccessToken result = nylasClient.executeRequest(request, AccessToken.class);
 
+        String expectedToString = "AccessToken [access_token=" + TEST_ACCESS_TOKEN + ", account_id=" + TEST_ACCOUNT_ID + ", email_address="
+                + TEST_EMAIL_ADDRESS + ", provider=" + TEST_PROVIDER + "]";
+
         assertEquals(result.getAccessToken(), TEST_ACCESS_TOKEN);
         assertEquals(result.getAccountId(), TEST_ACCOUNT_ID);
         assertEquals(result.getEmailAddress(), TEST_EMAIL_ADDRESS);
         assertEquals(result.getProvider(), TEST_PROVIDER);
+        assertEquals(result.toString(), expectedToString);
     }
 
     private void setField(String fieldName, String fieldValue, AccessToken accessToken) throws NoSuchFieldException, IllegalAccessException {
