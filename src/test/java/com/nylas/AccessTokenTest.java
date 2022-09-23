@@ -39,10 +39,14 @@ public class AccessTokenTest {
         when(nylasClient.executeRequest(request, AccessToken.class)).thenReturn(accessToken);
         AccessToken result = nylasClient.executeRequest(request, AccessToken.class);
 
+        String expectedToString = "AccessToken [access_token=" + TEST_ACCESS_TOKEN + ", account_id=" + TEST_ACCOUNT_ID + ", email_address="
+                + TEST_EMAIL_ADDRESS + ", provider=" + TEST_PROVIDER + "]";
+
         assertEquals(result.getAccessToken(), TEST_ACCESS_TOKEN);
         assertEquals(result.getAccountId(), TEST_ACCOUNT_ID);
         assertEquals(result.getEmailAddress(), TEST_EMAIL_ADDRESS);
         assertEquals(result.getProvider(), TEST_PROVIDER);
+        assertEquals(result.toString(), expectedToString);
     }
 
     private void setField(String fieldName, String fieldValue, AccessToken accessToken) throws NoSuchFieldException, IllegalAccessException {
