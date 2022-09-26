@@ -175,7 +175,7 @@ public abstract class RestfulDAO<M extends RestfulModel> {
 		}
 	}
 	
-	private static void setView(HttpUrl.Builder url, String view) {
+	protected static void setView(HttpUrl.Builder url, String view) {
 		url.addQueryParameter("view", view);
 	}
 

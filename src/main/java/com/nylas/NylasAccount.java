@@ -90,7 +90,8 @@ public class NylasAccount {
 		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");
 		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
 	}
-	
+
+	// TODO: Revoking an access token seems like an important op. We should return the result of the revoke operation.
 	public void revokeAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder revokeUrl = client.newUrlBuilder().addPathSegments("oauth/revoke");
 		client.executePost(accessToken, revokeUrl, null, null);

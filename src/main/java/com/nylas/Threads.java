@@ -21,8 +21,26 @@ public class Threads extends RestfulDAO<Thread> {
 		return super.list(query);
 	}
 
+	/**
+	 * Get a single thread by ID
+	 * @param id The thread ID
+	 * @return The requested thread
+	 */
 	@Override
 	public Thread get(String id) throws IOException, RequestFailedException {
+		return get(id, false);
+	}
+
+	/**
+	 * Get a single thread by ID
+	 * @param id The thread ID
+	 * @param expanded If true, the thread will return with a message and draft object as opposed to IDs
+	 * @return The requested thread
+	 */
+	public Thread get(String id, boolean expanded) throws IOException, RequestFailedException {
+		if(expanded) {
+			setView(getCollectionUrl(), "expanded");
+		}
 		return super.get(id);
 	}
 
