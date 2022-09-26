@@ -40,6 +40,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private List<Notification> notifications = new ArrayList<>();
 	private List<Participant> participants = new ArrayList<>();
 	private Map<String, String> metadata = new HashMap<>();
+	private final Map<String, Object> modifiedFields = new HashMap<>();
 	
 	/** for deserialization only */ public Event() {} 
 	
@@ -186,62 +187,77 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public void setEventCollectionId(String eventCollectionId) {
 		this.event_collection_id = eventCollectionId;
+		this.modifiedFields.put("event_collection_id", this.event_collection_id);
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
+		this.modifiedFields.put("title", this.title);
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+		this.modifiedFields.put("description", this.description);
 	}
 
 	public void setWhen(When when) {
 		this.when = when;
+		this.modifiedFields.put("when", this.when);
 	}
 
 	public void setLocation(String location) {
 		this.location = location;
+		this.modifiedFields.put("location", this.location);
 	}
 
 	public void setCustomerEventId(String customerEventId) {
 		this.customer_event_id = customerEventId;
+		this.modifiedFields.put("customer_event_id", this.customer_event_id);
 	}
 
 	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
+		this.modifiedFields.put("capacity", this.capacity);
 	}
 
 	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
+		this.modifiedFields.put("participants", this.participants);
 	}
 
 	public void setBusy(Boolean busy) {
 		this.busy = busy;
+		this.modifiedFields.put("busy", this.busy);
 	}
 
 	public void setMetadata(Map<String, String> metadata) {
 		this.metadata = metadata;
+		this.modifiedFields.put("metadata", this.metadata);
 	}
 
 	public void setConferencing(Conferencing conferencing) {
 		this.conferencing = conferencing;
+		this.modifiedFields.put("conferencing", this.conferencing);
 	}
 
 	public void setRoundRobinOrder(List<String> roundRobinOrder) {
 		this.round_robin_order = roundRobinOrder;
+		this.modifiedFields.put("round_robin_order", this.round_robin_order);
 	}
 
 	public void setNotifications(List<Notification> notifications) {
 		this.notifications = notifications;
+		this.modifiedFields.put("notifications", this.notifications);
 	}
 
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
+		this.modifiedFields.put("recurrence", this.recurrence);
 	}
 
 	public void setReminders(Reminders reminders) {
 		this.reminders = reminders;
+		this.modifiedFields.put("reminders", this.reminders);
 	}
 
 	/**
@@ -251,6 +267,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 */
 	public void addMetadata(String key, String value) {
 		this.metadata.put(key, value);
+		this.modifiedFields.put("metadata", this.metadata);
 	}
 
 	/**
@@ -262,6 +279,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			this.notifications = new ArrayList<>();
 		}
 		this.notifications.addAll(Arrays.asList(notifications));
+		this.modifiedFields.put("notifications", this.notifications);
 	}
 
 	/**
@@ -270,6 +288,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 */
 	public void addParticipants(Participant... participants) {
 		this.participants.addAll(Arrays.asList(participants));
+		this.modifiedFields.put("participants", serializeParticipants());
 	}
 
 	/**
