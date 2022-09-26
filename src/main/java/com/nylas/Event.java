@@ -300,24 +300,29 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			}
 		}
 
-		List<Map<String, Object>> participantWritableFields = null;
-		if(participants != null && !participants.isEmpty()) {
-			participantWritableFields = participants.stream()
-					.map(participant -> participant.getWritableFields(creation))
-					.collect(Collectors.toList());
 		}
 
 		Maps.putIfNotNull(params, "when", getWhen());
 		Maps.putIfNotNull(params, "title", getTitle());
 		Maps.putIfNotNull(params, "description", getDescription());
 		Maps.putIfNotNull(params, "location", getLocation());
-		Maps.putIfNotNull(params, "participants", participantWritableFields);
+		Maps.putIfNotNull(params, "participants", serializeParticipants());
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "conferencing", getConferencing());
 		Maps.putIfNotNull(params, "notifications", getNotifications());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		return params;
+	}
+
+	private List<Map<String, Object>> serializeParticipants() {
+		if(this.participants == null || this.participants.isEmpty()) {
+			return null;
+		}
+
+		return this.participants.stream()
+				.map(participant -> participant.getWritableFields(false))
+				.collect(Collectors.toList());
 	}
 
 	public static class Recurrence {
