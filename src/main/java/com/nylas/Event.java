@@ -309,18 +309,19 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	@Override
 	protected Map<String, Object> getWritableFields(boolean creation) {
+		if (!creation) {
+			return modifiedFields;
+		}
+
 		Map<String, Object> params = new HashMap<>();
-		if (creation) {
-			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
-			// Reminders, when creating an event, need to be included in the main object
-			if(reminders != null && reminders.reminder_minutes != null && reminders.reminder_method != null) {
-				params.put("reminder_minutes", String.format("[%d]", reminders.reminder_minutes));
-				params.put("reminder_method", reminders.reminder_method);
-			}
+
+		// Reminders, when creating an event, need to be included in the main object
+		if(reminders != null && reminders.reminder_minutes != null && reminders.reminder_method != null) {
+			params.put("reminder_minutes", String.format("[%d]", reminders.reminder_minutes));
+			params.put("reminder_method", reminders.reminder_method);
 		}
 
-		}
-
+		Maps.putIfNotNull(params, "calendar_id", getCalendarId());
 		Maps.putIfNotNull(params, "when", getWhen());
 		Maps.putIfNotNull(params, "title", getTitle());
 		Maps.putIfNotNull(params, "description", getDescription());
