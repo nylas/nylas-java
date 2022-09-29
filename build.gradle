@@ -54,7 +54,11 @@ dependencies {
     testImplementation('com.github.tomakehurst:wiremock-jre8:2.26.3')
 
     // mockito for dependency mocking
-    dependencies { testImplementation "org.mockito:mockito-core:3.+" }
+    dependencies {
+        testImplementation "org.mockito:mockito-core:3.+"
+        testImplementation 'org.mockito:mockito-inline:2.13.0'
+    }
+
     
     ///////////////////////////////////
     // Examples dependencies
