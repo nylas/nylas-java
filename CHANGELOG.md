@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Fix error when updating occurrence of a recurring event
+
 ### Removed
 
 ### Security
