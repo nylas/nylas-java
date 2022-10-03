@@ -146,7 +146,10 @@ public class Notification {
 		}
 		
 	}
-	
+
+	/**
+	 * Attributes for a message notification
+	 */
 	public static class Attributes {
 		private String received_date;
 		private String thread_id;
@@ -168,6 +171,112 @@ public class Notification {
 		@Override
 		public String toString() {
 			return "Attributes [receivedDate=" + received_date + ", threadId=" + thread_id + "]";
+		}
+	}
+
+	/**
+	 * Attributes for event notifications
+	 */
+	public static class EventNotificationAttributes extends Attributes {
+		private String calendar_id;
+		private Boolean created_before_account_connection;
+
+		/**
+		 * Calendar ID of the event
+		 */
+		public String getCalendarId() {
+			return calendar_id;
+		}
+
+		/**
+		 * Indicates if the event was created before the account was connected to Nylas
+		 */
+		public Boolean getCreatedBeforeAccountConnection() {
+			return created_before_account_connection;
+		}
+
+		@Override
+		public String toString() {
+			return "EventNotificationAttributes [calendarId=" + calendar_id + ", createdBeforeAccountConnection=" + created_before_account_connection + "]";
+		}
+	}
+
+	/**
+	 * Attributes for job status notifications
+	 */
+	public static class JobStatusNotificationAttributes extends Attributes {
+		private String action;
+		private String message_id;
+		private String job_status_id;
+		private Extras extras;
+
+		/**
+		 * Event that triggered the job status webhook
+		 */
+		public String getAction() {
+			return action;
+		}
+
+		/**
+		 * ID of the message associated with the Job
+		 */
+		public String getMessageId() {
+			return message_id;
+		}
+
+		/**
+		 * ID of the job
+		 */
+		public String getJobStatusId() {
+			return job_status_id;
+		}
+
+		/**
+		 * If the job has a status of cancelled, delayed, or failed then extras will contain more information
+		 */
+		public Extras getExtras() {
+			return extras;
+		}
+
+		@Override
+		public String toString() {
+			return "JobStatusNotificationAttributes [action=" + action + ", threadId=" + getThreadId() + ", messageId="
+					+ message_id + ", jobStatusId=" + job_status_id + ", extras=" + extras + "]";
+		}
+
+		/**
+		 * Extra information in the event that a job was cancelled, delayed or failed
+		 */
+		public static class Extras {
+			private String reason;
+			private Long send_at;
+			private Long original_send_at;
+
+			/**
+			 * Reason for status
+			 */
+			public String getReason() {
+				return reason;
+			}
+
+			/**
+			 * Unix timestamp for when the message was sent
+			 */
+			public Instant getSendAt() {
+				return Instants.toNullableInstant(send_at);
+			}
+
+			/**
+			 * Unix timestamp assigned from sending a message
+			 */
+			public Instant getOriginalSendAt() {
+				return Instants.toNullableInstant(original_send_at);
+			}
+
+			@Override
+			public String toString() {
+				return "Extras [reason=" + reason + ", sendAt=" + getSendAt() + ", originalSendAt=" + getOriginalSendAt() + "]";
+			}
 		}
 	}
 	
