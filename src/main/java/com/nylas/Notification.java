@@ -149,6 +149,7 @@ public class Notification {
 
 	/**
 	 * Attributes for a message notification
+	 * @deprecated Attributes will become an interface, this class will become "MessageNotificationAttributes"
 	 */
 	public static class Attributes {
 		private String received_date;

@@ -10,6 +10,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Deprecated
 
+* Deprecate `Notification.Attributes`, will become an interface and the current class will be refactored as an implementing class
+
 ### Fixed
 
 * Fix error when updating occurrence of a recurring event
