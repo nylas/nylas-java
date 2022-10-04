@@ -10,6 +10,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.squareup.moshi.JsonAdapter;
+import com.nylas.JobStatus.Action;
 
 public class Notification {
 
@@ -214,7 +215,18 @@ public class Notification {
 		/**
 		 * Event that triggered the job status webhook
 		 */
-		public String getAction() {
+		public Action getAction() {
+			try {
+				return Action.valueOf(action.toUpperCase());
+			} catch (IllegalArgumentException | NullPointerException e) {
+				return null;
+			}
+		}
+
+		/**
+		 * Event that triggered the job status webhook, as a string
+		 */
+		public String getActionString() {
 			return action;
 		}
 
