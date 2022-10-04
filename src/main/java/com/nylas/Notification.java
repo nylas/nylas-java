@@ -1,16 +1,20 @@
 package com.nylas;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.nylas.JobStatus.Action;
+import com.squareup.moshi.JsonReader;
 
 public class Notification {
 
@@ -99,8 +103,8 @@ public class Notification {
 		private String object;
 		private String account_id;
 		private String id;
-		private Attributes attributes;
 		private MessageTrackingData metadata;
+		private transient Attributes attributes;
 		
 		/**
 		 * The type of the object that triggered this notification
@@ -290,6 +294,47 @@ public class Notification {
 			public String toString() {
 				return "Extras [reason=" + reason + ", sendAt=" + getSendAt() + ", originalSendAt=" + getOriginalSendAt() + "]";
 			}
+		}
+	}
+
+	/**
+	 * This adapter identifies the type of object this notification is for,
+	 * and deserializes it to the appropriate Attributes class.
+	 */
+	@SuppressWarnings("unchecked")
+	static class WebhookDeltaAdapter {
+		@FromJson
+		Delta fromJson(JsonReader reader, JsonAdapter<Delta> delegate) throws IOException {
+			Map<String, Object> json = JsonHelper.jsonToMap(reader);
+			Delta delta = delegate.fromJson(JsonHelper.mapToJson(json));
+			if(delta != null && delta.object_data != null) {
+				Map<String, Object> objectDataJson = (Map<String, Object>) json.get("object_data");
+				if(objectDataJson.get("attributes") != null) {
+					Map<String, Object> attributesJson = (Map<String, Object>) objectDataJson.get("attributes");
+					if(attributesJson != null) {
+						if(delta.object != null) {
+							Class<? extends Attributes> attributeClass;
+							switch(delta.object) {
+								case "event":
+									attributeClass = EventNotificationAttributes.class;
+									break;
+								case "job_status":
+									attributeClass = JobStatusNotificationAttributes.class;
+									break;
+								case "message":
+								default:
+									attributeClass = Attributes.class;
+							}
+							delta.object_data.attributes = JsonHelper
+								.moshi()
+								.adapter(attributeClass)
+								.fromJson(JsonHelper.mapToJson(attributesJson));
+						}
+					}
+				}
+			}
+
+			return delta;
 		}
 	}
 	

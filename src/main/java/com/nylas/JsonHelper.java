@@ -32,6 +32,7 @@ public class JsonHelper {
 				.add(new Grant.GrantCustomAdapter())
 				.add(new Grant.GrantListCustomAdapter())
 				.add(new LoginInfo.LoginInfoCustomAdapter())
+				.add(new Notification.WebhookDeltaAdapter())
 				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
 				.build();
 	}
