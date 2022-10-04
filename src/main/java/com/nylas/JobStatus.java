@@ -9,6 +9,34 @@ public class JobStatus extends AccountOwnedModel {
 	private String object;
 	private String status;
 	private Map<String, Object> metadata;
+
+	/** Supported providers for integrations */
+	public enum Action {
+		CREATE_CALENDAR,
+		UPDATE_CALENDAR,
+		DELETE_CALENDAR,
+		CREATE_CONTACT,
+		UPDATE_CONTACT,
+		DELETE_CONTACT,
+		CREATE_FOLDER,
+		UPDATE_FOLDER,
+		DELETE_FOLDER,
+		CREATE_LABEL,
+		UPDATE_LABEL,
+		CREATE_EVENT,
+		UPDATE_EVENT,
+		DELETE_EVENT,
+		UPDATE_MESSAGE,
+		SAVE_DRAFT,
+		NEW_OUTBOX,
+
+		;
+
+		@Override
+		public String toString() {
+			return super.toString().toLowerCase();
+		}
+	}
 	
 	public String getAction() {
 		return action;
