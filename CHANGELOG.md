@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Added hide participants field for the `Event` class
+
 ### Changed
 
 ### Deprecated
