@@ -20,6 +20,42 @@ public class ProviderSettings {
 
 	private final String providerName;
 	private final Map<String, Object> settings = new HashMap<>();
+
+	/**
+	 * Returns the provider settings for a provider. If the provider is not found, it will return a
+	 * {@link KnownImapProviderSettings} with the provider set to the string passed in.
+	 * @param providerName The provider for the native authentication
+	 * @return The settings for the provider
+	 */
+	public static ProviderSettings getProviderSettingsByProvider(String providerName) {
+		Provider provider = Provider.getProviderByName(providerName);
+		if(provider == null) {
+			return knownImap(providerName);
+		}
+
+		switch (provider) {
+			case GOOGLE:
+				return ProviderSettings.google();
+			case IMAP:
+				return ProviderSettings.imap();
+			case OFFICE_365:
+				return ProviderSettings.office365();
+			case EXCHANGE:
+				return ProviderSettings.exchange();
+			case YAHOO:
+				return ProviderSettings.yahoo();
+			case AOL:
+				return ProviderSettings.aol();
+			case HOTMAIL:
+				return ProviderSettings.hotmail();
+			case OUTLOOK:
+				return ProviderSettings.outlook();
+			case ICLOUD:
+				return ProviderSettings.icloud();
+			default:
+				return knownImap(provider.getName());
+		}
+	}
 	
 	public static GoogleProviderSettings google() {
 		return new GoogleProviderSettings();

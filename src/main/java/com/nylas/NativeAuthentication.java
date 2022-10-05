@@ -41,6 +41,17 @@ public class NativeAuthentication {
 			return name;
 		}
 
+		public static Provider getProviderByName(String name) {
+			for(Provider provider : Provider.values()) {
+				if(provider.name.equals(name)) {
+					return provider;
+				}
+			}
+
+			return null;
+		}
+	}
+
 	NativeAuthentication(NylasApplication application) {
 		this.application = application;
 	}
