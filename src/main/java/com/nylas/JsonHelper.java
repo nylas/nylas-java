@@ -23,9 +23,11 @@ public class JsonHelper {
 	
 	static {
 		moshi = new Moshi.Builder()
+				// Polymorphic adapters
 				.add(Event.WHEN_JSON_FACTORY)
 				.add(Event.EVENT_NOTIFICATION_JSON_FACTORY)
         		.add(Delta.ACCOUNT_OWNED_MODEL_JSON_FACTORY)
+				// Custom adapters
 				.add(new NeuralCategorizer.CategorizeCustomAdapter())
 				.add(new Integration.IntegrationCustomAdapter())
 				.add(new Integration.IntegrationListCustomAdapter())
@@ -33,7 +35,10 @@ public class JsonHelper {
 				.add(new Grant.GrantListCustomAdapter())
 				.add(new LoginInfo.LoginInfoCustomAdapter())
 				.add(new Notification.WebhookDeltaAdapter())
+				// Date adapters
 				.add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
+				// Enum adapters
+				.add(JobStatus.Action.class, JobStatus.JOB_STATUS_ACTIONS_ADAPTER)
 				.build();
 	}
 	

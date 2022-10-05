@@ -215,7 +215,7 @@ public class Notification {
 	 * Attributes for job status notifications
 	 */
 	public static class JobStatusNotificationAttributes extends Attributes {
-		private String action;
+		private Action action;
 		private String message_id;
 		private String job_status_id;
 		private Extras extras;
@@ -224,17 +224,6 @@ public class Notification {
 		 * Event that triggered the job status webhook
 		 */
 		public Action getAction() {
-			try {
-				return Action.valueOf(action.toUpperCase());
-			} catch (IllegalArgumentException | NullPointerException e) {
-				return null;
-			}
-		}
-
-		/**
-		 * Event that triggered the job status webhook, as a string
-		 */
-		public String getActionString() {
 			return action;
 		}
 
