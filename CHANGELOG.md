@@ -6,6 +6,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Improved webhook notification support with the addition of more notification attributes and event metadata fields
+
 ### Changed
 
 ### Deprecated
