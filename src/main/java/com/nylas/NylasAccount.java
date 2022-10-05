@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.HttpUrl;
 
@@ -91,10 +92,10 @@ public class NylasAccount {
 		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
 	}
 
-	// TODO: Revoking an access token seems like an important op. We should return the result of the revoke operation.
-	public void revokeAccessToken() throws IOException, RequestFailedException {
+	public boolean revokeAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder revokeUrl = client.newUrlBuilder().addPathSegments("oauth/revoke");
-		client.executePost(accessToken, revokeUrl, null, null);
+		Map<String, Boolean> response = client.executePost(accessToken, revokeUrl, null, Map.class);
+		return response.get("success") != null && response.get("success");
 	}
 
 }
