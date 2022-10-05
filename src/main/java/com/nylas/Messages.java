@@ -26,8 +26,26 @@ public class Messages extends RestfulDAO<Message> {
 		return super.list(query);
 	}
 
+	/**
+	 * Get a single message by ID
+	 * @param id The message ID
+	 * @return The requested message
+	 */
 	@Override
 	public Message get(String id) throws IOException, RequestFailedException {
+		return get(id, false);
+	}
+
+	/**
+	 * Get a single message by ID
+	 * @param id The message ID
+	 * @param expanded If true, the message will return with additional RFC2822 headers
+	 * @return The requested message
+	 */
+	public Message get(String id, boolean expanded) throws IOException, RequestFailedException {
+		if(expanded) {
+			setView(getCollectionUrl(), "expanded");
+		}
 		return super.get(id);
 	}
 

@@ -41,6 +41,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private List<Notification> notifications = new ArrayList<>();
 	private List<Participant> participants = new ArrayList<>();
 	private Map<String, String> metadata = new HashMap<>();
+	private final Map<String, Object> modifiedFields = new HashMap<>();
 	
 	/** for deserialization only */ public Event() {} 
 	
@@ -192,38 +193,47 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public void setEventCollectionId(String eventCollectionId) {
 		this.event_collection_id = eventCollectionId;
+		this.modifiedFields.put("event_collection_id", this.event_collection_id);
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
+		this.modifiedFields.put("title", this.title);
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+		this.modifiedFields.put("description", this.description);
 	}
 
 	public void setWhen(When when) {
 		this.when = when;
+		this.modifiedFields.put("when", this.when);
 	}
 
 	public void setLocation(String location) {
 		this.location = location;
+		this.modifiedFields.put("location", this.location);
 	}
 
 	public void setCustomerEventId(String customerEventId) {
 		this.customer_event_id = customerEventId;
+		this.modifiedFields.put("customer_event_id", this.customer_event_id);
 	}
 
 	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
+		this.modifiedFields.put("capacity", this.capacity);
 	}
 
 	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
+		this.modifiedFields.put("participants", this.participants);
 	}
 
 	public void setBusy(Boolean busy) {
 		this.busy = busy;
+		this.modifiedFields.put("busy", this.busy);
 	}
 
 	public void setHideParticipant(Boolean hideParticipant) {
@@ -232,26 +242,32 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public void setMetadata(Map<String, String> metadata) {
 		this.metadata = metadata;
+		this.modifiedFields.put("metadata", this.metadata);
 	}
 
 	public void setConferencing(Conferencing conferencing) {
 		this.conferencing = conferencing;
+		this.modifiedFields.put("conferencing", this.conferencing);
 	}
 
 	public void setRoundRobinOrder(List<String> roundRobinOrder) {
 		this.round_robin_order = roundRobinOrder;
+		this.modifiedFields.put("round_robin_order", this.round_robin_order);
 	}
 
 	public void setNotifications(List<Notification> notifications) {
 		this.notifications = notifications;
+		this.modifiedFields.put("notifications", this.notifications);
 	}
 
 	public void setRecurrence(Recurrence recurrence) {
 		this.recurrence = recurrence;
+		this.modifiedFields.put("recurrence", this.recurrence);
 	}
 
 	public void setReminders(Reminders reminders) {
 		this.reminders = reminders;
+		this.modifiedFields.put("reminders", this.reminders);
 	}
 
 	/**
@@ -261,6 +277,14 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 */
 	public void addMetadata(String key, String value) {
 		this.metadata.put(key, value);
+		this.modifiedFields.put("metadata", this.metadata);
+	}
+
+	/**
+	 * Remove all metadata from the event
+	 */
+	public void clearMetadata() {
+		this.metadata.clear();
 	}
 
 	/**
@@ -272,6 +296,14 @@ public class Event extends AccountOwnedModel implements JsonObject {
 			this.notifications = new ArrayList<>();
 		}
 		this.notifications.addAll(Arrays.asList(notifications));
+		this.modifiedFields.put("notifications", this.notifications);
+	}
+
+	/**
+	 * Remove all notifications from the event
+	 */
+	public void clearNotifications() {
+		this.notifications.clear();
 	}
 
 	/**
@@ -280,6 +312,14 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 */
 	public void addParticipants(Participant... participants) {
 		this.participants.addAll(Arrays.asList(participants));
+		this.modifiedFields.put("participants", serializeParticipants());
+	}
+
+	/**
+	 * Remove all participants from the event
+	 */
+	public void clearParticipants() {
+		this.participants.clear();
 	}
 
 	/**
@@ -300,34 +340,40 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	@Override
 	protected Map<String, Object> getWritableFields(boolean creation) {
+		if (!creation) {
+			return modifiedFields;
+		}
+
 		Map<String, Object> params = new HashMap<>();
-		if (creation) {
-			Maps.putIfNotNull(params, "calendar_id", getCalendarId());
-			// Reminders, when creating an event, need to be included in the main object
-			if(reminders != null && reminders.reminder_minutes != null && reminders.reminder_method != null) {
-				params.put("reminder_minutes", String.format("[%d]", reminders.reminder_minutes));
-				params.put("reminder_method", reminders.reminder_method);
-			}
+
+		// Reminders, when creating an event, need to be included in the main object
+		if(reminders != null && reminders.reminder_minutes != null && reminders.reminder_method != null) {
+			params.put("reminder_minutes", String.format("[%d]", reminders.reminder_minutes));
+			params.put("reminder_method", reminders.reminder_method);
 		}
 
-		List<Map<String, Object>> participantWritableFields = null;
-		if(participants != null && !participants.isEmpty()) {
-			participantWritableFields = participants.stream()
-					.map(participant -> participant.getWritableFields(creation))
-					.collect(Collectors.toList());
-		}
-
+		Maps.putIfNotNull(params, "calendar_id", getCalendarId());
 		Maps.putIfNotNull(params, "when", getWhen());
 		Maps.putIfNotNull(params, "title", getTitle());
 		Maps.putIfNotNull(params, "description", getDescription());
 		Maps.putIfNotNull(params, "location", getLocation());
-		Maps.putIfNotNull(params, "participants", participantWritableFields);
+		Maps.putIfNotNull(params, "participants", serializeParticipants());
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "conferencing", getConferencing());
 		Maps.putIfNotNull(params, "notifications", getNotifications());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		return params;
+	}
+
+	private List<Map<String, Object>> serializeParticipants() {
+		if(this.participants == null || this.participants.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		return this.participants.stream()
+				.map(participant -> participant.getWritableFields(false))
+				.collect(Collectors.toList());
 	}
 
 	public static class Recurrence {

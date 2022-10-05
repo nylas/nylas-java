@@ -52,6 +52,13 @@ dependencies {
     
     // use wiremock for mocking the nylas server during tests
     testImplementation('com.github.tomakehurst:wiremock-jre8:2.26.3')
+
+    // mockito for dependency mocking
+    dependencies {
+        testImplementation "org.mockito:mockito-core:3.+"
+        testImplementation 'org.mockito:mockito-inline:2.13.0'
+    }
+
     
     ///////////////////////////////////
     // Examples dependencies
@@ -76,6 +83,17 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed", "standardError"
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) { // will match the outermost suite
+            def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
+            def startItem = '|  ', endItem = '  |'
+            def repeatLength = startItem.length() + output.length() + endItem.length()
+            println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+        }
+    }
 }
 
 task runExample(type: JavaExec) {

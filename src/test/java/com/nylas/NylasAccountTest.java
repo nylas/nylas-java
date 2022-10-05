@@ -1,0 +1,103 @@
+package com.nylas;
+
+import okhttp3.HttpUrl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+
+import static com.nylas.AccessTokenTest.TEST_ACCESS_TOKEN;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class NylasAccountTest {
+    private NylasClient nylasClient;
+
+    @BeforeEach
+    private void init() {
+        nylasClient = mock(NylasClient.class);
+    }
+
+    @Test
+    public void testNylasAccountBootstraping() {
+        final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
+
+        assertEquals(nylasAccount.getAccessToken(), TEST_ACCESS_TOKEN);
+        assertEquals(nylasAccount.getClient(), nylasClient);
+        assertNotNull(nylasAccount.threads());
+        assertNotNull(nylasAccount.messages());
+        assertNotNull(nylasAccount.folders());
+        assertNotNull(nylasAccount.labels());
+        assertNotNull(nylasAccount.drafts());
+        assertNotNull(nylasAccount.outbox());
+        assertNotNull(nylasAccount.calendars());
+        assertNotNull(nylasAccount.files());
+        assertNotNull(nylasAccount.contacts());
+        assertNotNull(nylasAccount.contactGroups());
+        assertNotNull(nylasAccount.deltas());
+        assertNotNull(nylasAccount.events());
+        assertNotNull(nylasAccount.jobStatuses());
+        assertNotNull(nylasAccount.roomResources());
+        assertNotNull(nylasAccount.neural());
+        assertNotNull(nylasAccount.schedulers());
+    }
+
+    @Test
+    public void testFetchAccountByAccessToken() throws RequestFailedException, IOException {
+        final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
+        final AccountDetail expectedAccountDetail = new AccountDetail();
+
+        when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
+        when(nylasClient.executeGet(anyString(), any(), any())).thenReturn(expectedAccountDetail);
+
+        AccountDetail actualAccountDetail = nylasAccount.fetchAccountByAccessToken();
+
+        verify(nylasClient).executeGet(anyString(), any(), any());
+        assertNotNull(actualAccountDetail);
+    }
+
+    @Test
+    public void testRevokeAccessToken() throws RequestFailedException, IOException {
+        final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
+        final Map<String, Boolean> revokeResponse = Collections.singletonMap("success", true);
+
+        when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
+        when(nylasClient.executePost(anyString(), any(), any(), any())).thenReturn(revokeResponse);
+
+        boolean revokeAccessToken = nylasAccount.revokeAccessToken();
+
+        verify(nylasClient).executePost(anyString(), any(), any(), any());
+        assertTrue(revokeAccessToken);
+    }
+
+    @Test
+    public void testRevokeAccessTokenSuccessFalse() throws RequestFailedException, IOException {
+        final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
+        final Map<String, Boolean> revokeResponse = Collections.singletonMap("success", false);
+
+        when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
+        when(nylasClient.executePost(anyString(), any(), any(), any())).thenReturn(revokeResponse);
+
+        boolean revokeAccessToken = nylasAccount.revokeAccessToken();
+
+        verify(nylasClient).executePost(anyString(), any(), any(), any());
+        assertFalse(revokeAccessToken);
+    }
+
+    @Test
+    public void testRevokeAccessTokenInvalidObjectReturnsFalse() throws RequestFailedException, IOException {
+        final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
+        final Map<String, Object> revokeResponse = Collections.singletonMap("invalidKey", "invalidValue");
+
+        when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
+        when(nylasClient.executePost(anyString(), any(), any(), any())).thenReturn(revokeResponse);
+
+        boolean revokeAccessToken = nylasAccount.revokeAccessToken();
+
+        verify(nylasClient).executePost(anyString(), any(), any(), any());
+        assertFalse(revokeAccessToken);
+    }
+}

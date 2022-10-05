@@ -1,6 +1,7 @@
 package com.nylas;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.HttpUrl;
 
@@ -90,10 +91,11 @@ public class NylasAccount {
 		HttpUrl.Builder accountUrl = client.newUrlBuilder().addPathSegment("account");
 		return client.executeGet(accessToken, accountUrl, AccountDetail.class);
 	}
-	
-	public void revokeAccessToken() throws IOException, RequestFailedException {
+
+	public boolean revokeAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder revokeUrl = client.newUrlBuilder().addPathSegments("oauth/revoke");
-		client.executePost(accessToken, revokeUrl, null, null);
+		Map<String, Boolean> response = client.executePost(accessToken, revokeUrl, null, Map.class);
+		return response.get("success") != null && response.get("success");
 	}
 
 }
