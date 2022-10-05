@@ -11,6 +11,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
+* NylasAccount.revokeAccessToken() returns a boolean value now
+
 ### Deprecated
 
 ### Fixed
