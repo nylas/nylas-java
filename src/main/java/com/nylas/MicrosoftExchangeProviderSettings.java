@@ -11,7 +11,7 @@ package com.nylas;
 public class MicrosoftExchangeProviderSettings extends ProviderSettings {
 
 	protected MicrosoftExchangeProviderSettings() {
-		super("exchange");
+		super(NativeAuthentication.Provider.EXCHANGE.getName());
 	}
 
 	public MicrosoftExchangeProviderSettings username(String username) {

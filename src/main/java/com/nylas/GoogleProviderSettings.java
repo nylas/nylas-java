@@ -19,7 +19,7 @@ import java.util.Set;
 public class GoogleProviderSettings extends ProviderSettings {
 
 	protected GoogleProviderSettings() {
-		super("gmail");
+		super(NativeAuthentication.Provider.GOOGLE.getName());
 	}
 	
 	public GoogleProviderSettings googleClientId(String googleClientId) {

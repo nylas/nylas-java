@@ -1,6 +1,7 @@
 package com.nylas;
 
 import static com.nylas.Validations.assertState;
+import com.nylas.NativeAuthentication.Provider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class ProviderSettings {
 	 * NOTE - Many Yahoo accounts currently require the user to generate an App Password for this to work.
 	 */
 	public static KnownImapProviderSettings yahoo() {
-		return new KnownImapProviderSettings("yahoo");
+		return new KnownImapProviderSettings(Provider.YAHOO.getName());
 	}
 	
 	/**
@@ -55,19 +56,19 @@ public class ProviderSettings {
 	 * NOTE - Many AOL accounts currently require the user to generate an App Password for this to work.
 	 */
 	public static KnownImapProviderSettings aol() {
-		return new KnownImapProviderSettings("aol");
+		return new KnownImapProviderSettings(Provider.AOL.getName());
 	}
 	
 	public static KnownImapProviderSettings hotmail() {
-		return new KnownImapProviderSettings("hotmail");
+		return new KnownImapProviderSettings(Provider.HOTMAIL.getName());
 	}
 	
 	public static KnownImapProviderSettings outlook() {
-		return new KnownImapProviderSettings("outlook");
+		return new KnownImapProviderSettings(Provider.OUTLOOK.getName());
 	}
 	
 	public static KnownImapProviderSettings icloud() {
-		return new KnownImapProviderSettings("icloud");
+		return new KnownImapProviderSettings(Provider.ICLOUD.getName());
 	}
 	
 	public ProviderSettings(String providerName) {

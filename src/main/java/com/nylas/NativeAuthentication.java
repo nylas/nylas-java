@@ -17,6 +17,30 @@ public class NativeAuthentication {
 
 	private final NylasApplication application;
 
+	/** Supported providers for Native Authentication */
+	public enum Provider {
+		GOOGLE("google"),
+		IMAP("imap"),
+		OFFICE_365("office365"),
+		EXCHANGE("exchange"),
+		YAHOO("yahoo"),
+		AOL("aol"),
+		HOTMAIL("hotmail"),
+		OUTLOOK("outlook"),
+		ICLOUD("icloud"),
+
+		;
+
+		private final String name;
+
+		Provider(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
 	NativeAuthentication(NylasApplication application) {
 		this.application = application;
 	}
