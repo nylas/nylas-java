@@ -1,5 +1,8 @@
 package com.nylas;
 
+import com.squareup.moshi.Json;
+import com.squareup.moshi.adapters.EnumJsonAdapter;
+
 import java.util.Map;
 
 public class JobStatus extends AccountOwnedModel {
@@ -9,6 +12,51 @@ public class JobStatus extends AccountOwnedModel {
 	private String object;
 	private String status;
 	private Map<String, Object> metadata;
+
+	/** Known actions for job status */
+	public enum Action {
+		@Json(name="create_calendar")
+		CREATE_CALENDAR,
+		@Json(name="update_calendar")
+		UPDATE_CALENDAR,
+		@Json(name="delete_calendar")
+		DELETE_CALENDAR,
+		@Json(name="create_contact")
+		CREATE_CONTACT,
+		@Json(name="update_contact")
+		UPDATE_CONTACT,
+		@Json(name="delete_contact")
+		DELETE_CONTACT,
+		@Json(name="create_folder")
+		CREATE_FOLDER,
+		@Json(name="update_folder")
+		UPDATE_FOLDER,
+		@Json(name="delete_folder")
+		DELETE_FOLDER,
+		@Json(name="create_label")
+		CREATE_LABEL,
+		@Json(name="update_label")
+		UPDATE_LABEL,
+		@Json(name="create_event")
+		CREATE_EVENT,
+		@Json(name="update_event")
+		UPDATE_EVENT,
+		@Json(name="delete_event")
+		DELETE_EVENT,
+		@Json(name="update_message")
+		UPDATE_MESSAGE,
+		@Json(name="save_draft")
+		SAVE_DRAFT,
+		@Json(name="new_outbox")
+		NEW_OUTBOX,
+
+		UNKNOWN;
+
+		@Override
+		public String toString() {
+			return super.toString().toLowerCase();
+		}
+	}
 	
 	public String getAction() {
 		return action;
@@ -76,5 +124,11 @@ public class JobStatus extends AccountOwnedModel {
 	static class JobStatusJson {
 		
 	}
-	
+
+	/**
+	 * Adapter for deserializing job actions as enums.
+	 * Actions from the API that are not matched returns {@link Action#UNKNOWN}
+	 */
+	public static final EnumJsonAdapter<Action> JOB_STATUS_ACTIONS_ADAPTER =
+			EnumJsonAdapter.create(Action.class).withUnknownFallback(Action.UNKNOWN);
 }

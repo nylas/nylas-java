@@ -1,15 +1,21 @@
 package com.nylas;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.squareup.moshi.FromJson;
+import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
+import com.nylas.JobStatus.Action;
+import com.squareup.moshi.JsonReader;
 
 public class Notification {
 
@@ -98,8 +104,8 @@ public class Notification {
 		private String object;
 		private String account_id;
 		private String id;
-		private Attributes attributes;
 		private MessageTrackingData metadata;
+		private transient Attributes attributes;
 		
 		/**
 		 * The type of the object that triggered this notification
@@ -146,7 +152,14 @@ public class Notification {
 		}
 		
 	}
-	
+
+	/**
+	 * Attributes for a message notification
+	 * <br>
+	 * Note: In the next major release Attributes will become an interface,
+	 * and this class will become "MessageNotificationAttributes" extending
+	 * from Attributes
+	 */
 	public static class Attributes {
 		private String received_date;
 		private String thread_id;
@@ -170,10 +183,160 @@ public class Notification {
 			return "Attributes [receivedDate=" + received_date + ", threadId=" + thread_id + "]";
 		}
 	}
+
+	/**
+	 * Attributes for event notifications
+	 */
+	public static class EventNotificationAttributes extends Attributes {
+		private String calendar_id;
+		private Boolean created_before_account_connection;
+
+		/**
+		 * Calendar ID of the event
+		 */
+		public String getCalendarId() {
+			return calendar_id;
+		}
+
+		/**
+		 * Indicates if the event was created before the account was connected to Nylas
+		 */
+		public Boolean getCreatedBeforeAccountConnection() {
+			return created_before_account_connection;
+		}
+
+		@Override
+		public String toString() {
+			return "EventNotificationAttributes [calendarId=" + calendar_id + ", createdBeforeAccountConnection=" + created_before_account_connection + "]";
+		}
+	}
+
+	/**
+	 * Attributes for job status notifications
+	 */
+	public static class JobStatusNotificationAttributes extends Attributes {
+		private Action action;
+		private String message_id;
+		private String job_status_id;
+		private Extras extras;
+
+		/**
+		 * Event that triggered the job status webhook
+		 */
+		public Action getAction() {
+			return action;
+		}
+
+		/**
+		 * ID of the message associated with the Job
+		 */
+		public String getMessageId() {
+			return message_id;
+		}
+
+		/**
+		 * ID of the job
+		 */
+		public String getJobStatusId() {
+			return job_status_id;
+		}
+
+		/**
+		 * If the job has a status of cancelled, delayed, or failed then extras will contain more information
+		 */
+		public Extras getExtras() {
+			return extras;
+		}
+
+		@Override
+		public String toString() {
+			return "JobStatusNotificationAttributes [action=" + action + ", threadId=" + getThreadId() + ", messageId="
+					+ message_id + ", jobStatusId=" + job_status_id + ", extras=" + extras + "]";
+		}
+
+		/**
+		 * Extra information in the event that a job was cancelled, delayed or failed
+		 */
+		public static class Extras {
+			private String reason;
+			private Long send_at;
+			private Long original_send_at;
+
+			/**
+			 * Reason for status
+			 */
+			public String getReason() {
+				return reason;
+			}
+
+			/**
+			 * Unix timestamp for when the message was sent
+			 */
+			public Instant getSendAt() {
+				return Instants.toNullableInstant(send_at);
+			}
+
+			/**
+			 * Unix timestamp assigned from sending a message
+			 */
+			public Instant getOriginalSendAt() {
+				return Instants.toNullableInstant(original_send_at);
+			}
+
+			@Override
+			public String toString() {
+				return "Extras [reason=" + reason + ", sendAt=" + getSendAt() + ", originalSendAt=" + getOriginalSendAt() + "]";
+			}
+		}
+	}
+
+	/**
+	 * This adapter identifies the type of object this notification is for,
+	 * and deserializes it to the appropriate Attributes class.
+	 */
+	@SuppressWarnings("unchecked")
+	static class WebhookDeltaAdapter {
+		@FromJson
+		Delta fromJson(JsonReader reader, JsonAdapter<Delta> delegate) throws IOException {
+			Map<String, Object> json = JsonHelper.jsonToMap(reader);
+			Delta delta = delegate.fromJson(JsonHelper.mapToJson(json));
+			if(delta != null && delta.object_data != null) {
+				Map<String, Object> objectDataJson = (Map<String, Object>) json.get("object_data");
+				if(objectDataJson.get("attributes") != null) {
+					Map<String, Object> attributesJson = (Map<String, Object>) objectDataJson.get("attributes");
+					if(attributesJson != null) {
+						if(delta.object != null) {
+							Class<? extends Attributes> attributeClass;
+							switch(delta.object) {
+								case "event":
+									attributeClass = EventNotificationAttributes.class;
+									break;
+								case "job_status":
+									attributeClass = JobStatusNotificationAttributes.class;
+									break;
+								case "message":
+								default:
+									attributeClass = Attributes.class;
+							}
+							delta.object_data.attributes = JsonHelper
+								.moshi()
+								.adapter(attributeClass)
+								.fromJson(JsonHelper.mapToJson(attributesJson));
+						}
+					}
+				}
+			}
+
+			return delta;
+		}
+	}
 	
-	/*
-	 * Perhaps this class could be better served by splitting into subclasses for specific
-	 * notification types.  Not sure it's worth the time investment yet to get the Moshi JSON parsing done.
+	/**
+	 * Metadata for webhook notifications
+	 * <br>
+	 * Note: In the next major release this class will be split into
+	 * smaller classes more specific to the different types of metadata
+	 * depending on the type of webhook notification
 	 */
 	public static class MessageTrackingData {
 		private String message_id;
@@ -192,6 +355,11 @@ public class Notification {
 		// message.link_clicked specific fields
 		private List<LinkClickCount> link_data;
 		private List<LinkClick> recents;  // also in message.opened
+
+		// event specific fields
+		@Json(name = "event-type")
+		private String eventType;
+		private String message;
 		
 		/**
 		 * Nylas message ID for the tracked message
@@ -283,12 +451,30 @@ public class Notification {
 			return recents;
 		}
 
+		/**
+		 * The custom event type set for the Event
+		 *
+		 * Available for event notifications only
+		 */
+		public String getEventType() {
+			return eventType;
+		}
+
+		/**
+		 * The custom message set for the Event
+		 *
+		 * Available for event notifications only
+		 */
+		public String getMessage() {
+			return message;
+		}
+
 		@Override
 		public String toString() {
 			return "MessageTrackingData [messageId=" + message_id + ", senderAppId=" + sender_app_id + ", payload="
 					+ payload + ", timestamp=" + getTimestamp() + ", threadId=" + thread_id + ", fromSelf=" + from_self
 					+ ", replyToMessageId=" + reply_to_message_id + ", openedCount=" + count + ", linkClickCounts="
-					+ link_data + ", recentClicks=" + recents + "]";
+					+ link_data + ", recentClicks=" + recents + ", eventType=" + eventType + ", message=" + message + "]";
 		}
 	}
 	
