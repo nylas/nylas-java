@@ -155,7 +155,10 @@ public class Notification {
 
 	/**
 	 * Attributes for a message notification
-	 * @deprecated Attributes will become an interface, this class will become "MessageNotificationAttributes"
+	 * <br>
+	 * Note: In the next major release Attributes will become an interface,
+	 * and this class will become "MessageNotificationAttributes" extending
+	 * from Attributes
 	 */
 	public static class Attributes {
 		private String received_date;
@@ -339,9 +342,12 @@ public class Notification {
 		}
 	}
 	
-	/*
-	 * Perhaps this class could be better served by splitting into subclasses for specific
-	 * notification types.  Not sure it's worth the time investment yet to get the Moshi JSON parsing done.
+	/**
+	 * Metadata for webhook notifications
+	 * <br>
+	 * Note: In the next major release this class will be split into
+	 * smaller classes more specific to the different types of metadata
+	 * depending on the type of webhook notification
 	 */
 	public static class MessageTrackingData {
 		private String message_id;
