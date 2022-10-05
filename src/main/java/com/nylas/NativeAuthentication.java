@@ -19,7 +19,7 @@ public class NativeAuthentication {
 
 	/** Supported providers for Native Authentication */
 	public enum Provider {
-		GOOGLE("google"),
+		GMAIL("gmail"),
 		IMAP("imap"),
 		OFFICE_365("office365"),
 		EXCHANGE("exchange"),

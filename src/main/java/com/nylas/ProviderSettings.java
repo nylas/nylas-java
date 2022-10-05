@@ -34,7 +34,7 @@ public class ProviderSettings {
 		}
 
 		switch (provider) {
-			case GOOGLE:
+			case GMAIL:
 				return ProviderSettings.google();
 			case IMAP:
 				return ProviderSettings.imap();
