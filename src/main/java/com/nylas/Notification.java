@@ -12,6 +12,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.squareup.moshi.FromJson;
+import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.nylas.JobStatus.Action;
 import com.squareup.moshi.JsonReader;
@@ -359,6 +360,11 @@ public class Notification {
 		// message.link_clicked specific fields
 		private List<LinkClickCount> link_data;
 		private List<LinkClick> recents;  // also in message.opened
+
+		// event specific fields
+		@Json(name = "event-type")
+		private String eventType;
+		private String message;
 		
 		/**
 		 * Nylas message ID for the tracked message
@@ -450,12 +456,30 @@ public class Notification {
 			return recents;
 		}
 
+		/**
+		 * The custom event type set for the Event
+		 *
+		 * Available for event notifications only
+		 */
+		public String getEventType() {
+			return eventType;
+		}
+
+		/**
+		 * The custom message set for the Event
+		 *
+		 * Available for event notifications only
+		 */
+		public String getMessage() {
+			return message;
+		}
+
 		@Override
 		public String toString() {
 			return "MessageTrackingData [messageId=" + message_id + ", senderAppId=" + sender_app_id + ", payload="
 					+ payload + ", timestamp=" + getTimestamp() + ", threadId=" + thread_id + ", fromSelf=" + from_self
 					+ ", replyToMessageId=" + reply_to_message_id + ", openedCount=" + count + ", linkClickCounts="
-					+ link_data + ", recentClicks=" + recents + "]";
+					+ link_data + ", recentClicks=" + recents + ", eventType=" + eventType + ", message=" + message + "]";
 		}
 	}
 	
