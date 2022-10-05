@@ -150,6 +150,11 @@ public class NativeAuthentication {
 		}
 	}
 	
+	/**
+	 * Exchange the code from sending the native authentication for an access token
+	 * @param authorizationCode The code received from the native authentication
+	 * @return The access token details
+	 */
 	public AccessToken fetchToken(String authorizationCode) throws IOException, RequestFailedException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("client_id", application.getClientId());
