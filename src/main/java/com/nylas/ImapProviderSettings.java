@@ -10,7 +10,7 @@ package com.nylas;
 public class ImapProviderSettings extends ProviderSettings {
 
 	protected ImapProviderSettings() {
-		super("imap");
+		super(NativeAuthentication.Provider.IMAP.getName());
 	}
 
 	public ImapProviderSettings imapHost(String imapHost) {
