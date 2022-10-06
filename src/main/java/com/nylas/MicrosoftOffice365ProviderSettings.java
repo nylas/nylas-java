@@ -11,7 +11,7 @@ package com.nylas;
 public class MicrosoftOffice365ProviderSettings extends ProviderSettings {
 
 	protected MicrosoftOffice365ProviderSettings() {
-		super("office365");
+		super(NativeAuthentication.Provider.OFFICE_365.getName());
 	}
 
 	public MicrosoftOffice365ProviderSettings microsoftClientId(String microsoftClientId) {
