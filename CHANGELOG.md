@@ -6,6 +6,21 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
+
+## [1.18.0] - Released 2022-10-06
+
+### Added
+
 * Added hide participants field for the `Event` class
 * Added support for provider detection
 * Added an enum for all known providers for native authentication
@@ -15,15 +30,9 @@ This section contains changes that have been committed but not yet released.
 
 * NylasAccount.revokeAccessToken() returns a boolean value now
 
-### Deprecated
-
 ### Fixed
 
 * Fix error when updating occurrence of a recurring event
-
-### Removed
-
-### Security
 
 ## [1.17.0] - Released 2022-09-22
 
@@ -314,7 +323,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.17.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.18.0...HEAD
+[1.18.0]: https://github.com/nylas/nylas-java/releases/tag/v1.18.0
 [1.17.0]: https://github.com/nylas/nylas-java/releases/tag/v1.17.0
 [1.16.0]: https://github.com/nylas/nylas-java/releases/tag/v1.16.0
 [1.15.0]: https://github.com/nylas/nylas-java/releases/tag/v1.15.0
