@@ -17,6 +17,41 @@ public class NativeAuthentication {
 
 	private final NylasApplication application;
 
+	/** Supported providers for Native Authentication */
+	public enum Provider {
+		GMAIL("gmail"),
+		IMAP("imap"),
+		OFFICE_365("office365"),
+		EXCHANGE("exchange"),
+		YAHOO("yahoo"),
+		AOL("aol"),
+		HOTMAIL("hotmail"),
+		OUTLOOK("outlook"),
+		ICLOUD("icloud"),
+
+		;
+
+		private final String name;
+
+		Provider(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public static Provider getProviderByName(String name) {
+			for(Provider provider : Provider.values()) {
+				if(provider.name.equals(name)) {
+					return provider;
+				}
+			}
+
+			return null;
+		}
+	}
+
 	NativeAuthentication(NylasApplication application) {
 		this.application = application;
 	}
@@ -115,6 +150,11 @@ public class NativeAuthentication {
 		}
 	}
 	
+	/**
+	 * Exchange the code from sending the native authentication for an access token
+	 * @param authorizationCode The code received from the native authentication
+	 * @return The access token details
+	 */
 	public AccessToken fetchToken(String authorizationCode) throws IOException, RequestFailedException {
 		Map<String, Object> params = new HashMap<>();
 		params.put("client_id", application.getClientId());
@@ -125,4 +165,72 @@ public class NativeAuthentication {
 		return application.getClient().executePost(null, tokenUrl, params, AccessToken.class);
 	}
 	
+	/**
+	 * Detect which provider an email uses
+	 * @param emailAddress The email address to determine the provider of
+	 * @return The details of the provider detection
+	 */
+	public DetectedProvider detectProvider(String emailAddress) throws RequestFailedException, IOException {
+		Map<String, Object> params = new HashMap<>();
+		params.put("client_id", application.getClientId());
+		params.put("client_secret", application.getClientSecret());
+		params.put("email_address", emailAddress);
+
+		HttpUrl.Builder detectUrl = application.getClient().newUrlBuilder().addPathSegments("connect/detect-provider");
+		return application.getClient().executePost(null, detectUrl, params, DetectedProvider.class);
+	}
+
+	/**
+	 * Get settings of a provider detected from an email
+	 * @param emailAddress The email address to determine the provider of
+	 * @return The settings for the detected provider
+	 */
+	public ProviderSettings getDetectedProviderSettings(String emailAddress) throws RequestFailedException, IOException {
+		DetectedProvider detectedProvider = detectProvider(emailAddress);
+		return ProviderSettings.getProviderSettingsByProvider(detectedProvider.getAuthName());
+	}
+
+	public static class DetectedProvider {
+		private String auth_name;
+		private String email_address;
+		private String provider_name;
+		private Boolean detected;
+		private Boolean is_imap;
+
+		/**
+		 * The provider's auth name to be used in Native Authentication
+		 */
+		public String getAuthName() {
+			return auth_name;
+		}
+
+		/**
+		 * The email address being checked
+		 */
+		public String getEmailAddress() {
+			return email_address;
+		}
+
+		/**
+		 * The name of the detected provider
+		 */
+		public String getProviderName() {
+			return provider_name;
+		}
+
+		/**
+		 * If this account's mail server settings and provider were auto-detected
+		 */
+		public Boolean isDetected() {
+			return detected;
+		}
+
+		/**
+		 * If the account should be authenticated with IMAP.
+		 * If {@link #isDetected()} returns false, ignore this value.
+		 */
+		public Boolean isImap() {
+			return is_imap;
+		}
+	}
 }
