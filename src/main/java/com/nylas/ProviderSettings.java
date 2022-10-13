@@ -1,6 +1,7 @@
 package com.nylas;
 
 import static com.nylas.Validations.assertState;
+import com.nylas.NativeAuthentication.Provider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,42 @@ public class ProviderSettings {
 
 	private final String providerName;
 	private final Map<String, Object> settings = new HashMap<>();
+
+	/**
+	 * Returns the provider settings for a provider. If the provider is not found, it will return a
+	 * {@link KnownImapProviderSettings} with the provider set to the string passed in.
+	 * @param providerName The provider for the native authentication
+	 * @return The settings for the provider
+	 */
+	public static ProviderSettings getProviderSettingsByProvider(String providerName) {
+		Provider provider = Provider.getProviderByName(providerName);
+		if(provider == null) {
+			return knownImap(providerName);
+		}
+
+		switch (provider) {
+			case GMAIL:
+				return ProviderSettings.google();
+			case IMAP:
+				return ProviderSettings.imap();
+			case OFFICE_365:
+				return ProviderSettings.office365();
+			case EXCHANGE:
+				return ProviderSettings.exchange();
+			case YAHOO:
+				return ProviderSettings.yahoo();
+			case AOL:
+				return ProviderSettings.aol();
+			case HOTMAIL:
+				return ProviderSettings.hotmail();
+			case OUTLOOK:
+				return ProviderSettings.outlook();
+			case ICLOUD:
+				return ProviderSettings.icloud();
+			default:
+				return knownImap(provider.getName());
+		}
+	}
 	
 	public static GoogleProviderSettings google() {
 		return new GoogleProviderSettings();
@@ -46,7 +83,7 @@ public class ProviderSettings {
 	 * NOTE - Many Yahoo accounts currently require the user to generate an App Password for this to work.
 	 */
 	public static KnownImapProviderSettings yahoo() {
-		return new KnownImapProviderSettings("yahoo");
+		return new KnownImapProviderSettings(Provider.YAHOO.getName());
 	}
 	
 	/**
@@ -55,19 +92,19 @@ public class ProviderSettings {
 	 * NOTE - Many AOL accounts currently require the user to generate an App Password for this to work.
 	 */
 	public static KnownImapProviderSettings aol() {
-		return new KnownImapProviderSettings("aol");
+		return new KnownImapProviderSettings(Provider.AOL.getName());
 	}
 	
 	public static KnownImapProviderSettings hotmail() {
-		return new KnownImapProviderSettings("hotmail");
+		return new KnownImapProviderSettings(Provider.HOTMAIL.getName());
 	}
 	
 	public static KnownImapProviderSettings outlook() {
-		return new KnownImapProviderSettings("outlook");
+		return new KnownImapProviderSettings(Provider.OUTLOOK.getName());
 	}
 	
 	public static KnownImapProviderSettings icloud() {
-		return new KnownImapProviderSettings("icloud");
+		return new KnownImapProviderSettings(Provider.ICLOUD.getName());
 	}
 	
 	public ProviderSettings(String providerName) {

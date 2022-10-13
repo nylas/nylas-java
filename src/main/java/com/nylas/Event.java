@@ -31,6 +31,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	private Integer capacity;
 	private Boolean read_only;
 	private Boolean busy;
+	private Boolean hide_participant;
 	private Long original_start_time;
 	private When when;
 	private Conferencing conferencing;
@@ -122,6 +123,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return busy;
 	}
 
+	public Boolean getHideParticipant() {
+		return hide_participant;
+	}
+
 	public Map<String, String> getMetadata() {
 		return metadata;
 	}
@@ -174,6 +179,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 				", capacity=" + capacity +
 				", read_only=" + read_only +
 				", busy=" + busy +
+				", hide_participant=" + hide_participant +
 				", original_start_time=" + getOriginalStartTime() +
 				", when=" + when +
 				", conferencing=" + conferencing +
@@ -228,6 +234,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	public void setBusy(Boolean busy) {
 		this.busy = busy;
 		this.modifiedFields.put("busy", this.busy);
+	}
+
+	public void setHideParticipant(Boolean hideParticipant) {
+		this.hide_participant = hideParticipant;
 	}
 
 	public void setMetadata(Map<String, String> metadata) {
