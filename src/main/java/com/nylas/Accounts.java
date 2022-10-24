@@ -35,17 +35,20 @@ public class Accounts extends RestfulDAO<Account> {
 	}
 
 	public void downgrade(String accountId) throws IOException, RequestFailedException {
+		// TODO: Downgrade should return the result of the operation?
 		HttpUrl.Builder url = getInstanceUrl(accountId).addPathSegment("downgrade");
 		client.executePost(authUser, url, null, null);
 	}
 	
 	public void upgrade(String accountId) throws IOException, RequestFailedException {
+		// TODO: Upgrade should return the result of the opreation?
 		HttpUrl.Builder url = getInstanceUrl(accountId).addPathSegment("upgrade");
 		client.executePost(authUser, url, null, null);
 	}
 	
 	public void revokeAllTokensForAccount(String accountId, String keepAccessToken)
 			throws IOException, RequestFailedException {
+		// TODO: revoke should return operation result?
 		HttpUrl.Builder url = getInstanceUrl(accountId).addPathSegment("revoke-all");
 		Map<String, Object> params = new HashMap<>();
 		if (keepAccessToken != null) {
