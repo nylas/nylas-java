@@ -9,6 +9,7 @@ public class Calendar extends AccountOwnedModel {
 	private String description;
 	private String location;
 	private String timezone;
+	private String hex_color;
 	private Boolean read_only;
 	private Boolean is_primary;
 	private Map<String, String> metadata = new HashMap<>();
@@ -27,6 +28,10 @@ public class Calendar extends AccountOwnedModel {
 
 	public String getTimezone() {
 		return timezone;
+	}
+
+	public String getHexColor() {
+		return hex_color;
 	}
 
 	public Boolean isReadOnly() {
@@ -85,6 +90,7 @@ public class Calendar extends AccountOwnedModel {
 	@Override
 	public String toString() {
 		return "Calendar [name=" + name + ", description=" + description + ", location=" + location + ", timezone="
-				+ timezone + ", readOnly=" + read_only + ", isPrimary=" + is_primary + ", metadata=" + metadata + "]";
+				+ timezone + ", hexColor=" + hex_color + ", readOnly=" + read_only + ", isPrimary=" + is_primary
+				+ ", metadata=" + metadata + "]";
 	}
 }
