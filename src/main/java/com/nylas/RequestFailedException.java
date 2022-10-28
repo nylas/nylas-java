@@ -84,7 +84,7 @@ public class RequestFailedException extends Exception {
 		return new RequestFailedException(statusCode, errorMessage, errorType);
 	}
 
-	private static String formatError(int statusCode, String type, String message) {
+	protected static String formatError(int statusCode, String type, String message) {
 		return "statusCode=" + statusCode + ", type=" + type + ", message=" + message;
 	}
 	
