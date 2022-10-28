@@ -7,6 +7,7 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 * Add support for calendar colors (for Microsoft calendars)
+* Added support for rate limit errors
 
 ### Changed
 
