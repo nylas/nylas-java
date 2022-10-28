@@ -62,29 +62,14 @@ public class NylasAccountTest {
     @Test
     public void testRevokeAccessToken() throws RequestFailedException, IOException {
         final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
-        final Map<String, Boolean> revokeResponse = Collections.singletonMap("success", true);
 
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
-        when(nylasClient.executePost(anyString(), any(), any(), any())).thenReturn(revokeResponse);
+        when(nylasClient.executePost(anyString(), any(), any(), any())).thenReturn(null);
 
         boolean revokeAccessToken = nylasAccount.revokeAccessToken();
 
         verify(nylasClient).executePost(anyString(), any(), any(), any());
         assertTrue(revokeAccessToken);
-    }
-
-    @Test
-    public void testRevokeAccessTokenSuccessFalse() throws RequestFailedException, IOException {
-        final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
-        final Map<String, Boolean> revokeResponse = Collections.singletonMap("success", false);
-
-        when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
-        when(nylasClient.executePost(anyString(), any(), any(), any())).thenReturn(revokeResponse);
-
-        boolean revokeAccessToken = nylasAccount.revokeAccessToken();
-
-        verify(nylasClient).executePost(anyString(), any(), any(), any());
-        assertFalse(revokeAccessToken);
     }
 
     @Test
