@@ -71,18 +71,4 @@ public class NylasAccountTest {
         verify(nylasClient).executePost(anyString(), any(), any(), any());
         assertTrue(revokeAccessToken);
     }
-
-    @Test
-    public void testRevokeAccessTokenInvalidObjectReturnsFalse() throws RequestFailedException, IOException {
-        final NylasAccount nylasAccount = new NylasAccount(nylasClient, TEST_ACCESS_TOKEN);
-        final Map<String, Object> revokeResponse = Collections.singletonMap("invalidKey", "invalidValue");
-
-        when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
-        when(nylasClient.executePost(anyString(), any(), any(), any())).thenReturn(revokeResponse);
-
-        boolean revokeAccessToken = nylasAccount.revokeAccessToken();
-
-        verify(nylasClient).executePost(anyString(), any(), any(), any());
-        assertFalse(revokeAccessToken);
-    }
 }
