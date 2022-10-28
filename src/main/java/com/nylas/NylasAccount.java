@@ -94,8 +94,8 @@ public class NylasAccount {
 
 	public boolean revokeAccessToken() throws IOException, RequestFailedException {
 		HttpUrl.Builder revokeUrl = client.newUrlBuilder().addPathSegments("oauth/revoke");
-		Map<String, Boolean> response = client.executePost(accessToken, revokeUrl, null, Map.class);
-		return response.get("success") != null && response.get("success");
+		client.executePost(accessToken, revokeUrl, null, null);
+		return true;
 	}
 
 }
