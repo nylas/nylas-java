@@ -7,8 +7,17 @@ import java.util.Map;
  */
 public class RequestFailedException extends Exception {
 
+	/**
+	 * The status code returned from the API
+	 */
 	private final int statusCode;
+	/**
+	 * The error message returned from the Nylas API payload
+	 */
 	private final String errorMessage;
+	/**
+	 * The type of error returned from the Nylas API payload
+	 */
 	private final String errorType;
 	
 	public RequestFailedException(int statusCode, String errorMessage, String errorType) {
@@ -69,6 +78,12 @@ public class RequestFailedException extends Exception {
 		return errorType;
 	}
 
+	/**
+	 * Creates an error response
+	 * @param statusCode The status code returned from the API
+	 * @param responseBody The error payload to parse details from
+	 * @return The error with the details from the API
+	 */
 	public static RequestFailedException parseErrorResponse(int statusCode, String responseBody) {
 		String errorMessage = null;
 		String errorType = null;
