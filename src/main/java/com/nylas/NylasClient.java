@@ -252,6 +252,12 @@ public class NylasClient {
 		if (!response.isSuccessful()) {
 			String responseBody = response.body().string();
 			response.close();
+			if(response.code() == RateLimitException.RATE_LIMIT_STATUS_CODE) {
+				String rateLimit = response.headers().get(RateLimitException.RATE_LIMIT_LIMIT_HEADER);
+				String rateLimitReset = response.headers().get(RateLimitException.RATE_LIMIT_RESET_HEADER);
+				throw RateLimitException.parseErrorResponse(rateLimit, rateLimitReset, responseBody);
+			}
+
 			throw RequestFailedException.parseErrorResponse(response.code(), responseBody);
 		}
 	}
