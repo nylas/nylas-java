@@ -31,7 +31,23 @@ public class NylasClient {
 
 	enum AuthMethod { BASIC, BASIC_WITH_CREDENTIALS, BEARER }
 	enum HttpMethod { GET, PUT, POST, DELETE, PATCH }
-	enum HttpHeaders { ACCEPT, AUTHORIZATION }
+	enum HttpHeaders { 
+		ACCEPT("Accept"),
+		AUTHORIZATION("Authorization"),
+		CONTENT_TYPE("Content-Type"),
+		
+		;
+		
+		private final String name;
+		
+		HttpHeaders(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
+		}
+	}
 	enum MediaType {
 		APPLICATION_JSON("application/json"),
 		MESSAGE_RFC822("message/rfc822"),
@@ -106,8 +122,9 @@ public class NylasClient {
 	private NylasClient(OkHttpClient.Builder httpClientBuilder, String baseUrl) {
 		this.baseUrl = HttpUrl.get(baseUrl);
 		httpClient = httpClientBuilder
-			.addInterceptor(new AddVersionHeadersInterceptor())  // enforce user agent and build data
-			.build();
+				.addInterceptor(new AddVersionHeadersInterceptor())  // enforce user agent and build data
+				.addInterceptor(new ContentHeadersInterceptor()) // enforce Content-Type headers.
+				.build();
 	}
 	
 	public HttpUrl.Builder newUrlBuilder() {
