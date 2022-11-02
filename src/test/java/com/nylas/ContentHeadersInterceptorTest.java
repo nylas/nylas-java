@@ -20,8 +20,7 @@ public class ContentHeadersInterceptorTest {
 
         HttpUrl.Builder url = new HttpUrl.Builder();
             url.scheme("https")
-                    .host("api.nylas.com")
-                    .addPathSegment("/accounts/123");
+                    .host("api.nylas.com");
 
 
         Request request = new Request.Builder()

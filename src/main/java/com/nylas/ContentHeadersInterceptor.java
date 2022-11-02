@@ -31,8 +31,8 @@ public class ContentHeadersInterceptor implements Interceptor {
     }
 
     private boolean isDownloadablePath(String path) {
-        return path.equals("/contacts/picture") ||
-                path.equals("/files/download") ||
-                path.equals("/delta/streaming");
+        return path.equals("%2Fcontacts%2Fpicture") ||
+                path.equals("%2Ffiles%2Fdownload") ||
+                path.equals("%2Fdelta%2Fstreaming");
     }
 }
