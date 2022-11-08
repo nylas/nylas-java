@@ -136,7 +136,7 @@ public class ContactTest {
 
     @Test
     public void testGetWriteableFields_NoCreation() {
-        Map<String, Object> writeableFields = contact.getWritableFields(true);
+        Map<String, Object> writeableFields = contact.getWritableFields(false);
 
         assertEquals(writeableFields.size(), 16);
         assertEquals(writeableFields.get("given_name"), "Linus");
@@ -169,7 +169,7 @@ public class ContactTest {
 
     @Test
     public void testToString() {
-        assertEquals(contact.toString(), "Contact [given_name=Linus, middle_name=Benedict, surname=Torvalds, suffix=mr, nickname=Linux, birthday=December 28, 1969, company_name=Linux Foundation, job_title=Founder, manager_name=N/A, office_location=Portland, Oregon, notes=Known for git and linux, picture_url=https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/w_1920,c_limit/Cohen-Linus-Torvalds.jpg, emails=[Email [type=imap, email=torvalds@linux-foundation.org]], im_addresses=[IMAddress [type=im, im_address=torvalds-im@linux-foundation.org]], physical_addresses=[PhysicalAddress [format=standard, type=physical, street_address=1234, city=Portland, postal_code=0101, state=Oregon, country=U.S]], phone_numbers=[PhoneNumber [type=cellphone, number=091283]], web_pages=[WebPage [type=page, url=linux-foundation.org]], groups=[ContactGroup [name=org, path=it, accountId=null, id=null]], source=address_book, accountId=null, id=null]");
+        assertEquals(contact.toString(), "Contact [given_name=Linus, middle_name=Benedict, surname=Torvalds, suffix=mr, nickname=Linux, birthday=December 28, 1969, company_name=Linux Foundation, job_title=Founder, manager_name=N/A, office_location=Portland, Oregon, notes=Known for git and linux, picture_url=https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/w_1920,c_limit/Cohen-Linus-Torvalds.jpg, emails=[Email [type=imap, email=torvalds@linux-foundation.org]], im_addresses=[IMAddress [type=im, im_address=torvalds-im@linux-foundation.org]], physical_addresses=[PhysicalAddress [format=standard, type=physical, street_address=1234, city=Portland, postal_code=0101, state=Oregon, country=U.S]], phone_numbers=[PhoneNumber [type=cellphone, number=091283]], web_pages=[WebPage [type=page, url=linux-foundation.org]], groups=[ContactGroup [name=org, path=it, accountId=null, id=asdolkv909d7v4r]], source=address_book, accountId=null, id=null]");
     }
 
     @Test
