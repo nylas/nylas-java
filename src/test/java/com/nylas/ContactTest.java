@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ContactTest {
     private Contact contact;
@@ -64,6 +64,9 @@ public class ContactTest {
         contact.setWebPages(web_pages);
 
         ContactGroup contactGroup = new ContactGroup();
+        Field idField = contactGroup.getClass().getSuperclass().getSuperclass().getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(contactGroup, "asdolkv909d7v4r");
         setField("name", "org", contactGroup);
         setField("path", "it", contactGroup);
         contact.setGroup(contactGroup);
@@ -97,12 +100,71 @@ public class ContactTest {
 
     @Test
     public void testGetWriteableFields_creation() {
-        assertEquals(contact.getWritableFields(true).size(), 16);
+        Map<String, Object> writeableFields = contact.getWritableFields(true);
+
+        assertEquals(writeableFields.size(), 17);
+        assertEquals(writeableFields.get("given_name"), "Linus");
+        assertEquals(writeableFields.get("middle_name"), "Benedict");
+        assertEquals(writeableFields.get("surname"), "Torvalds");
+        assertEquals(writeableFields.get("birthday"), "December 28, 1969");
+        assertEquals(writeableFields.get("suffix"), "mr");
+        assertEquals(writeableFields.get("nickname"), "Linux");
+        assertEquals(writeableFields.get("company_name"), "Linux Foundation");
+        assertEquals(writeableFields.get("job_title"), "Founder");
+        assertEquals(writeableFields.get("manager_name"), "N/A");
+        assertEquals(writeableFields.get("office_location"), "Portland, Oregon");
+        assertEquals(writeableFields.get("notes"), "Known for git and linux");
+
+        List<Contact.Email> emails = (List<Contact.Email>) writeableFields.get("emails");
+        assertEquals(emails.get(0).getEmail(), "torvalds@linux-foundation.org");
+
+        List<Contact.IMAddress> imAddresses = (List<Contact.IMAddress>) writeableFields.get("im_addresses");
+        assertEquals(imAddresses.get(0).getIMAddress(), "torvalds-im@linux-foundation.org");
+
+        List<Contact.PhoneNumber> phoneNumbers = (List<Contact.PhoneNumber>) writeableFields.get("phone_numbers");
+        assertEquals(phoneNumbers.get(0).getNumber(), "091283");
+
+        List<Contact.PhysicalAddress> physicalAddresses = (List<Contact.PhysicalAddress>) writeableFields.get("physical_addresses");
+        assertEquals(physicalAddresses.get(0).getStreetAddress(), "1234");
+
+        List<Contact.WebPage> webPages = (List<Contact.WebPage>) writeableFields.get("web_pages");
+        assertEquals(webPages.get(0).getUrl(), "linux-foundation.org");
+
+        String group = (String)writeableFields.get("group"); // gets the id of the group and not the actual group
+        assertEquals(group, "asdolkv909d7v4r");
     }
 
     @Test
     public void testGetWriteableFields_NoCreation() {
-        assertEquals(contact.getWritableFields(false).size(), 16);
+        Map<String, Object> writeableFields = contact.getWritableFields(true);
+
+        assertEquals(writeableFields.size(), 16);
+        assertEquals(writeableFields.get("given_name"), "Linus");
+        assertEquals(writeableFields.get("middle_name"), "Benedict");
+        assertEquals(writeableFields.get("surname"), "Torvalds");
+        assertEquals(writeableFields.get("birthday"), "December 28, 1969");
+        assertEquals(writeableFields.get("suffix"), "mr");
+        assertEquals(writeableFields.get("nickname"), "Linux");
+        assertEquals(writeableFields.get("company_name"), "Linux Foundation");
+        assertEquals(writeableFields.get("job_title"), "Founder");
+        assertEquals(writeableFields.get("manager_name"), "N/A");
+        assertEquals(writeableFields.get("office_location"), "Portland, Oregon");
+        assertEquals(writeableFields.get("notes"), "Known for git and linux");
+
+        List<Contact.Email> emails = (List<Contact.Email>) writeableFields.get("emails");
+        assertEquals(emails.get(0).getEmail(), "torvalds@linux-foundation.org");
+
+        List<Contact.IMAddress> imAddresses = (List<Contact.IMAddress>) writeableFields.get("im_addresses");
+        assertEquals(imAddresses.get(0).getIMAddress(), "torvalds-im@linux-foundation.org");
+
+        List<Contact.PhoneNumber> phoneNumbers = (List<Contact.PhoneNumber>) writeableFields.get("phone_numbers");
+        assertEquals(phoneNumbers.get(0).getNumber(), "091283");
+
+        List<Contact.PhysicalAddress> physicalAddresses = (List<Contact.PhysicalAddress>) writeableFields.get("physical_addresses");
+        assertEquals(physicalAddresses.get(0).getStreetAddress(), "1234");
+
+        List<Contact.WebPage> webPages = (List<Contact.WebPage>) writeableFields.get("web_pages");
+        assertEquals(webPages.get(0).getUrl(), "linux-foundation.org");
     }
 
     @Test
