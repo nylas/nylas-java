@@ -28,7 +28,7 @@ public class ContactTest {
         contact.setManagerName("N/A");
         contact.setOfficeLocation("Portland, Oregon");
         contact.setNotes("Known for git and linux");
-        setField("picture_url", "https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/w_1920,c_limit/Cohen-Linus-Torvalds.jpg", contact);
+        FieldSetter.setField("picture_url", "https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/w_1920,c_limit/Cohen-Linus-Torvalds.jpg", contact);
 
         List<Contact.Email> emails = new LinkedList<>();
         Contact.Email email = new Contact.Email("imap", "torvalds@linux-foundation.org");
@@ -67,11 +67,11 @@ public class ContactTest {
         Field idField = contactGroup.getClass().getSuperclass().getSuperclass().getDeclaredField("id");
         idField.setAccessible(true);
         idField.set(contactGroup, "asdolkv909d7v4r");
-        setField("name", "org", contactGroup);
-        setField("path", "it", contactGroup);
+        FieldSetter.setField("name", "org", contactGroup);
+        FieldSetter.setField("path", "it", contactGroup);
         contact.setGroup(contactGroup);
 
-        setField("source", "address_book", contact);
+        FieldSetter.setField("source", "address_book", contact);
     }
 
     @Test
@@ -217,11 +217,5 @@ public class ContactTest {
 
         assertEquals(contact.getWebPages().get(0).getUrl(), "linux-foundation.org");
         assertEquals(contact.getWebPages().get(0).getType(), "page");
-    }
-
-    private void setField(String fieldName, Object fieldValue, Object o) throws NoSuchFieldException, IllegalAccessException {
-        Field codeField = o.getClass().getDeclaredField(fieldName);
-        codeField.setAccessible(true);
-        codeField.set(o, fieldValue);
     }
 }

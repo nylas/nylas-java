@@ -5,7 +5,6 @@ import okhttp3.RequestBody;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -26,9 +25,7 @@ public class AuthorizationCodeTest {
         Request request = new Request.Builder().url("https://test.nylas.com/auth/code").post(body).build();
         AuthorizationCode authorizationCode = new AuthorizationCode();
 
-        Field codeField = authorizationCode.getClass().getDeclaredField("code");
-        codeField.setAccessible(true);
-        codeField.set(authorizationCode, "asdf1234");
+        FieldSetter.setField("code", "asdf1234", authorizationCode);
 
         when(nylasClient.executeRequest(request, AuthorizationCode.class)).thenReturn(authorizationCode);
         AuthorizationCode result = nylasClient.executeRequest(request, AuthorizationCode.class);

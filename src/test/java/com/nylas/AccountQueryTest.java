@@ -4,8 +4,6 @@ import okhttp3.HttpUrl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -20,7 +18,7 @@ public class AccountQueryTest {
         metadataQuery.metadataKey("key1", "key2");
         metadataQuery.metadataValue("value1", "value2");
 
-        setField("metadataQuery", metadataQuery, accountQuery);
+        FieldSetter.setField("metadataQuery", metadataQuery, accountQuery);
     }
 
     @Test
@@ -43,12 +41,5 @@ public class AccountQueryTest {
         accountQuery.metadataQuery(null);
 
         assertNotNull(accountQuery);
-    }
-
-
-    private void setField(String fieldName, Object fieldValue, Object o) throws NoSuchFieldException, IllegalAccessException {
-        Field codeField = o.getClass().getDeclaredField(fieldName);
-        codeField.setAccessible(true);
-        codeField.set(o, fieldValue);
     }
 }
