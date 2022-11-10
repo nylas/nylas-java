@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
 
 import static com.nylas.AccessTokenTest.TEST_ACCESS_TOKEN;
 import static org.junit.jupiter.api.Assertions.*;
