@@ -53,7 +53,7 @@ public class NativeAuthenticationTest {
     @Test
     public void testAuthRequestBuilder() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         AuthorizationCode code = new AuthorizationCode();
-        FieldSetter.setField("code", "123", code);
+        FieldReflectionUtils.setField("code", "123", code);
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);
         when(nylasApplication.getClientId()).thenReturn("123456");
@@ -81,10 +81,10 @@ public class NativeAuthenticationTest {
     @Test
     public void testFetchToken() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         AccessToken accessToken = new AccessToken();
-        FieldSetter.setField("access_token", "lskdjnv", accessToken);
-        FieldSetter.setField("account_id", "wdoivj", accessToken);
-        FieldSetter.setField("email_address", "ric@nylas.com", accessToken);
-        FieldSetter.setField("provider", "google", accessToken);
+        FieldReflectionUtils.setField("access_token", "lskdjnv", accessToken);
+        FieldReflectionUtils.setField("account_id", "wdoivj", accessToken);
+        FieldReflectionUtils.setField("email_address", "ric@nylas.com", accessToken);
+        FieldReflectionUtils.setField("provider", "google", accessToken);
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);
         when(nylasApplication.getClientId()).thenReturn("abc");
@@ -101,11 +101,11 @@ public class NativeAuthenticationTest {
     @Test
     public void testDetectProvider() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         NativeAuthentication.DetectedProvider expected = new NativeAuthentication.DetectedProvider();
-        FieldSetter.setField("auth_name", "gmail", expected);
-        FieldSetter.setField("email_address", "ric@nylas.com", expected);
-        FieldSetter.setField("provider_name", "google", expected);
-        FieldSetter.setField("detected", true, expected);
-        FieldSetter.setField("is_imap", false, expected);
+        FieldReflectionUtils.setField("auth_name", "gmail", expected);
+        FieldReflectionUtils.setField("email_address", "ric@nylas.com", expected);
+        FieldReflectionUtils.setField("provider_name", "google", expected);
+        FieldReflectionUtils.setField("detected", true, expected);
+        FieldReflectionUtils.setField("is_imap", false, expected);
 
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);
@@ -128,11 +128,11 @@ public class NativeAuthenticationTest {
     @Test
     public void testGetDetectedProviderSettings() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         NativeAuthentication.DetectedProvider detectedProvider = new NativeAuthentication.DetectedProvider();
-        FieldSetter.setField("auth_name", "gmail", detectedProvider);
-        FieldSetter.setField("email_address", "ric@nylas.com", detectedProvider);
-        FieldSetter.setField("provider_name", "google", detectedProvider);
-        FieldSetter.setField("detected", true, detectedProvider);
-        FieldSetter.setField("is_imap", false, detectedProvider);
+        FieldReflectionUtils.setField("auth_name", "gmail", detectedProvider);
+        FieldReflectionUtils.setField("email_address", "ric@nylas.com", detectedProvider);
+        FieldReflectionUtils.setField("provider_name", "google", detectedProvider);
+        FieldReflectionUtils.setField("detected", true, detectedProvider);
+        FieldReflectionUtils.setField("is_imap", false, detectedProvider);
 
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);

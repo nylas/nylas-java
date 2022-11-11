@@ -84,7 +84,7 @@ public class GrantsTest {
         settings.put("setting1", "value1");
 
         Grant grant = new Grant();
-        FieldSetter.setField("id", "abc", grant, true);
+        FieldReflectionUtils.setField("id", "abc", grant, true);
         grant.setSettings(settings);
         grant.setProvider(Authentication.Provider.GOOGLE);
 
@@ -140,7 +140,7 @@ public class GrantsTest {
         settings.put("setting1", "value1");
 
         Grant grant = new Grant();
-        FieldSetter.setField("id", "abc", grant, true);
+        FieldReflectionUtils.setField("id", "abc", grant, true);
         grant.setSettings(settings);
         grant.setProvider(Authentication.Provider.GOOGLE);
 
@@ -160,7 +160,7 @@ public class GrantsTest {
         settings.put("setting1", "value1");
 
         Grant grant = new Grant();
-        FieldSetter.setField("id", "abc", grant, true);
+        FieldReflectionUtils.setField("id", "abc", grant, true);
         grant.setSettings(settings);
         grant.setProvider(Authentication.Provider.GOOGLE);
 
@@ -176,7 +176,7 @@ public class GrantsTest {
     public void testOnDemandSync() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         Grants grants = new Grants(nylasClient, "jhon-doe", baseUrl);
         Grant grant = new Grant();
-        FieldSetter.setField("id", "abc", grant, true);
+        FieldReflectionUtils.setField("id", "abc", grant, true);
         grant.setProvider(Authentication.Provider.GOOGLE);
 
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
@@ -192,7 +192,7 @@ public class GrantsTest {
     public void testOnDemandSync_from() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         Grants grants = new Grants(nylasClient, "jhon-doe", baseUrl);
         Grant grant = new Grant();
-        FieldSetter.setField("id", "abc", grant, true);
+        FieldReflectionUtils.setField("id", "abc", grant, true);
         grant.setProvider(Authentication.Provider.GOOGLE);
 
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());

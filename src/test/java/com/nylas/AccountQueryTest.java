@@ -18,7 +18,7 @@ public class AccountQueryTest {
         metadataQuery.metadataKey("key1", "key2");
         metadataQuery.metadataValue("value1", "value2");
 
-        FieldSetter.setField("metadataQuery", metadataQuery, accountQuery);
+        FieldReflectionUtils.setField("metadataQuery", metadataQuery, accountQuery);
     }
 
     @Test

@@ -10,10 +10,10 @@ public class TokenInfoTest {
     @Test
     public void testGetters() throws NoSuchFieldException, IllegalAccessException {
         TokenInfo tokenInfo = new TokenInfo();
-        FieldSetter.setField("created_at", 1664983332L, tokenInfo);
-        FieldSetter.setField("updated_at", 1664983333L, tokenInfo);
-        FieldSetter.setField("scopes", "email,calendar", tokenInfo);
-        FieldSetter.setField("state", "valid", tokenInfo);
+        FieldReflectionUtils.setField("created_at", 1664983332L, tokenInfo);
+        FieldReflectionUtils.setField("updated_at", 1664983333L, tokenInfo);
+        FieldReflectionUtils.setField("scopes", "email,calendar", tokenInfo);
+        FieldReflectionUtils.setField("state", "valid", tokenInfo);
 
         assertNotNull(tokenInfo);
         assertEquals(tokenInfo.getCreatedAt().getEpochSecond(), 1664983332L);

@@ -18,13 +18,13 @@ public class AccountTest {
         metadata.put("label_count", "3");
 
         account = new Account();
-        FieldSetter.setField("billing_state", "paid", account); // can be: cancelled, deleted
-        FieldSetter.setField("email", "ric@nylas.com", account);
-        FieldSetter.setField("provider", "google", account);
-        FieldSetter.setField("sync_state", "update", account);
-        FieldSetter.setField("authentication_type", "code", account);
-        FieldSetter.setField("trial", false, account);
-        FieldSetter.setField("metadata", metadata, account);
+        FieldReflectionUtils.setField("billing_state", "paid", account); // can be: cancelled, deleted
+        FieldReflectionUtils.setField("email", "ric@nylas.com", account);
+        FieldReflectionUtils.setField("provider", "google", account);
+        FieldReflectionUtils.setField("sync_state", "update", account);
+        FieldReflectionUtils.setField("authentication_type", "code", account);
+        FieldReflectionUtils.setField("trial", false, account);
+        FieldReflectionUtils.setField("metadata", metadata, account);
     }
 
     @Test
