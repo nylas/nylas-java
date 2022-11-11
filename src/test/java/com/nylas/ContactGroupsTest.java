@@ -37,12 +37,12 @@ public class ContactGroupsTest {
     public void testListAll() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         // prepare expectations
         ContactGroup expectedGroup = new ContactGroup();
-        FieldSetter.setField("name", "IT", expectedGroup);
-        FieldSetter.setField("path", "ORG", expectedGroup);
+        FieldReflectionUtils.setField("name", "IT", expectedGroup);
+        FieldReflectionUtils.setField("path", "ORG", expectedGroup);
 
         //Depth: ContactGroup[-1].AccountOwnedModel[0].RestfulModel[1]
-        FieldSetter.setField("id", "lskdvnc83e", expectedGroup, 1);
-        FieldSetter.setField("account_id", "09123840", expectedGroup, 0);
+        FieldReflectionUtils.setField("id", "lskdvnc83e", expectedGroup, 1);
+        FieldReflectionUtils.setField("account_id", "09123840", expectedGroup, 0);
 
         List<ContactGroup> expectedGroups = new ArrayList<>();
         expectedGroups.add(expectedGroup);

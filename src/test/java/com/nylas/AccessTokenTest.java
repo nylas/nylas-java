@@ -30,10 +30,10 @@ public class AccessTokenTest {
         Request request = new Request.Builder().url("https://test.nylas.com/auth/access_token").post(body).build();
 
         AccessToken accessToken = new AccessToken();
-        FieldSetter.setField("access_token", TEST_ACCESS_TOKEN, accessToken);
-        FieldSetter.setField("account_id", TEST_ACCOUNT_ID, accessToken);
-        FieldSetter.setField("email_address", TEST_EMAIL_ADDRESS, accessToken);
-        FieldSetter.setField("provider", TEST_PROVIDER, accessToken);
+        FieldReflectionUtils.setField("access_token", TEST_ACCESS_TOKEN, accessToken);
+        FieldReflectionUtils.setField("account_id", TEST_ACCOUNT_ID, accessToken);
+        FieldReflectionUtils.setField("email_address", TEST_EMAIL_ADDRESS, accessToken);
+        FieldReflectionUtils.setField("provider", TEST_PROVIDER, accessToken);
 
         when(nylasClient.executeRequest(request, AccessToken.class)).thenReturn(accessToken);
         AccessToken result = nylasClient.executeRequest(request, AccessToken.class);

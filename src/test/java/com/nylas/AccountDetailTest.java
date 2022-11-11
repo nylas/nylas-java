@@ -14,13 +14,13 @@ public class AccountDetailTest {
     @BeforeEach
     public void init() throws NoSuchFieldException, IllegalAccessException {
         accountDetail = new AccountDetail();
-        FieldSetter.setField("id", "123", accountDetail);
-        FieldSetter.setField("name", "Marty McFly", accountDetail);
-        FieldSetter.setField("email_address", "marty@delorian.com", accountDetail);
-        FieldSetter.setField("provider", "google", accountDetail);
-        FieldSetter.setField("organization_unit", "ops", accountDetail);
-        FieldSetter.setField("sync_state", "update", accountDetail);
-        FieldSetter.setField("linked_at", 12039L, accountDetail);
+        FieldReflectionUtils.setField("id", "123", accountDetail);
+        FieldReflectionUtils.setField("name", "Marty McFly", accountDetail);
+        FieldReflectionUtils.setField("email_address", "marty@delorian.com", accountDetail);
+        FieldReflectionUtils.setField("provider", "google", accountDetail);
+        FieldReflectionUtils.setField("organization_unit", "ops", accountDetail);
+        FieldReflectionUtils.setField("sync_state", "update", accountDetail);
+        FieldReflectionUtils.setField("linked_at", 12039L, accountDetail);
     }
 
     @Test

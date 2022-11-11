@@ -182,12 +182,12 @@ public class GrantTest {
     public void testNonWriteableFields() throws NoSuchFieldException, IllegalAccessException {
         Grant grant = new Grant();
 
-        FieldSetter.setField("email", "noreply@nylas.com", grant);
-        FieldSetter.setField("ip", "192.168.72.11", grant);
-        FieldSetter.setField("grant_status", "GRANTED", grant);
-        FieldSetter.setField("user_agent", "X-Nylas-SDK", grant);
-        FieldSetter.setField("created_at", 1664987122L, grant);
-        FieldSetter.setField("updated_at", 1664987123L, grant);
+        FieldReflectionUtils.setField("email", "noreply@nylas.com", grant);
+        FieldReflectionUtils.setField("ip", "192.168.72.11", grant);
+        FieldReflectionUtils.setField("grant_status", "GRANTED", grant);
+        FieldReflectionUtils.setField("user_agent", "X-Nylas-SDK", grant);
+        FieldReflectionUtils.setField("created_at", 1664987122L, grant);
+        FieldReflectionUtils.setField("updated_at", 1664987123L, grant);
 
         assertEquals(grant.getEmail(), "noreply@nylas.com");
         assertEquals(grant.getIp(), "192.168.72.11");
