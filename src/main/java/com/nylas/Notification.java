@@ -19,6 +19,13 @@ import com.squareup.moshi.JsonReader;
 
 public class Notification {
 
+	/**
+	 * Verify incoming signature came from Nylas
+	 * @param jsonNotification The notification body
+	 * @param clientSecret The client secret belonging to the notification, to verify the signature with
+	 * @param expectedSignature The signature to verify
+	 * @return True if the signature is indeed from Nylas
+	 */
 	public static boolean isSignatureValid(String jsonNotification, String clientSecret, String expectedSignature) {
 		try {
 			byte[] expectedBytes = hexStringToByteArray(expectedSignature);
