@@ -2,7 +2,7 @@ package com.nylas;
 
 import java.lang.reflect.Field;
 
-public class FieldSetter {
+public class FieldReflectionUtils {
     public static void setField(String fieldName, Object fieldValue, Object o, boolean setOnParentClass) throws NoSuchFieldException, IllegalAccessException {
 
         Field codeField = null;
@@ -41,5 +41,12 @@ public class FieldSetter {
         Field codeField = o.getClass().getDeclaredField(fieldName);
         codeField.setAccessible(true);
         codeField.set(o, fieldValue);
+    }
+
+    public static Object getField(String fieldName, Object o) throws NoSuchFieldException, IllegalAccessException {
+        Field declaredField = o.getClass().getDeclaredField(fieldName);
+        declaredField.setAccessible(true);
+
+        return declaredField.get(o);
     }
 }

@@ -28,7 +28,7 @@ public class ContactTest {
         contact.setManagerName("N/A");
         contact.setOfficeLocation("Portland, Oregon");
         contact.setNotes("Known for git and linux");
-        FieldSetter.setField("picture_url", "https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/w_1920,c_limit/Cohen-Linus-Torvalds.jpg", contact);
+        FieldReflectionUtils.setField("picture_url", "https://media.newyorker.com/photos/5ba177da9eb2f7420aadeb98/master/w_1920,c_limit/Cohen-Linus-Torvalds.jpg", contact);
 
         List<Contact.Email> emails = new LinkedList<>();
         Contact.Email email = new Contact.Email("imap", "torvalds@linux-foundation.org");
@@ -67,11 +67,11 @@ public class ContactTest {
         Field idField = contactGroup.getClass().getSuperclass().getSuperclass().getDeclaredField("id");
         idField.setAccessible(true);
         idField.set(contactGroup, "asdolkv909d7v4r");
-        FieldSetter.setField("name", "org", contactGroup);
-        FieldSetter.setField("path", "it", contactGroup);
+        FieldReflectionUtils.setField("name", "org", contactGroup);
+        FieldReflectionUtils.setField("path", "it", contactGroup);
         contact.setGroup(contactGroup);
 
-        FieldSetter.setField("source", "address_book", contact);
+        FieldReflectionUtils.setField("source", "address_book", contact);
     }
 
     @Test

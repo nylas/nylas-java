@@ -30,13 +30,13 @@ public class AccountsTest {
         metadata.put("label_count", "3");
 
         account = new Account();
-        FieldSetter.setField("billing_state", "paid", account); // can be: cancelled, deleted
-        FieldSetter.setField("email", "ric@nylas.com", account);
-        FieldSetter.setField("provider", "google", account);
-        FieldSetter.setField("sync_state", "update", account);
-        FieldSetter.setField("authentication_type", "code", account);
-        FieldSetter.setField("trial", false, account);
-        FieldSetter.setField("metadata", metadata, account);
+        FieldReflectionUtils.setField("billing_state", "paid", account); // can be: cancelled, deleted
+        FieldReflectionUtils.setField("email", "ric@nylas.com", account);
+        FieldReflectionUtils.setField("provider", "google", account);
+        FieldReflectionUtils.setField("sync_state", "update", account);
+        FieldReflectionUtils.setField("authentication_type", "code", account);
+        FieldReflectionUtils.setField("trial", false, account);
+        FieldReflectionUtils.setField("metadata", metadata, account);
     }
 
     @Test
@@ -116,10 +116,10 @@ public class AccountsTest {
     @Test
     public void testTokenInfo() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         TokenInfo expected = new TokenInfo();
-        FieldSetter.setField("created_at", 1666637474L, expected);
-        FieldSetter.setField("updated_at", 1666637480L, expected);
-        FieldSetter.setField("scopes", "EMAIL,CALENDAR", expected);
-        FieldSetter.setField("state", "valid", expected);
+        FieldReflectionUtils.setField("created_at", 1666637474L, expected);
+        FieldReflectionUtils.setField("updated_at", 1666637480L, expected);
+        FieldReflectionUtils.setField("scopes", "EMAIL,CALENDAR", expected);
+        FieldReflectionUtils.setField("state", "valid", expected);
 
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
         when(nylasClient.executePost(any(), any(), any(), any())).thenReturn(expected);
@@ -157,7 +157,7 @@ public class AccountsTest {
 
     @Test
     public void testAddMetadata_nullMetadata() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
-        FieldSetter.setField("metadata", null, account);
+        FieldReflectionUtils.setField("metadata", null, account);
         Map<String, String> metadata = new HashMap<>();
         metadata.put("is_admin", "true");
 
@@ -165,7 +165,7 @@ public class AccountsTest {
         when(nylasClient.executeGet(any(), any(), any(), any())).thenReturn(account);
 
         Account updatedAccount = new Account();
-        FieldSetter.setField("metadata", metadata, updatedAccount);
+        FieldReflectionUtils.setField("metadata", metadata, updatedAccount);
         when(nylasClient.executePut(any(), any(), any(), any(), any())).thenReturn(updatedAccount);
 
         Account result = accounts.addMetadata("123", "is_admin",  "true");
@@ -188,7 +188,7 @@ public class AccountsTest {
     public void testRemoveMetadata_fails() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
         when(nylasClient.executeGet(any(), any(), any(), any())).thenReturn(account);
-        FieldSetter.setField("metadata", null, account);
+        FieldReflectionUtils.setField("metadata", null, account);
 
         Boolean result = accounts.removeMetadata("123", "label_count");
 

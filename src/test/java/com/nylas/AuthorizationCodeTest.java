@@ -25,7 +25,7 @@ public class AuthorizationCodeTest {
         Request request = new Request.Builder().url("https://test.nylas.com/auth/code").post(body).build();
         AuthorizationCode authorizationCode = new AuthorizationCode();
 
-        FieldSetter.setField("code", "asdf1234", authorizationCode);
+        FieldReflectionUtils.setField("code", "asdf1234", authorizationCode);
 
         when(nylasClient.executeRequest(request, AuthorizationCode.class)).thenReturn(authorizationCode);
         AuthorizationCode result = nylasClient.executeRequest(request, AuthorizationCode.class);

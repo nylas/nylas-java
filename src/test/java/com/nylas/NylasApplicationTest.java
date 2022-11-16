@@ -104,9 +104,9 @@ public class NylasApplicationTest {
         List<String> redirectUris = new ArrayList<>();
         redirectUris.add("https://app.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "nylas-app", expected);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", expected);
-        FieldSetter.setField("redirect_uris", redirectUris, expected);
+        FieldReflectionUtils.setField("application_name", "nylas-app", expected);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", expected);
+        FieldReflectionUtils.setField("redirect_uris", redirectUris, expected);
 
         when(nylasClient.executeGet(anyString(), any(), any())).thenReturn(expected);
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
@@ -125,9 +125,9 @@ public class NylasApplicationTest {
         List<String> redirectUris = new ArrayList<>();
         redirectUris.add("https://app.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", expected);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", expected);
-        FieldSetter.setField("redirect_uris", redirectUris, expected);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", expected);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", expected);
+        FieldReflectionUtils.setField("redirect_uris", redirectUris, expected);
 
         when(nylasClient.executePut(anyString(), any(), any(), any())).thenReturn(expected);
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
@@ -143,9 +143,9 @@ public class NylasApplicationTest {
         List<String> redirectUris = new ArrayList<>();
         redirectUris.add("https://app.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", expected);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", expected);
-        FieldSetter.setField("redirect_uris", redirectUris, expected);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", expected);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", expected);
+        FieldReflectionUtils.setField("redirect_uris", redirectUris, expected);
 
         when(nylasClient.executePut(anyString(), any(), any(), any())).thenReturn(expected);
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
@@ -161,9 +161,9 @@ public class NylasApplicationTest {
         List<String> redirectUris = new ArrayList<>();
         redirectUris.add("https://app.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", existing);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", existing);
-        FieldSetter.setField("redirect_uris", redirectUris, existing);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", existing);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", existing);
+        FieldReflectionUtils.setField("redirect_uris", redirectUris, existing);
 
 
         ApplicationDetail updated = new ApplicationDetail();
@@ -171,9 +171,9 @@ public class NylasApplicationTest {
         updatedRedirectUris.add("https://app.nylas.com/auth");
         updatedRedirectUris.add("https://app2.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", updated);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", updated);
-        FieldSetter.setField("redirect_uris", updatedRedirectUris, updated);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", updated);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", updated);
+        FieldReflectionUtils.setField("redirect_uris", updatedRedirectUris, updated);
 
         // gets exsisting
         when(nylasClient.executeGet(anyString(), any(), any())).thenReturn(existing);
@@ -193,9 +193,9 @@ public class NylasApplicationTest {
         List<String> redirectUris = new ArrayList<>();
         redirectUris.add("https://app.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", existing);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", existing);
-        FieldSetter.setField("redirect_uris", redirectUris, existing);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", existing);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", existing);
+        FieldReflectionUtils.setField("redirect_uris", redirectUris, existing);
 
 
         // gets exsisting
@@ -215,18 +215,18 @@ public class NylasApplicationTest {
         redirectUris.add("https://app.nylas.com/auth");
         redirectUris.add("https://app2.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", existing);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", existing);
-        FieldSetter.setField("redirect_uris", redirectUris, existing);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", existing);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", existing);
+        FieldReflectionUtils.setField("redirect_uris", redirectUris, existing);
 
 
         ApplicationDetail updated = new ApplicationDetail();
         List<String> updatedRedirectUris = new ArrayList<>();
         updatedRedirectUris.add("https://app.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", updated);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", updated);
-        FieldSetter.setField("redirect_uris", updatedRedirectUris, updated);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", updated);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", updated);
+        FieldReflectionUtils.setField("redirect_uris", updatedRedirectUris, updated);
 
         // gets exsisting
         when(nylasClient.executeGet(anyString(), any(), any())).thenReturn(existing);
@@ -246,9 +246,9 @@ public class NylasApplicationTest {
         List<String> redirectUris = new ArrayList<>();
         redirectUris.add("https://app.nylas.com/auth");
 
-        FieldSetter.setField("application_name", "mew-nylas-app", existing);
-        FieldSetter.setField("icon_url", "https://placehold.it/3x3", existing);
-        FieldSetter.setField("redirect_uris", redirectUris, existing);
+        FieldReflectionUtils.setField("application_name", "mew-nylas-app", existing);
+        FieldReflectionUtils.setField("icon_url", "https://placehold.it/3x3", existing);
+        FieldReflectionUtils.setField("redirect_uris", redirectUris, existing);
 
 
         // gets exsisting urls
@@ -267,7 +267,7 @@ public class NylasApplicationTest {
         List<String> ipAddresses = new ArrayList<>();
         ipAddresses.add("192.169.11.2");
 
-        FieldSetter.setField("ip_addresses", ipAddresses, expected);
+        FieldReflectionUtils.setField("ip_addresses", ipAddresses, expected);
 
         when(nylasClient.executeGet(anyString(), any(), any())).thenReturn(expected);
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
