@@ -312,7 +312,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 */
 	public void addParticipants(Participant... participants) {
 		this.participants.addAll(Arrays.asList(participants));
-		this.modifiedFields.put("participants", serializeParticipants());
+		this.modifiedFields.put("participants", serializeParticipants(false));
 	}
 
 	/**
@@ -357,7 +357,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "title", getTitle());
 		Maps.putIfNotNull(params, "description", getDescription());
 		Maps.putIfNotNull(params, "location", getLocation());
-		Maps.putIfNotNull(params, "participants", serializeParticipants());
+		Maps.putIfNotNull(params, "participants", serializeParticipants(true));
 		Maps.putIfNotNull(params, "busy", getBusy());
 		Maps.putIfNotNull(params, "metadata", getMetadata());
 		Maps.putIfNotNull(params, "conferencing", getConferencing());
@@ -366,13 +366,13 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		return params;
 	}
 
-	private List<Map<String, Object>> serializeParticipants() {
+	private List<Map<String, Object>> serializeParticipants(boolean creation) {
 		if(this.participants == null || this.participants.isEmpty()) {
 			return Collections.emptyList();
 		}
 
 		return this.participants.stream()
-				.map(participant -> participant.getWritableFields(false))
+				.map(participant -> participant.getWritableFields(creation))
 				.collect(Collectors.toList());
 	}
 
