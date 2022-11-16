@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +53,7 @@ public class NativeAuthenticationTest {
     @Test
     public void testAuthRequestBuilder() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         AuthorizationCode code = new AuthorizationCode();
-        setField("code", "123", code);
+        FieldReflectionUtils.setField("code", "123", code);
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);
         when(nylasApplication.getClientId()).thenReturn("123456");
@@ -82,10 +81,10 @@ public class NativeAuthenticationTest {
     @Test
     public void testFetchToken() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         AccessToken accessToken = new AccessToken();
-        setField("access_token", "lskdjnv", accessToken);
-        setField("account_id", "wdoivj", accessToken);
-        setField("email_address", "ric@nylas.com", accessToken);
-        setField("provider", "google", accessToken);
+        FieldReflectionUtils.setField("access_token", "lskdjnv", accessToken);
+        FieldReflectionUtils.setField("account_id", "wdoivj", accessToken);
+        FieldReflectionUtils.setField("email_address", "ric@nylas.com", accessToken);
+        FieldReflectionUtils.setField("provider", "google", accessToken);
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);
         when(nylasApplication.getClientId()).thenReturn("abc");
@@ -102,11 +101,11 @@ public class NativeAuthenticationTest {
     @Test
     public void testDetectProvider() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         NativeAuthentication.DetectedProvider expected = new NativeAuthentication.DetectedProvider();
-        setField("auth_name", "gmail", expected);
-        setField("email_address", "ric@nylas.com", expected);
-        setField("provider_name", "google", expected);
-        setField("detected", true, expected);
-        setField("is_imap", false, expected);
+        FieldReflectionUtils.setField("auth_name", "gmail", expected);
+        FieldReflectionUtils.setField("email_address", "ric@nylas.com", expected);
+        FieldReflectionUtils.setField("provider_name", "google", expected);
+        FieldReflectionUtils.setField("detected", true, expected);
+        FieldReflectionUtils.setField("is_imap", false, expected);
 
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);
@@ -129,11 +128,11 @@ public class NativeAuthenticationTest {
     @Test
     public void testGetDetectedProviderSettings() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         NativeAuthentication.DetectedProvider detectedProvider = new NativeAuthentication.DetectedProvider();
-        setField("auth_name", "gmail", detectedProvider);
-        setField("email_address", "ric@nylas.com", detectedProvider);
-        setField("provider_name", "google", detectedProvider);
-        setField("detected", true, detectedProvider);
-        setField("is_imap", false, detectedProvider);
+        FieldReflectionUtils.setField("auth_name", "gmail", detectedProvider);
+        FieldReflectionUtils.setField("email_address", "ric@nylas.com", detectedProvider);
+        FieldReflectionUtils.setField("provider_name", "google", detectedProvider);
+        FieldReflectionUtils.setField("detected", true, detectedProvider);
+        FieldReflectionUtils.setField("is_imap", false, detectedProvider);
 
 
         when(nylasApplication.getClient()).thenReturn(nylasClient);
@@ -146,12 +145,5 @@ public class NativeAuthenticationTest {
         ProviderSettings providerSettings = nativeAuthentication.getDetectedProviderSettings("ric@nylas.com");
 
         assertEquals(providerSettings.toString(), "ProviderSettings [providerName=gmail, settings={}]");
-    }
-
-
-    private void setField(String fieldName, Object fieldValue, Object o) throws NoSuchFieldException, IllegalAccessException {
-        Field codeField = o.getClass().getDeclaredField(fieldName);
-        codeField.setAccessible(true);
-        codeField.set(o, fieldValue);
     }
 }

@@ -53,6 +53,7 @@ public class ProviderSettings {
 			case ICLOUD:
 				return ProviderSettings.icloud();
 			default:
+				// TODO: default will never evaluate because getProviderByName returns null when nothing matches, and the null check above acts as default
 				return knownImap(provider.getName());
 		}
 	}

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -31,10 +30,10 @@ public class AccessTokenTest {
         Request request = new Request.Builder().url("https://test.nylas.com/auth/access_token").post(body).build();
 
         AccessToken accessToken = new AccessToken();
-        setField("access_token", TEST_ACCESS_TOKEN, accessToken);
-        setField("account_id", TEST_ACCOUNT_ID, accessToken);
-        setField("email_address", TEST_EMAIL_ADDRESS, accessToken);
-        setField("provider", TEST_PROVIDER, accessToken);
+        FieldReflectionUtils.setField("access_token", TEST_ACCESS_TOKEN, accessToken);
+        FieldReflectionUtils.setField("account_id", TEST_ACCOUNT_ID, accessToken);
+        FieldReflectionUtils.setField("email_address", TEST_EMAIL_ADDRESS, accessToken);
+        FieldReflectionUtils.setField("provider", TEST_PROVIDER, accessToken);
 
         when(nylasClient.executeRequest(request, AccessToken.class)).thenReturn(accessToken);
         AccessToken result = nylasClient.executeRequest(request, AccessToken.class);
@@ -47,11 +46,5 @@ public class AccessTokenTest {
         assertEquals(result.getEmailAddress(), TEST_EMAIL_ADDRESS);
         assertEquals(result.getProvider(), TEST_PROVIDER);
         assertEquals(result.toString(), expectedToString);
-    }
-
-    private void setField(String fieldName, String fieldValue, AccessToken accessToken) throws NoSuchFieldException, IllegalAccessException {
-        Field codeField = accessToken.getClass().getDeclaredField(fieldName);
-        codeField.setAccessible(true);
-        codeField.set(accessToken, fieldValue);
     }
 }

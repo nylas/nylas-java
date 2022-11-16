@@ -10,7 +10,6 @@ import okio.Timeout;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
@@ -183,12 +182,12 @@ public class GrantTest {
     public void testNonWriteableFields() throws NoSuchFieldException, IllegalAccessException {
         Grant grant = new Grant();
 
-        setField("email", "noreply@nylas.com", grant);
-        setField("ip", "192.168.72.11", grant);
-        setField("grant_status", "GRANTED", grant);
-        setField("user_agent", "X-Nylas-SDK", grant);
-        setField("created_at", 1664987122L, grant);
-        setField("updated_at", 1664987123L, grant);
+        FieldReflectionUtils.setField("email", "noreply@nylas.com", grant);
+        FieldReflectionUtils.setField("ip", "192.168.72.11", grant);
+        FieldReflectionUtils.setField("grant_status", "GRANTED", grant);
+        FieldReflectionUtils.setField("user_agent", "X-Nylas-SDK", grant);
+        FieldReflectionUtils.setField("created_at", 1664987122L, grant);
+        FieldReflectionUtils.setField("updated_at", 1664987123L, grant);
 
         assertEquals(grant.getEmail(), "noreply@nylas.com");
         assertEquals(grant.getIp(), "192.168.72.11");
@@ -284,9 +283,4 @@ public class GrantTest {
         assertEquals(theGrants.size(), 0);
     }
 
-    private void setField(String fieldName, Object fieldValue, Object o) throws NoSuchFieldException, IllegalAccessException {
-        Field codeField = o.getClass().getDeclaredField(fieldName);
-        codeField.setAccessible(true);
-        codeField.set(o, fieldValue);
-    }
 }

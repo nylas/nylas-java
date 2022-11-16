@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,13 +30,13 @@ public class AccountsTest {
         metadata.put("label_count", "3");
 
         account = new Account();
-        setField("billing_state", "paid", account); // can be: cancelled, deleted
-        setField("email", "ric@nylas.com", account);
-        setField("provider", "google", account);
-        setField("sync_state", "update", account);
-        setField("authentication_type", "code", account);
-        setField("trial", false, account);
-        setField("metadata", metadata, account);
+        FieldReflectionUtils.setField("billing_state", "paid", account); // can be: cancelled, deleted
+        FieldReflectionUtils.setField("email", "ric@nylas.com", account);
+        FieldReflectionUtils.setField("provider", "google", account);
+        FieldReflectionUtils.setField("sync_state", "update", account);
+        FieldReflectionUtils.setField("authentication_type", "code", account);
+        FieldReflectionUtils.setField("trial", false, account);
+        FieldReflectionUtils.setField("metadata", metadata, account);
     }
 
     @Test
@@ -117,10 +116,10 @@ public class AccountsTest {
     @Test
     public void testTokenInfo() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         TokenInfo expected = new TokenInfo();
-        setField("created_at", 1666637474L, expected);
-        setField("updated_at", 1666637480L, expected);
-        setField("scopes", "EMAIL,CALENDAR", expected);
-        setField("state", "valid", expected);
+        FieldReflectionUtils.setField("created_at", 1666637474L, expected);
+        FieldReflectionUtils.setField("updated_at", 1666637480L, expected);
+        FieldReflectionUtils.setField("scopes", "EMAIL,CALENDAR", expected);
+        FieldReflectionUtils.setField("state", "valid", expected);
 
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
         when(nylasClient.executePost(any(), any(), any(), any())).thenReturn(expected);
@@ -158,7 +157,7 @@ public class AccountsTest {
 
     @Test
     public void testAddMetadata_nullMetadata() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
-        setField("metadata", null, account);
+        FieldReflectionUtils.setField("metadata", null, account);
         Map<String, String> metadata = new HashMap<>();
         metadata.put("is_admin", "true");
 
@@ -166,7 +165,7 @@ public class AccountsTest {
         when(nylasClient.executeGet(any(), any(), any(), any())).thenReturn(account);
 
         Account updatedAccount = new Account();
-        setField("metadata", metadata, updatedAccount);
+        FieldReflectionUtils.setField("metadata", metadata, updatedAccount);
         when(nylasClient.executePut(any(), any(), any(), any(), any())).thenReturn(updatedAccount);
 
         Account result = accounts.addMetadata("123", "is_admin",  "true");
@@ -189,16 +188,10 @@ public class AccountsTest {
     public void testRemoveMetadata_fails() throws RequestFailedException, IOException, NoSuchFieldException, IllegalAccessException {
         when(nylasClient.newUrlBuilder()).thenReturn(new HttpUrl.Builder());
         when(nylasClient.executeGet(any(), any(), any(), any())).thenReturn(account);
-        setField("metadata", null, account);
+        FieldReflectionUtils.setField("metadata", null, account);
 
         Boolean result = accounts.removeMetadata("123", "label_count");
 
         assertEquals(result, false);
-    }
-
-    private void setField(String fieldName, Object fieldValue, Object o) throws NoSuchFieldException, IllegalAccessException {
-        Field codeField = o.getClass().getDeclaredField(fieldName);
-        codeField.setAccessible(true);
-        codeField.set(o, fieldValue);
     }
 }
