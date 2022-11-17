@@ -16,6 +16,7 @@ This section contains changes that have been committed but not yet released.
 ### Fixed
 
 * Fixed revoke access token always throwing an error
+* Fixed participant status not serializing on Event creation
 
 ### Removed
 
