@@ -40,6 +40,7 @@ public class Notification {
 		}
 	}
 	
+	public static final String NYLAS_SIGNATURE_HEADER = "X-Nylas-Signature";
 	private static final JsonAdapter<Notification> JSON_ADAPTER =  JsonHelper.moshi().adapter(Notification.class);
 	public static Notification parseNotification(String jsonNotification) {
 		return JsonHelper.fromJsonUnchecked(JSON_ADAPTER, jsonNotification);
