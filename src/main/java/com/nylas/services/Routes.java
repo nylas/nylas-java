@@ -1,7 +1,6 @@
 package com.nylas.services;
 
 import com.nylas.*;
-import com.sun.istack.internal.Nullable;
 
 import java.io.IOException;
 
@@ -20,6 +19,22 @@ public class Routes {
 	 * @param scopes Authentication scopes to request from the authenticating user
 	 * @param emailAddress The user's email address
 	 * @param successUrl The URI to which the user will be redirected once authentication completes
+	 * {@code clientUri} and {@code state} are set to null.
+	 * @return The URL for hosted authentication
+	 */
+	public String buildAuthUrl(
+			Scope[] scopes,
+			String emailAddress,
+			String successUrl
+	) {
+		return buildAuthUrl(scopes, emailAddress, successUrl, null, null);
+	}
+
+	/**
+	 * Build the URL for authenticating users to your application via Hosted Authentication
+	 * @param scopes Authentication scopes to request from the authenticating user
+	 * @param emailAddress The user's email address
+	 * @param successUrl The URI to which the user will be redirected once authentication completes
 	 * @param clientUri The route of the client
 	 * @param state An optional arbitrary string that is returned as a URL param in your redirect URI
 	 * @return The URL for hosted authentication
@@ -28,8 +43,8 @@ public class Routes {
 			Scope[] scopes,
 			String emailAddress,
 			String successUrl,
-			@Nullable String clientUri,
-			@Nullable String state
+			String clientUri,
+			String state
 	) {
 		clientUri = clientUri != null ? clientUri : "";
 		HostedAuthentication.UrlBuilder authUrl = application
