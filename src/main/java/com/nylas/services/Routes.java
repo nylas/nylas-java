@@ -68,21 +68,9 @@ public class Routes {
 	/**
 	 * The default paths the Nylas backend middlewares and frontend SDKs are preconfigured to.
 	 */
-	public enum DefaultRoutes {
-		BUILD_AUTH_URL("/nylas/generate-auth-url"),
-		EXCHANGE_CODE_FOR_TOKEN("/nylas/exchange-mailbox-token"),
-		WEBHOOKS("/nylas/webhook"),
-
-		;
-
-		private final String path;
-
-		DefaultRoutes(String path) {
-			this.path = path;
-		}
-
-		public String getPath() {
-			return path;
-		}
+	public static class Constants {
+		public static final String BUILD_AUTH_URL = "/nylas/generate-auth-url";
+		public static final String EXCHANGE_CODE_FOR_TOKEN = "/nylas/exchange-mailbox-token";
+		public static final String WEBHOOKS = "/nylas/webhook";
 	}
 }
