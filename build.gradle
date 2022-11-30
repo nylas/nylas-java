@@ -39,7 +39,10 @@ dependencies {
     
     // SLF4J for logging facade
     implementation('org.slf4j:slf4j-api:1.7.30')
-    
+
+    // Websocket dependency
+    implementation('org.java-websocket:Java-WebSocket:1.5.3')
+
     ///////////////////////////////////
     // Test dependencies
     
