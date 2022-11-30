@@ -42,6 +42,7 @@ dependencies {
 
     // Middleware-related dependencies
     implementation('javax.servlet:javax.servlet-api:3.0.1')
+    implementation('org.java-websocket:Java-WebSocket:1.5.3')
 
     ///////////////////////////////////
     // Test dependencies
