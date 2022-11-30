@@ -32,7 +32,7 @@ public class NylasFilter implements Filter {
 	private String buildAuthUrl = Routes.Constants.BUILD_AUTH_URL;
 	private String exchangeCodeForTokenUrl = Routes.Constants.EXCHANGE_CODE_FOR_TOKEN;
 	private String webhooksUrl = Routes.Constants.WEBHOOKS;
-	private static final Logger LOGGER = LoggerFactory.getLogger(NylasFilter.class);
+	private static final Logger log = LoggerFactory.getLogger(NylasFilter.class);
 
 	/**
 	 * Constructor for NylasFilter
@@ -95,7 +95,7 @@ public class NylasFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		LOGGER.trace("Setting up the Nylas Filter");
+		log.trace("Setting up the Nylas Filter");
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class NylasFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		LOGGER.trace("Destroying the Nylas Filter");
+		log.trace("Destroying the Nylas Filter");
 	}
 
 	private void handleBuildAuthUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
