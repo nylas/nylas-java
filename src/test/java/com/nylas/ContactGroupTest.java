@@ -10,12 +10,12 @@ public class ContactGroupTest {
     @Test
     public void testGetters() throws NoSuchFieldException, IllegalAccessException {
         contactGroup = new ContactGroup();
-        FieldSetter.setField("name", "IT", contactGroup);
-        FieldSetter.setField("path", "ORG", contactGroup);
+        FieldReflectionUtils.setField("name", "IT", contactGroup);
+        FieldReflectionUtils.setField("path", "ORG", contactGroup);
 
         //Depth: ContactGroup[-1].AccountOwnedModel[0].RestfulModel[1]
-        FieldSetter.setField("id", "lskdvnc83e", contactGroup, 1);
-        FieldSetter.setField("account_id", "09123840", contactGroup, 0);
+        FieldReflectionUtils.setField("id", "lskdvnc83e", contactGroup, 1);
+        FieldReflectionUtils.setField("account_id", "09123840", contactGroup, 0);
 
         assertEquals(contactGroup.getName(), "IT");
         assertEquals(contactGroup.getPath(), "ORG");

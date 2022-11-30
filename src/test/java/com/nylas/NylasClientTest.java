@@ -523,6 +523,17 @@ public class NylasClientTest {
     }
 
     @Test
+    public void testHttpHeaders() {
+        assertEquals(NylasClient.HttpHeaders.CONTENT_TYPE.getName(), "Content-Type");
+        assertEquals(NylasClient.HttpHeaders.AUTHORIZATION.getName(), "Authorization");
+        assertEquals(NylasClient.HttpHeaders.ACCEPT.getName(), "Accept");
+
+        assertEquals(NylasClient.HttpHeaders.CONTENT_TYPE.name(), "CONTENT_TYPE");
+        assertEquals(NylasClient.HttpHeaders.AUTHORIZATION.name(), "AUTHORIZATION");
+        assertEquals(NylasClient.HttpHeaders.ACCEPT.name(), "ACCEPT");
+    }
+
+    @Test
     public void testBuilder() {
         NylasClient.Builder builder = new NylasClient.Builder();
 

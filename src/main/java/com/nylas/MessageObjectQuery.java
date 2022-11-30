@@ -70,14 +70,11 @@ public abstract class MessageObjectQuery<Q extends MessageObjectQuery<Q>> extend
 	}
 	
 	public Q anyEmail(Iterable<String> emails) {
-		if (emails == null) {
+		this.anyEmail = String.join(",", emails);
+		if (this.anyEmail.isEmpty()) {
 			this.anyEmail = null;
-		} else {
-			this.anyEmail = String.join(",", emails);
-			if (this.anyEmail.isEmpty()) {
-				this.anyEmail = null;
-			}
 		}
+
 		return self();
 	}
 	

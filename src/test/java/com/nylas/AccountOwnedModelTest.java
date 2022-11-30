@@ -11,7 +11,7 @@ public class AccountOwnedModelTest {
     @BeforeEach
     public void init() throws NoSuchFieldException, IllegalAccessException {
         accountOwnedModel = new AccountOwnedModelImpl();
-        FieldSetter.setField("account_id", "123", accountOwnedModel, true);
+        FieldReflectionUtils.setField("account_id", "123", accountOwnedModel, true);
     }
 
     @Test
