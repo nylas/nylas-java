@@ -14,6 +14,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Fixed typo in `Event.hide_participants`
+
 ### Removed
 
 ### Security
