@@ -15,6 +15,14 @@ public class FreeBusy {
 		return time_slots;
 	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setTimeSlots(List<TimeSlot> timeSlots) {
+		this.time_slots = timeSlots;
+	}
+
 	@Override
 	public String toString() {
 		return "FreeBusy [email=" + email + ", time_slots=" + time_slots + "]";
