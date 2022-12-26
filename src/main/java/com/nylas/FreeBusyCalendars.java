@@ -1,13 +1,12 @@
 package com.nylas;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class FreeBusyCalendars {
 
 	private String account_id;
-	private List<String> calendar_ids = new ArrayList<>();
+	private List<String> calendar_ids;
 
 	public FreeBusyCalendars(String accountId, List<String> calendarIds) {
 		this.account_id = accountId;
