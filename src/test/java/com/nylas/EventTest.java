@@ -56,7 +56,7 @@ public class EventTest {
         event.setParticipants(participants);
 
         event.setBusy(true);
-        event.setHideParticipant(false);
+        event.setHideParticipants(false);
 
         Map<String, String> metadata = new HashMap<>();
         event.setMetadata(metadata);
@@ -130,7 +130,7 @@ public class EventTest {
         assertEquals(event.getCapacity(), 10);
         assertTrue(event.getReadOnly());
         assertTrue(event.getBusy());
-        assertFalse(event.getHideParticipant());
+        assertFalse(event.getHideParticipants());
         assertEquals(event.getMetadata().size(), 1);
         assertEquals(event.getConferencing().getProvider(), "GOOGLE");
         assertEquals(event.getRoundRobinOrder().size(), 2);
