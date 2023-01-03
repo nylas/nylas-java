@@ -53,6 +53,7 @@ public class IntegrationHostedAuthentication {
 		private String grant_id;
 		private String login_hint;
 		private String state;
+		private String account_id;
 		private Long expires_in;
 		private List<String> scope;
 		private Map<String, String> settings;
@@ -112,6 +113,12 @@ public class IntegrationHostedAuthentication {
 			return this;
 		}
 
+		/** Nylas Account ID */
+		public RequestBuilder accountId(String accountId) {
+			this.account_id = accountId;
+			return this;
+		}
+
 		private void validate() {
 			assertState(!nullOrEmpty(this.provider), "Provider is required");
 			assertState(!nullOrEmpty(this.redirect_uri), "Redirect URI is required");
@@ -130,6 +137,7 @@ public class IntegrationHostedAuthentication {
 			Maps.putIfNotNull(request, "login_hint", login_hint);
 			Maps.putIfNotNull(request, "state", state);
 			Maps.putIfNotNull(request, "expires_in", expires_in);
+			Maps.putIfNotNull(request, "account_id", account_id);
 			return request;
 		}
 	}
