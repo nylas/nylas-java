@@ -8,9 +8,13 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
+* Added missing setters for `FreeBusy`
+
 ### Deprecated
 
 ### Fixed
+
+* Fixed typo in `Event.hide_participants`
 
 ### Removed
 
