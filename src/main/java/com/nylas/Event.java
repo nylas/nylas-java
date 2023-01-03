@@ -327,7 +327,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 	 * @return If the event is valid
 	 */
 	public boolean isValid() {
-		return conferencing == null || conferencing.getAutocreate() == null || conferencing.getDetails() == null &&
+ 		return conferencing == null || conferencing.getAutocreate() == null || conferencing.getDetails() == null &&
 				(this.capacity == null || capacity == -1 || nullOrEmpty(this.participants) || this.participants.size() <= this.capacity);
 	}
 
