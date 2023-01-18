@@ -1,24 +1,14 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
-
-This section contains changes that have been committed but not yet released.
-
-### Added
+## [1.19.1] - Released 2023-01-18
 
 ### Changed
 
 * Added missing setters for `FreeBusy`
 
-### Deprecated
-
 ### Fixed
 
 * Fixed typo in `Event.hide_participants`
-
-### Removed
-
-### Security
 
 ## [1.19.0] - Released 2022-11-18
 
