@@ -1,5 +1,21 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+This section contains changes that have been committed but not yet released.
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
 ## [1.19.1] - Released 2023-01-18
 
 ### Changed
@@ -333,7 +349,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.19.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.19.1...HEAD
+[1.19.1]: https://github.com/nylas/nylas-java/releases/tag/v1.19.1
 [1.19.0]: https://github.com/nylas/nylas-java/releases/tag/v1.19.0
 [1.18.0]: https://github.com/nylas/nylas-java/releases/tag/v1.18.0
 [1.17.0]: https://github.com/nylas/nylas-java/releases/tag/v1.17.0
