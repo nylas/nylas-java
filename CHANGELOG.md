@@ -14,6 +14,7 @@ This section contains changes that have been committed but not yet released.
 
 * Fix `Event.hide_participants` not serializing
 * Fix `Event.visibility` not serializing
+* Fix `FreeBusy` not having a `calendar_id` field
 
 ### Removed
 
