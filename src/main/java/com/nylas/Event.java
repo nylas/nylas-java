@@ -242,6 +242,11 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		this.modifiedFields.put("hide_participants", this.hide_participants);
 	}
 
+	public void setVisibility(String visibility) {
+		this.visibility = visibility;
+		this.modifiedFields.put("visibility", this.visibility);
+	}
+
 	public void setMetadata(Map<String, String> metadata) {
 		this.metadata = metadata;
 		this.modifiedFields.put("metadata", this.metadata);
