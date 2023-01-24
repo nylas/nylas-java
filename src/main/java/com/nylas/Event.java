@@ -187,6 +187,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 				", round_robin_order=" + round_robin_order +
 				", notifications=" + notifications +
 				", participants=" + participants +
+				", visibility=" + visibility +
 				", metadata=" + metadata +
 				']';
 	}
@@ -238,6 +239,12 @@ public class Event extends AccountOwnedModel implements JsonObject {
 
 	public void setHideParticipants(Boolean hideParticipants) {
 		this.hide_participants = hideParticipants;
+		this.modifiedFields.put("hide_participants", this.hide_participants);
+	}
+
+	public void setVisibility(String visibility) {
+		this.visibility = visibility;
+		this.modifiedFields.put("visibility", this.visibility);
 	}
 
 	public void setMetadata(Map<String, String> metadata) {
@@ -363,6 +370,8 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "conferencing", getConferencing());
 		Maps.putIfNotNull(params, "notifications", getNotifications());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
+		Maps.putIfNotNull(params, "hide_participants", getHideParticipants());
+		Maps.putIfNotNull(params, "visibility", getVisibility());
 		return params;
 	}
 

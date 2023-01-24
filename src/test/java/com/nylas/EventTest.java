@@ -201,8 +201,8 @@ public class EventTest {
 
     @Test
     public void testGetWritableFields() {
-        assertEquals(event.getWritableFields(true).size(), 13);
-        assertEquals(event.getWritableFields(false).size(), 15);
+        assertEquals(event.getWritableFields(true).size(), 15);
+        assertEquals(event.getWritableFields(false).size(), 16);
     }
 
     @Test
