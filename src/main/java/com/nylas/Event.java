@@ -363,6 +363,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "conferencing", getConferencing());
 		Maps.putIfNotNull(params, "notifications", getNotifications());
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
+		Maps.putIfNotNull(params, "hide_participants", getHideParticipants());
 		return params;
 	}
 

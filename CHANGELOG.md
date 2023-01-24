@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Fix `Event.hide_participants` not serializing
+
 ### Removed
 
 ### Security
