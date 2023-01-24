@@ -25,6 +25,7 @@ public class FreeBusyTest {
 
         FieldReflectionUtils.setField("email", "jdoe@gmail.com", freeBusy);
         FieldReflectionUtils.setField("time_slots", timeSlots, freeBusy);
+        FieldReflectionUtils.setField("calendar_id", "abc123", freeBusy);
     }
 
     @Test
@@ -37,6 +38,6 @@ public class FreeBusyTest {
 
     @Test
     public void testToString() {
-        assertEquals(freeBusy.toString(), "FreeBusy [email=jdoe@gmail.com, time_slots=[TimeSlot [status=null, start_time=2022-12-13T15:34:05Z, end_time=2022-12-13T15:34:05Z, emails=[]]]]");
+        assertEquals(freeBusy.toString(), "FreeBusy [email=jdoe@gmail.com, time_slots=[TimeSlot [status=null, start_time=2022-12-13T15:34:05Z, end_time=2022-12-13T15:34:05Z, emails=[]]], calendar_id=abc123]");
     }
 }
