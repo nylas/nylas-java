@@ -6,6 +6,9 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Added local webhook testing support
+* Added new enums for `Webhook.Triggers` and `Webhook.State`
+
 ### Changed
 
 ### Deprecated
