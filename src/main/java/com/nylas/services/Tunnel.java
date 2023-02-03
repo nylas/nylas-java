@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * Sets up and registers a websocket connection for local webhook testing
  */
-public class WebhookTunnel extends WebSocketClient {
+public class Tunnel extends WebSocketClient {
 
 	private final NylasApplication app;
 	private final String tunnelId;
@@ -25,9 +25,9 @@ public class WebhookTunnel extends WebSocketClient {
 	private final String region;
 	private static final String websocketDomain = "tunnel.nylas.com";
 	private static final String callbackDomain = "cb.nylas.com";
-	private static final Logger log = LoggerFactory.getLogger(WebhookTunnel.class);
+	private static final Logger log = LoggerFactory.getLogger(Tunnel.class);
 
-	public WebhookTunnel(Builder builder) throws URISyntaxException {
+	public Tunnel(Builder builder) throws URISyntaxException {
 		super(new URI("wss://" + websocketDomain));
 		this.webhookHandler = builder.webhookHandler;
 		this.app = builder.app;
@@ -124,7 +124,7 @@ public class WebhookTunnel extends WebSocketClient {
 	}
 
 	/**
-	 * A builder for {@link WebhookTunnel}
+	 * A builder for {@link Tunnel}
 	 */
 	public static class Builder {
 		private final NylasApplication app;
@@ -158,11 +158,11 @@ public class WebhookTunnel extends WebSocketClient {
 		}
 
 		/**
-		 * Builds the WebhookTunnel
-		 * @return The configured WebhookTunnel
+		 * Builds the Tunnel
+		 * @return The configured Tunnel
 		 */
-		public WebhookTunnel build() throws URISyntaxException {
-			return new WebhookTunnel(this);
+		public Tunnel build() throws URISyntaxException {
+			return new Tunnel(this);
 		}
 
 		/**
@@ -178,7 +178,7 @@ public class WebhookTunnel extends WebSocketClient {
 	}
 
 	/**
-	 * An interface for implementing classes to handle events from the {@link WebhookTunnel}
+	 * An interface for implementing classes to handle events from the {@link Tunnel}
 	 */
 	public interface WebhookHandler {
 		void onOpen(short httpStatusCode);
