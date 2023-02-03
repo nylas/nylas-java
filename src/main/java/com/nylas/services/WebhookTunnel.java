@@ -1,4 +1,4 @@
-package com.nylas.server_bindings;
+package com.nylas.services;
 
 import com.nylas.*;
 import org.java_websocket.client.WebSocketClient;
