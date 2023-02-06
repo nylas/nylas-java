@@ -71,11 +71,14 @@ public class Tunnel extends WebSocketClient {
 		log.trace("Messaged received from websocket");
 		Map<String, Object> response = JsonHelper.jsonToMap(message);
 		String jsonBody = (String) response.get("body");
-		if(jsonBody != null) {
-			Notification notification = Notification.parseNotification(jsonBody);
-			webhookHandler.onMessage(notification);
+		if(jsonBody == null || jsonBody.isEmpty()) {
+			log.trace("Not a valid delta response, skipping.");
+			return;
 		}
-		log.trace("Not a valid delta response, skipping.");
+
+		// Parse notification from JSON body and call onMessage callback
+		Notification notification = Notification.parseNotification(jsonBody);
+		webhookHandler.onMessage(notification);
 	}
 
 	/**
