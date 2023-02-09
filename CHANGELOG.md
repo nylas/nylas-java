@@ -8,6 +8,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Changed
 
+* Provide default implementations for `WebhookHandler` methods `onOpen`, `onClose`, and `onError`
+
 ### Deprecated
 
 ### Fixed

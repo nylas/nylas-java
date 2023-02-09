@@ -58,7 +58,6 @@ public class Tunnel extends WebSocketClient {
 	 */
 	@Override
 	public void onOpen(ServerHandshake handshakedata) {
-		log.trace("Opening websocket connection");
 		webhookHandler.onOpen(handshakedata.getHttpStatus());
 	}
 
@@ -87,7 +86,6 @@ public class Tunnel extends WebSocketClient {
 	 */
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		log.trace("Closing websocket connection");
 		webhookHandler.onClose(code, reason, remote);
 	}
 
@@ -97,7 +95,6 @@ public class Tunnel extends WebSocketClient {
 	 */
 	@Override
 	public void onError(Exception ex) {
-		log.trace("Error encountered during websocket connection");
 		webhookHandler.onError(ex);
 	}
 
@@ -184,9 +181,18 @@ public class Tunnel extends WebSocketClient {
 	 * An interface for implementing classes to handle events from the {@link Tunnel}
 	 */
 	public interface WebhookHandler {
-		void onOpen(short httpStatusCode);
-		void onClose(int code, String reason, boolean remote);
 		void onMessage(Notification notification);
-		void onError(Exception ex);
+
+		default void onOpen(short httpStatusCode) {
+			log.trace("Opening websocket connection. Code: {}", httpStatusCode);
+		}
+
+		default void onClose(int code, String reason, boolean remote) {
+			log.trace("Closing websocket connection. Code: {}, Reason: {}, Remote: {}", code, reason, remote);
+		}
+
+		default void onError(Exception ex) {
+			log.error("Error encountered during websocket connection. Exception: {}", ex.getMessage());
+		}
 	}
 }
