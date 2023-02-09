@@ -63,7 +63,7 @@ public class Tunnel extends WebSocketClient {
 
 	/**
 	 * {@inheritDoc}
-	 * Calls {@link WebhookHandler#onMessage(Notification)}
+	 * Calls {@link WebhookHandler#onMessage(Notification.Delta)}
 	 */
 	@Override
 	public void onMessage(String message) {
@@ -77,7 +77,9 @@ public class Tunnel extends WebSocketClient {
 
 		// Parse notification from JSON body and call onMessage callback
 		Notification notification = Notification.parseNotification(jsonBody);
-		webhookHandler.onMessage(notification);
+		for(Notification.Delta delta : notification.getDeltas()) {
+			webhookHandler.onMessage(delta);
+		}
 	}
 
 	/**
@@ -181,7 +183,7 @@ public class Tunnel extends WebSocketClient {
 	 * An interface for implementing classes to handle events from the {@link Tunnel}
 	 */
 	public interface WebhookHandler {
-		void onMessage(Notification notification);
+		void onMessage(Notification.Delta delta);
 
 		default void onOpen(short httpStatusCode) {
 			log.trace("Opening websocket connection. Code: {}", httpStatusCode);

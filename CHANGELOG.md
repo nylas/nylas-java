@@ -14,6 +14,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Fix `Tunnel.onMessage` not emitting individual deltas
+
 ### Removed
 
 ### Security
