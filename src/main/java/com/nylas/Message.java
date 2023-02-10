@@ -111,7 +111,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject="
 				+ subject + ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to
 				+ ", date=" + getDate() + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet
-				+ ", body.length=" + body.length() + ", files=" + files + ", events=" + events + ", folder=" + folder
+				+ ", files=" + files + ", events=" + events + ", folder=" + folder
 				+ ", labels=" + labels + ", headers=" + headers + ", metadata=" + metadata + "]";
 	}
 	

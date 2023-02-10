@@ -71,7 +71,7 @@ public class MessageTest {
         assertEquals(message.getLabels().size(), 1);
         assertEquals(message.getMetadata().size(), 1);
         assertEquals(message.getHeaders().size(), 1);
-        assertEquals(message.toString(), "Message [id=null, account_id=null, thread_id=okdvc089, subject=That thing I sent you, from=[NameEmail [name=Peter Potamus, email=potamus.peter@sebbebandsebben.com]], to=[NameEmail [name=Blue Falcone, email=falcone.blue@sebbebandsebben.com]], cc=[NameEmail [name=Harvey Birdman, email=harvey.birdman@sebbebandsebben.com]], bcc=[NameEmail [name=Christie, email=christie@sebbebandsebben.com]], reply_to=[NameEmail [name=Peter Potamus, email=potamus.peter@sebbebandsebben.com]], date=2022-11-10T12:28:00Z, unread=true, starred=true, snippet=Did you get that thing..., body.length=46, files=[File [id=null, filename=logo.jpg, size=12334, content_type=image/jpeg, message_ids=[odjashjcv89], content_id=osdivcnm90834e]], events=[Event [id='null', calendar_id='null', ical_uid='null', master_event_id='null', event_collection_id='null', title='null', description='null', location='null', owner='null', status='null', capacity=null, read_only=null, busy=null, hide_participants=null, original_start_time=null, when=null, conferencing=null, recurrence=null, round_robin_order=[], notifications=[], participants=[], visibility=null, metadata={}]], folder=Folder [id=null, name=null, display_name=null], labels=[Label [id=null, name=null, display_name=null]], headers={header1=value}, metadata={key1=value}]");
+        assertEquals(message.toString(), "Message [id=null, account_id=null, thread_id=okdvc089, subject=That thing I sent you, from=[NameEmail [name=Peter Potamus, email=potamus.peter@sebbebandsebben.com]], to=[NameEmail [name=Blue Falcone, email=falcone.blue@sebbebandsebben.com]], cc=[NameEmail [name=Harvey Birdman, email=harvey.birdman@sebbebandsebben.com]], bcc=[NameEmail [name=Christie, email=christie@sebbebandsebben.com]], reply_to=[NameEmail [name=Peter Potamus, email=potamus.peter@sebbebandsebben.com]], date=2022-11-10T12:28:00Z, unread=true, starred=true, snippet=Did you get that thing..., files=[File [id=null, filename=logo.jpg, size=12334, content_type=image/jpeg, message_ids=[odjashjcv89], content_id=osdivcnm90834e, content_disposition=attachment]], events=[Event [id='null', calendar_id='null', ical_uid='null', master_event_id='null', event_collection_id='null', title='null', description='null', location='null', owner='null', status='null', capacity=null, read_only=null, busy=null, hide_participants=null, original_start_time=null, when=null, conferencing=null, recurrence=null, round_robin_order=[], notifications=[], participants=[], visibility=null, metadata={}]], folder=Folder [id=null, name=null, display_name=null], labels=[Label [id=null, name=null, display_name=null]], headers={header1=value}, metadata={key1=value}]");
     }
 
 
@@ -91,6 +91,7 @@ public class MessageTest {
         FieldReflectionUtils.setField("content_type", contentType, file);
         FieldReflectionUtils.setField("message_ids", Arrays.asList("odjashjcv89"), file);
         FieldReflectionUtils.setField("content_id", "osdivcnm90834e", file);
+        FieldReflectionUtils.setField("content_disposition", "attachment", file);
 
         return file;
     }
