@@ -6,13 +6,15 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
+* Added missing `content_disposition` field in `File`
+
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
-* Add missing `content_disposition` field in `File`
+* Fixed NullPointerException sporadically occurring when calling `Message.toString()`
 
 ### Removed
 
