@@ -107,6 +107,23 @@ public class JobStatus extends AccountOwnedModel {
 		return super.getId();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toJSON() {
+		return JsonHelper.objectToJson(JobStatus.class, this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, JobStatus> toMap() {
+		return (Map<String, JobStatus>) JsonHelper.adapter(JobStatus.class).toJsonValue(this);
+	}
+
 	@Override
 	public String toString() {
 		return "JobStatus [" +
