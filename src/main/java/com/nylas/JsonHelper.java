@@ -69,6 +69,10 @@ public class JsonHelper {
 	private static final JsonAdapter<List<Object>> listAdapter
 			= moshi.<List<Object>>adapter(List.class).indent("  ");
 
+	public static String objectToJson(Class<?> cls, Object obj) {
+		return adapter(cls).toJson(obj);
+	}
+
 	public static String mapToJson(Map<String, Object> map) {
 		return mapAdapter.toJson(map);
 	}
