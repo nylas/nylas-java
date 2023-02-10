@@ -12,6 +12,8 @@ This section contains changes that have been committed but not yet released.
 
 ### Fixed
 
+* Add missing `content_disposition` field in `File`
+
 ### Removed
 
 ### Security

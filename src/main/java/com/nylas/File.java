@@ -10,6 +10,7 @@ public class File extends AccountOwnedModel implements JsonObject {
 	private String content_type;
 	private List<String> message_ids = Collections.emptyList();
 	private String content_id;
+	private String content_disposition;
 	
 	@Override
 	public String getObjectType() {
@@ -36,10 +37,15 @@ public class File extends AccountOwnedModel implements JsonObject {
 		return content_id;
 	}
 
+	public String getContentDisposition() {
+		return content_disposition;
+	}
+
 	@Override
 	public String toString() {
 		return "File [id=" + getId() + ", filename=" + filename + ", size=" + size + ", content_type=" + content_type
-				+ ", message_ids=" + message_ids + ", content_id=" + content_id + "]";
+				+ ", message_ids=" + message_ids + ", content_id=" + content_id
+				+ ", content_disposition=" + content_disposition + "]";
 	}
 	
 	
