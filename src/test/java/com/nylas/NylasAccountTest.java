@@ -17,6 +17,7 @@ public class NylasAccountTest {
     @BeforeEach
     private void init() {
         nylasClient = mock(NylasClient.class);
+        when(nylasClient.newUrlBuilder()).thenReturn(HttpUrl.get(NylasClient.DEFAULT_BASE_URL).newBuilder());
     }
 
     @Test

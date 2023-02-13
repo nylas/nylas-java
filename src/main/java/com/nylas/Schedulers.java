@@ -1,6 +1,5 @@
 package com.nylas;
 
-import com.nylas.*;
 import com.nylas.scheduler.*;
 import okhttp3.HttpUrl;
 
@@ -13,14 +12,27 @@ import java.util.Map;
 
 public class Schedulers extends RestfulDAO<Scheduler> {
 
-	private final String SCHEDULER_API_BASE_URL = "https://api.schedule.nylas.com";
+	private static final String SCHEDULER_API_BASE_URL = "https://api.schedule.nylas.com/";
+	private static final String SCHEDULER_API_EU_BASE_URL = "https://ireland.api.schedule.nylas.com/";
+	private final String baseUrl;
 
 	Schedulers(NylasClient client, String accessToken) {
 		super(client, Scheduler.class, "manage/pages", accessToken);
+
+		// Set the Scheduler URL based on the URL set in the client
+		switch (client.newUrlBuilder().toString()) {
+			case NylasClient.EU_BASE_URL:
+				baseUrl = SCHEDULER_API_EU_BASE_URL;
+				break;
+			case NylasClient.DEFAULT_BASE_URL:
+			default:
+				baseUrl = SCHEDULER_API_BASE_URL;
+				break;
+		}
 	}
 
 	protected HttpUrl.Builder getCollectionUrl() {
-		return HttpUrl.get(SCHEDULER_API_BASE_URL).newBuilder().addPathSegments(collectionPath);
+		return HttpUrl.get(baseUrl).newBuilder().addPathSegments(collectionPath);
 	}
 
 	public RemoteCollection<Scheduler> list() throws IOException, RequestFailedException {
@@ -147,6 +159,6 @@ public class Schedulers extends RestfulDAO<Scheduler> {
 	}
 
 	private HttpUrl.Builder schedulerUrl() {
-		return HttpUrl.get(SCHEDULER_API_BASE_URL).newBuilder().addPathSegment("schedule");
+		return HttpUrl.get(baseUrl).newBuilder().addPathSegment("schedule");
 	}
 }

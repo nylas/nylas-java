@@ -24,8 +24,9 @@ import okhttp3.ResponseBody;
  */
 public class NylasClient {
 
-	public static final String DEFAULT_BASE_URL = "https://api.nylas.com";
-	
+	public static final String DEFAULT_BASE_URL = "https://api.nylas.com/";
+	public static final String EU_BASE_URL = "https://ireland.api.nylas.com/";
+
 	private final HttpUrl baseUrl;
 	private final OkHttpClient httpClient;
 
