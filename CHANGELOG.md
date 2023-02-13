@@ -7,6 +7,7 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 * Added missing `content_disposition` field in `File`
+* Added scheduler support for the EU region
 
 ### Changed
 
