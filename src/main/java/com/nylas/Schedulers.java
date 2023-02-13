@@ -13,7 +13,8 @@ import java.util.Map;
 
 public class Schedulers extends RestfulDAO<Scheduler> {
 
-	private final String SCHEDULER_API_BASE_URL = "https://api.schedule.nylas.com";
+	private static final String SCHEDULER_API_BASE_URL = "https://api.schedule.nylas.com/";
+	private static final String SCHEDULER_API_EU_BASE_URL = "https://ireland.api.schedule.nylas.com/";
 
 	Schedulers(NylasClient client, String accessToken) {
 		super(client, Scheduler.class, "manage/pages", accessToken);
