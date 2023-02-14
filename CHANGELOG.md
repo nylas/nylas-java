@@ -1,5 +1,21 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+This section contains changes that have been committed but not yet released.
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Fixed
+
+### Removed
+
+### Security
+
 ## [1.21.0] - Released 2023-02-14
 
 ### Added
