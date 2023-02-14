@@ -6,20 +6,27 @@ This section contains changes that have been committed but not yet released.
 
 ### Added
 
-* Added missing `content_disposition` field in `File`
-* Added scheduler support for the EU region
-
 ### Changed
 
 ### Deprecated
 
 ### Fixed
 
-* Fixed NullPointerException sporadically occurring when calling `Message.toString()`
-
 ### Removed
 
 ### Security
+
+## [1.21.0] - Released 2023-02-14
+
+### Added
+
+* Added missing `content_disposition` field in `File`
+* Added toJSON() and toMap() support to account owned models
+* Added scheduler support for the EU region
+
+### Fixed
+
+* Fixed NullPointerException sporadically occurring when calling `Message.toString()`
 
 ## [1.20.1] - Released 2023-02-09
 
@@ -380,7 +387,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.20.1...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.21.0...HEAD
+[1.21.0]: https://github.com/nylas/nylas-java/releases/tag/v1.21.0
 [1.20.1]: https://github.com/nylas/nylas-java/releases/tag/v1.20.1
 [1.20.0]: https://github.com/nylas/nylas-java/releases/tag/v1.20.0
 [1.19.2]: https://github.com/nylas/nylas-java/releases/tag/v1.19.2
