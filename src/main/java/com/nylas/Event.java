@@ -189,6 +189,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 				", participants=" + participants +
 				", visibility=" + visibility +
 				", metadata=" + metadata +
+				", customer_event_id" + customerEventId +
 				']';
 	}
 
