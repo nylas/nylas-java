@@ -26,6 +26,7 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	private List<String> metadataKeys;
 	private List<String> metadataValues;
 	private List<String> metadataPairs;
+	private String customerEventId;
 
 	@Override
 	public void addParameters(HttpUrl.Builder url) {
