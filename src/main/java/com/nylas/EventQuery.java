@@ -88,6 +88,9 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 		if (metadataQuery != null) {
 			metadataQuery.addParameters(url);
 		}
+		if (customerEventId != null) {
+			url.addQueryParameter("customer_event_id", customerEventId);
+		}
 	}
 
 	/**
@@ -206,6 +209,14 @@ public class EventQuery extends RestfulQuery<EventQuery> {
 	 */
 	public EventQuery metadataQuery(MetadataQuery metadataQuery) {
 		this.metadataQuery = metadataQuery;
+		return this;
+	}
+	
+	/**
+	 * Return events matching the specified customer event ID.
+	 */
+	public EventQuery customerEventId(String customerEventId) {
+		this.customerEventId = customerEventId;
 		return this;
 	}
 
