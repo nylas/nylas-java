@@ -189,6 +189,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 				", participants=" + participants +
 				", visibility=" + visibility +
 				", metadata=" + metadata +
+				", customer_event_id=" + customer_event_id +
 				']';
 	}
 
@@ -372,6 +373,7 @@ public class Event extends AccountOwnedModel implements JsonObject {
 		Maps.putIfNotNull(params, "recurrence", getRecurrence());
 		Maps.putIfNotNull(params, "hide_participants", getHideParticipants());
 		Maps.putIfNotNull(params, "visibility", getVisibility());
+		Maps.putIfNotNull(params, "customer_event_id", getCustomerEventId());
 		return params;
 	}
 
