@@ -7,4 +7,4 @@
  * in the user manual at https://docs.gradle.org/5.4/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'nylas-java-sdk'
+rootProject.name = "nylas-java-sdk"
