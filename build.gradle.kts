@@ -1,12 +1,10 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
-    id 'signing' 
-    id 'eclipse'  // necessary for workaround at bottom
+    kotlin("jvm") version "1.8.21"
+    application
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 java {
@@ -24,6 +22,14 @@ sourceSets {
 configurations {
     examplesImplementation.extendsFrom implementation
     examplesRuntimeOnly.extendsFrom runtimeOnly
+}
+
+kotlin {
+    jvmToolchain(8)
+}
+
+application {
+    mainClass.set("MainKt")
 }
 
 dependencies {
