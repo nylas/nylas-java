@@ -12,13 +12,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-sourceSets {
-    examples {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
 configurations {
     examplesImplementation.extendsFrom implementation
     examplesRuntimeOnly.extendsFrom runtimeOnly
