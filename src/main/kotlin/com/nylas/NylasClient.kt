@@ -68,10 +68,10 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     @Throws(IOException::class, RequestFailedException::class)
     fun <T> executePut(
         url: HttpUrl.Builder,
-        params: Map<String, Any>?,
+        requestBody: String?,
         resultType: Type?,
     ): T {
-        val jsonBody = if(params != null) JsonHelper.jsonRequestBody(params) else null
+        val jsonBody = if(requestBody != null) JsonHelper.jsonRequestBody(requestBody) else null
         return executeRequest(url, HttpMethod.PUT, jsonBody, resultType)
     }
 
@@ -88,12 +88,12 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     @Throws(IOException::class, RequestFailedException::class)
     fun <T> executePost(
         url: HttpUrl.Builder,
-        params: Map<String, Any>?,
+        requestBody: String?,
         resultType: Type?,
     ): T {
         var jsonBody = RequestBody.create(null, ByteArray(0))
-        if (params != null) {
-            jsonBody = JsonHelper.jsonRequestBody(params)
+        if (requestBody != null) {
+            jsonBody = JsonHelper.jsonRequestBody(requestBody)
         }
         return executeRequest(url, HttpMethod.POST, jsonBody, resultType)
     }
@@ -156,7 +156,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
      * by choosing a different base url or modifying http client options.
      */
     data class Builder(
-        var apiKey: String,
+        private val apiKey: String,
     ) {
         //TODO::is this good?
         private var baseUrl: String = DEFAULT_BASE_URL

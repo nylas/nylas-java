@@ -1,6 +1,7 @@
 package com.nylas.resources
 
 import com.nylas.NylasClient
+import com.nylas.models.DeleteResponse
 import com.nylas.models.ListResponse
 import com.nylas.models.RequestFailedException
 import com.nylas.models.Response
@@ -27,27 +28,34 @@ abstract class Resource<T> protected constructor(
         return client.executeGet(url, listResponseType)
     }
 
-    //	protected RemoteCollection<M> list(RestfulQuery<?> query) throws IOException, RequestFailedException {
-    //		return new RemoteCollection<M>(this, null, getModelListType(), query);
-    //	}
-    //	protected RemoteCollection<M> expanded(RestfulQuery<?> query) throws IOException, RequestFailedException {
-    //		return new RemoteCollection<M>(this, "expanded", getModelListType(), query);
-    //	}
-    //
-    //	private static final Type STRING_LIST_TYPE = JsonHelper.listTypeOf(String.class);
-    //	protected RemoteCollection<String> ids(RestfulQuery<?> query) throws IOException, RequestFailedException {
-    //		return new RemoteCollection<String>(this, "ids", STRING_LIST_TYPE, query);
-    //	}
-    //
-    //	protected RemoteCollection<M> search(SearchQuery query) throws IOException, RequestFailedException {
-    //		return new RemoteCollection<M>(this, null, getModelListType(), query);
-    //	}
-    //
-    //	protected long count(RestfulQuery<?> query) throws IOException, RequestFailedException {
-    //		Count count = fetchQuery(query, "count", Count.class);
-    //		return count.getCount();
-    //	}
-    //
+    @Throws(IOException::class, RequestFailedException::class)
+    protected fun findResource(path: String, queryParams: Map<String, String>?): Response<T> {
+        var url = client.newUrlBuilder().addPathSegments(path)
+        url = addQueryParams(url, queryParams)
+        return client.executeGet(url, responseType)
+    }
+
+    @Throws(IOException::class, RequestFailedException::class)
+    protected fun createResource(path: String, requestBody: String?, queryParams: Map<String, String>?): Response<T> {
+        var url = client.newUrlBuilder().addPathSegments(path)
+        url = addQueryParams(url, queryParams)
+        return client.executePost(url, requestBody, responseType)
+    }
+
+    @Throws(IOException::class, RequestFailedException::class)
+    protected fun updateResource(path: String, requestBody: String?, queryParams: Map<String, String>?): Response<T> {
+        var url = client.newUrlBuilder().addPathSegments(path)
+        url = addQueryParams(url, queryParams)
+        return client.executePut(url, requestBody, responseType)
+    }
+
+    @Throws(IOException::class, RequestFailedException::class)
+    protected fun destroyResource(path: String, queryParams: Map<String, String>?): DeleteResponse {
+        var url = client.newUrlBuilder().addPathSegments(path)
+        url = addQueryParams(url, queryParams)
+        return client.executeDelete(url, DeleteResponse::class.java)
+    }
+
     //	<T> T fetchQuery(RestfulQuery<?> query, String view, Type resultType) throws IOException, RequestFailedException {
     //		HttpUrl.Builder url = getCollectionUrl();
     //		setQuery(url, query);

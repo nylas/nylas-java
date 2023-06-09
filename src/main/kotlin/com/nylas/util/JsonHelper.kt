@@ -107,6 +107,11 @@ class JsonHelper {
         @JvmStatic
         fun jsonRequestBody(params: Map<String, Any>): RequestBody {
             val json = mapToJson(params)
+            return jsonRequestBody(json)
+        }
+
+        @JvmStatic
+        fun jsonRequestBody(json: String): RequestBody {
             return RequestBody.create(jsonType(), json)
         }
     }
