@@ -53,3 +53,16 @@ dependencies {
         testImplementation("org.mockito:mockito-inline:2.13.0")
     }
 }
+
+tasks.register<Jar>("uberJar") {
+    archiveClassifier.set("uber")
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
