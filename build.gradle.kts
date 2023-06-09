@@ -28,6 +28,7 @@ dependencies {
 
     // Moshi JSON library
     implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("com.squareup.moshi:moshi-adapters:1.15.0")
 
     // SLF4J for logging facade
