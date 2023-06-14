@@ -1,6 +1,7 @@
 package com.nylas
 
-import com.nylas.models.RequestFailedException
+import com.nylas.models.NylasApiError
+import com.nylas.models.NylasApiErrorResponse
 import com.nylas.resources.Calendars
 import com.nylas.util.JsonHelper
 import okhttp3.*
@@ -60,12 +61,12 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
         return baseUrl.newBuilder()
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     fun <T> executeGet(url: HttpUrl.Builder, resultType: Type?): T {
         return executeRequest(url, HttpMethod.GET, null, resultType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     fun <T> executePut(
         url: HttpUrl.Builder,
         requestBody: String?,
@@ -75,7 +76,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
         return executeRequest(url, HttpMethod.PUT, jsonBody, resultType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     fun <T> executePatch(
         url: HttpUrl.Builder,
         params: Map<String, Any>?,
@@ -85,7 +86,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
         return executeRequest(url, HttpMethod.PATCH, jsonBody, resultType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     fun <T> executePost(
         url: HttpUrl.Builder,
         requestBody: String?,
@@ -98,7 +99,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
         return executeRequest(url, HttpMethod.POST, jsonBody, resultType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     fun <T> executeDelete(url: HttpUrl.Builder, resultType: Type?): T {
         return executeRequest(url, HttpMethod.DELETE, null, resultType)
     }
@@ -107,7 +108,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
      * Download the given url. If the request is successful, returns the raw response body, exposing useful headers
      * such as Content-Type and Content-Length.
      */
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     fun download(url: HttpUrl.Builder): ResponseBody? {
         val request = buildRequest(url, HttpMethod.GET, null)
         val response = httpClient.newCall(request).execute()
@@ -125,7 +126,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
         return builder.method(method.toString(), body).build()
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     fun <T> executeRequest(url: HttpUrl.Builder, method: HttpMethod, body: RequestBody?,
                            resultType: Type?): T {
         val request = buildRequest(url, method, body)
@@ -142,12 +143,18 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
         }
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
+    @Throws(IOException::class, NylasApiError::class)
     private fun throwAndCloseOnFailedRequest(response: Response) {
         if (!response.isSuccessful) {
             val responseBody = response.body()!!.string()
             response.close()
-            throw RequestFailedException.parseErrorResponse(response.code(), responseBody)
+            val parsedError = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
+                .fromJson(responseBody)
+            if (parsedError?.error != null) {
+                throw parsedError.error
+            } else {
+                throw NylasApiError("unknown", "Unknown error received from the API: $responseBody")
+            }
         }
     }
 

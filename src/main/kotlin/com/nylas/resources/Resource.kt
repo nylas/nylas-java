@@ -21,36 +21,36 @@ abstract class Resource<T> protected constructor(
         listResponseType = Types.newParameterizedType(ListResponse::class.java, modelClass)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
     protected fun listResource(path: String, queryParams: Map<String, String>?): ListResponse<T> {
+    @Throws(IOException::class, NylasApiError::class)
         var url = client.newUrlBuilder().addPathSegments(path)
         url = addQueryParams(url, queryParams)
         return client.executeGet(url, listResponseType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
     protected fun findResource(path: String, queryParams: Map<String, String>?): Response<T> {
+    @Throws(IOException::class, NylasApiError::class)
         var url = client.newUrlBuilder().addPathSegments(path)
         url = addQueryParams(url, queryParams)
         return client.executeGet(url, responseType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
     protected fun createResource(path: String, requestBody: String?, queryParams: Map<String, String>?): Response<T> {
+    @Throws(IOException::class, NylasApiError::class)
         var url = client.newUrlBuilder().addPathSegments(path)
         url = addQueryParams(url, queryParams)
         return client.executePost(url, requestBody, responseType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
     protected fun updateResource(path: String, requestBody: String?, queryParams: Map<String, String>?): Response<T> {
+    @Throws(IOException::class, NylasApiError::class)
         var url = client.newUrlBuilder().addPathSegments(path)
         url = addQueryParams(url, queryParams)
         return client.executePut(url, requestBody, responseType)
     }
 
-    @Throws(IOException::class, RequestFailedException::class)
     protected fun destroyResource(path: String, queryParams: Map<String, String>?): DeleteResponse {
+    @Throws(IOException::class, NylasApiError::class)
         var url = client.newUrlBuilder().addPathSegments(path)
         url = addQueryParams(url, queryParams)
         return client.executeDelete(url, DeleteResponse::class.java)
