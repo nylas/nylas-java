@@ -1,5 +1,6 @@
 package com.nylas.util
 
+import com.nylas.models.When.Companion.WHEN_JSON_FACTORY
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
@@ -18,6 +19,13 @@ class JsonHelper {
             // Date adapters
             .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
             // Custom adapters
+            .add(ConferencingAdapter())
+            .add(CreateConferencingAdapter())
+            .add(UpdateConferencingAdapter())
+            .add(CreateWhenAdapter())
+            .add(UpdateWhenAdapter())
+            // Polymorphic adapters
+            .add(WHEN_JSON_FACTORY)
             .add(KotlinJsonAdapterFactory())
             .build()
 
