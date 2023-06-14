@@ -18,7 +18,7 @@ data class UpdateCalendarRequest(
   @Json(name = "hex_foreground_color")
   val hexForegroundColor: String? = null,
 ) {
-  class Builder() {
+  class Builder {
     private var name: String? = null
     private var description: String? = null
     private var location: String? = null

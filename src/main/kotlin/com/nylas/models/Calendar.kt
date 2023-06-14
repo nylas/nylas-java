@@ -10,7 +10,7 @@ data class Calendar(
     @Json(name = "name")
     val name: String = "",
     @Json(name = "object")
-    private val obj: String = "",
+    private val obj: String = "calendar",
     @Json(name = "timezone")
     val timezone: String = "",
     @Json(name = "read_only")
@@ -29,4 +29,6 @@ data class Calendar(
     val hexForegroundColor: String? = null,
     @Json(name = "metadata")
     val metadata: Map<String, String>? = null
-)
+) {
+    fun getObject(): String = obj
+}

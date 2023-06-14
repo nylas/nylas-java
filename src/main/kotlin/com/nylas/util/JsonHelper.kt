@@ -17,20 +17,7 @@ class JsonHelper {
         private val moshi: Moshi = Moshi.Builder()
             // Date adapters
             .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
-            // Enum adapters
-            //	.add(JobStatus.Action.class, JobStatus.JOB_STATUS_ACTIONS_ADAPTER)
-            // Polymorphic adapters
-            //	.add(Event.WHEN_JSON_FACTORY)
-            //	add(Event.EVENT_NOTIFICATION_JSON_FACTORY)
-            //  .add(Delta.ACCOUNT_OWNED_MODEL_JSON_FACTORY)
             // Custom adapters
-            //	.add(new NeuralCategorizer.CategorizeCustomAdapter())
-            //	.add(new Integration.IntegrationCustomAdapter())
-            //	.add(new Integration.IntegrationListCustomAdapter())
-            //	.add(new Grant.GrantCustomAdapter())
-            //	.add(new Grant.GrantListCustomAdapter())
-            //	.add(new LoginInfo.LoginInfoCustomAdapter())
-            //	.add(new Notification.WebhookDeltaAdapter())
             .add(KotlinJsonAdapterFactory())
             .build()
 
@@ -40,17 +27,17 @@ class JsonHelper {
         }
 
         @JvmStatic
-        fun listTypeOf(type: Type?): Type {
+        fun listTypeOf(type: Type): Type {
             return Types.newParameterizedType(MutableList::class.java, type)
         }
 
         @JvmStatic
-        fun <T> adapter(type: Type?): JsonAdapter<T> {
-            return moshi!!.adapter<Any>(type).indent("  ") as JsonAdapter<T>
+        fun <T> adapter(type: Type): JsonAdapter<T> {
+            return moshi.adapter<Any>(type).indent("  ") as JsonAdapter<T>
         }
 
         @JvmStatic
-        fun <T> fromJsonUnchecked(adapter: JsonAdapter<T>, json: String?): T? {
+        fun <T> fromJsonUnchecked(adapter: JsonAdapter<T>, json: String): T? {
             return try {
                 adapter.fromJson(json)
             } catch (e: IOException) {
@@ -59,15 +46,15 @@ class JsonHelper {
         }
 
         @JvmStatic
-        private val mapAdapter = moshi!!.adapter<Map<String, Any>>(
+        val mapAdapter = moshi.adapter<Map<String, Any>>(
             MutableMap::class.java
         ).indent("  ")
-        private val listAdapter = moshi!!.adapter<List<Any>>(
+        val listAdapter = moshi.adapter<List<Any>>(
             MutableList::class.java
         ).indent("  ")
 
         @JvmStatic
-        fun objectToJson(cls: Class<*>?, obj: Any?): String {
+        fun objectToJson(cls: Class<*>, obj: Any?): String {
             return adapter<Any>(cls).toJson(obj)
         }
 
@@ -82,7 +69,7 @@ class JsonHelper {
         }
 
         @JvmStatic
-        fun jsonToMap(json: String?): Map<String, Any> {
+        fun jsonToMap(json: String): Map<String, Any> {
             return fromJsonUnchecked(mapAdapter, json)!!
         }
 
