@@ -3,6 +3,7 @@ package com.nylas
 import com.nylas.models.NylasApiError
 import com.nylas.models.NylasApiErrorResponse
 import com.nylas.resources.Calendars
+import com.nylas.resources.Events
 import com.nylas.util.JsonHelper
 import okhttp3.*
 import java.io.IOException
@@ -55,6 +56,10 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
 
     fun calendars(): Calendars {
         return Calendars(this)
+    }
+
+    fun events(): Events {
+        return Events(this)
     }
 
     fun newUrlBuilder(): HttpUrl.Builder {
