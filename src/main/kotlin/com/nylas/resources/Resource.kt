@@ -8,7 +8,7 @@ import java.io.IOException
 import java.lang.reflect.Type;
 
 abstract class Resource<T> protected constructor(
-    protected val client: NylasClient,
+    private val client: NylasClient,
     modelClass: Class<T>
 ) {
     private val responseType: Type
@@ -20,58 +20,26 @@ abstract class Resource<T> protected constructor(
 
     @Throws(IOException::class, NylasApiError::class)
     protected fun listResource(path: String, queryParams: IQueryParams? = null): ListResponse<T> {
-        var url = client.newUrlBuilder().addPathSegments(path)
-        if (queryParams != null) {
-            url = addQueryParams(url, queryParams.convertToMap())
-        }
-
-        return client.executeGet(url, listResponseType)
+        return client.executeGet(path, listResponseType, queryParams)
     }
 
     @Throws(IOException::class, NylasApiError::class)
     protected fun findResource(path: String, queryParams: IQueryParams? = null): Response<T> {
-        var url = client.newUrlBuilder().addPathSegments(path)
-        if (queryParams != null) {
-            url = addQueryParams(url, queryParams.convertToMap())
-        }
-
-        return client.executeGet(url, responseType)
+        return client.executeGet(path, responseType, queryParams)
     }
 
     @Throws(IOException::class, NylasApiError::class)
     protected fun createResource(path: String, requestBody: String?, queryParams: IQueryParams? = null): Response<T> {
-        var url = client.newUrlBuilder().addPathSegments(path)
-        if (queryParams != null) {
-            url = addQueryParams(url, queryParams.convertToMap())
-        }
-
-        return client.executePost(url, requestBody, responseType)
+        return client.executePost(path, responseType, requestBody, queryParams)
     }
 
     @Throws(IOException::class, NylasApiError::class)
     protected fun updateResource(path: String, requestBody: String?, queryParams: IQueryParams? = null): Response<T> {
-        var url = client.newUrlBuilder().addPathSegments(path)
-        if (queryParams != null) {
-            url = addQueryParams(url, queryParams.convertToMap())
-        }
-
-        return client.executePut(url, requestBody, responseType)
+        return client.executePut(path, responseType, requestBody, queryParams)
     }
 
     @Throws(IOException::class, NylasApiError::class)
     protected fun destroyResource(path: String, queryParams: IQueryParams? = null): DeleteResponse {
-        var url = client.newUrlBuilder().addPathSegments(path)
-        if (queryParams != null) {
-            url = addQueryParams(url, queryParams.convertToMap())
-        }
-
-        return client.executeDelete(url, DeleteResponse::class.java)
-    }
-
-    private fun addQueryParams(url: HttpUrl.Builder, params: Map<String, Any>): HttpUrl.Builder {
-        for ((key, value) in params) {
-            url.addQueryParameter(key, value.toString())
-        }
-        return url
+        return client.executeDelete(path, DeleteResponse::class.java, queryParams)
     }
 }

@@ -1,5 +1,6 @@
 package com.nylas
 
+import com.nylas.models.IQueryParams
 import com.nylas.models.NylasApiError
 import com.nylas.models.NylasApiErrorResponse
 import com.nylas.resources.Calendars
@@ -67,36 +68,47 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     }
 
     @Throws(IOException::class, NylasApiError::class)
-    fun <T> executeGet(url: HttpUrl.Builder, resultType: Type?): T {
+    fun <T> executeGet(
+        path: String,
+        resultType: Type,
+        queryParams: IQueryParams? = null,
+    ): T {
+        val url = buildUrl(path, queryParams)
         return executeRequest(url, HttpMethod.GET, null, resultType)
     }
 
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executePut(
-        url: HttpUrl.Builder,
-        requestBody: String?,
-        resultType: Type?,
+        path: String,
+        resultType: Type,
+        requestBody: String? = null,
+        queryParams: IQueryParams? = null,
     ): T {
+        val url = buildUrl(path, queryParams)
         val jsonBody = if(requestBody != null) JsonHelper.jsonRequestBody(requestBody) else null
         return executeRequest(url, HttpMethod.PUT, jsonBody, resultType)
     }
 
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executePatch(
-        url: HttpUrl.Builder,
-        params: Map<String, Any>?,
-        resultType: Type?,
+        path: String,
+        resultType: Type,
+        requestBody: String? = null,
+        queryParams: IQueryParams? = null,
     ): T {
-        val jsonBody = if(params != null) JsonHelper.jsonRequestBody(params) else null
+        val url = buildUrl(path, queryParams)
+        val jsonBody = if(requestBody != null) JsonHelper.jsonRequestBody(requestBody) else null
         return executeRequest(url, HttpMethod.PATCH, jsonBody, resultType)
     }
 
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executePost(
-        url: HttpUrl.Builder,
-        requestBody: String?,
-        resultType: Type?,
+        path: String,
+        resultType: Type,
+        requestBody: String? = null,
+        queryParams: IQueryParams? = null,
     ): T {
+        val url = buildUrl(path, queryParams)
         var jsonBody = RequestBody.create(null, ByteArray(0))
         if (requestBody != null) {
             jsonBody = JsonHelper.jsonRequestBody(requestBody)
@@ -105,7 +117,12 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     }
 
     @Throws(IOException::class, NylasApiError::class)
-    fun <T> executeDelete(url: HttpUrl.Builder, resultType: Type?): T {
+    fun <T> executeDelete(
+        path: String,
+        resultType: Type,
+        queryParams: IQueryParams? = null,
+    ): T {
+        val url = buildUrl(path, queryParams)
         return executeRequest(url, HttpMethod.DELETE, null, resultType)
     }
 
@@ -161,6 +178,21 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
                 throw NylasApiError("unknown", "Unknown error received from the API: $responseBody")
             }
         }
+    }
+
+    private fun buildUrl(path: String, queryParams: IQueryParams?): HttpUrl.Builder {
+        var url = newUrlBuilder().addPathSegments(path)
+        if (queryParams != null) {
+            url = addQueryParams(url, queryParams.convertToMap())
+        }
+        return url
+    }
+
+    private fun addQueryParams(url: HttpUrl.Builder, params: Map<String, Any>): HttpUrl.Builder {
+        for ((key, value) in params) {
+            url.addQueryParameter(key, value.toString())
+        }
+        return url
     }
 
     /**
