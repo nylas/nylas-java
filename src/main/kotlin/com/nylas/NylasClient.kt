@@ -3,6 +3,7 @@ package com.nylas
 import com.nylas.models.IQueryParams
 import com.nylas.models.NylasApiError
 import com.nylas.models.NylasApiErrorResponse
+import com.nylas.resources.Auth
 import com.nylas.resources.Calendars
 import com.nylas.resources.Events
 import com.nylas.util.JsonHelper
@@ -53,6 +54,10 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
 //            .addInterceptor(AddVersionHeadersInterceptor()) // enforce user agent and build data
 //            .addInterceptor(ContentHeadersInterceptor()) // enforce Content-Type headers.
             .build()
+    }
+
+    fun auth(clientId: String, clientSecret: String): Auth {
+        return Auth(this, clientId, clientSecret)
     }
 
     fun calendars(): Calendars {
