@@ -3,6 +3,7 @@ package com.nylas
 import com.nylas.models.IQueryParams
 import com.nylas.models.NylasApiError
 import com.nylas.models.NylasApiErrorResponse
+import com.nylas.models.Region
 import com.nylas.resources.Applications
 import com.nylas.resources.Auth
 import com.nylas.resources.Calendars
@@ -19,7 +20,11 @@ import java.util.concurrent.TimeUnit
  * An instance holds a configured http client pointing to a base URL and is intended to be reused and shared
  * across threads and time.
  */
-class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkHttpClient.Builder, baseUrl: String) {
+class NylasClient(
+  val apiKey: String,
+  httpClientBuilder: OkHttpClient.Builder = defaultHttpClient(),
+  baseUrl: String = DEFAULT_BASE_URL,
+) {
   private val baseUrl: HttpUrl
   private val httpClient: OkHttpClient
 
@@ -214,7 +219,6 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
   data class Builder(
     private val apiKey: String,
   ) {
-    // TODO::is this good?
     private var baseUrl: String = DEFAULT_BASE_URL
     private var httpClient: OkHttpClient.Builder = defaultHttpClient()
     fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
@@ -234,8 +238,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
   }
 
   companion object {
-    const val DEFAULT_BASE_URL = "https://api-staging.us.nylas.com/"
-    const val EU_BASE_URL = "https://ireland.api.nylas.com/"
+    val DEFAULT_BASE_URL = Region.US.nylasApiUrl
     private fun defaultHttpClient(): OkHttpClient.Builder {
       return OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
