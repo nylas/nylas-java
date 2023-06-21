@@ -105,6 +105,14 @@ class Auth(
   }
 
   @Throws(IOException::class, NylasApiError::class)
+  fun revoke(accessToken: String): Boolean {
+    val path = "/v3/connect/revoke?access_token=$accessToken"
+    client.executePost<Any>(path)
+
+    return true
+  }
+
+  @Throws(IOException::class, NylasApiError::class)
   private fun urlAuthBuilder(config: UrlForAuthenticationConfig): HttpUrl.Builder {
     val url = this.client.newUrlBuilder().addPathSegments("/v3/connect/auth")
     val json = JsonHelper.moshi()
