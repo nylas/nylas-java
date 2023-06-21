@@ -48,6 +48,21 @@ class Auth(
 
     return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
   }
+
+  @Throws(IOException::class, NylasApiError::class)
+  fun validateIDToken(token: String): Response<OpenIDResponse> {
+    val url = "/v3/connect/tokeninfo?id_token=$token"
+
+    return client.executeGet(url, OpenIDResponse::class.java)
+  }
+
+  @Throws(IOException::class, NylasApiError::class)
+  fun validateAccessToken(token: String): String {
+    val url = "/v3/connect/tokeninfo?access_token=$token"
+
+    return client.executeGet(url, OpenIDResponse::class.java)
+  }
+
   @Throws(IOException::class, NylasApiError::class)
   fun urlForAuthentication(config: UrlForAuthenticationConfig): String {
     return urlAuthBuilder(config).build().toString()
