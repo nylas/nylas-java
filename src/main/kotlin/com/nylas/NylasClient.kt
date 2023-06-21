@@ -1,5 +1,8 @@
 package com.nylas
 
+import com.nylas.interceptors.AddVersionHeadersInterceptor
+import com.nylas.interceptors.ContentHeadersInterceptor
+import com.nylas.interceptors.HttpLoggingInterceptor
 import com.nylas.models.IQueryParams
 import com.nylas.models.NylasApiError
 import com.nylas.models.NylasApiErrorResponse
@@ -55,8 +58,8 @@ class NylasClient(
   init {
     this.baseUrl = HttpUrl.get(baseUrl)
     httpClient = httpClientBuilder
-//            .addInterceptor(AddVersionHeadersInterceptor()) // enforce user agent and build data
-//            .addInterceptor(ContentHeadersInterceptor()) // enforce Content-Type headers.
+      .addInterceptor(AddVersionHeadersInterceptor()) // enforce user agent and build data
+      .addInterceptor(ContentHeadersInterceptor()) // enforce Content-Type headers.
       .build()
   }
 
@@ -245,7 +248,7 @@ class NylasClient(
         .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(60, TimeUnit.SECONDS)
         .protocols(listOf(Protocol.HTTP_1_1))
-//                .addNetworkInterceptor(HttpLoggingInterceptor())
+        .addNetworkInterceptor(HttpLoggingInterceptor())
     }
   }
 }
