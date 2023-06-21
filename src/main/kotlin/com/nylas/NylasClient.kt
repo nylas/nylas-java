@@ -75,7 +75,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executeGet(
         path: String,
-        resultType: Type,
+        resultType: Type? = null,
         queryParams: IQueryParams? = null,
     ): T {
         val url = buildUrl(path, queryParams)
@@ -85,7 +85,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executePut(
         path: String,
-        resultType: Type,
+        resultType: Type? = null,
         requestBody: String? = null,
         queryParams: IQueryParams? = null,
     ): T {
@@ -97,7 +97,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executePatch(
         path: String,
-        resultType: Type,
+        resultType: Type? = null,
         requestBody: String? = null,
         queryParams: IQueryParams? = null,
     ): T {
@@ -109,7 +109,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executePost(
         path: String,
-        resultType: Type,
+        resultType: Type? = null,
         requestBody: String? = null,
         queryParams: IQueryParams? = null,
     ): T {
@@ -124,7 +124,7 @@ class NylasClient private constructor(val apiKey: String, httpClientBuilder: OkH
     @Throws(IOException::class, NylasApiError::class)
     fun <T> executeDelete(
         path: String,
-        resultType: Type,
+        resultType: Type? = null,
         queryParams: IQueryParams? = null,
     ): T {
         val url = buildUrl(path, queryParams)
