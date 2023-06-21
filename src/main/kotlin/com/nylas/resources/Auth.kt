@@ -13,6 +13,11 @@ class Auth(
   private val clientId: String,
   private val clientSecret: String
 ) {
+
+  fun grants(): Grants {
+    return Grants(client)
+  }
+
   @Throws(IOException::class, NylasApiError::class)
   fun exchangeCodeForToken(request: CodeExchangeRequest): Response<CodeExchangeResponse> {
     val path = "/v3/connect/token"
