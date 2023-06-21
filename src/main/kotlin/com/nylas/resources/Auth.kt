@@ -95,6 +95,16 @@ class Auth(
   }
 
   @Throws(IOException::class, NylasApiError::class)
+  fun hostedAuth(request: HostedAuthRequest): Response<HostedAuthResponse> {
+    val path = "/v3/connect/auth"
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(HostedAuthRequest::class.java)
+      .toJson(request)
+
+    return client.executePost(path, HostedAuthResponse::class.java, serializedRequestBody)
+  }
+
+  @Throws(IOException::class, NylasApiError::class)
   private fun urlAuthBuilder(config: UrlForAuthenticationConfig): HttpUrl.Builder {
     val url = this.client.newUrlBuilder().addPathSegments("/v3/connect/auth")
     val json = JsonHelper.moshi()
