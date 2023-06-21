@@ -11,7 +11,7 @@ class Providers(
 ) : Resource<Provider>(client, Provider::class.java) {
   @Throws(IOException::class, NylasApiError::class)
   fun list(): ListResponse<Provider> {
-    val path = "/v3/grants/connect/providers/find?client_id=$clientId"
+    val path = "v3/grants/connect/providers/find?client_id=$clientId"
     return listResource(path)
   }
 
@@ -20,7 +20,7 @@ class Providers(
     if (params.clientId == null) {
       params.clientId = clientId
     }
-    val path = "/v3/grants/connect/providers/detect"
+    val path = "v3/grants/connect/providers/detect"
     val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
 
     return client.executePost(path, responseType, queryParams = params)

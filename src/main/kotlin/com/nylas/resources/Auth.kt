@@ -25,7 +25,7 @@ class Auth(
 
   @Throws(IOException::class, NylasApiError::class)
   fun exchangeCodeForToken(request: CodeExchangeRequest): Response<CodeExchangeResponse> {
-    val path = "/v3/connect/token"
+    val path = "v3/connect/token"
 
     if (request.clientId == null) {
       request.clientId = clientId
@@ -44,7 +44,7 @@ class Auth(
 
   @Throws(IOException::class, NylasApiError::class)
   fun refreshAccessToken(request: TokenExchangeRequest): Response<CodeExchangeResponse> {
-    val path = "/v3/connect/token"
+    val path = "v3/connect/token"
 
     if (request.clientId == null) {
       request.clientId = clientId
@@ -63,7 +63,7 @@ class Auth(
 
   @Throws(IOException::class, NylasApiError::class)
   fun validateIDToken(token: String): Response<OpenIDResponse> {
-    val url = "/v3/connect/tokeninfo?id_token=$token"
+    val url = "v3/connect/tokeninfo?id_token=$token"
     val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
 
     return client.executeGet(url, responseType)
@@ -71,7 +71,7 @@ class Auth(
 
   @Throws(IOException::class, NylasApiError::class)
   fun validateAccessToken(token: String): String {
-    val url = "/v3/connect/tokeninfo?access_token=$token"
+    val url = "v3/connect/tokeninfo?access_token=$token"
     val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
 
     return client.executeGet(url, responseType)
@@ -110,7 +110,7 @@ class Auth(
 
   @Throws(IOException::class, NylasApiError::class)
   fun hostedAuth(request: HostedAuthRequest): Response<HostedAuthResponse> {
-    val path = "/v3/connect/auth"
+    val path = "v3/connect/auth"
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(HostedAuthRequest::class.java)
       .toJson(request)
@@ -121,7 +121,7 @@ class Auth(
 
   @Throws(IOException::class, NylasApiError::class)
   fun revoke(accessToken: String): Boolean {
-    val path = "/v3/connect/revoke?access_token=$accessToken"
+    val path = "v3/connect/revoke?access_token=$accessToken"
     client.executePost<Any>(path)
 
     return true
@@ -129,7 +129,7 @@ class Auth(
 
   @Throws(IOException::class, NylasApiError::class)
   private fun urlAuthBuilder(config: UrlForAuthenticationConfig): HttpUrl.Builder {
-    val url = this.client.newUrlBuilder().addPathSegments("/v3/connect/auth")
+    val url = this.client.newUrlBuilder().addPathSegments("v3/connect/auth")
     val json = JsonHelper.moshi()
       .adapter(UrlForAuthenticationConfig::class.java)
       .toJson(config)
