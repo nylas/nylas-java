@@ -2,10 +2,10 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-enum class Region {
+enum class Region(val nylasApiUrl: String) {
   @Json(name = "us")
-  US,
+  US("https://api.us.nylas.com"),
 
   @Json(name = "eu")
-  EU,
+  EU("https://api.eu.nylas.com"),
 }
