@@ -11,12 +11,13 @@ class CreateConferencingAdapter {
   }
 
   @ToJson
-  fun toJson(writer: JsonWriter,
-             value: CreateEventRequest.Conferencing?,
-             delegateAutocreate: JsonAdapter<CreateEventRequest.Conferencing.Autocreate>,
-             delegateDetails: JsonAdapter<CreateEventRequest.Conferencing.Details>
+  fun toJson(
+    writer: JsonWriter,
+    value: CreateEventRequest.Conferencing?,
+    delegateAutocreate: JsonAdapter<CreateEventRequest.Conferencing.Autocreate>,
+    delegateDetails: JsonAdapter<CreateEventRequest.Conferencing.Details>,
   ) {
-    when(value) {
+    when (value) {
       is CreateEventRequest.Conferencing.Autocreate -> delegateAutocreate.toJson(writer, value)
       is CreateEventRequest.Conferencing.Details -> delegateDetails.toJson(writer, value)
       else -> writer.nullValue()

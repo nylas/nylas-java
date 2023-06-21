@@ -7,9 +7,9 @@ data class CreateEventQueryParams(
   val calendarId: String,
   @Json(name = "notify_participants")
   val notifyParticipants: Boolean? = null,
-): IQueryParams {
+) : IQueryParams {
   data class Builder(
-    private val calendarId: String
+    private val calendarId: String,
   ) {
     private var notifyParticipants: Boolean? = null
 
@@ -17,7 +17,7 @@ data class CreateEventQueryParams(
 
     fun build() = CreateEventQueryParams(
       calendarId,
-      notifyParticipants
+      notifyParticipants,
     )
   }
 }

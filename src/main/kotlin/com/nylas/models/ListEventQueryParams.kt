@@ -30,10 +30,10 @@ data class ListEventQueryParams(
   @Json(name = "busy")
   val busy: Boolean? = null,
   @Json(name = "participants")
-  val participants: String? = null
-): IQueryParams {
+  val participants: String? = null,
+) : IQueryParams {
   data class Builder(
-    private val calendarId: String
+    private val calendarId: String,
   ) {
     private var limit: Int? = null
     private var pageToken: String? = null
@@ -77,7 +77,7 @@ data class ListEventQueryParams(
       metadataPair,
       expandRecurring,
       busy,
-      participants
+      participants,
     )
   }
 }

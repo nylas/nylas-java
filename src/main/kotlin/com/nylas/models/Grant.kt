@@ -26,5 +26,5 @@ data class Grant(
   @Json(name = "provider_user_id")
   val providerUserId: String?,
   @Json(name = "settings")
-  val settings: Map<String, Any>?
+  val settings: Map<String, Any>?,
 )

@@ -6,14 +6,14 @@ import okhttp3.Response
 import java.io.IOException
 
 class AddVersionHeadersInterceptor : Interceptor {
-    @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val requestBuilder = chain.request().newBuilder()
-            .header("User-Agent", USER_AGENT)
-        return chain.proceed(requestBuilder.build())
-    }
+  @Throws(IOException::class)
+  override fun intercept(chain: Interceptor.Chain): Response {
+    val requestBuilder = chain.request().newBuilder()
+      .header("User-Agent", USER_AGENT)
+    return chain.proceed(requestBuilder.build())
+  }
 
-    companion object {
-        private val USER_AGENT = "Nylas Java SDK " + (BuildInfo.VERSION ?: "unknown")
-    }
+  companion object {
+    private val USER_AGENT = "Nylas Java SDK " + (BuildInfo.VERSION ?: "unknown")
+  }
 }

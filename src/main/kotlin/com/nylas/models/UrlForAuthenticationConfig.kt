@@ -20,11 +20,11 @@ data class UrlForAuthenticationConfig(
   @Json(name = "state")
   val state: String?,
   @Json(name = "login_hint")
-  val loginHint: String?
+  val loginHint: String?,
 ) {
   data class Builder(
     private val provider: AuthProvider,
-    private val redirectUri: String
+    private val redirectUri: String,
   ) {
     private var accessType: AccessType = AccessType.OFFLINE
     private var prompt: String? = null
@@ -51,7 +51,7 @@ data class UrlForAuthenticationConfig(
       includeGrantScopes,
       metadata,
       state,
-      loginHint
+      loginHint,
     )
   }
 }

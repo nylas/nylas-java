@@ -8,7 +8,7 @@ interface IQueryParams {
       .adapter(this.javaClass)
       .toJson(this)
 
-    if(json.isEmpty()) {
+    if (json.isEmpty()) {
       return emptyMap()
     }
 

@@ -10,8 +10,8 @@ data class ListGrantsQueryParams(
   val email: String? = null,
   val grantStatus: String? = null,
   val ip: String? = null,
-  val provider: AuthProvider? = null
-): IQueryParams {
+  val provider: AuthProvider? = null,
+) : IQueryParams {
   class Builder {
     private var limit: Int? = null
     private var offset: Int? = null
@@ -45,7 +45,7 @@ data class ListGrantsQueryParams(
       email,
       grantStatus,
       ip,
-      provider
+      provider,
     )
   }
 }

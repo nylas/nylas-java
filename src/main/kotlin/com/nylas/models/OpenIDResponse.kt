@@ -33,5 +33,5 @@ data class OpenIDResponse(
   @Json(name = "gender")
   val gender: String?,
   @Json(name = "locale")
-  val locale: String?
+  val locale: String?,
 )

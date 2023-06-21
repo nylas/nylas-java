@@ -12,7 +12,7 @@ import java.util.*
 class Auth(
   private val client: NylasClient,
   private val clientId: String,
-  private val clientSecret: String
+  private val clientSecret: String,
 ) {
 
   fun grants(): Grants {
@@ -27,10 +27,10 @@ class Auth(
   fun exchangeCodeForToken(request: CodeExchangeRequest): Response<CodeExchangeResponse> {
     val path = "/v3/connect/token"
 
-    if(request.clientId == null) {
+    if (request.clientId == null) {
       request.clientId = clientId
     }
-    if(request.clientSecret == null) {
+    if (request.clientSecret == null) {
       request.clientSecret = clientSecret
     }
 
@@ -46,10 +46,10 @@ class Auth(
   fun refreshAccessToken(request: TokenExchangeRequest): Response<CodeExchangeResponse> {
     val path = "/v3/connect/token"
 
-    if(request.clientId == null) {
+    if (request.clientId == null) {
       request.clientId = clientId
     }
-    if(request.clientSecret == null) {
+    if (request.clientSecret == null) {
       request.clientSecret = clientSecret
     }
 
@@ -85,7 +85,7 @@ class Auth(
   @Throws(IOException::class, NylasApiError::class)
   fun urlForAuthenticationPKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
     val urlBuilder = urlAuthBuilder(config)
-    val secret = UUID.randomUUID().toString();
+    val secret = UUID.randomUUID().toString()
 
     val sha256Digest = MessageDigest.getInstance("SHA-256").digest(secret.toByteArray())
     val secretHash = Base64.getEncoder().encodeToString(sha256Digest)

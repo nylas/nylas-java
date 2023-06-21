@@ -16,7 +16,7 @@ data class ApplicationDetails(
   @Json(name = "hosted_authentication")
   val hostedAuthentication: HostedAuthentication?,
   @Json(name = "redirect_uris")
-  val redirectUris: List<RedirectUri>?
+  val redirectUris: List<RedirectUri>?,
 ) {
   data class Branding(
     @Json(name = "name")
@@ -45,6 +45,6 @@ data class ApplicationDetails(
     @Json(name = "background_color")
     val backgroundColor: String?,
     @Json(name = "spacing")
-    val spacing: Int
+    val spacing: Int,
   )
 }

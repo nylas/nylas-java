@@ -9,8 +9,8 @@ data class ListCalendersQueryParams(
   val pageToken: String? = null,
   @Json(name = "metadata_pair")
   val metadataPair: Map<String, String>? = null,
-): IQueryParams {
-  class Builder{
+) : IQueryParams {
+  class Builder {
     private var limit: Int? = null
     private var pageToken: String? = null
     private var metadataPair: Map<String, String>? = null
@@ -22,7 +22,7 @@ data class ListCalendersQueryParams(
     fun build() = ListCalendersQueryParams(
       limit,
       pageToken,
-      metadataPair
+      metadataPair,
     )
   }
 }

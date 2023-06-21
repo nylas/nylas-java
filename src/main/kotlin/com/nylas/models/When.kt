@@ -4,7 +4,6 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 
-
 sealed class When {
   @Json(name = "object")
   protected open val obj: WhenType? = null
@@ -14,7 +13,7 @@ sealed class When {
   data class Date(
     @Json(name = "date")
     val date: String,
-  ): When() {
+  ) : When() {
     @Json(name = "object")
     override val obj: WhenType = WhenType.DATESPAN
   }
@@ -24,7 +23,7 @@ sealed class When {
     val startDate: String,
     @Json(name = "end_date")
     val endDate: String,
-  ): When() {
+  ) : When() {
     @Json(name = "object")
     override val obj: WhenType = WhenType.DATESPAN
   }
@@ -34,7 +33,7 @@ sealed class When {
     val time: Int,
     @Json(name = "timezone")
     val timezone: String? = null,
-  ): When() {
+  ) : When() {
     @Json(name = "object")
     override val obj: WhenType = WhenType.TIME
   }
@@ -48,7 +47,7 @@ sealed class When {
     val startTimezone: String? = null,
     @Json(name = "end_timezone")
     val endTimezone: String? = null,
-  ): When() {
+  ) : When() {
     @Json(name = "object")
     override val obj: WhenType = WhenType.TIMESPAN
   }

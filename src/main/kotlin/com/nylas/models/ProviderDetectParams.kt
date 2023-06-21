@@ -9,9 +9,9 @@ data class ProviderDetectParams(
   val allProviderTypes: Boolean?,
   @Json(name = "client_id")
   var clientId: String?,
-): IQueryParams {
+) : IQueryParams {
   data class Builder(
-    private val email: String
+    private val email: String,
   ) {
     private var allProviderTypes: Boolean? = null
     private var clientId: String? = null
@@ -22,7 +22,7 @@ data class ProviderDetectParams(
     fun build() = ProviderDetectParams(
       email,
       allProviderTypes,
-      clientId
+      clientId,
     )
   }
 }

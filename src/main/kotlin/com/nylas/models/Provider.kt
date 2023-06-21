@@ -10,7 +10,7 @@ data class Provider(
   @Json(name = "type")
   val type: String,
   @Json(name = "settings")
-  val settings: Settings?
+  val settings: Settings?,
 ) {
   data class Settings(
     @Json(name = "name")
@@ -26,6 +26,6 @@ data class Provider(
     @Json(name = "password_link")
     val passwordLink: String?,
     @Json(name = "primary")
-    val primary: Boolean?
+    val primary: Boolean?,
   )
 }

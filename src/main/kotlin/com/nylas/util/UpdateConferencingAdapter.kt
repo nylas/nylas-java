@@ -9,13 +9,15 @@ class UpdateConferencingAdapter {
   fun fromJson(reader: JsonReader): UpdateEventRequest.Conferencing? {
     throw UnsupportedOperationException("UpdateConferencingAdapter is only used for serialization")
   }
+
   @ToJson
-  fun toJson(writer: JsonWriter,
-             value: UpdateEventRequest.Conferencing?,
-             delegateAutocreate: JsonAdapter<UpdateEventRequest.Conferencing.Autocreate>,
-             delegateDetails: JsonAdapter<UpdateEventRequest.Conferencing.Details>
+  fun toJson(
+    writer: JsonWriter,
+    value: UpdateEventRequest.Conferencing?,
+    delegateAutocreate: JsonAdapter<UpdateEventRequest.Conferencing.Autocreate>,
+    delegateDetails: JsonAdapter<UpdateEventRequest.Conferencing.Details>,
   ) {
-    when(value) {
+    when (value) {
       is UpdateEventRequest.Conferencing.Autocreate -> delegateAutocreate.toJson(writer, value)
       is UpdateEventRequest.Conferencing.Details -> delegateDetails.toJson(writer, value)
       else -> writer.nullValue()

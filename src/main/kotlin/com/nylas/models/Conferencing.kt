@@ -2,21 +2,20 @@ package com.nylas.models
 
 import com.squareup.moshi.*
 
-
 sealed class Conferencing {
   data class Autocreate(
     @Json(name = "provider")
     val provider: ConferencingProvider,
     @Json(name = "autocreate")
-    val autocreate: Map<String, Any> = emptyMap()
-  ): Conferencing()
+    val autocreate: Map<String, Any> = emptyMap(),
+  ) : Conferencing()
 
   data class Details(
     @Json(name = "provider")
     val provider: ConferencingProvider,
     @Json(name = "details")
-    val details: Config
-  ): Conferencing() {
+    val details: Config,
+  ) : Conferencing() {
     data class Config(
       @Json(name = "meeting_code")
       val meetingCode: String? = null,

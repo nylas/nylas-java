@@ -2,7 +2,7 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-data class UpdateEventRequest (
+data class UpdateEventRequest(
   @Json(name = "when")
   val whenObj: When? = null,
   @Json(name = "title")
@@ -37,20 +37,20 @@ data class UpdateEventRequest (
   val capacity: Int? = null,
   @Json(name = "hide_participant")
   val hideParticipant: Boolean? = null,
-  ) {
+) {
 
   sealed class When {
     data class Date(
       @Json(name = "date")
       val date: String? = null,
-    ): When()
+    ) : When()
 
     data class Datespan(
       @Json(name = "start_date")
       val startDate: String? = null,
       @Json(name = "end_date")
       val endDate: String? = null,
-    ): When() {
+    ) : When() {
       class Builder {
         private var startDate: String? = null
         private var endDate: String? = null
@@ -67,7 +67,7 @@ data class UpdateEventRequest (
       val time: Int? = null,
       @Json(name = "timezone")
       val timezone: String? = null,
-    ): When() {
+    ) : When() {
       class Builder {
         private var time: Int? = null
         private var timezone: String? = null
@@ -87,7 +87,7 @@ data class UpdateEventRequest (
       val startTimezone: String? = null,
       @Json(name = "end_timezone")
       val endTimezone: String? = null,
-    ): When() {
+    ) : When() {
       class Builder {
         private var startTime: Int? = null
         private var endTime: Int? = null
@@ -127,13 +127,13 @@ data class UpdateEventRequest (
     }
   }
 
-  sealed class Conferencing{
+  sealed class Conferencing {
     data class Autocreate(
       @Json(name = "provider")
       val provider: ConferencingProvider?,
       @Json(name = "autocreate")
       val autocreate: Map<String, Any>?,
-    ): Conferencing() {
+    ) : Conferencing() {
       class Builder {
         private var provider: ConferencingProvider? = null
         private var autocreate: Map<String, Any>? = null
@@ -149,8 +149,8 @@ data class UpdateEventRequest (
       @Json(name = "provider")
       val provider: ConferencingProvider?,
       @Json(name = "details")
-      val details: Config?
-    ): Conferencing() {
+      val details: Config?,
+    ) : Conferencing() {
       data class Config(
         @Json(name = "meeting_code")
         val meetingCode: String? = null,
@@ -196,7 +196,7 @@ data class UpdateEventRequest (
     @Json(name = "rrule")
     val rrule: List<String>? = null,
     @Json(name = "timezone")
-    val timezone: String? = null
+    val timezone: String? = null,
   ) {
     class Builder {
       private var rrule: List<String>? = null
@@ -264,7 +264,7 @@ data class UpdateEventRequest (
       roundRobinOrder,
       visibility,
       capacity,
-      hideParticipant
+      hideParticipant,
     )
   }
 }

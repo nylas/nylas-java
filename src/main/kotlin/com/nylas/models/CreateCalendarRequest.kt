@@ -12,7 +12,7 @@ data class CreateCalendarRequest(
   @Json(name = "timezone")
   val timezone: String? = null,
   @Json(name = "metadata")
-  val metadata: Map<String, String>? = null
+  val metadata: Map<String, String>? = null,
 ) {
   // builder
   data class Builder(

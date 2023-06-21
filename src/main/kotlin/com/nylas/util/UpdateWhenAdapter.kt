@@ -11,14 +11,15 @@ class UpdateWhenAdapter {
   }
 
   @ToJson
-  fun toJson(writer: JsonWriter,
-             value: UpdateEventRequest.When?,
-             delegateTime: JsonAdapter<UpdateEventRequest.When.Time>,
-             delegateTimespan: JsonAdapter<UpdateEventRequest.When.Timespan>,
-             delegateDate: JsonAdapter<UpdateEventRequest.When.Date>,
-             delegateDatespan: JsonAdapter<UpdateEventRequest.When.Datespan>
+  fun toJson(
+    writer: JsonWriter,
+    value: UpdateEventRequest.When?,
+    delegateTime: JsonAdapter<UpdateEventRequest.When.Time>,
+    delegateTimespan: JsonAdapter<UpdateEventRequest.When.Timespan>,
+    delegateDate: JsonAdapter<UpdateEventRequest.When.Date>,
+    delegateDatespan: JsonAdapter<UpdateEventRequest.When.Datespan>,
   ) {
-    when(value) {
+    when (value) {
       is UpdateEventRequest.When.Time -> delegateTime.toJson(writer, value)
       is UpdateEventRequest.When.Timespan -> delegateTimespan.toJson(writer, value)
       is UpdateEventRequest.When.Date -> delegateDate.toJson(writer, value)

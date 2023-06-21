@@ -18,7 +18,7 @@ data class HostedAuthRequest(
 ) {
   data class Builder(
     private val provider: AuthProvider,
-    private val redirectUri: String
+    private val redirectUri: String,
   ) {
     private var scope: List<String>? = null
     private var state: String? = null
@@ -36,7 +36,7 @@ data class HostedAuthRequest(
       scope,
       state,
       loginHint,
-      cookieNonce
+      cookieNonce,
     )
   }
 }

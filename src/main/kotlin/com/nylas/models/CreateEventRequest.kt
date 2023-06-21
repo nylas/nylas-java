@@ -42,24 +42,24 @@ data class CreateEventRequest(
   sealed class When {
     data class Date(
       @Json(name = "date")
-      val date: String
-    ): When()
+      val date: String,
+    ) : When()
 
     data class Datespan(
       @Json(name = "start_date")
       val startDate: String,
       @Json(name = "end_date")
       val endDate: String,
-    ): When()
+    ) : When()
 
     data class Time(
       @Json(name = "time")
       val time: Int,
       @Json(name = "timezone")
       val timezone: String? = null,
-    ): When() {
+    ) : When() {
       data class Builder(
-        private val time: Int
+        private val time: Int,
       ) {
         private var timezone: String? = null
 
@@ -78,10 +78,10 @@ data class CreateEventRequest(
       val startTimezone: String? = null,
       @Json(name = "end_timezone")
       val endTimezone: String? = null,
-    ): When() {
+    ) : When() {
       data class Builder(
         private val startTime: Int,
-        private val endTime: Int
+        private val endTime: Int,
       ) {
         private var startTimezone: String? = null
         private var endTimezone: String? = null
@@ -107,7 +107,7 @@ data class CreateEventRequest(
     val comment: String? = null,
   ) {
     data class Builder(
-      private val email: String
+      private val email: String,
     ) {
       private var status: ParticipantStatus? = null
       private var name: String? = null
@@ -123,20 +123,20 @@ data class CreateEventRequest(
     }
   }
 
-  sealed class Conferencing{
+  sealed class Conferencing {
     data class Autocreate(
       @Json(name = "provider")
       val provider: ConferencingProvider,
       @Json(name = "autocreate")
-      val autocreate: Map<String, Any> = emptyMap()
-    ): Conferencing()
+      val autocreate: Map<String, Any> = emptyMap(),
+    ) : Conferencing()
 
     data class Details(
       @Json(name = "provider")
       val provider: ConferencingProvider,
       @Json(name = "details")
-      val details: Config
-    ): Conferencing() {
+      val details: Config,
+    ) : Conferencing() {
       data class Config(
         @Json(name = "meeting_code")
         val meetingCode: String? = null,
@@ -172,12 +172,12 @@ data class CreateEventRequest(
     @Json(name = "rrule")
     val rrule: List<String>,
     @Json(name = "timezone")
-    val timezone: String
+    val timezone: String,
   )
 
   // builder
   data class Builder(
-    private val whenObj: When
+    private val whenObj: When,
   ) {
     private var title: String? = null
     private var description: String? = null
@@ -230,7 +230,7 @@ data class CreateEventRequest(
       roundRobinOrder,
       visibility,
       capacity,
-      hideParticipant
+      hideParticipant,
     )
   }
 }
