@@ -39,6 +39,11 @@ abstract class Resource<T> protected constructor(
     }
 
     @Throws(IOException::class, NylasApiError::class)
+    protected fun patchResource(path: String, requestBody: String?, queryParams: IQueryParams? = null): Response<T> {
+        return client.executePatch(path, responseType, requestBody, queryParams)
+    }
+
+    @Throws(IOException::class, NylasApiError::class)
     protected fun destroyResource(path: String, queryParams: IQueryParams? = null): DeleteResponse {
         return client.executeDelete(path, DeleteResponse::class.java, queryParams)
     }
