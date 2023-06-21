@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.Types
 import okhttp3.HttpUrl
 import java.io.IOException
 import java.security.MessageDigest
@@ -36,8 +37,9 @@ class Auth(
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(CodeExchangeRequest::class.java)
       .toJson(request)
+    val responseType = Types.newParameterizedType(Response::class.java, CodeExchangeResponse::class.java)
 
-    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 
   @Throws(IOException::class, NylasApiError::class)
@@ -54,22 +56,25 @@ class Auth(
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(TokenExchangeRequest::class.java)
       .toJson(request)
+    val responseType = Types.newParameterizedType(Response::class.java, CodeExchangeResponse::class.java)
 
-    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 
   @Throws(IOException::class, NylasApiError::class)
   fun validateIDToken(token: String): Response<OpenIDResponse> {
     val url = "/v3/connect/tokeninfo?id_token=$token"
+    val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
 
-    return client.executeGet(url, OpenIDResponse::class.java)
+    return client.executeGet(url, responseType)
   }
 
   @Throws(IOException::class, NylasApiError::class)
   fun validateAccessToken(token: String): String {
     val url = "/v3/connect/tokeninfo?access_token=$token"
+    val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
 
-    return client.executeGet(url, OpenIDResponse::class.java)
+    return client.executeGet(url, responseType)
   }
 
   @Throws(IOException::class, NylasApiError::class)
@@ -109,8 +114,9 @@ class Auth(
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(HostedAuthRequest::class.java)
       .toJson(request)
+    val responseType = Types.newParameterizedType(Response::class.java, HostedAuthResponse::class.java)
 
-    return client.executePost(path, HostedAuthResponse::class.java, serializedRequestBody)
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 
   @Throws(IOException::class, NylasApiError::class)

@@ -2,6 +2,7 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
+import com.squareup.moshi.Types
 import java.io.IOException
 
 class Providers(
@@ -20,7 +21,8 @@ class Providers(
       params.clientId = clientId
     }
     val path = "/v3/grants/connect/providers/detect"
+    val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
 
-    return client.executePost(path, ProviderDetectResponse::class.java, queryParams = params)
+    return client.executePost(path, responseType, queryParams = params)
   }
 }
