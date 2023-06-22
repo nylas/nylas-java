@@ -33,6 +33,10 @@ dependencies {
   implementation("org.slf4j:slf4j-api:2.0.7")
 }
 
+tasks.processResources {
+  expand("artifact_version" to project.version)
+}
+
 tasks.register<Jar>("uberJar") {
   archiveClassifier.set("uber")
 
