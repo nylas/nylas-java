@@ -109,12 +109,12 @@ class Auth(
   }
 
   @Throws(IOException::class, NylasApiError::class)
-  fun hostedAuth(request: HostedAuthRequest): Response<HostedAuthResponse> {
+  fun serverSideHostedAuth(request: ServerSideHostedAuthRequest): Response<ServerSideHostedAuthResponse> {
     val path = "v3/connect/auth"
     val serializedRequestBody = JsonHelper.moshi()
-      .adapter(HostedAuthRequest::class.java)
+      .adapter(ServerSideHostedAuthRequest::class.java)
       .toJson(request)
-    val responseType = Types.newParameterizedType(Response::class.java, HostedAuthResponse::class.java)
+    val responseType = Types.newParameterizedType(Response::class.java, ServerSideHostedAuthResponse::class.java)
 
     return client.executePost(path, responseType, serializedRequestBody)
   }

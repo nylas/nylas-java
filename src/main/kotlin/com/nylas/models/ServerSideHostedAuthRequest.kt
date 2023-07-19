@@ -2,7 +2,7 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-data class HostedAuthRequest(
+data class ServerSideHostedAuthRequest(
   @Json(name = "provider")
   val provider: AuthProvider,
   @Json(name = "redirect_uri")
@@ -30,7 +30,7 @@ data class HostedAuthRequest(
     fun loginHint(loginHint: String) = apply { this.loginHint = loginHint }
     fun cookieNonce(cookieNonce: String) = apply { this.cookieNonce = cookieNonce }
 
-    fun build() = HostedAuthRequest(
+    fun build() = ServerSideHostedAuthRequest(
       provider,
       redirectUri,
       scope,

@@ -2,7 +2,7 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-data class HostedAuthResponse(
+data class ServerSideHostedAuthResponse(
   @Json(name = "url")
   val url: String,
   @Json(name = "id")
