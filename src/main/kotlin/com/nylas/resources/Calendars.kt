@@ -6,9 +6,18 @@ import com.nylas.util.JsonHelper
 import java.io.IOException
 
 /**
- * [https://docs.nylas.com/reference#calendars](https://docs.nylas.com/reference#calendars)
+ * Nylas Calendar API
+ *
+ * The Nylas calendar API allows you to create new calendars or manage existing ones.
+ * A calendar can be accessed by one, or several people, and can contain events.
  */
 class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::class.java) {
+  /**
+   * Return all Calendars
+   * @param identifier The identifier of the grant to act upon
+   * @param queryParams The query parameters to include in the request
+   * @return The list of Calendars
+   */
   @Throws(IOException::class, NylasApiError::class)
   @JvmOverloads
   fun list(identifier: String, queryParams: ListCalendersQueryParams? = null): ListResponse<Calendar> {
@@ -16,12 +25,24 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
     return listResource(path, queryParams)
   }
 
+  /**
+   * Return a Calendar
+   * @param identifier The identifier of the grant to act upon
+   * @param calendarId The id of the Calendar to retrieve. Use "primary" to refer to the primary calendar associated with grant.
+   * @return The Calendar
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun find(identifier: String, calendarId: String): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
     return findResource(path)
   }
 
+  /**
+   * Create a Calendar
+   * @param identifier The identifier of the grant to act upon
+   * @param requestBody The values to create the Calendar with
+   * @return The created Calendar
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun create(identifier: String, requestBody: CreateCalendarRequest): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars", identifier)
@@ -30,6 +51,13 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
     return createResource(path, serializedRequestBody)
   }
 
+  /**
+   * Update a Calendar
+   * @param identifier The identifier of the grant to act upon
+   * @param calendarId The id of the Calendar to update. Use "primary" to refer to the primary calendar associated with grant.
+   * @param requestBody The values to update the Calendar with
+   * @return The updated Calendar
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun update(identifier: String, calendarId: String, requestBody: UpdateCalendarRequest): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
@@ -38,6 +66,12 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
     return updateResource(path, serializedRequestBody)
   }
 
+  /**
+   * Delete a Calendar
+   * @param identifier The identifier of the grant to act upon
+   * @param calendarId The id of the Calendar to delete. Use "primary" to refer to the primary calendar associated with grant.
+   * @return The deletion response
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun destroy(identifier: String, calendarId: String): DeleteResponse {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
