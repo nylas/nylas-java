@@ -45,6 +45,6 @@ data class ApplicationDetails(
     @Json(name = "background_color")
     val backgroundColor: String?,
     @Json(name = "spacing")
-    val spacing: Int,
+    val spacing: Int?,
   )
 }
