@@ -7,11 +7,24 @@ import com.nylas.models.Response
 import com.squareup.moshi.Types
 import java.io.IOException
 
+/**
+ * Nylas Applications API
+ *
+ * This endpoint allows for getting application details as well as redirect URI operations.
+ */
 class Applications(private val client: NylasClient) {
+  /**
+   * Access the collection of redirect URI related API endpoints.
+   * @return The collection of redirect URI related API endpoints.
+   */
   fun redirectUris(): RedirectUris {
     return RedirectUris(client)
   }
 
+  /**
+   * Get application details
+   * @return The application details
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun getDetails(): Response<ApplicationDetails> {
     val path = "v3/applications"

@@ -6,6 +6,11 @@ import com.squareup.moshi.Types
 import java.io.IOException
 import java.lang.reflect.Type
 
+/**
+ * Base class for Nylas API resources
+ *
+ * @suppress No public constructor or functions
+ */
 abstract class Resource<T> protected constructor(
   private val client: NylasClient,
   modelClass: Class<T>,

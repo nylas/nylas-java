@@ -9,16 +9,30 @@ import java.io.IOException
 import java.security.MessageDigest
 import java.util.*
 
+/**
+ * A collection of authentication related API endpoints
+ *
+ * These endpoints allow for various functionality related to authentication.
+ * Also contains the Grants API and collection of provider API endpoints.
+ */
 class Auth(
   private val client: NylasClient,
   private val clientId: String,
   private val clientSecret: String,
 ) {
 
+  /**
+   * Access the Grants API
+   * @return The Grants API
+   */
   fun grants(): Grants {
     return Grants(client)
   }
 
+  /**
+   * Access the collection of provider related API endpoints
+   * @return The collection of provider related API endpoints
+   */
   fun providers(): Providers {
     return Providers(client, clientId)
   }

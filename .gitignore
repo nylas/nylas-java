@@ -13,3 +13,5 @@ out
 
 # Ignore Intellij files
 .idea
+.DS_Store
+src/main/kotlin/com/nylas/Main.kt

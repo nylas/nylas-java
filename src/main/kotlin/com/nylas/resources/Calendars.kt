@@ -10,6 +10,8 @@ import java.io.IOException
  *
  * The Nylas calendar API allows you to create new calendars or manage existing ones.
  * A calendar can be accessed by one, or several people, and can contain events.
+ *
+ * @param client The configured Nylas API client
  */
 class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::class.java) {
   /**
