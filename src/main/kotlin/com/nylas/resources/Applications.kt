@@ -13,7 +13,7 @@ class Applications(private val client: NylasClient) {
   }
 
   @Throws(IOException::class, NylasApiError::class)
-  fun get(): Response<ApplicationDetails> {
+  fun getDetails(): Response<ApplicationDetails> {
     val path = "v3/applications"
     val responseType = Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java)
     return client.executeGet(path, responseType)
