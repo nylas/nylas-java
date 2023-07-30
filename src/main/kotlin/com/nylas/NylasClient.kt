@@ -20,8 +20,13 @@ import java.util.concurrent.TimeUnit
 
 /**
  * The NylasClient is the entry point to the Java SDK's API.
+ *
  * An instance holds a configured http client pointing to a base URL and is intended to be reused and shared
  * across threads and time.
+ *
+ * @param apiKey The Nylas API key to use for authentication.
+ * @param httpClientBuilder The builder to use for creating the http client.
+ * @param baseUrl The base URL to use for the Nylas API.
  */
 class NylasClient(
   val apiKey: String,
@@ -31,6 +36,9 @@ class NylasClient(
   private val baseUrl: HttpUrl
   private val httpClient: OkHttpClient
 
+  /**
+   * Different HTTP methods supported by the Nylas API.
+   */
   enum class HttpMethod {
     GET,
     PUT,
@@ -39,22 +47,23 @@ class NylasClient(
     PATCH,
   }
 
+  /**
+   * Different media types that can be set to the "Content-Type" header.
+   */
   enum class MediaType(val mediaType: String) {
     APPLICATION_JSON("application/json"),
     MESSAGE_RFC822("message/rfc822"),
   }
 
+  /**
+   * Different HTTP headers that can be set for an API request.
+   */
   internal enum class HttpHeaders(val headerName: String) {
     ACCEPT("Accept"),
     AUTHORIZATION("Authorization"),
     CONTENT_TYPE("Content-Type"),
   }
 
-  /**
-   * Internal constructor for builder.
-   *
-   * Only adds required version / build info interceptor
-   */
   init {
     this.baseUrl = HttpUrl.get(baseUrl)
     httpClient = httpClientBuilder
@@ -63,26 +72,54 @@ class NylasClient(
       .build()
   }
 
+  /**
+   * Access the Applications API
+   * @return The Applications API
+   */
   fun applications(): Applications {
     return Applications(this)
   }
 
+  /**
+   * Access the Auth API
+   * @param clientId The client ID for your Nylas Application
+   * @param clientSecret The client secret for your Nylas Application
+   * @return The Auth API
+   */
   fun auth(clientId: String, clientSecret: String): Auth {
     return Auth(this, clientId, clientSecret)
   }
 
+  /**
+   * Access the Calendars API
+   * @return The Calendars API
+   */
   fun calendars(): Calendars {
     return Calendars(this)
   }
 
+  /**
+   * Access the Events API
+   * @return The Events API
+   */
   fun events(): Events {
     return Events(this)
   }
 
+  /**
+   * Get a URL builder instance for the Nylas API.
+   */
   fun newUrlBuilder(): HttpUrl.Builder {
     return baseUrl.newBuilder()
   }
 
+  /**
+   * Execute a GET request to the Nylas API.
+   * @param path The path to request.
+   * @param resultType The type of the response body.
+   * @param queryParams The query parameters.
+   * @suppress Not for public use.
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun <T> executeGet(
     path: String,
@@ -93,6 +130,14 @@ class NylasClient(
     return executeRequest(url, HttpMethod.GET, null, resultType)
   }
 
+  /**
+   * Execute a PUT request to the Nylas API.
+   * @param path The path to request.
+   * @param resultType The type of the response body.
+   * @param requestBody The request body.
+   * @param queryParams The query parameters.
+   * @suppress Not for public use.
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun <T> executePut(
     path: String,
@@ -105,6 +150,14 @@ class NylasClient(
     return executeRequest(url, HttpMethod.PUT, jsonBody, resultType)
   }
 
+  /**
+   * Execute a PATCH request to the Nylas API.
+   * @param path The path to request.
+   * @param resultType The type of the response body.
+   * @param requestBody The request body.
+   * @param queryParams The query parameters.
+   * @suppress Not for public use.
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun <T> executePatch(
     path: String,
@@ -117,6 +170,14 @@ class NylasClient(
     return executeRequest(url, HttpMethod.PATCH, jsonBody, resultType)
   }
 
+  /**
+   * Execute a POST request to the Nylas API.
+   * @param path The path to request.
+   * @param resultType The type of the response body.
+   * @param requestBody The request body.
+   * @param queryParams The query parameters.
+   * @suppress Not for public use.
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun <T> executePost(
     path: String,
@@ -132,6 +193,13 @@ class NylasClient(
     return executeRequest(url, HttpMethod.POST, jsonBody, resultType)
   }
 
+  /**
+   * Execute a DELETE request to the Nylas API.
+   * @param path The path to request.
+   * @param resultType The type of the response body.
+   * @param queryParams The query parameters.
+   * @suppress Not for public use.
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun <T> executeDelete(
     path: String,
@@ -140,18 +208,6 @@ class NylasClient(
   ): T {
     val url = buildUrl(path, queryParams)
     return executeRequest(url, HttpMethod.DELETE, null, resultType)
-  }
-
-  /**
-   * Download the given url. If the request is successful, returns the raw response body, exposing useful headers
-   * such as Content-Type and Content-Length.
-   */
-  @Throws(IOException::class, NylasApiError::class)
-  fun download(url: HttpUrl.Builder): ResponseBody? {
-    val request = buildRequest(url, HttpMethod.GET, null)
-    val response = httpClient.newCall(request).execute()
-    throwAndCloseOnFailedRequest(response)
-    return response.body()
   }
 
   private fun buildRequest(
@@ -164,6 +220,14 @@ class NylasClient(
     return builder.method(method.toString(), body).build()
   }
 
+  /**
+   * Execute a request to the Nylas API.
+   * @param url The url to request.
+   * @param method The HTTP method to use.
+   * @param body The request body.
+   * @param resultType The type of the response body.
+   * @suppress Not for public use.
+   */
   @Throws(IOException::class, NylasApiError::class)
   fun <T> executeRequest(
     url: HttpUrl.Builder,
@@ -237,6 +301,10 @@ class NylasClient(
      */
     fun httpClient(httpClient: OkHttpClient.Builder) = apply { this.httpClient = httpClient }
 
+    /**
+     * Build the NylasClient instance
+     * @return a NylasClient instance
+     */
     fun build() = NylasClient(apiKey, httpClient, baseUrl)
   }
 
