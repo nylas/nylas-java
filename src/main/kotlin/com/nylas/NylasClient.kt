@@ -82,12 +82,10 @@ class NylasClient(
 
   /**
    * Access the Auth API
-   * @param clientId The client ID for your Nylas Application
-   * @param clientSecret The client secret for your Nylas Application
    * @return The Auth API
    */
-  fun auth(clientId: String, clientSecret: String): Auth {
-    return Auth(this, clientId, clientSecret)
+  fun auth(): Auth {
+    return Auth(this)
   }
 
   /**

@@ -16,14 +16,8 @@ import java.util.*
  * Also contains the Grants API and collection of provider API endpoints.
  *
  * @param client The configured Nylas API client
- * @param clientId The client ID for your Nylas Application
- * @param clientSecret The client secret for your Nylas Application
  */
-class Auth(
-  private val client: NylasClient,
-  private val clientId: String,
-  private val clientSecret: String,
-) {
+class Auth(private val client: NylasClient) {
 
   /**
    * Access the Grants API
@@ -35,9 +29,10 @@ class Auth(
 
   /**
    * Access the collection of provider related API endpoints
+   * @param clientId The client ID for your Nylas Application
    * @return The collection of provider related API endpoints
    */
-  fun providers(): Providers {
+  fun providers(clientId: String): Providers {
     return Providers(client, clientId)
   }
 
@@ -49,13 +44,6 @@ class Auth(
   @Throws(IOException::class, NylasApiError::class)
   fun exchangeCodeForToken(request: CodeExchangeRequest): Response<CodeExchangeResponse> {
     val path = "v3/connect/token"
-
-    if (request.clientId == null) {
-      request.clientId = clientId
-    }
-    if (request.clientSecret == null) {
-      request.clientSecret = clientSecret
-    }
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(CodeExchangeRequest::class.java)
@@ -73,13 +61,6 @@ class Auth(
   @Throws(IOException::class, NylasApiError::class)
   fun refreshAccessToken(request: TokenExchangeRequest): Response<CodeExchangeResponse> {
     val path = "v3/connect/token"
-
-    if (request.clientId == null) {
-      request.clientId = clientId
-    }
-    if (request.clientSecret == null) {
-      request.clientSecret = clientSecret
-    }
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(TokenExchangeRequest::class.java)
