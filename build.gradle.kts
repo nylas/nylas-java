@@ -38,6 +38,11 @@ tasks.processResources {
   expand("artifact_version" to project.version)
 }
 
+tasks.register<Jar>("sourceJar") {
+  archiveClassifier.set("sources")
+  from(sourceSets.main.get().allSource)
+}
+
 tasks.register<Jar>("uberJar") {
   archiveClassifier.set("uber")
 
