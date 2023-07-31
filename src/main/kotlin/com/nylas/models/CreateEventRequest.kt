@@ -24,7 +24,7 @@ data class CreateEventRequest(
   @Json(name = "metadata")
   val metadata: Map<String, String>? = null,
   @Json(name = "recurrence")
-  val recurrence: Recurrence? = null,
+  val recurrence: List<String>? = null,
   @Json(name = "calendar_id")
   val calendarId: String? = null,
   @Json(name = "read_only")
@@ -188,7 +188,7 @@ data class CreateEventRequest(
     private var reminderMinutes: String? = null
     private var reminderMethod: ReminderMethod? = null
     private var metadata: Map<String, String>? = null
-    private var recurrence: Recurrence? = null
+    private var recurrence: List<String>? = null
     private var calendarId: String? = null
     private var readOnly: Boolean? = null
     private var roundRobinOrder: List<String>? = null
@@ -205,7 +205,7 @@ data class CreateEventRequest(
     fun reminderMinutes(reminderMinutes: String) = apply { this.reminderMinutes = reminderMinutes }
     fun reminderMethod(reminderMethod: ReminderMethod) = apply { this.reminderMethod = reminderMethod }
     fun metadata(metadata: Map<String, String>) = apply { this.metadata = metadata }
-    fun recurrence(recurrence: Recurrence) = apply { this.recurrence = recurrence }
+    fun recurrence(recurrence: List<String>) = apply { this.recurrence = recurrence }
     fun calendarId(calendarId: String) = apply { this.calendarId = calendarId }
     fun readOnly(readOnly: Boolean) = apply { this.readOnly = readOnly }
     fun roundRobinOrder(roundRobinOrder: List<String>) = apply { this.roundRobinOrder = roundRobinOrder }

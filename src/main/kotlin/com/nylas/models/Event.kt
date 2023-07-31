@@ -42,7 +42,7 @@ data class Event(
   @Json(name = "organizer")
   val organizer: EmailName? = null,
   @Json(name = "recurrence")
-  val recurrence: Recurrence? = null,
+  val recurrence: List<String>? = null,
   @Json(name = "reminders")
   val reminders: Reminders? = null,
   @Json(name = "status")
