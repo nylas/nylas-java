@@ -97,17 +97,21 @@ class Auth(private val client: NylasClient) {
   }
 
   /**
-   * Build the URL for authenticating users to your application via Hosted Authentication
+   * Build the URL for authenticating users to your application with OAuth 2.0
    * @param config The configuration for building the URL
    * @return The URL for hosted authentication
    */
   @Throws(IOException::class, NylasApiError::class)
-  fun urlForAuthentication(config: UrlForAuthenticationConfig): String {
-    return urlAuthBuilder(config).build().toString()
+  fun urlForOAuth2(config: UrlForAuthenticationConfig): String {
+    val urlBuilder = urlAuthBuilder(config)
+
+    urlBuilder.addQueryParameter("response_type", "code")
+
+    return urlBuilder.build().toString()
   }
 
   /**
-   * Build the URL for authenticating users to your application via Hosted Authentication with PKCE
+   * Build the URL for authenticating users to your application with OAuth 2.0 and PKCE
    *
    * IMPORTANT: YOU WILL NEED TO STORE THE 'secret' returned to use it inside the CodeExchange flow
    *
@@ -115,7 +119,7 @@ class Auth(private val client: NylasClient) {
    * @return The URL for hosted authentication with secret & hashed secret
    */
   @Throws(IOException::class, NylasApiError::class)
-  fun urlForAuthenticationPKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
+  fun urlForOAuth2PKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
     val urlBuilder = urlAuthBuilder(config)
     val secret = UUID.randomUUID().toString()
 

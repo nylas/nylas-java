@@ -3,6 +3,8 @@ package com.nylas.models
 import com.squareup.moshi.Json
 
 data class UrlForAuthenticationConfig(
+  @Json(name = "client_id")
+  val clientId: String,
   @Json(name = "redirect_uri")
   val redirectUri: String,
   @Json(name = "access_type")
@@ -23,6 +25,7 @@ data class UrlForAuthenticationConfig(
   val loginHint: String?,
 ) {
   data class Builder(
+    private val clientId: String,
     private val redirectUri: String,
   ) {
     private var accessType: AccessType = AccessType.OFFLINE
@@ -44,6 +47,7 @@ data class UrlForAuthenticationConfig(
     fun loginHint(loginHint: String) = apply { this.loginHint = loginHint }
 
     fun build() = UrlForAuthenticationConfig(
+      clientId,
       redirectUri,
       accessType,
       provider,
