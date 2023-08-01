@@ -2,6 +2,9 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
+/**
+ * Class representation of a Nylas code exchange request
+ */
 data class CodeExchangeRequest(
   /**
    * Should match the same redirect URI that was used for getting the code during the initial authorization request.

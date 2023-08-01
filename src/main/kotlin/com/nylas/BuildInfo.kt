@@ -4,6 +4,9 @@ import org.slf4j.LoggerFactory
 import java.io.FileInputStream
 import java.util.*
 
+/**
+ * @suppress Not for public use.
+ */
 object BuildInfo {
   private val log = LoggerFactory.getLogger(BuildInfo::class.java)
   var VERSION: String? = null

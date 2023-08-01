@@ -2,6 +2,9 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
+/**
+ * Enum for the different conferencing providers.
+ */
 enum class ConferencingProvider {
   @Json(name = "Zoom Meeting")
   ZOOM_MEETING,

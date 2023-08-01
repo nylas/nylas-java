@@ -38,6 +38,7 @@ class NylasClient(
 
   /**
    * Different HTTP methods supported by the Nylas API.
+   * @suppress Not for public use.
    */
   enum class HttpMethod {
     GET,
@@ -49,6 +50,7 @@ class NylasClient(
 
   /**
    * Different media types that can be set to the "Content-Type" header.
+   * @suppress Not for public use.
    */
   enum class MediaType(val mediaType: String) {
     APPLICATION_JSON("application/json"),
@@ -57,6 +59,7 @@ class NylasClient(
 
   /**
    * Different HTTP headers that can be set for an API request.
+   * @suppress Not for public use.
    */
   internal enum class HttpHeaders(val headerName: String) {
     ACCEPT("Accept"),
@@ -284,34 +287,47 @@ class NylasClient(
   }
 
   /**
-   * A NylasClient.Builder allows applications to customize the Nylas http access
-   * by choosing a different base url or modifying http client options.
+   * A builder for creating [NylasClient]. Allows applications to customize the Nylas
+   * http access by choosing a different base url or modifying http client options.
+   *
+   * @param apiKey The Nylas API key to use for authentication.
    */
   data class Builder(
     private val apiKey: String,
   ) {
     private var baseUrl: String = DEFAULT_BASE_URL
     private var httpClient: OkHttpClient.Builder = defaultHttpClient()
+
+    /**
+     * Set the base url for the NylasClient.
+     * @param baseUrl The base url to use.
+     */
     fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
 
     /**
-     * Access the OkHttpClient.Builder to allow customization.
+     * Set the OkHttpClient.Builder for the NylasClient.
+     *
      * By default, the NylasClient configures it as follows:
      * .protocols(Arrays.asList(Protocol.HTTP_1_1))
      * .connectTimeout(60, TimeUnit.SECONDS)
      * .readTimeout(60, TimeUnit.SECONDS)
      * .writeTimeout(60,  TimeUnit.SECONDS)
      * .addNetworkInterceptor(new HttpLoggingInterceptor()
+     *
+     * @param httpClient The custom OkHttpClient.Builder to use.
      */
     fun httpClient(httpClient: OkHttpClient.Builder) = apply { this.httpClient = httpClient }
 
     /**
-     * Build the NylasClient instance
-     * @return a NylasClient instance
+     * Build the [NylasClient] instance
+     * @return a [NylasClient] instance
      */
     fun build() = NylasClient(apiKey, httpClient, baseUrl)
   }
 
+  /**
+   * @suppress Not for public use.
+   */
   companion object {
     val DEFAULT_BASE_URL = Region.US.nylasApiUrl
     private fun defaultHttpClient(): OkHttpClient.Builder {
