@@ -37,6 +37,20 @@ class Auth(private val client: NylasClient) {
   }
 
   /**
+   * Build the URL for authenticating users to your application with OAuth 2.0
+   * @param config The configuration for building the URL
+   * @return The URL for hosted authentication
+   */
+  @Throws(IOException::class, NylasApiError::class)
+  fun urlForOAuth2(config: UrlForAuthenticationConfig): String {
+    val urlBuilder = urlAuthBuilder(config)
+
+    urlBuilder.addQueryParameter("response_type", "code")
+
+    return urlBuilder.build().toString()
+  }
+
+  /**
    * Exchange an authorization code for an access token
    * @param request The code exchange request
    * @return The response containing the access token
@@ -51,6 +65,46 @@ class Auth(private val client: NylasClient) {
     val responseType = Types.newParameterizedType(Response::class.java, CodeExchangeResponse::class.java)
 
     return client.executePost(path, responseType, serializedRequestBody)
+  }
+
+  /**
+   * Build the URL for authenticating users to your application with OAuth 2.0 and PKCE
+   *
+   * IMPORTANT: YOU WILL NEED TO STORE THE 'secret' returned to use it inside the CodeExchange flow
+   *
+   * @param config The configuration for building the URL
+   * @return The URL for hosted authentication with secret & hashed secret
+   */
+  @Throws(IOException::class, NylasApiError::class)
+  fun urlForOAuth2PKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
+    val urlBuilder = urlAuthBuilder(config)
+    val secret = UUID.randomUUID().toString()
+
+    val sha256Digest = MessageDigest.getInstance("SHA-256").digest(secret.toByteArray())
+    val secretHash = Base64.getEncoder().encodeToString(sha256Digest)
+
+    urlBuilder
+      .addQueryParameter("code_challenge_method", "s256")
+      .addQueryParameter("code_challenge", secretHash)
+
+    return PKCEAuthURL(urlBuilder.build().toString(), secret, secretHash)
+  }
+
+  /**
+   * Build the URL for admin consent authentication for Microsoft
+   * @param config The configuration for building the URL
+   * @param credentialId The credential ID for the Microsoft account
+   * @return The URL for admin consent authentication
+   */
+  @Throws(IOException::class, NylasApiError::class)
+  fun urlForAdminConsent(config: UrlForAuthenticationConfig, credentialId: String): String {
+    val urlBuilder = urlAuthBuilder(config)
+
+    urlBuilder
+      .addQueryParameter("response_type", "adminconsent")
+      .addQueryParameter("credential_id", credentialId)
+
+    return urlBuilder.build().toString()
   }
 
   /**
@@ -94,60 +148,6 @@ class Auth(private val client: NylasClient) {
     val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
 
     return client.executeGet(url, responseType)
-  }
-
-  /**
-   * Build the URL for authenticating users to your application with OAuth 2.0
-   * @param config The configuration for building the URL
-   * @return The URL for hosted authentication
-   */
-  @Throws(IOException::class, NylasApiError::class)
-  fun urlForOAuth2(config: UrlForAuthenticationConfig): String {
-    val urlBuilder = urlAuthBuilder(config)
-
-    urlBuilder.addQueryParameter("response_type", "code")
-
-    return urlBuilder.build().toString()
-  }
-
-  /**
-   * Build the URL for authenticating users to your application with OAuth 2.0 and PKCE
-   *
-   * IMPORTANT: YOU WILL NEED TO STORE THE 'secret' returned to use it inside the CodeExchange flow
-   *
-   * @param config The configuration for building the URL
-   * @return The URL for hosted authentication with secret & hashed secret
-   */
-  @Throws(IOException::class, NylasApiError::class)
-  fun urlForOAuth2PKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
-    val urlBuilder = urlAuthBuilder(config)
-    val secret = UUID.randomUUID().toString()
-
-    val sha256Digest = MessageDigest.getInstance("SHA-256").digest(secret.toByteArray())
-    val secretHash = Base64.getEncoder().encodeToString(sha256Digest)
-
-    urlBuilder
-      .addQueryParameter("code_challenge_method", "s256")
-      .addQueryParameter("code_challenge", secretHash)
-
-    return PKCEAuthURL(urlBuilder.build().toString(), secret, secretHash)
-  }
-
-  /**
-   * Build the URL for admin consent authentication for Microsoft
-   * @param config The configuration for building the URL
-   * @param credentialId The credential ID for the Microsoft account
-   * @return The URL for admin consent authentication
-   */
-  @Throws(IOException::class, NylasApiError::class)
-  fun urlForAdminConsent(config: UrlForAuthenticationConfig, credentialId: String): String {
-    val urlBuilder = urlAuthBuilder(config)
-
-    urlBuilder
-      .addQueryParameter("response_type", "adminconsent")
-      .addQueryParameter("credential_id", credentialId)
-
-    return urlBuilder.build().toString()
   }
 
   /**
