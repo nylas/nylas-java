@@ -56,15 +56,14 @@ class Auth(private val client: NylasClient) {
    * @return The response containing the access token
    */
   @Throws(IOException::class, NylasApiError::class)
-  fun exchangeCodeForToken(request: CodeExchangeRequest): Response<CodeExchangeResponse> {
+  fun exchangeCodeForToken(request: CodeExchangeRequest): CodeExchangeResponse {
     val path = "v3/connect/token"
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(CodeExchangeRequest::class.java)
       .toJson(request)
-    val responseType = Types.newParameterizedType(Response::class.java, CodeExchangeResponse::class.java)
 
-    return client.executePost(path, responseType, serializedRequestBody)
+    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
   }
 
   /**
@@ -84,6 +83,7 @@ class Auth(private val client: NylasClient) {
     val secretHash = Base64.getEncoder().encodeToString(sha256Digest)
 
     urlBuilder
+      .addQueryParameter("response_type", "code")
       .addQueryParameter("code_challenge_method", "s256")
       .addQueryParameter("code_challenge", secretHash)
 
@@ -113,15 +113,14 @@ class Auth(private val client: NylasClient) {
    * @return The response containing the new access token
    */
   @Throws(IOException::class, NylasApiError::class)
-  fun refreshAccessToken(request: TokenExchangeRequest): Response<CodeExchangeResponse> {
+  fun refreshAccessToken(request: TokenExchangeRequest): CodeExchangeResponse {
     val path = "v3/connect/token"
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(TokenExchangeRequest::class.java)
       .toJson(request)
-    val responseType = Types.newParameterizedType(Response::class.java, CodeExchangeResponse::class.java)
 
-    return client.executePost(path, responseType, serializedRequestBody)
+    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
   }
 
   /**
