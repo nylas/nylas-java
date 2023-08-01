@@ -252,8 +252,14 @@ class NylasClient(
     if (!response.isSuccessful) {
       val responseBody = response.body()!!.string()
       response.close()
-      val parsedError = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
-        .fromJson(responseBody)
+      var parsedError: NylasApiErrorResponse? = null
+      try {
+        parsedError = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
+          .fromJson(responseBody)
+      } catch (e: IOException) {
+        throw NylasApiError("unknown", "Unknown error received from the API: $responseBody")
+      }
+
       if (parsedError?.error != null) {
         throw parsedError.error
       } else {
