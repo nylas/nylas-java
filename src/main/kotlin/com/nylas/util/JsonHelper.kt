@@ -57,13 +57,15 @@ class JsonHelper {
     val mapAdapter = moshi.adapter<Map<String, Any>>(
       MutableMap::class.java,
     ).indent("  ")
+
+    @JvmStatic
     val listAdapter = moshi.adapter<List<Any>>(
       MutableList::class.java,
     ).indent("  ")
 
     @JvmStatic
-    fun objectToJson(cls: Class<*>, obj: Any?): String {
-      return adapter<Any>(cls).toJson(obj)
+    fun objectToJson(obj: Any): String {
+      return adapter<Any>(obj.javaClass).toJson(obj)
     }
 
     @JvmStatic
