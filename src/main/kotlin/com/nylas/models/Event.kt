@@ -1,6 +1,5 @@
 package com.nylas.models
 
-import com.nylas.util.JsonHelper
 import com.squareup.moshi.Json
 data class Event(
   @Json(name = "id")
@@ -59,6 +58,4 @@ data class Event(
   fun getObject(): String = obj
 
   fun getWhen(): When = whenObj
-
-  fun toJSON() = JsonHelper.objectToJson(Event::class.java, this)
 }
