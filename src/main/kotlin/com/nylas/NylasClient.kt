@@ -260,13 +260,22 @@ class NylasClient(
         parsedError = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
           .fromJson(responseBody)
       } catch (e: IOException) {
-        throw NylasApiError("unknown", "Unknown error received from the API: $responseBody")
+        throw NylasApiError(
+          type = "unknown",
+          message = "Unknown error received from the API: $responseBody",
+          statusCode = response.code(),
+        )
       }
 
       if (parsedError?.error != null) {
+        parsedError.error.statusCode = response.code()
         throw parsedError.error
       } else {
-        throw NylasApiError("unknown", "Unknown error received from the API: $responseBody")
+        throw NylasApiError(
+          type = "unknown",
+          message = "Unknown error received from the API: $responseBody",
+          statusCode = response.code(),
+        )
       }
     }
   }
