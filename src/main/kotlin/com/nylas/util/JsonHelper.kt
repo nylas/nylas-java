@@ -35,6 +35,11 @@ class JsonHelper {
     }
 
     @JvmStatic
+    fun mapTypeOf(vararg type: Type): Type {
+      return Types.newParameterizedType(MutableMap::class.java, *type)
+    }
+
+    @JvmStatic
     fun listTypeOf(type: Type): Type {
       return Types.newParameterizedType(MutableList::class.java, type)
     }
@@ -56,6 +61,11 @@ class JsonHelper {
     @JvmStatic
     val mapAdapter = moshi.adapter<Map<String, Any>>(
       MutableMap::class.java,
+    ).indent("  ")
+
+    @JvmStatic
+    val jsonMapAdapter = moshi.adapter<Map<String, String>>(
+      mapTypeOf(String::class.java, String::class.java),
     ).indent("  ")
 
     @JvmStatic

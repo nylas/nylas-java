@@ -3,7 +3,7 @@ package com.nylas.models
 import com.nylas.util.JsonHelper
 
 interface IQueryParams {
-  fun convertToMap(): Map<String, Any> {
+  fun convertToMap(): Map<String, String> {
     val json = JsonHelper.moshi()
       .adapter(this.javaClass)
       .toJson(this)
@@ -12,6 +12,6 @@ interface IQueryParams {
       return emptyMap()
     }
 
-    return JsonHelper.mapAdapter.fromJson(json)!!
+    return JsonHelper.jsonMapAdapter.fromJson(json)!!
   }
 }
