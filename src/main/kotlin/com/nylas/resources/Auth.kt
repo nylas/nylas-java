@@ -168,13 +168,13 @@ class Auth(private val client: NylasClient) {
   }
 
   /**
-   * Revoke an access token
-   * @param accessToken The access token to revoke
-   * @return True if the access token was revoked successfully
+   * Revoke a token (and the grant attached to the token)
+   * @param token The token to revoke
+   * @return True if the token was revoked successfully
    */
   @Throws(IOException::class, NylasApiError::class)
-  fun revoke(accessToken: String): Boolean {
-    val path = "v3/connect/revoke?access_token=$accessToken"
+  fun revoke(token: String): Boolean {
+    val path = "v3/connect/revoke?token=$token"
     client.executePost<Any>(path)
 
     return true
