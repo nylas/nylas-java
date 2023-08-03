@@ -3,7 +3,6 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import java.io.IOException
 
 /**
  * A collection of redirect URI related API endpoints.
@@ -17,7 +16,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    * Return all Redirect URIs
    * @return The list of Redirect URIs
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun list(): ListResponse<RedirectUri> {
     val path = "v3/applications/redirect-uris"
     return listResource(path)
@@ -28,7 +27,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    * @param redirectUriId The id of the Redirect URI to retrieve.
    * @return The Redirect URI
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun find(redirectUriId: String): Response<RedirectUri> {
     val path = String.format("v3/grants/redirect-uris/%s", redirectUriId)
     return findResource(path)
@@ -39,7 +38,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    * @param requestBody The values to create the Redirect URI with
    * @return The created Redirect URI
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun create(requestBody: CreateRedirectUriRequest): Response<RedirectUri> {
     val path = "v3/applications/redirect-uris"
     val serializedRequestBody = JsonHelper.moshi()
@@ -55,7 +54,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    * @param requestBody The values to update the Redirect URI with
    * @return The updated Redirect URI
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun update(redirectUriId: String, requestBody: UpdateRedirectUriRequest): Response<RedirectUri> {
     val path = String.format("v3/grants/redirect-uris/%s", redirectUriId)
     val serializedRequestBody = JsonHelper.moshi()
@@ -70,7 +69,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    * @param redirectUriId The id of the Redirect URI to delete.
    * @return The deleted Redirect URI
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun destroy(redirectUriId: String): DeleteResponse {
     val path = String.format("v3/grants/redirect-uris/%s", redirectUriId)
     return destroyResource(path)

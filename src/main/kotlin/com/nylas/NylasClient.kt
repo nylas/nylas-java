@@ -119,7 +119,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun <T> executeGet(
     path: String,
     resultType: Type? = null,
@@ -137,7 +137,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun <T> executePut(
     path: String,
     resultType: Type? = null,
@@ -157,7 +157,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun <T> executePatch(
     path: String,
     resultType: Type? = null,
@@ -177,7 +177,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun <T> executePost(
     path: String,
     resultType: Type? = null,
@@ -199,7 +199,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun <T> executeDelete(
     path: String,
     resultType: Type? = null,
@@ -227,7 +227,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @suppress Not for public use.
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun <T> executeRequest(
     url: HttpUrl.Builder,
     method: HttpMethod,
@@ -248,18 +248,17 @@ class NylasClient(
     }
   }
 
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(AbstractNylasApiError::class)
   private fun throwAndCloseOnFailedRequest(url: HttpUrl, response: Response) {
     if (response.isSuccessful) {
       return
     }
 
     val responseBody = response.body()!!.string()
+    val parsedError: AbstractNylasApiError?
     response.close()
 
     if (url.encodedPath().equals("/v3/connect/token") || url.encodedPath().equals("/oauth/revoke")) {
-      var parsedError: NylasOAuthError? = null
-
       try {
         parsedError = JsonHelper.moshi().adapter(NylasOAuthError::class.java)
           .fromJson(responseBody)
@@ -267,7 +266,7 @@ class NylasClient(
         throw NylasOAuthError(
           error = "unknown",
           errorDescription = "Unknown error received from the API: $responseBody",
-          providerError = "unknown",
+          errorUri = "unknown",
           errorCode = "0",
           statusCode = response.code(),
         )
@@ -278,10 +277,10 @@ class NylasClient(
         throw parsedError
       }
     } else {
-      var parsedError: NylasApiErrorResponse? = null
       try {
-        parsedError = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
+        val errorResp = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
           .fromJson(responseBody)
+        parsedError = errorResp?.error
       } catch (e: IOException) {
         throw NylasApiError(
           type = "unknown",
@@ -289,11 +288,11 @@ class NylasClient(
           statusCode = response.code(),
         )
       }
+    }
 
-      if (parsedError?.error != null) {
-        parsedError.error.statusCode = response.code()
-        throw parsedError.error
-      }
+    if (parsedError != null) {
+      parsedError.statusCode = response.code()
+      throw parsedError
     }
 
     throw NylasApiError(

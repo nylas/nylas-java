@@ -1,7 +1,6 @@
 package com.nylas.models
 
 import com.squareup.moshi.Json
-import java.lang.Exception
 
 // TODO::Enum for type
 data class NylasApiError(
@@ -11,5 +10,5 @@ data class NylasApiError(
   override val message: String,
   @Json(name = "provider_error")
   val providerError: Map<String, Any?>? = null,
-  var statusCode: Int? = null,
-) : Exception()
+  override var statusCode: Int? = null,
+) : AbstractNylasApiError(message, statusCode)

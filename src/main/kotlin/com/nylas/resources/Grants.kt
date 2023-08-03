@@ -3,7 +3,6 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import java.io.IOException
 
 /**
  * Nylas Grants API
@@ -18,7 +17,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param queryParams The query parameters to include in the request
    * @return The list of Grants
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   @JvmOverloads
   fun list(queryParams: ListGrantsQueryParams? = null): ListResponse<Grant> {
     val path = "v3/grants"
@@ -30,7 +29,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param grantId The id of the Grant to retrieve.
    * @return The Grant
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun find(grantId: String): Response<Grant> {
     val path = String.format("v3/grants/%s", grantId)
     return findResource(path)
@@ -41,7 +40,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param requestBody The values to create the Grant with
    * @return The created Grant
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun create(requestBody: CreateGrantRequest): Response<Grant> {
     val path = "v3/grants"
     val serializedRequestBody = JsonHelper.moshi()
@@ -57,7 +56,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param requestBody The values to update the Grant with
    * @return The updated Grant
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun update(calendarId: String, requestBody: UpdateGrantRequest): Response<Grant> {
     val path = String.format("v3/grants/%s", calendarId)
     val serializedRequestBody = JsonHelper.moshi()
@@ -72,7 +71,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param grantId The id of the Grant to delete.
    * @return The deletion response
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun destroy(grantId: String): DeleteResponse {
     val path = String.format("v3/grants/%s", grantId)
     return destroyResource(path)

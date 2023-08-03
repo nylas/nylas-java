@@ -5,7 +5,6 @@ import com.nylas.models.ApplicationDetails
 import com.nylas.models.NylasApiError
 import com.nylas.models.Response
 import com.squareup.moshi.Types
-import java.io.IOException
 
 /**
  * Nylas Applications API
@@ -25,7 +24,7 @@ class Applications(private val client: NylasClient) {
    * Get application details
    * @return The application details
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun getDetails(): Response<ApplicationDetails> {
     val path = "v3/applications"
     val responseType = Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java)

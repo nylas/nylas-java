@@ -3,7 +3,6 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import java.io.IOException
 
 /**
  * Nylas Calendar API
@@ -20,7 +19,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @param queryParams The query parameters to include in the request
    * @return The list of Calendars
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   @JvmOverloads
   fun list(identifier: String, queryParams: ListCalendersQueryParams? = null): ListResponse<Calendar> {
     val path = String.format("v3/grants/%s/calendars", identifier)
@@ -33,7 +32,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @param calendarId The id of the Calendar to retrieve. Use "primary" to refer to the primary calendar associated with grant.
    * @return The Calendar
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun find(identifier: String, calendarId: String): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
     return findResource(path)
@@ -45,7 +44,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @param requestBody The values to create the Calendar with
    * @return The created Calendar
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun create(identifier: String, requestBody: CreateCalendarRequest): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars", identifier)
     val adapter = JsonHelper.moshi().adapter(CreateCalendarRequest::class.java)
@@ -60,7 +59,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @param requestBody The values to update the Calendar with
    * @return The updated Calendar
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun update(identifier: String, calendarId: String, requestBody: UpdateCalendarRequest): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
     val adapter = JsonHelper.moshi().adapter(UpdateCalendarRequest::class.java)
@@ -74,7 +73,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @param calendarId The id of the Calendar to delete. Use "primary" to refer to the primary calendar associated with grant.
    * @return The deletion response
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun destroy(identifier: String, calendarId: String): DeleteResponse {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
     return destroyResource(path)

@@ -3,7 +3,6 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import java.io.IOException
 
 /**
  * Nylas Events API
@@ -19,7 +18,7 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
    * @param queryParams The query parameters to include in the request
    * @return The list of Events
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun list(identifier: String, queryParams: ListEventQueryParams): ListResponse<Event> {
     val path = String.format("v3/grants/%s/events", identifier)
     return listResource(path, queryParams)
@@ -32,7 +31,7 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
    * @param queryParams The query parameters to include in the request
    * @return The Event
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun find(identifier: String, eventId: String, queryParams: FindEventQueryParams): Response<Event> {
     val path = String.format("v3/grants/%s/events/%s", identifier, eventId)
     return findResource(path, queryParams)
@@ -45,7 +44,7 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
    * @param queryParams The query parameters to include in the request
    * @return The created Event
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun create(identifier: String, requestBody: CreateEventRequest, queryParams: CreateEventQueryParams): Response<Event> {
     val path = String.format("v3/grants/%s/events", identifier)
     val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
@@ -61,7 +60,7 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
    * @param queryParams The query parameters to include in the request
    * @return The updated Event
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun update(identifier: String, eventId: String, requestBody: UpdateEventRequest, queryParams: UpdateEventQueryParams): Response<Event> {
     val path = String.format("v3/grants/%s/events/%s", identifier, eventId)
     val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
@@ -76,7 +75,7 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
    * @param queryParams The query parameters to include in the request
    * @return The deletion response
    */
-  @Throws(IOException::class, NylasApiError::class)
+  @Throws(NylasApiError::class)
   fun destroy(identifier: String, eventId: String, queryParams: DestroyEventQueryParams): DeleteResponse {
     val path = String.format("v3/grants/%s/events/%s", identifier, eventId)
     return destroyResource(path, queryParams)
