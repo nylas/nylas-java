@@ -3,16 +3,14 @@ package com.nylas
 import com.nylas.interceptors.AddVersionHeadersInterceptor
 import com.nylas.interceptors.ContentHeadersInterceptor
 import com.nylas.interceptors.HttpLoggingInterceptor
-import com.nylas.models.IQueryParams
-import com.nylas.models.NylasApiError
-import com.nylas.models.NylasApiErrorResponse
-import com.nylas.models.Region
+import com.nylas.models.*
 import com.nylas.resources.Applications
 import com.nylas.resources.Auth
 import com.nylas.resources.Calendars
 import com.nylas.resources.Events
 import com.nylas.util.JsonHelper
 import okhttp3.*
+import okhttp3.Response
 import java.io.IOException
 import java.lang.Exception
 import java.lang.reflect.Type
@@ -238,7 +236,7 @@ class NylasClient(
   ): T {
     val request = buildRequest(url, method, body)
     httpClient.newCall(request).execute().use { response ->
-      throwAndCloseOnFailedRequest(response)
+      throwAndCloseOnFailedRequest(url.build(), response)
       val responseBody = response.body()
       if (resultType == null || responseBody == null) {
         throw Exception("Unexpected null response body")
@@ -251,10 +249,35 @@ class NylasClient(
   }
 
   @Throws(IOException::class, NylasApiError::class)
-  private fun throwAndCloseOnFailedRequest(response: Response) {
-    if (!response.isSuccessful) {
-      val responseBody = response.body()!!.string()
-      response.close()
+  private fun throwAndCloseOnFailedRequest(url: HttpUrl, response: Response) {
+    if (response.isSuccessful) {
+      return
+    }
+
+    val responseBody = response.body()!!.string()
+    response.close()
+
+    if (url.encodedPath().equals("/v3/connect/token") || url.encodedPath().equals("/oauth/revoke")) {
+      var parsedError: NylasOAuthError? = null
+
+      try {
+        parsedError = JsonHelper.moshi().adapter(NylasOAuthError::class.java)
+          .fromJson(responseBody)
+      } catch (e: IOException) {
+        throw NylasOAuthError(
+          error = "unknown",
+          errorDescription = "Unknown error received from the API: $responseBody",
+          providerError = "unknown",
+          errorCode = "0",
+          statusCode = response.code(),
+        )
+      }
+
+      if (parsedError != null) {
+        parsedError.statusCode = response.code()
+        throw parsedError
+      }
+    } else {
       var parsedError: NylasApiErrorResponse? = null
       try {
         parsedError = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
@@ -270,14 +293,14 @@ class NylasClient(
       if (parsedError?.error != null) {
         parsedError.error.statusCode = response.code()
         throw parsedError.error
-      } else {
-        throw NylasApiError(
-          type = "unknown",
-          message = "Unknown error received from the API: $responseBody",
-          statusCode = response.code(),
-        )
       }
     }
+
+    throw NylasApiError(
+      type = "unknown",
+      message = "Unknown error received from the API: $responseBody",
+      statusCode = response.code(),
+    )
   }
 
   private fun buildUrl(path: String, queryParams: IQueryParams?): HttpUrl.Builder {
