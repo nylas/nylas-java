@@ -14,6 +14,7 @@ import okhttp3.Response
 import java.io.IOException
 import java.lang.Exception
 import java.lang.reflect.Type
+import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -119,7 +120,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(NylasApiError::class)
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executeGet(
     path: String,
     resultType: Type? = null,
@@ -137,7 +138,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(NylasApiError::class)
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executePut(
     path: String,
     resultType: Type? = null,
@@ -157,7 +158,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(NylasApiError::class)
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executePatch(
     path: String,
     resultType: Type? = null,
@@ -177,7 +178,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(NylasApiError::class)
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executePost(
     path: String,
     resultType: Type? = null,
@@ -199,7 +200,7 @@ class NylasClient(
    * @param queryParams The query parameters.
    * @suppress Not for public use.
    */
-  @Throws(NylasApiError::class)
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executeDelete(
     path: String,
     resultType: Type? = null,
@@ -227,7 +228,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @suppress Not for public use.
    */
-  @Throws(NylasApiError::class)
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executeRequest(
     url: HttpUrl.Builder,
     method: HttpMethod,
@@ -235,16 +236,21 @@ class NylasClient(
     resultType: Type?,
   ): T {
     val request = buildRequest(url, method, body)
-    httpClient.newCall(request).execute().use { response ->
-      throwAndCloseOnFailedRequest(url.build(), response)
-      val responseBody = response.body()
-      if (resultType == null || responseBody == null) {
-        throw Exception("Unexpected null response body")
+    val finalUrl = url.build()
+    try {
+      httpClient.newCall(request).execute().use { response ->
+        throwAndCloseOnFailedRequest(finalUrl, response)
+        val responseBody = response.body()
+        if (resultType == null || responseBody == null) {
+          throw Exception("Unexpected null response body")
+        }
+
+        val adapter = JsonHelper.moshi().adapter<T>(resultType)
+
+        return adapter?.fromJson(responseBody.source()) ?: throw Exception("Failed to deserialize response body")
       }
-
-      val adapter = JsonHelper.moshi().adapter<T>(resultType)
-
-      return adapter?.fromJson(responseBody.source()) ?: throw Exception("Failed to deserialize response body")
+    } catch (e: SocketTimeoutException) {
+      throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis())
     }
   }
 

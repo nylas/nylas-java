@@ -17,7 +17,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param queryParams The query parameters to include in the request
    * @return The list of Grants
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(queryParams: ListGrantsQueryParams? = null): ListResponse<Grant> {
     val path = "v3/grants"
@@ -29,7 +29,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param grantId The id of the Grant to retrieve.
    * @return The Grant
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun find(grantId: String): Response<Grant> {
     val path = String.format("v3/grants/%s", grantId)
     return findResource(path)
@@ -40,7 +40,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param requestBody The values to create the Grant with
    * @return The created Grant
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun create(requestBody: CreateGrantRequest): Response<Grant> {
     val path = "v3/grants"
     val serializedRequestBody = JsonHelper.moshi()
@@ -56,7 +56,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param requestBody The values to update the Grant with
    * @return The updated Grant
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun update(calendarId: String, requestBody: UpdateGrantRequest): Response<Grant> {
     val path = String.format("v3/grants/%s", calendarId)
     val serializedRequestBody = JsonHelper.moshi()
@@ -71,7 +71,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
    * @param grantId The id of the Grant to delete.
    * @return The deletion response
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun destroy(grantId: String): DeleteResponse {
     val path = String.format("v3/grants/%s", grantId)
     return destroyResource(path)

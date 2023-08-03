@@ -40,7 +40,6 @@ class Auth(private val client: NylasClient) {
    * @param config The configuration for building the URL
    * @return The URL for hosted authentication
    */
-  @Throws(NylasApiError::class)
   fun urlForOAuth2(config: UrlForAuthenticationConfig): String {
     val urlBuilder = urlAuthBuilder(config)
 
@@ -54,7 +53,7 @@ class Auth(private val client: NylasClient) {
    * @param request The code exchange request
    * @return The response containing the access token
    */
-  @Throws(NylasOAuthError::class)
+  @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun exchangeCodeForToken(request: CodeExchangeRequest): CodeExchangeResponse {
     val path = "v3/connect/token"
 
@@ -73,7 +72,6 @@ class Auth(private val client: NylasClient) {
    * @param config The configuration for building the URL
    * @return The URL for hosted authentication with secret & hashed secret
    */
-  @Throws(NylasApiError::class)
   fun urlForOAuth2PKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
     val urlBuilder = urlAuthBuilder(config)
     val secret = UUID.randomUUID().toString()
@@ -95,7 +93,6 @@ class Auth(private val client: NylasClient) {
    * @param credentialId The credential ID for the Microsoft account
    * @return The URL for admin consent authentication
    */
-  @Throws(NylasApiError::class)
   fun urlForAdminConsent(config: UrlForAuthenticationConfig, credentialId: String): String {
     val urlBuilder = urlAuthBuilder(config)
 
@@ -111,7 +108,7 @@ class Auth(private val client: NylasClient) {
    * @param request The refresh token request
    * @return The response containing the new access token
    */
-  @Throws(NylasOAuthError::class)
+  @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun refreshAccessToken(request: TokenExchangeRequest): CodeExchangeResponse {
     val path = "v3/connect/token"
 
@@ -127,7 +124,7 @@ class Auth(private val client: NylasClient) {
    * @param token The ID token to validate
    * @return The response containing the ID token information
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun validateIDToken(token: String): Response<OpenIDResponse> {
     val url = "v3/connect/tokeninfo?id_token=$token"
     val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
@@ -140,7 +137,7 @@ class Auth(private val client: NylasClient) {
    * @param token The access token to validate
    * @return The response containing the access token information
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun validateAccessToken(token: String): String {
     val url = "v3/connect/tokeninfo?access_token=$token"
     val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
@@ -155,7 +152,7 @@ class Auth(private val client: NylasClient) {
    * @param request The server side hosted auth request
    * @return The response containing the new login url
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun serverSideHostedAuth(request: ServerSideHostedAuthRequest): Response<ServerSideHostedAuthResponse> {
     val path = "v3/connect/auth"
     val serializedRequestBody = JsonHelper.moshi()
@@ -171,7 +168,7 @@ class Auth(private val client: NylasClient) {
    * @param token The token to revoke
    * @return True if the token was revoked successfully
    */
-  @Throws(NylasOAuthError::class)
+  @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun revoke(token: String): Boolean {
     val path = "v3/connect/revoke?token=$token"
     client.executePost<Any>(path)
@@ -184,7 +181,6 @@ class Auth(private val client: NylasClient) {
    * @param config The configuration for building the URL
    * @return The URL for hosted authentication
    */
-  @Throws(NylasApiError::class)
   private fun urlAuthBuilder(config: UrlForAuthenticationConfig): HttpUrl.Builder {
     val url = this.client.newUrlBuilder().addPathSegments("v3/connect/auth")
     val json = JsonHelper.moshi()

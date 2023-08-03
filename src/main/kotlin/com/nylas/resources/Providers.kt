@@ -19,7 +19,7 @@ class Providers(
    * List your available OAuth providers
    * @return The list of providers
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun list(): ListResponse<Provider> {
     val path = "v3/grants/connect/providers/find?client_id=$clientId"
     return listResource(path)
@@ -30,7 +30,7 @@ class Providers(
    * @param params The parameters to include in the request
    * @return The detected provider, if found
    */
-  @Throws(NylasApiError::class)
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun detect(params: ProviderDetectParams): Response<ProviderDetectResponse> {
     if (params.clientId == null) {
       params.clientId = clientId
