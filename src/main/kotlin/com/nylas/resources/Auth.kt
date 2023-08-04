@@ -146,24 +146,6 @@ class Auth(private val client: NylasClient) {
   }
 
   /**
-   * Create a new authorization request and get a new unique login url.
-   * Used only for hosted authentication.
-   * This is the initial step requested from the server side to issue a new login url.
-   * @param request The server side hosted auth request
-   * @return The response containing the new login url
-   */
-  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun serverSideHostedAuth(request: ServerSideHostedAuthRequest): Response<ServerSideHostedAuthResponse> {
-    val path = "v3/connect/auth"
-    val serializedRequestBody = JsonHelper.moshi()
-      .adapter(ServerSideHostedAuthRequest::class.java)
-      .toJson(request)
-    val responseType = Types.newParameterizedType(Response::class.java, ServerSideHostedAuthResponse::class.java)
-
-    return client.executePost(path, responseType, serializedRequestBody)
-  }
-
-  /**
    * Revoke a token (and the grant attached to the token)
    * @param token The token to revoke
    * @return True if the token was revoked successfully
