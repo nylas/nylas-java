@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.Types
 import okhttp3.HttpUrl
 import java.security.MessageDigest
 import java.util.*
@@ -23,15 +24,6 @@ class Auth(private val client: NylasClient) {
    */
   fun grants(): Grants {
     return Grants(client)
-  }
-
-  /**
-   * Access the collection of provider related API endpoints
-   * @param clientId The client ID for your Nylas Application
-   * @return The collection of provider related API endpoints
-   */
-  fun providers(clientId: String): Providers {
-    return Providers(client, clientId)
   }
 
   /**
@@ -129,6 +121,19 @@ class Auth(private val client: NylasClient) {
     client.executePost<Any>(path)
 
     return true
+  }
+
+  /**
+   * Detect provider from email address
+   * @param params The parameters to include in the request
+   * @return The detected provider, if found
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun detectProvider(params: ProviderDetectParams): Response<ProviderDetectResponse> {
+    val path = "v3/grants/connect/providers/detect"
+    val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
+
+    return client.executePost(path, responseType, queryParams = params)
   }
 
   /**
