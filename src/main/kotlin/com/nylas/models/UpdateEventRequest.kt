@@ -1,12 +1,29 @@
 package com.nylas.models
 
+import com.nylas.models.CreateEventRequest.When
 import com.squareup.moshi.Json
 
+/**
+ * Class representation of a Nylas update event request
+ */
 data class UpdateEventRequest(
+  /**
+   * Representation of time and duration for events. When object can be in one of four formats (sub-objects):
+   * - [When.Date]
+   * - [When.Datespan]
+   * - [When.Time]
+   * - [When.Timespan]
+   */
   @Json(name = "when")
   val whenObj: When? = null,
+  /**
+   * The title of the event
+   */
   @Json(name = "title")
   val title: String? = null,
+  /**
+   * Description of the event.
+   */
   @Json(name = "description")
   val description: String? = null,
   @Json(name = "location")

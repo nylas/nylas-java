@@ -509,7 +509,7 @@ data class CreateEventRequest(
     fun metadata(metadata: Map<String, String>) = apply { this.metadata = metadata }
 
     /**
-     * Set an array of RRULE and EXDATE strings.
+     * Set a list of RRULE and EXDATE strings.
      * Please note that EXRULE, RDATE, and TZID are not supported.
      * @param recurrence An array of RRULE and EXDATE strings.
      * @return The builder.

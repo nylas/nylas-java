@@ -7,7 +7,7 @@ import com.squareup.moshi.Json
  */
 data class Calendar(
   /**
-   * The globally unique object identifier.
+   * Globally unique object identifier.
    */
   @Json(name = "id")
   val id: String = "",
