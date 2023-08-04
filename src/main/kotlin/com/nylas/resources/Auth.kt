@@ -3,7 +3,6 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import com.squareup.moshi.Types
 import okhttp3.HttpUrl
 import java.security.MessageDigest
 import java.util.*
@@ -117,32 +116,6 @@ class Auth(private val client: NylasClient) {
       .toJson(request)
 
     return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
-  }
-
-  /**
-   * Validate and retrieve information about an ID token
-   * @param token The ID token to validate
-   * @return The response containing the ID token information
-   */
-  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun validateIDToken(token: String): Response<OpenIDResponse> {
-    val url = "v3/connect/tokeninfo?id_token=$token"
-    val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
-
-    return client.executeGet(url, responseType)
-  }
-
-  /**
-   * Validate and retrieve information about an access token
-   * @param token The access token to validate
-   * @return The response containing the access token information
-   */
-  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun validateAccessToken(token: String): String {
-    val url = "v3/connect/tokeninfo?access_token=$token"
-    val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
-
-    return client.executeGet(url, responseType)
   }
 
   /**
