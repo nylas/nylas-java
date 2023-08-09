@@ -1,30 +1,39 @@
 # Upgrading to the Nylas SDK v2.0 for Java
 
 ## Introduction
-With the upcoming release of the Nylas API v3, the Nylas Java SDK has been rewritten to be more idiomatic and easier to use. This guide will help you upgrade your code to use the new SDK. We have also documented the methods and models of the SDK so that you can easily find the information you need in our [SDK reference](https://nylas-java-sdk-reference.pages.dev/).
 
-⚠️ **Please note:** The Nylas SDK v2.0 is not compatible with the Nylas API < 3.0. If you are still using any prior version of the API please stick to the Nylas Java SDK v1.x. 
+The Nylas Java SDK has been rewritten for the upcoming release of the Nylas API v3 to be more idiomatic and easier to use. This guide helps you upgrade your code to use the new SDK. The new SDK also includes [documentation for the SDK's methods and models](https://nylas-java-sdk-reference.pages.dev/) so you can easily find the implementation details you need.
 
-## Initial Setup
-To upgrade to the new SDK, you will need to update your dependencies to use the new version. It's important to note though that the artifact name has changed from `nylas-java-sdk` to `nylas`. This was done to make it more consistent with our other SDK offerings, and it reflects that this SDK is no longer Java-only. Despite this name change, we will be keeping the versioning consistent with the previous SDK version, so the first version of the new SDK will be `2.0.0`. To upgrade to this SDK, change the dependency in your `build.gradle` file to the following:
+⚠️ **Note:** The Nylas Java SDK v2.0 is not compatible with Nylas APIs earlier than 3.0 beta. If you are still using an earlier version of the API (such as Nylas v2.7), keep using the Nylas Java SDK v1.x until you can upgrade.
+
+## Initial Set up
+
+To upgrade to the new SDK, you update your dependencies to use the new version.
+
+**Note:** The artifact name has changed from `nylas-java-sdk` to `nylas`.
+This makes it consistent with the other Nylas SDK offerings, and reflects that this SDK is no longer Java-only. Despite the name change, versioning will remain consistent with the previous SDK version, so the first version of the new SDK is `2.0.0`.
+
+To upgrade to the new SDK, change the dependency in your `build.gradle` file to the following:
 
 ```groovy
 implementation ('com.nylas.sdk:nylas:2.0.0-beta.1')
 ```
 
-The first step to using the Nylas Java SDK is to create a new `NylasClient` object. This object will be used to make all API requests. All methods to initialize the `NylasClient` that were deprecated are now removed, so the only way to create it now is through the builder. The SDK employs the use of builder patterns in many places, to make it more readable and easier to create objects with many optional parameters. 
+The first step to use the Nylas Java SDK is to create a new `NylasClient` object. This object is used to make all API requests.
+
+All previous deprecated methods of initializing the `NylasClient` have been removed, so you must now create it  using the builder, as in the example below. The SDK uses builder patterns in many places to make your code more readable and easier to create objects with many optional parameters.
 
 ```java
 NylasClient nylas = new NylasClient.Builder("API_KEY").build();
 ```
 
-From here, you can use the client to make API requests by accessing all the different resources configured with your API Key.
-
+From here, you can use the client to make API requests by accessing the different resources configured with your API Key.
 
 ## Building Objects
-As mentioned earlier, the SDK now uses builder patterns extensively to create objects. This makes it easier to create objects with many optional parameters. All models that contain optional parameters now have a builder class that can be used to create the object.
 
-Furthermore, we now have different models for creating, updating, and retrieving objects. This was done to better reflect the API, which itself has different models for each different endpoint and operation. Create objects are prefixed with "Create" and has a suffix of "Request", update objects are prefixed with "Update" and has a suffix of "Request", and retrieve objects are just the name of the object.
+As mentioned earlier, the SDK now uses builder patterns extensively to create objects. This makes it easier to create objects with many optional parameters. All models that contain optional parameters now have a builder class that you can use to create the object.
+
+The SDK now has different models for creating, updating, and retrieving objects, to better reflect the underlying methods in the Nylas API. Create objects are prefixed with `Create` and have a suffix of `Request`, update objects are prefixed with `Update` and have a suffix of `Request`, and retrieve objects are just the name of the object.
 
 If we take Calendar objects as an example, `Calendar` is the retrieve object, `CreateCalendarRequest` is the create object, and `UpdateCalendarRequest` is the update object.
 
@@ -41,7 +50,8 @@ CreateCalendarRequest createCalendarRequest = new CreateCalendarRequest.Builder(
 ```
 
 ## Making Requests to the Nylas API
-Your `NylasClient` object is what you use to make requests to the Nylas API. The SDK is organized into different resources, each of which has methods to make requests to the API. Each resource is available through the `NylasClient` object configured with you API key. 
+
+You use the `NylasClient` object to make requests to the Nylas API. The SDK is organized into different resources, each of which has methods to make requests to the API. Each resource is available using the `NylasClient` object configured with your API key.
 
 For example, to get a list of calendars, you can use the following code:
 
@@ -50,22 +60,27 @@ NylasClient nylas = new NylasClient.Builder("API_KEY").build();
 ListResponse<Calendars> calendars = nylas.calendars().list("GRANT_ID");
 ```
 
-As illustrated by the code above, there are some new concepts that are introduced into the SDK when making requests. These concepts are explained in more detail below.
+You might notice in the code above that there are some new concepts in the new SDK when making requests. These concepts are explained in more detail below.
 
 ### Resource Parameters
-Depending on the resource it takes different parameters. All resources take an "identifier", which is the ID of the account you want to make the request for. This is usually the Grant ID or the email address of the account. Some resources also take "query parameters" which is mainly used for filtering data or passing in additional information.
+
+Each resource takes different parameters. All resources take an "identifier", which is the ID of the account you want to make the request for. This is usually the Grant ID or the email address of the account. Some resources also take "query parameters" which are mainly used to filter data or pass in additional information.
 
 ### Response Objects
-With the new Nylas API v3, we now have standard response objects for all requests (excluding OAuth endpoints). There's generally two main types of response objects: `Response` and `ListResponse`.
 
-The `Response` object is used for requests that return a single object, such as retrieving a single calendar. This will return a parameterized object of the type you are requesting (e.g. `Calendar`) and a string representing the request ID.
+The new Nylas API v3 now has standard response objects for all requests (excluding OAuth endpoints). There are generally two main types of response objects: `Response` and `ListResponse`.
 
-The `ListResponse` object is used for requests that return a list of objects, such as retrieving a list of calendars.This will return a list of parameterized objects of the type you are requesting (e.g. `Calendar`), a string representing the request ID, and another string representing the token of the next page for paginating a request.
+The `Response` object is used for requests that return a single object, such as retrieving a single calendar. This returns a parameterized object of the type you are requesting (for example `Calendar`), and a string that represents the request ID.
+
+The `ListResponse` object is used for requests that return a list of objects, such as retrieving a _list_ of calendars. This returns a list of parameterized objects of the type you are requesting (for example, `Calendar`), a string representing the request ID, and another string representing the token of the next page for paginating a request. <!-- Do we need to talk about changes to the default pagination behavior here? -->
 
 ### Error Objects
-Like the response objects, we now have standard error objects for all requests (excluding OAuth endpoints). There are two superclass error classes, `AbstractNylasApiError` and `AbstractNylasSdkError`.
 
-`AbstractNylasApiError` is used for errors returned by the API. Currently, there are only two subclasses of this error class: `NylasOAuthError` and `NylasApiError`. `NylasOAuthError` is used for errors that are returned from the OAuth endpoints. While `NylasApiError` is used for errors all the other Nylas API errors. The error details are extracted from the response and stored in the error object along with the request ID as well as the HTTP status code.
+Like the response objects, Nylas v3 now has standard error objects for all requests (excluding OAuth endpoints). There are two superclass error classes, `AbstractNylasApiError`, used for errors returned by the API, and `AbstractNylasSdkError`, used for errors returned by the SDK.
+
+The `AbstractNylasApiError` includes two subclasses: `NylasOAuthError`, used for API errors that are returned from the OAuth endpoints, and `NylasApiError`, used for any other Nylas API errors.
+
+The error details are extracted from the response and stored in the error object along with the request ID and the HTTP status code.
 
 `AbstractNylasSdkError` is used for errors returned by the SDK. Right now there's only one type of error we return, and that's a `NylasSdkTimeoutError` which is thrown when a request times out.
 
@@ -102,11 +117,12 @@ try {
 ```
 
 ## Authentication
-The authentication methods have changed to reflect the new Nylas API v3. While you can manage your application's integrations in the dashboard, you can manage nearly everything else directly from the SDK. That includes managing grants, redirect URIs, OAuth tokens, and authenticating your users.
 
-To authenticate users to your application there are two main methods to focus on. The first is the `Auth#urlForOAuth2` method, which returns the URL that you should redirect your users to in order to authenticate them using Nylas' OAuth 2.0 implementation. 
+The available authentication methods reflect the new Nylas API v3. While you can manage your application's integrations in the dashboard, you can manage almost everything else directly from the SDK. This includes managing grants, redirect URIs, OAuth tokens, and authenticating your users.
 
-The second is the `Auth#exchangeCodeForToken` method, which is used to exchange the code returned from the authentication redirect for an access token. You actually don't need to use the data from the response as you can use the authenticated email address directly as the identifier for the account. However, if you prefer to use the grant ID as the account identifier, you can extract the grant ID from the `CodeExchangeResponse` object and use that instead.
+There are two main methods to focus on when authenticating users to your application. The first is the `Auth#urlForOAuth2` method, which returns the URL that you should redirect your users to in order to authenticate them using Nylas' OAuth 2.0 implementation.
+
+The second is the `Auth#exchangeCodeForToken` method, which you use to exchange the code returned from the authentication redirect for an access token. You actually don't need to use the data from the response as you can use the authenticated email address directly as the identifier for the account. However, if you prefer to use the grant ID as the account identifier, you can extract the grant ID from the `CodeExchangeResponse` object and use that instead.
 
 The following code shows how to authenticate a user into a Nylas application:
 
@@ -123,7 +139,7 @@ String authURL = nylasClient.auth().urlForOAuth2(
       .loginHint("example@email.com")
       .build());
 
-// Insert code here to redirect the user to the url and parse the code
+// Write code here to redirect the user to the url and parse the code
     ...
 
 // Exchange the code for an access token
