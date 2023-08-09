@@ -95,11 +95,25 @@ class JsonHelper {
       return Types.newParameterizedType(MutableList::class.java, type)
     }
 
+    /**
+     * Get a JSON adapter for the specified type.
+     * @param type The type to parameterize the adapter with.
+     * @return The JSON adapter.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun <T> adapter(type: Type): JsonAdapter<T> {
       return moshi.adapter<Any>(type).indent("  ") as JsonAdapter<T>
     }
 
+    /**
+     * Deserialize a JSON string to a Java object.
+     * @param adapter The JSON adapter to use.
+     * @param json The JSON string to deserialize.
+     * @return The deserialized object.
+     * @throws IOException if there is an error deserializing the JSON string.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun <T> fromJsonUnchecked(adapter: JsonAdapter<T>, json: String): T? {
       return try {
@@ -109,26 +123,55 @@ class JsonHelper {
       }
     }
 
+    /**
+     * Get the JSON adapter for a generic map.
+     * @return The JSON adapter.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     val mapAdapter = moshi.adapter<Map<String, Any>>(
       MutableMap::class.java,
     ).indent("  ")
 
+    /**
+     * Get the JSON adapter for a generic map with String values.
+     * @return The JSON adapter.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     val jsonMapAdapter = moshi.adapter<Map<String, String>>(
       mapTypeOf(String::class.java, String::class.java),
     ).indent("  ")
 
+    /**
+     * Get the JSON adapter for a generic list.
+     * @return The JSON adapter.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     val listAdapter = moshi.adapter<List<Any>>(
       MutableList::class.java,
     ).indent("  ")
 
+    /**
+     * Deserialize a JSON string to a map.
+     * @param json The JSON string to deserialize.
+     * @return The deserialized map.
+     * @throws IOException if there is an error deserializing the JSON string.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun jsonToMap(json: String): Map<String, Any> {
       return fromJsonUnchecked(mapAdapter, json)!!
     }
 
+    /**
+     * Deserialize a JSON string to a map with String values.
+     * @param jsonReader The JSON reader to deserialize from.
+     * @return The deserialized map.
+     * @throws IOException if there is an error deserializing the JSON string.
+     * @suppress Not for public use.
+     */
     @Throws(IOException::class)
     @JvmStatic
     fun jsonToMap(jsonReader: JsonReader): Map<String, Any?> {
@@ -143,17 +186,34 @@ class JsonHelper {
 
     private val jsonType = MediaType.parse("application/json; charset=utf-8")
 
+    /**
+     * Get the JSON media type.
+     * @return The JSON media type.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun jsonType(): MediaType? {
       return jsonType
     }
 
+    /**
+     * Get a JSON request body for the specified object.
+     * @param params The object to serialize.
+     * @return The request body.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun jsonRequestBody(params: Map<String, Any>): RequestBody {
       val json = mapToJson(params)
       return jsonRequestBody(json)
     }
 
+    /**
+     * Get a JSON request body for the specified object.
+     * @param json The string to serialize.
+     * @return The request body.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun jsonRequestBody(json: String): RequestBody {
       return RequestBody.create(jsonType(), json)
