@@ -11,6 +11,7 @@ Here are some resources to help you get started:
 
 - [Sign up for your free Nylas account](https://dashboard.nylas.com/register)
 - [Nylas API v3 Quickstart Guide](https://developer.nylas.com/docs/v3-beta/v3-quickstart/)
+- [Nylas SDK Reference](https://nylas-java-sdk-reference.pages.dev/)
 - [Nylas API Reference](https://docs.nylas.com/reference)
 - [Nylas Samples repo for code samples and example applications](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=java)
 
