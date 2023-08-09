@@ -1,9 +1,17 @@
-# Upgrading to the Nylas Java SDK v2.0
+# Upgrading to the Nylas SDK v2.0 for Java
 
 ## Introduction
 With the upcoming release of the Nylas API v3, the Nylas Java SDK has been rewritten to be more idiomatic and easier to use. This guide will help you upgrade your code to use the new SDK. We have also documented the methods and models of the SDK so that you can easily find the information you need in our [SDK reference](https://nylas-java-sdk-reference.pages.dev/).
 
+⚠️ **Please note:** The Nylas SDK v2.0 is not compatible with the Nylas API < 3.0. If you are still using any prior version of the API please stick to the Nylas Java SDK v1.x. 
+
 ## Initial Setup
+To upgrade to the new SDK, you will need to update your dependencies to use the new version. It's important to note though that the artifact name has changed from `nylas-java-sdk` to `nylas`. This was done to make it more consistent with our other SDK offerings, and it reflects that this SDK is no longer Java-only. Despite this name change, we will be keeping the versioning consistent with the previous SDK version, so the first version of the new SDK will be `2.0.0`. To upgrade to this SDK, change the dependency in your `build.gradle` file to the following:
+
+```groovy
+implementation ('com.nylas.sdk:nylas:2.0.0-beta.1')
+```
+
 The first step to using the Nylas Java SDK is to create a new `NylasClient` object. This object will be used to make all API requests. All methods to initialize the `NylasClient` that were deprecated are now removed, so the only way to create it now is through the builder. The SDK employs the use of builder patterns in many places, to make it more readable and easier to create objects with many optional parameters. 
 
 ```java
