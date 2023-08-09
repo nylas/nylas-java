@@ -25,4 +25,5 @@ data class NylasApiError(
    * The HTTP status code of the error response
    */
   override var statusCode: Int? = null,
-) : AbstractNylasApiError(message, statusCode)
+  override var requestId: String? = null,
+) : AbstractNylasApiError(message, statusCode, requestId)
