@@ -4,6 +4,10 @@ import com.nylas.models.Conferencing
 import com.squareup.moshi.*
 import java.io.IOException
 
+/**
+ * This class is used to serialize and deserialize the Conferencing object.
+ * @suppress Not for public use.
+ */
 class ConferencingAdapter {
   @FromJson
   @Throws(IOException::class)

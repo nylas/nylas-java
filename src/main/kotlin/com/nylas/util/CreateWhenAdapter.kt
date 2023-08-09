@@ -3,6 +3,10 @@ package com.nylas.util
 import com.nylas.models.CreateEventRequest
 import com.squareup.moshi.*
 
+/**
+ * This class is used to serialize and deserialize the CreateEventRequest.When object.
+ * @suppress Not for public use.
+ */
 class CreateWhenAdapter {
   @FromJson
   @Throws(UnsupportedOperationException::class)

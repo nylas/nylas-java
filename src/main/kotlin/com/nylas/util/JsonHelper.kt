@@ -13,6 +13,9 @@ import java.io.IOException
 import java.lang.reflect.Type
 import java.util.*
 
+/**
+ * This class is used to serialize and deserialize JSON objects.
+ */
 class JsonHelper {
   companion object {
     private val moshi: Moshi = Moshi.Builder()
@@ -29,16 +32,64 @@ class JsonHelper {
       .add(KotlinJsonAdapterFactory())
       .build()
 
+    /**
+     * Converts a Java object to a JSON string.
+     * Recommended for use with Nylas SDK models.
+     * @param obj The object to convert.
+     * @return The JSON string.
+     */
+    @JvmStatic
+    fun objectToJson(obj: Any): String {
+      return adapter<Any>(obj.javaClass).toJson(obj)
+    }
+
+    /**
+     * Converts a map to a JSON string.
+     * @param map The map to convert.
+     * @return The JSON string.
+     */
+    @JvmStatic
+    fun mapToJson(map: Map<String, Any>): String {
+      return mapAdapter.toJson(map)
+    }
+
+    /**
+     * Converts a list of objects.
+     * @param list The list to convert.
+     * @return The JSON string.
+     */
+    @JvmStatic
+    fun listToJson(list: List<Any>): String {
+      return listAdapter.toJson(list)
+    }
+
+    /**
+     * Get an instance of Moshi
+     * @return The Moshi instance.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun moshi(): Moshi {
       return moshi
     }
 
+    /**
+     * Get a map adapter parameterized with the specified type.
+     * @param type The type(s) to parameterize the adapter with.
+     * @return The map adapter.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun mapTypeOf(vararg type: Type): Type {
       return Types.newParameterizedType(MutableMap::class.java, *type)
     }
 
+    /**
+     * Get a list adapter parameterized with the specified type.
+     * @param type The type to parameterize the adapter with.
+     * @return The list adapter.
+     * @suppress Not for public use.
+     */
     @JvmStatic
     fun listTypeOf(type: Type): Type {
       return Types.newParameterizedType(MutableList::class.java, type)
@@ -72,21 +123,6 @@ class JsonHelper {
     val listAdapter = moshi.adapter<List<Any>>(
       MutableList::class.java,
     ).indent("  ")
-
-    @JvmStatic
-    fun objectToJson(obj: Any): String {
-      return adapter<Any>(obj.javaClass).toJson(obj)
-    }
-
-    @JvmStatic
-    fun mapToJson(map: Map<String, Any>): String {
-      return mapAdapter.toJson(map)
-    }
-
-    @JvmStatic
-    fun listToJson(list: List<Any>): String {
-      return listAdapter.toJson(list)
-    }
 
     @JvmStatic
     fun jsonToMap(json: String): Map<String, Any> {
