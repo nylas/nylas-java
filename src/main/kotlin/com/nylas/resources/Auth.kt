@@ -5,85 +5,65 @@ import com.nylas.models.*
 import com.nylas.util.JsonHelper
 import com.squareup.moshi.Types
 import okhttp3.HttpUrl
-import java.io.IOException
 import java.security.MessageDigest
 import java.util.*
 
-class Auth(
-  private val client: NylasClient,
-  private val clientId: String,
-  private val clientSecret: String,
-) {
+/**
+ * A collection of authentication related API endpoints
+ *
+ * These endpoints allow for various functionality related to authentication.
+ * Also contains the Grants API and collection of provider API endpoints.
+ *
+ * @param client The configured Nylas API client
+ */
+class Auth(private val client: NylasClient) {
 
+  /**
+   * Access the Grants API
+   * @return The Grants API
+   */
   fun grants(): Grants {
     return Grants(client)
   }
 
-  fun providers(): Providers {
-    return Providers(client, clientId)
+  /**
+   * Build the URL for authenticating users to your application with OAuth 2.0
+   * @param config The configuration for building the URL
+   * @return The URL for hosted authentication
+   */
+  fun urlForOAuth2(config: UrlForAuthenticationConfig): String {
+    val urlBuilder = urlAuthBuilder(config)
+
+    urlBuilder.addQueryParameter("response_type", "code")
+
+    return urlBuilder.build().toString()
   }
 
-  @Throws(IOException::class, NylasApiError::class)
-  fun exchangeCodeForToken(request: CodeExchangeRequest): Response<CodeExchangeResponse> {
+  /**
+   * Exchange an authorization code for an access token
+   * @param request The code exchange request
+   * @return The response containing the access token
+   */
+  @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
+  fun exchangeCodeForToken(request: CodeExchangeRequest): CodeExchangeResponse {
     val path = "v3/connect/token"
-
-    if (request.clientId == null) {
-      request.clientId = clientId
-    }
-    if (request.clientSecret == null) {
-      request.clientSecret = clientSecret
-    }
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(CodeExchangeRequest::class.java)
       .toJson(request)
-    val responseType = Types.newParameterizedType(Response::class.java, CodeExchangeResponse::class.java)
 
-    return client.executePost(path, responseType, serializedRequestBody)
+    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
   }
 
-  @Throws(IOException::class, NylasApiError::class)
-  fun refreshAccessToken(request: TokenExchangeRequest): Response<CodeExchangeResponse> {
-    val path = "v3/connect/token"
-
-    if (request.clientId == null) {
-      request.clientId = clientId
-    }
-    if (request.clientSecret == null) {
-      request.clientSecret = clientSecret
-    }
-
-    val serializedRequestBody = JsonHelper.moshi()
-      .adapter(TokenExchangeRequest::class.java)
-      .toJson(request)
-    val responseType = Types.newParameterizedType(Response::class.java, CodeExchangeResponse::class.java)
-
-    return client.executePost(path, responseType, serializedRequestBody)
-  }
-
-  @Throws(IOException::class, NylasApiError::class)
-  fun validateIDToken(token: String): Response<OpenIDResponse> {
-    val url = "v3/connect/tokeninfo?id_token=$token"
-    val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
-
-    return client.executeGet(url, responseType)
-  }
-
-  @Throws(IOException::class, NylasApiError::class)
-  fun validateAccessToken(token: String): String {
-    val url = "v3/connect/tokeninfo?access_token=$token"
-    val responseType = Types.newParameterizedType(Response::class.java, OpenIDResponse::class.java)
-
-    return client.executeGet(url, responseType)
-  }
-
-  @Throws(IOException::class, NylasApiError::class)
-  fun urlForAuthentication(config: UrlForAuthenticationConfig): String {
-    return urlAuthBuilder(config).build().toString()
-  }
-
-  @Throws(IOException::class, NylasApiError::class)
-  fun urlForAuthenticationPKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
+  /**
+   * Build the URL for authenticating users to your application with OAuth 2.0 and PKCE
+   *
+   * IMPORTANT: YOU WILL NEED TO STORE THE 'secret' returned to use it inside the CodeExchange flow
+   *
+   * @param config The configuration for building the URL
+   * @return The URL for hosted authentication with secret & hashed secret
+   */
+  fun urlForOAuth2PKCE(config: UrlForAuthenticationConfig): PKCEAuthURL {
     val urlBuilder = urlAuthBuilder(config)
     val secret = UUID.randomUUID().toString()
 
@@ -91,13 +71,19 @@ class Auth(
     val secretHash = Base64.getEncoder().encodeToString(sha256Digest)
 
     urlBuilder
+      .addQueryParameter("response_type", "code")
       .addQueryParameter("code_challenge_method", "s256")
       .addQueryParameter("code_challenge", secretHash)
 
     return PKCEAuthURL(urlBuilder.build().toString(), secret, secretHash)
   }
 
-  @Throws(IOException::class, NylasApiError::class)
+  /**
+   * Build the URL for admin consent authentication for Microsoft
+   * @param config The configuration for building the URL
+   * @param credentialId The credential ID for the Microsoft account
+   * @return The URL for admin consent authentication
+   */
   fun urlForAdminConsent(config: UrlForAuthenticationConfig, credentialId: String): String {
     val urlBuilder = urlAuthBuilder(config)
 
@@ -108,26 +94,53 @@ class Auth(
     return urlBuilder.build().toString()
   }
 
-  @Throws(IOException::class, NylasApiError::class)
-  fun hostedAuth(request: HostedAuthRequest): Response<HostedAuthResponse> {
-    val path = "v3/connect/auth"
-    val serializedRequestBody = JsonHelper.moshi()
-      .adapter(HostedAuthRequest::class.java)
-      .toJson(request)
-    val responseType = Types.newParameterizedType(Response::class.java, HostedAuthResponse::class.java)
+  /**
+   * Refresh an access token
+   * @param request The refresh token request
+   * @return The response containing the new access token
+   */
+  @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
+  fun refreshAccessToken(request: TokenExchangeRequest): CodeExchangeResponse {
+    val path = "v3/connect/token"
 
-    return client.executePost(path, responseType, serializedRequestBody)
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(TokenExchangeRequest::class.java)
+      .toJson(request)
+
+    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
   }
 
-  @Throws(IOException::class, NylasApiError::class)
-  fun revoke(accessToken: String): Boolean {
-    val path = "v3/connect/revoke?access_token=$accessToken"
+  /**
+   * Revoke a token (and the grant attached to the token)
+   * @param token The token to revoke
+   * @return True if the token was revoked successfully
+   */
+  @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
+  fun revoke(token: String): Boolean {
+    val path = "v3/connect/revoke?token=$token"
     client.executePost<Any>(path)
 
     return true
   }
 
-  @Throws(IOException::class, NylasApiError::class)
+  /**
+   * Detect provider from email address
+   * @param params The parameters to include in the request
+   * @return The detected provider, if found
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun detectProvider(params: ProviderDetectParams): Response<ProviderDetectResponse> {
+    val path = "v3/grants/connect/providers/detect"
+    val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
+
+    return client.executePost(path, responseType, queryParams = params)
+  }
+
+  /**
+   * Underlying function to build the Hosted Authentication URL
+   * @param config The configuration for building the URL
+   * @return The URL for hosted authentication
+   */
   private fun urlAuthBuilder(config: UrlForAuthenticationConfig): HttpUrl.Builder {
     val url = this.client.newUrlBuilder().addPathSegments("v3/connect/auth")
     val json = JsonHelper.moshi()

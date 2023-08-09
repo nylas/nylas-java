@@ -2,6 +2,9 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
+/**
+ * Enum representing the status of an Event participant.
+ */
 enum class ParticipantStatus {
   @Json(name = "noreply")
   NOREPLY,

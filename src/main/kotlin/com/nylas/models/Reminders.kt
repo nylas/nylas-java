@@ -2,9 +2,20 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
+/**
+ * Class representing the reminders field of an event.
+ */
 data class Reminders(
+  /**
+   * The number of minutes before the event start time when a user wants a reminder for this event.
+   * Reminder minutes are in the following format: "[20]".
+   */
   @Json(name = "reminder_minutes")
   val reminderMinutes: String,
+
+  /**
+   * Method to remind the user about the event. (Google only).
+   */
   @Json(name = "reminder_method")
   val reminderMethod: ReminderMethod? = null,
 )

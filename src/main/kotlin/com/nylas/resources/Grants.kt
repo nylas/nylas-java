@@ -3,23 +3,44 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import java.io.IOException
 
+/**
+ * Nylas Grants API
+ *
+ * The Nylas Grants API allows for the management of grants.
+ *
+ * @param client The configured Nylas API client
+ */
 class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
-  @Throws(IOException::class, NylasApiError::class)
+  /**
+   * Return all Grants
+   * @param queryParams The query parameters to include in the request
+   * @return The list of Grants
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(queryParams: ListGrantsQueryParams? = null): ListResponse<Grant> {
     val path = "v3/grants"
     return listResource(path, queryParams)
   }
 
-  @Throws(IOException::class, NylasApiError::class)
+  /**
+   * Return a Grant
+   * @param grantId The id of the Grant to retrieve.
+   * @return The Grant
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun find(grantId: String): Response<Grant> {
     val path = String.format("v3/grants/%s", grantId)
     return findResource(path)
   }
 
-  @Throws(IOException::class, NylasApiError::class)
+  /**
+   * Create a Grant
+   * @param requestBody The values to create the Grant with
+   * @return The created Grant
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun create(requestBody: CreateGrantRequest): Response<Grant> {
     val path = "v3/grants"
     val serializedRequestBody = JsonHelper.moshi()
@@ -29,7 +50,13 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
     return createResource(path, serializedRequestBody)
   }
 
-  @Throws(IOException::class, NylasApiError::class)
+  /**
+   * Update a Grant
+   * @param calendarId The id of the Grant to update.
+   * @param requestBody The values to update the Grant with
+   * @return The updated Grant
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun update(calendarId: String, requestBody: UpdateGrantRequest): Response<Grant> {
     val path = String.format("v3/grants/%s", calendarId)
     val serializedRequestBody = JsonHelper.moshi()
@@ -39,7 +66,12 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
     return updateResource(path, serializedRequestBody)
   }
 
-  @Throws(IOException::class, NylasApiError::class)
+  /**
+   * Delete a Grant
+   * @param grantId The id of the Grant to delete.
+   * @return The deletion response
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun destroy(grantId: String): DeleteResponse {
     val path = String.format("v3/grants/%s", grantId)
     return destroyResource(path)

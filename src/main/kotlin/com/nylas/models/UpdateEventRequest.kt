@@ -1,12 +1,29 @@
 package com.nylas.models
 
+import com.nylas.models.CreateEventRequest.When
 import com.squareup.moshi.Json
 
+/**
+ * Class representation of a Nylas update event request
+ */
 data class UpdateEventRequest(
+  /**
+   * Representation of time and duration for events. When object can be in one of four formats (sub-objects):
+   * - [When.Date]
+   * - [When.Datespan]
+   * - [When.Time]
+   * - [When.Timespan]
+   */
   @Json(name = "when")
   val whenObj: When? = null,
+  /**
+   * The title of the event
+   */
   @Json(name = "title")
   val title: String? = null,
+  /**
+   * Description of the event.
+   */
   @Json(name = "description")
   val description: String? = null,
   @Json(name = "location")
@@ -24,13 +41,11 @@ data class UpdateEventRequest(
   @Json(name = "metadata")
   val metadata: Map<String, String>? = null,
   @Json(name = "recurrence")
-  val recurrence: Recurrence? = null,
+  val recurrence: List<String>? = null,
   @Json(name = "calendar_id")
   val calendarId: String? = null,
   @Json(name = "read_only")
   val readOnly: Boolean? = null,
-  @Json(name = "round_robin_order")
-  val roundRobinOrder: List<String>? = null,
   @Json(name = "visibility")
   val visibility: EvenVisibility? = null,
   @Json(name = "capacity")
@@ -221,10 +236,9 @@ data class UpdateEventRequest(
     private var reminderMinutes: String? = null
     private var reminderMethod: ReminderMethod? = null
     private var metadata: Map<String, String>? = null
-    private var recurrence: Recurrence? = null
+    private var recurrence: List<String>? = null
     private var calendarId: String? = null
     private var readOnly: Boolean? = null
-    private var roundRobinOrder: List<String>? = null
     private var visibility: EvenVisibility? = null
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
@@ -239,10 +253,9 @@ data class UpdateEventRequest(
     fun reminderMinutes(reminderMinutes: String) = apply { this.reminderMinutes = reminderMinutes }
     fun reminderMethod(reminderMethod: ReminderMethod) = apply { this.reminderMethod = reminderMethod }
     fun metadata(metadata: Map<String, String>) = apply { this.metadata = metadata }
-    fun recurrence(recurrence: Recurrence) = apply { this.recurrence = recurrence }
+    fun recurrence(recurrence: List<String>) = apply { this.recurrence = recurrence }
     fun calendarId(calendarId: String) = apply { this.calendarId = calendarId }
     fun readOnly(readOnly: Boolean) = apply { this.readOnly = readOnly }
-    fun roundRobinOrder(roundRobinOrder: List<String>) = apply { this.roundRobinOrder = roundRobinOrder }
     fun visibility(visibility: EvenVisibility) = apply { this.visibility = visibility }
     fun capacity(capacity: Int) = apply { this.capacity = capacity }
     fun hideParticipant(hideParticipant: Boolean) = apply { this.hideParticipant = hideParticipant }
@@ -261,7 +274,6 @@ data class UpdateEventRequest(
       recurrence,
       calendarId,
       readOnly,
-      roundRobinOrder,
       visibility,
       capacity,
       hideParticipant,

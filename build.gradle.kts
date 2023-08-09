@@ -1,6 +1,7 @@
 plugins {
   kotlin("jvm") version "1.8.21"
   id("org.jmailen.kotlinter") version "3.15.0"
+  id("org.jetbrains.dokka") version "1.8.20"
   application
 }
 
@@ -35,6 +36,11 @@ dependencies {
 
 tasks.processResources {
   expand("artifact_version" to project.version)
+}
+
+tasks.register<Jar>("sourceJar") {
+  archiveClassifier.set("sources")
+  from(sourceSets.main.get().allSource)
 }
 
 tasks.register<Jar>("uberJar") {

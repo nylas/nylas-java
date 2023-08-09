@@ -15,7 +15,8 @@ import java.nio.charset.StandardCharsets
  * and one line for each response containing status code, message, content size and duration.</dd>
  * <dt>com.nylas.http.Headers</dt><dd>logs request and response headers (except Authorization value by default).</dd>
  * <dt>com.nylas.http.Body</dt><dd>logs request and response bodies (only the first 10kB by default).</dd>
-</dl> *
+ * </dl>
+ * @suppress Not for public use.
  */
 class HttpLoggingInterceptor : Interceptor {
   private var isLogAuthHeader = false

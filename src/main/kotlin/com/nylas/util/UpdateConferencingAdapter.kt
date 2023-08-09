@@ -3,6 +3,10 @@ package com.nylas.util
 import com.nylas.models.UpdateEventRequest
 import com.squareup.moshi.*
 
+/**
+ * This class is used to serialize and deserialize the UpdateEventRequest.Conferencing object.
+ * @suppress Not for public use.
+ */
 class UpdateConferencingAdapter {
   @FromJson
   @Throws(UnsupportedOperationException::class)

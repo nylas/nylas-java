@@ -4,6 +4,10 @@ import com.nylas.models.Conferencing
 import com.squareup.moshi.*
 import java.io.IOException
 
+/**
+ * This class is used to serialize and deserialize the Conferencing object.
+ * @suppress Not for public use.
+ */
 class ConferencingAdapter {
   @FromJson
   @Throws(IOException::class)
@@ -22,7 +26,16 @@ class ConferencingAdapter {
   }
 
   @ToJson
-  fun toJson(writer: JsonWriter, value: Conferencing?) {
-    throw UnsupportedOperationException("ConferencingAdapter is only used for deserialization")
+  fun toJson(
+    writer: JsonWriter,
+    value: Conferencing?,
+    delegateAutocreate: JsonAdapter<Conferencing.Autocreate>,
+    delegateDetails: JsonAdapter<Conferencing.Details>,
+  ) {
+    when (value) {
+      is Conferencing.Autocreate -> delegateAutocreate.toJson(writer, value)
+      is Conferencing.Details -> delegateDetails.toJson(writer, value)
+      else -> writer.nullValue()
+    }
   }
 }
