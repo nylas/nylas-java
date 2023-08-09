@@ -1,51 +1,63 @@
-# Nylas Java SDK
-This is the GitHub repository for the Nylas Java SDK and this repo is primarily for anyone who wants to make contributions to the SDK or install it from source. If you are looking to use Java to access the Nylas Email, Calendar, or Contacts API you should refer to our official [Java SDK Quickstart Guide](https://docs.nylas.com/docs/quickstart-java).
+<a href="https://www.nylas.com/">
+    <img src="https://brand.nylas.com/assets/downloads/logo_horizontal_png/Nylas-Logo-Horizontal-Blue_.png" alt="Aimeos logo" title="Aimeos" align="right" height="60" />
+</a>
 
-The Nylas Communications Platform provides REST APIs for [Email](https://docs.nylas.com/docs/quickstart-email), [Calendar](https://docs.nylas.com/docs/quickstart-calendar), and [Contacts](https://docs.nylas.com/docs/quickstart-contacts), and the Java SDK is the quickest way to build your integration using Java.
+# Nylas SDK for Kotlin & Java
+This is the GitHub repository for the Nylas SDK for Kotlin & Java and this repo is primarily for anyone who wants to make contributions to the SDK or install it from source. If you are looking to use this SDK to access the Nylas Email, Calendar, or Contacts API you should refer to our official [Java SDK Quickstart Guide](https://developer.nylas.com/docs/sdks/java/).
+
+The Nylas Communications Platform provides REST APIs for [Email](https://developer.nylas.com/docs/email/), [Calendar](https://developer.nylas.com/docs/calendar/), and [Contacts](https://developer.nylas.com/docs/contacts/), and the Nylas SDK is the quickest way to build your integration using Kotlin or Java.
 
 Here are some resources to help you get started:
 
-- [Nylas SDK Tutorials](https://docs.nylas.com/docs/tutorials)
-- [Get Started with the Nylas Communications Platform](https://docs.nylas.com/docs/getting-started)
-- [Sign up for your Nylas developer account.](https://nylas.com/register)
+- [Sign up for your free Nylas account](https://dashboard.nylas.com/register)
+- [Nylas API v3 Quickstart Guide](https://developer.nylas.com/docs/v3-beta/v3-quickstart/)
 - [Nylas API Reference](https://docs.nylas.com/reference)
+- [Nylas Samples repo for code samples and example applications](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=java)
 
 If you have a question about the Nylas Communications Platform, please reach out to support@nylas.com to get help.
 
-# Install
-**Note:** The Nylas Java SDK requires Java 8 or above.
-
-**Setup via Gradle**: If you're using Gradle, add the following to your dependencies section of build.gradle:
-
-    implementation("com.nylas.sdk:nylas-java-sdk:1.21.0")
-
-**Setup via Maven**: For projects using Maven, add the following to your POM file:
-
-    <dependency>
-      <groupId>com.nylas.sdk</groupId>
-      <artifactId>nylas-java-sdk</artifactId>
-      <version>1.21.0</version>
-    </dependency>
+## ⚙️ Install
+**Note:** The Nylas SDK for Kotlin & Java requires JRE 8 or above.
     
 **Build from source**: To build from source, clone this repo and build the project with Gradle.
 
-    git clone https://github.com/nylas/nylas-java.git && cd nylas-java
-    ./gradlew build
+```shell
+git clone https://github.com/nylas/nylas-java.git && cd nylas-java
+./gradlew build uberJar
+```
 
-This will create a new jar file in the `build/libs` subdirectory.
+This will create a new jar file in `build/libs/nylas-java-sdk-2.0.0-SNAPSHOT-uber.jar`. Support for gradle is also coming soon.
 
-See Gradle documentation on [Building Java Libraries](https://guides.gradle.org/building-java-libraries/)
+See Gradle documentation on [Building Libraries](https://guides.gradle.org/building-java-libraries/)
 or the [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) for more information.
 
-# Usage
+## ⚡️Usage
 
-To use this SDK, you first need to [sign up for a free Nylas developer account](https://nylas.com/register).
+To use this SDK, you first need to [sign up for a free Nylas account](https://dashboard.nylas.com/register).
 
-Then, follow our guide to [setup your first app and get your API access keys](https://docs.nylas.com/docs/get-your-developer-api-keys).
+Then, follow our guide to [setup your first app and get your API access keys](https://developer.nylas.com/docs/v3-beta/v3-quickstart/#update-or-create-test-provider-applications).
 
-For code examples that demonstrate how to use this SDK, take a look at our [Java SDK Quickstart Guide](https://docs.nylas.com/docs/quickstart-java).
+For code examples that demonstrate how to use this SDK, take a look at our [Nylas Samples repo](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=java).
 
-## Logging
+### 🚀 Making Your First Request
+
+Your `NylasClient` object is what you use to make requests to the Nylas API. The SDK is organized into different resources, each of which has methods to make requests to the API. Each resource is available through the `NylasClient` object configured with you API key.
+
+For example, to get a list of calendars, you can use the following code:
+
+```java
+NylasClient nylas = new NylasClient.Builder("API_KEY").build();
+ListResponse<Calendars> calendars = nylas.calendars().list("GRANT_ID");
+```
+
+## 📚 Documentation
+We have provided an SDK reference guide to help you get familiar with the available methods and classes. You can find the latest documentation here: [Nylas SDK Reference](https://nylas-java-sdk-reference.pages.dev/).
+
+## ✨ Upgrading from 1.x
+
+Please refer to [UPGRADING.md](UPGRADING.md) for information about how to upgrade from 1.x to 2.x. Please note that 2.x is not compatible with the Nylas API < 3.0.
+
+## 🪵 Logging
 
 The SDK uses [SLF4J](http://www.slf4j.org) for logging.  Applications using the SDK can
 [choose what logging framework to use with it](http://www.slf4j.org/manual.html#projectDep).
@@ -66,10 +78,10 @@ For example, if using log4j2 and with an xml configuration file, include this li
 Configuring the logging of the HTTP Authorization header values and the body size limit can be done by using a 
 `NylasClient.Builder` with a customized `HttpLoggingInterceptor`
 
-# Contributing
+## 💙 Contributing
 
 Please refer to [Contributing](Contributing.md) for information about how to make contributions to this project. We welcome questions, bug reports, and pull requests.
 
-# License
+## 📝 License
 
 This project is licensed under the terms of the MIT license. Please refer to [LICENSE](LICENSE) for the full terms. 
