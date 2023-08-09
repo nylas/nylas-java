@@ -18,6 +18,12 @@ If you have a question about the Nylas Communications Platform, please reach out
 
 ## ⚙️ Install
 **Note:** The Nylas SDK for Kotlin & Java requires JRE 8 or above.
+
+**Setup via Gradle**: If you're using Gradle, add the following to your dependencies section of build.gradle:
+
+```groovy
+implementation("com.nylas.sdk:nylas:2.0.0-beta.1")
+```
     
 **Build from source**: To build from source, clone this repo and build the project with Gradle.
 
@@ -26,7 +32,7 @@ git clone https://github.com/nylas/nylas-java.git && cd nylas-java
 ./gradlew build uberJar
 ```
 
-This will create a new jar file in `build/libs/nylas-java-sdk-2.0.0-SNAPSHOT-uber.jar`. Support for gradle is also coming soon.
+This will create a new jar file in `build/libs/nylas-java-sdk-2.0.0-beta.1-uber.jar`.
 
 See Gradle documentation on [Building Libraries](https://guides.gradle.org/building-java-libraries/)
 or the [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) for more information.
