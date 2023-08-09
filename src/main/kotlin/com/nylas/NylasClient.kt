@@ -264,7 +264,7 @@ class NylasClient(
     val parsedError: AbstractNylasApiError?
     response.close()
 
-    if (url.encodedPath().equals("/v3/connect/token") || url.encodedPath().equals("/oauth/revoke")) {
+    if (url.encodedPath().equals("/v3/connect/token") || url.encodedPath().equals("/v3/connect/revoke")) {
       try {
         parsedError = JsonHelper.moshi().adapter(NylasOAuthError::class.java)
           .fromJson(responseBody)
@@ -277,16 +277,14 @@ class NylasClient(
           statusCode = response.code(),
         )
       }
-
-      if (parsedError != null) {
-        parsedError.statusCode = response.code()
-        throw parsedError
-      }
     } else {
       try {
         val errorResp = JsonHelper.moshi().adapter(NylasApiErrorResponse::class.java)
           .fromJson(responseBody)
         parsedError = errorResp?.error
+        if (parsedError != null) {
+          parsedError.requestId = errorResp?.requestId
+        }
       } catch (e: IOException) {
         throw NylasApiError(
           type = "unknown",
