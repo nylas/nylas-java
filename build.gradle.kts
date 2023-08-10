@@ -34,7 +34,7 @@ dependencies {
   implementation("org.slf4j:slf4j-api:2.0.7")
 
   // Render dokka from the Java perspective
-  dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.8.20")
+  dokkaPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.8.20")
 }
 
 tasks.processResources {

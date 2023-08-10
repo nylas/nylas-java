@@ -20,10 +20,14 @@ jobs:
           java-version: "8"
           distribution: "corretto"
           cache: gradle
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build SDK refernece
-        run: ./gradlew dokkaHtml
+      - uses: burrunan/gradle-cache-action@v1
+        name: Build SDK refernece
+        with:
+          arguments: dokkaHtml
+          gradle-version: wrapper
+          properties: |
+            kotlin.js.compiler=ir
+            kotlin.parallel.tasks.in.project=true
       - name: Set env BRANCH
         run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
       - name: Set env CLOUDFLARE_BRANCH
