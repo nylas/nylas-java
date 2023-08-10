@@ -1,0 +1,29 @@
+name: sdk-reference
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    environment: sdk-reference
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Java 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: "8"
+          distribution: "corretto"
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build SDK refernece
+        run: ./gradlew dokkaHtml
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: nylas-java-sdk-reference
+          directory: build/dokka/html
+          wranglerVersion: "3"
