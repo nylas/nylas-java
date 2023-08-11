@@ -32,6 +32,9 @@ dependencies {
 
   // SLF4J for logging facade
   implementation("org.slf4j:slf4j-api:2.0.7")
+
+  // Render dokka from the Java perspective
+  dokkaPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.8.20")
 }
 
 tasks.processResources {
