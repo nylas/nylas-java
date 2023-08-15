@@ -10,12 +10,12 @@ data class GetAvailabilityRequest(
    * Unix timestamp for the start time to check availability for.
    */
   @Json(name = "start_time")
-  val startTime: String,
+  val startTime: Int,
   /**
    * Unix timestamp for the end time to check availability for.
    */
   @Json(name = "end_time")
-  val endTime: String,
+  val endTime: Int,
   /**
    * Participant details to check availability for.
    */

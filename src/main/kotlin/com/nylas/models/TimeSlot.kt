@@ -16,9 +16,9 @@ data class TimeSlot(
    */
   @Json(name = "start_time")
   val startTime: Int,
-  @Json(name = "end_time")
   /**
    * Unix timestamp for the end of the slot.
    */
+  @Json(name = "end_time")
   val endTime: Int,
 )

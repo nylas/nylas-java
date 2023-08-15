@@ -32,7 +32,6 @@ data class CodeExchangeResponse(
   @Json(name = "refresh_token")
   val refreshToken: String? = null,
   /**
-   *
    * A JWT that contains identity information about the user that is digitally signed by Nylas.
    */
   @Json(name = "id_token")

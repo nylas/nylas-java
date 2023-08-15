@@ -38,6 +38,9 @@ sealed class Conferencing {
     @Json(name = "details")
     val details: Config,
   ) : Conferencing() {
+    /**
+     * Class representation of a the configuration for a conferencing object
+     */
     data class Config(
       /**
        * The conferencing meeting code. Used for Zoom.

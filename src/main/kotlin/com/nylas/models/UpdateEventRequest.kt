@@ -644,7 +644,6 @@ data class UpdateEventRequest(
      */
     fun hideParticipant(hideParticipant: Boolean) = apply { this.hideParticipant = hideParticipant }
 
-
     /**
      * Builds the [UpdateEventRequest] object.
      * @return [UpdateEventRequest] object.
