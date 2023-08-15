@@ -4,10 +4,7 @@ import com.nylas.interceptors.AddVersionHeadersInterceptor
 import com.nylas.interceptors.ContentHeadersInterceptor
 import com.nylas.interceptors.HttpLoggingInterceptor
 import com.nylas.models.*
-import com.nylas.resources.Applications
-import com.nylas.resources.Auth
-import com.nylas.resources.Calendars
-import com.nylas.resources.Events
+import com.nylas.resources.*
 import com.nylas.util.JsonHelper
 import okhttp3.*
 import okhttp3.Response
@@ -104,6 +101,14 @@ class NylasClient(
    */
   fun events(): Events {
     return Events(this)
+  }
+
+  /**
+   * Access the Webhooks API
+   * @return The Webhooks API
+   */
+  fun webhooks(): Webhooks {
+    return Webhooks(this)
   }
 
   /**
