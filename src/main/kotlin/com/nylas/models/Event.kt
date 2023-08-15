@@ -113,7 +113,7 @@ data class Event(
    * Status of the event.
    */
   @Json(name = "status")
-  val status: String? = null,
+  val status: EventStatus? = null,
   /**
    * Title of the event.
    */
