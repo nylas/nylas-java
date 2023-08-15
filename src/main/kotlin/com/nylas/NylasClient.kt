@@ -18,14 +18,14 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 /**
- * The NylasClient is the entry point to the Java SDK's API.
+ * The NylasClient is the entry point to the Java SDK.
  *
  * An instance holds a configured http client pointing to a base URL and is intended to be reused and shared
  * across threads and time.
  *
  * @param apiKey The Nylas API key to use for authentication.
  * @param httpClientBuilder The builder to use for creating the http client.
- * @param baseUrl The base URL to use for the Nylas API.
+ * @param baseUrl The URL to use for communicating with the Nylas API.
  */
 class NylasClient(
   val apiKey: String,
@@ -335,7 +335,7 @@ class NylasClient(
 
     /**
      * Set the base url for the NylasClient.
-     * @param baseUrl The base url to use.
+     * @param baseUrl The URL to use for communicating with the Nylas API.
      */
     fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
 

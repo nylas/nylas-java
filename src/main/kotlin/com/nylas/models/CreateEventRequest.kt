@@ -8,10 +8,10 @@ import com.squareup.moshi.Json
 data class CreateEventRequest(
   /**
    * Representation of time and duration for events. When object can be in one of four formats (sub-objects):
-   * - [When.Date]
-   * - [When.Datespan]
-   * - [When.Time]
-   * - [When.Timespan]
+   * - [CreateEventRequest.When.Date]
+   * - [CreateEventRequest.When.Datespan]
+   * - [CreateEventRequest.When.Time]
+   * - [CreateEventRequest.When.Timespan]
    */
   @Json(name = "when")
   val whenObj: When = When.Time(0),
@@ -42,8 +42,8 @@ data class CreateEventRequest(
   val busy: Boolean? = null,
   /**
    * Representation of conferencing details for events. Conferencing object can be in one of two formats (sub-objects):
-   * - [Conferencing.Autocreate]
-   * - [Conferencing.Details]
+   * - [CreateEventRequest.Conferencing.Autocreate]
+   * - [CreateEventRequest.Conferencing.Details]
    */
   @Json(name = "conferencing")
   val conferencing: Conferencing? = null,
@@ -416,10 +416,10 @@ data class CreateEventRequest(
    * Builder for [CreateEventRequest].
    * @property whenObj Representation of time and duration for events.
    * When object can be in one of four formats (sub-objects):
-   * - [When.Date]
-   * - [When.Datespan]
-   * - [When.Time]
-   * - [When.Timespan]
+   * - [CreateEventRequest.When.Date]
+   * - [CreateEventRequest.When.Datespan]
+   * - [CreateEventRequest.When.Time]
+   * - [CreateEventRequest.When.Timespan]
    */
   data class Builder(
     private val whenObj: When,
@@ -479,8 +479,8 @@ data class CreateEventRequest(
     /**
      * Set the event conferencing details.
      * Representation of conferencing details for events. Conferencing object can be in one of two formats (sub-objects):
-     * - [Conferencing.Autocreate]
-     * - [Conferencing.Details]
+     * - [CreateEventRequest.Conferencing.Autocreate]
+     * - [CreateEventRequest.Conferencing.Details]
      * @param conferencing The event conferencing details.
      * @return The builder.
      */

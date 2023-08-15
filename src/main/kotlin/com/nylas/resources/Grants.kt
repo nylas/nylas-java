@@ -52,13 +52,13 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
 
   /**
    * Update a Grant
-   * @param calendarId The id of the Grant to update.
+   * @param grantId The id of the Grant to update.
    * @param requestBody The values to update the Grant with
    * @return The updated Grant
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun update(calendarId: String, requestBody: UpdateGrantRequest): Response<Grant> {
-    val path = String.format("v3/grants/%s", calendarId)
+  fun update(grantId: String, requestBody: UpdateGrantRequest): Response<Grant> {
+    val path = String.format("v3/grants/%s", grantId)
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(UpdateGrantRequest::class.java)
       .toJson(requestBody)

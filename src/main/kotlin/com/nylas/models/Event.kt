@@ -26,7 +26,7 @@ data class Event(
   @Json(name = "when")
   private val whenObj: When = When.Time(0),
   /**
-   * The title of the event.
+   * This value determines whether to show this event's time block as available on shared or public calendars.
    */
   @Json(name = "busy")
   val busy: Boolean = false,

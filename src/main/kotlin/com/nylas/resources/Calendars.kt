@@ -78,4 +78,19 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
     return destroyResource(path)
   }
+
+  /**
+   * Get Availability for a given account / accounts
+   * @param request The availability request
+   * @return The availability response
+   */
+  fun getAvailability(request: GetAvailabilityRequest): Response<GetAvailabilityResponse> {
+    val path = "v3/calendars/availability"
+
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(GetAvailabilityRequest::class.java)
+      .toJson(request);
+
+    return client.executePost(path, GetAvailabilityResponse::class.java, serializedRequestBody)
+  }
 }
