@@ -25,5 +25,5 @@ data class RedirectUri(
    * Configuration settings
    */
   @Json(name = "settings")
-  val settings: RedirectUriSettings?,
+  val settings: RedirectUriSettings? = null,
 )

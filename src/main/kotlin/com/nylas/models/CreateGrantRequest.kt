@@ -20,12 +20,12 @@ data class CreateGrantRequest(
    * Optional state value to return to developer's website after authentication flow is completed.
    */
   @Json(name = "state")
-  val state: String?,
+  val state: String? = null,
   /**
    * Optional list of scopes to request. If not specified it will use the integration default scopes.
    */
   @Json(name = "scopes")
-  val scopes: List<String>?,
+  val scopes: List<String>? = null,
 ) {
   /**
    * Builder for [CreateGrantRequest].

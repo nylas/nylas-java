@@ -35,12 +35,12 @@ data class ApplicationDetails(
    * Hosted authentication branding details
    */
   @Json(name = "hosted_authentication")
-  val hostedAuthentication: HostedAuthentication?,
+  val hostedAuthentication: HostedAuthentication? = null,
   /**
    * List of redirect URIs
    */
   @Json(name = "redirect_uris")
-  val redirectUris: List<RedirectUri>?,
+  val redirectUris: List<RedirectUri>? = null,
 ) {
   /**
    * Class representation of branding details for the application
@@ -55,17 +55,17 @@ data class ApplicationDetails(
      * URL points to application icon
      */
     @Json(name = "icon_url")
-    val iconUrl: String?,
+    val iconUrl: String? = null,
     /**
      * Application / publisher website URL
      */
     @Json(name = "website_url")
-    val websiteUrl: String?,
+    val websiteUrl: String? = null,
     /**
      * Description of the application
      */
     @Json(name = "description")
-    val description: String?,
+    val description: String? = null,
   )
 
   /**
@@ -76,41 +76,41 @@ data class ApplicationDetails(
      * URL of the background image
      */
     @Json(name = "background_image_url")
-    val backgroundImageUrl: String?,
+    val backgroundImageUrl: String? = null,
     /**
      * Alignment of background image
      */
     @Json(name = "alignment")
-    val alignment: String?,
+    val alignment: String? = null,
     /**
      * Primary color
      */
     @Json(name = "color_primary")
-    val colorPrimary: String?,
+    val colorPrimary: String? = null,
     /**
      * Secondary color
      */
     @Json(name = "color_secondary")
-    val colorSecondary: String?,
+    val colorSecondary: String? = null,
     /**
      * Title
      */
     @Json(name = "title")
-    val title: String?,
+    val title: String? = null,
     /**
      * Subtitle
      */
     @Json(name = "subtitle")
-    val subtitle: String?,
+    val subtitle: String? = null,
     /**
      * Background color
      */
     @Json(name = "background_color")
-    val backgroundColor: String?,
+    val backgroundColor: String? = null,
     /**
      * CSS spacing attribute in px
      */
     @Json(name = "spacing")
-    val spacing: Int?,
+    val spacing: Int? = null,
   )
 }

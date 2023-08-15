@@ -20,10 +20,10 @@ data class ProviderDetectResponse(
    * Detected provider
    */
   @Json(name = "provider")
-  val provider: String?,
+  val provider: String? = null,
   /**
    * Provider type (if IMAP provider detected displays the IMAP provider)
    */
   @Json(name = "type")
-  val type: String?,
+  val type: String? = null,
 )

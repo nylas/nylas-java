@@ -30,13 +30,13 @@ data class CodeExchangeResponse(
    * Only returned if the code was requested using [AccessType.OFFLINE][com.nylas.models.AccessType.OFFLINE].
    */
   @Json(name = "refresh_token")
-  val refreshToken: String?,
+  val refreshToken: String? = null,
   /**
    *
    * A JWT that contains identity information about the user that is digitally signed by Nylas.
    */
   @Json(name = "id_token")
-  val idToken: String?,
+  val idToken: String? = null,
   /**
    * Currently always Bearer.
    */
