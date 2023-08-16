@@ -4,6 +4,7 @@
 
 ### BREAKING CHANGES
 
+* Renamed artifact from `nylas-java-sdk` to `nylas`.
 * Nylas SDK v2 supports the Nylas API v3 exclusively, dropping support for any endpoints that are not available in v3.
 * Removed all REST calls from models and moved them directly into resources
 
