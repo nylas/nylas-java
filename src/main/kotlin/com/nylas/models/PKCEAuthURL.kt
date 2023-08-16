@@ -12,7 +12,6 @@ data class PKCEAuthURL(
    * Server-side challenge used in the OAuth 2.0 flow
    */
   val secret: String,
-
   /**
    * SHA-256 hash of the secret
    */

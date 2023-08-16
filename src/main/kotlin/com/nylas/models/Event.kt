@@ -26,7 +26,7 @@ data class Event(
   @Json(name = "when")
   private val whenObj: When = When.Time(0),
   /**
-   * The title of the event.
+   * This value determines whether to show this event's time block as available on shared or public calendars.
    */
   @Json(name = "busy")
   val busy: Boolean = false,
@@ -99,7 +99,7 @@ data class Event(
   @Json(name = "organizer")
   val organizer: EmailName? = null,
   /**
-   * An list of RRULE and EXDATE strings.
+   * A list of RRULE and EXDATE strings.
    * @see <a href="https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5">RFC-5545</a>
    */
   @Json(name = "recurrence")
@@ -113,7 +113,7 @@ data class Event(
    * Status of the event.
    */
   @Json(name = "status")
-  val status: String? = null,
+  val status: EventStatus? = null,
   /**
    * Title of the event.
    */

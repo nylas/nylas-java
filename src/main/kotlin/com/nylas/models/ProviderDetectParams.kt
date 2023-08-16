@@ -20,7 +20,7 @@ data class ProviderDetectParams(
    * Search by all providers regardless of created integrations. If unset, defaults to false.
    */
   @Json(name = "all_provider_types")
-  val allProviderTypes: Boolean?,
+  val allProviderTypes: Boolean? = null,
 ) : IQueryParams {
   /**
    * Builder for [ProviderDetectParams].

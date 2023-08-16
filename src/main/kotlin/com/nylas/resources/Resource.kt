@@ -11,7 +11,7 @@ import java.lang.reflect.Type
  * @suppress No public constructor or functions
  */
 abstract class Resource<T> protected constructor(
-  private val client: NylasClient,
+  protected val client: NylasClient,
   modelClass: Class<T>,
 ) {
   private val responseType: Type

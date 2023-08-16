@@ -14,7 +14,7 @@ data class ListCalendersQueryParams(
   val limit: Int? = null,
   /**
    * An identifier that specifies which page of data to return.
-   * This value should be taken from the next_cursor response field.
+   * This value should be taken from the [ListResponse.nextCursor] response field.
    */
   @Json(name = "page_token")
   val pageToken: String? = null,

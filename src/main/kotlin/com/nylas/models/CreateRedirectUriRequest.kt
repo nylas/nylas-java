@@ -20,7 +20,7 @@ data class CreateRedirectUriRequest(
    * Optional settings for the redirect uri.
    */
   @Json(name = "settings")
-  val settings: RedirectUriSettings?,
+  val settings: RedirectUriSettings? = null,
 ) {
   /**
    * Builder for [CreateRedirectUriRequest].
