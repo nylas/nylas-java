@@ -22,14 +22,14 @@ import java.util.concurrent.TimeUnit
  *
  * @param apiKey The Nylas API key to use for authentication.
  * @param httpClientBuilder The builder to use for creating the http client.
- * @param baseUrl The URL to use for communicating with the Nylas API.
+ * @param apiUri The URL to use for communicating with the Nylas API.
  */
 class NylasClient(
   val apiKey: String,
   httpClientBuilder: OkHttpClient.Builder = defaultHttpClient(),
-  baseUrl: String = DEFAULT_BASE_URL,
+  apiUri: String = DEFAULT_BASE_URL,
 ) {
-  private val baseUrl: HttpUrl
+  private val apiUri: HttpUrl
   private val httpClient: OkHttpClient
 
   /**
@@ -64,7 +64,7 @@ class NylasClient(
   }
 
   init {
-    this.baseUrl = HttpUrl.get(baseUrl)
+    this.apiUri = HttpUrl.get(apiUri)
     httpClient = httpClientBuilder
       .addInterceptor(AddVersionHeadersInterceptor()) // enforce user agent and build data
       .addInterceptor(ContentHeadersInterceptor()) // enforce Content-Type headers.
@@ -115,7 +115,7 @@ class NylasClient(
    * Get a URL builder instance for the Nylas API.
    */
   fun newUrlBuilder(): HttpUrl.Builder {
-    return baseUrl.newBuilder()
+    return apiUri.newBuilder()
   }
 
   /**
@@ -335,14 +335,14 @@ class NylasClient(
   data class Builder(
     private val apiKey: String,
   ) {
-    private var baseUrl: String = DEFAULT_BASE_URL
+    private var apiUri: String = DEFAULT_BASE_URL
     private var httpClient: OkHttpClient.Builder = defaultHttpClient()
 
     /**
      * Set the base url for the NylasClient.
-     * @param baseUrl The URL to use for communicating with the Nylas API.
+     * @param apiUri The URL to use for communicating with the Nylas API.
      */
-    fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
+    fun apiUri(apiUri: String) = apply { this.apiUri = apiUri }
 
     /**
      * Set the OkHttpClient.Builder for the NylasClient.
@@ -362,7 +362,7 @@ class NylasClient(
      * Build the [NylasClient] instance
      * @return a [NylasClient] instance
      */
-    fun build() = NylasClient(apiKey, httpClient, baseUrl)
+    fun build() = NylasClient(apiKey, httpClient, apiUri)
   }
 
   /**
