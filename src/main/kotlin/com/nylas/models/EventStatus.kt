@@ -8,8 +8,10 @@ import com.squareup.moshi.Json
 enum class EventStatus {
   @Json(name = "confirmed")
   CONFIRMED,
+
   @Json(name = "tentative")
   TENTATIVE,
+
   @Json(name = "cancelled")
   CANCELLED,
 }

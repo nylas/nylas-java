@@ -54,8 +54,8 @@ data class GetAvailabilityRequest(
    * @param durationMinutes The total number of minutes the event should last.
    */
   data class Builder(
-    private val startTime: String,
-    private val endTime: String,
+    private val startTime: Int,
+    private val endTime: Int,
     private val participants: List<AvailabilityParticipant>,
     private val durationMinutes: Int,
   ) {
@@ -98,7 +98,7 @@ data class GetAvailabilityRequest(
       durationMinutes,
       intervalMinutes,
       roundTo30Minutes,
-      availabilityRules
+      availabilityRules,
     )
   }
 }

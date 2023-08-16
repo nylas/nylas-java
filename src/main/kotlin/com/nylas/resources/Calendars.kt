@@ -89,7 +89,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(GetAvailabilityRequest::class.java)
-      .toJson(request);
+      .toJson(request)
 
     return client.executePost(path, GetAvailabilityResponse::class.java, serializedRequestBody)
   }
