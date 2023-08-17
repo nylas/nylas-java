@@ -38,7 +38,6 @@ data class UpdateGrantRequest(
      */
     fun scopes(scopes: List<String>) = apply { this.scopes = scopes }
 
-
     /**
      * Build the [UpdateGrantRequest].
      * @return The built [UpdateGrantRequest]

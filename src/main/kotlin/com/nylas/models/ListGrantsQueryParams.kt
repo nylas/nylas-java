@@ -132,7 +132,6 @@ data class ListGrantsQueryParams(
      */
     fun provider(provider: AuthProvider?) = apply { this.provider = provider }
 
-
     /**
      * Builds a [ListGrantsQueryParams] instance.
      * @return The [ListGrantsQueryParams] instance.

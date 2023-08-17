@@ -8,6 +8,7 @@ import com.squareup.moshi.Json
 enum class AvailabilityMethod {
   @Json(name = "max-fairness")
   MAX_FAIRNESS,
+
   @Json(name = "max-availability")
   MAX_AVAILABILITY,
 }

@@ -8,10 +8,13 @@ import com.squareup.moshi.Json
 enum class WebhookStatus {
   @Json(name = "active")
   ACTIVE,
+
   @Json(name = "failing")
   FAILING,
+
   @Json(name = "failed")
   FAILED,
+
   @Json(name = "paused")
   PAUSE,
 }
