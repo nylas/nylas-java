@@ -3,7 +3,7 @@ package com.nylas.models
 import com.squareup.moshi.Json
 
 /**
- * Class representing a Nylas webhook with secret. Used when rotating a webhook secret.
+ * Class representing a Nylas webhook with secret.
  */
 data class WebhookWithSecret(
   /**
