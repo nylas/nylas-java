@@ -40,6 +40,16 @@ dependencies {
 
   // Render dokka from the Java perspective
   dokkaPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.8.20")
+
+  // Test dependencies
+  testImplementation(kotlin("test"))
+  testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+  testImplementation("org.mockito:mockito-inline:4.11.0")
+  testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+}
+
+tasks.test {
+  useJUnitPlatform()
 }
 
 tasks.processResources {
