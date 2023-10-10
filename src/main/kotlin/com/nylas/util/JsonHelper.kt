@@ -1,5 +1,6 @@
 package com.nylas.util
 
+import com.nylas.models.GetFreeBusyResponse.Companion.FREE_BUSY_JSON_FACTORY
 import com.nylas.models.When.Companion.WHEN_JSON_FACTORY
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
@@ -29,6 +30,7 @@ class JsonHelper {
       .add(UpdateWhenAdapter())
       // Polymorphic adapters
       .add(WHEN_JSON_FACTORY)
+      .add(FREE_BUSY_JSON_FACTORY)
       .add(KotlinJsonAdapterFactory())
       .build()
 
