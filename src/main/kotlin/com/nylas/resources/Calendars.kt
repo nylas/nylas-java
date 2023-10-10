@@ -97,6 +97,12 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
     return client.executePost(path, GetAvailabilityResponse::class.java, serializedRequestBody)
   }
 
+  /**
+   * Get the free/busy schedule for a list of email addresses
+   * @param identifier The identifier of the grant to act upon
+   * @param request The free/busy request
+   * @return The free/busy response
+   */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun getFreeBusy(identifier: String, request: GetFreeBusyRequest): Response<GetFreeBusyResponse> {
     val path = String.format("v3/grants/%s/calendars/free-busy", identifier)
