@@ -2,7 +2,9 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
+import com.nylas.models.GetFreeBusyResponse.Companion.GET_FREE_BUSY_RESPONSE_ADAPTER
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.Types
 
 /**
  * Nylas Calendar API
@@ -84,6 +86,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @param request The availability request
    * @return The availability response
    */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun getAvailability(request: GetAvailabilityRequest): Response<GetAvailabilityResponse> {
     val path = "v3/calendars/availability"
 
@@ -92,5 +95,18 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
       .toJson(request)
 
     return client.executePost(path, GetAvailabilityResponse::class.java, serializedRequestBody)
+  }
+
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun getFreeBusy(identifier: String, request: GetFreeBusyRequest): Response<GetFreeBusyResponse> {
+    val path = String.format("v3/grants/%s/calendars/free-busy", identifier)
+
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(GetFreeBusyRequest::class.java)
+      .toJson(request)
+
+    val responseType = Types.newParameterizedType(Response::class.java, GET_FREE_BUSY_RESPONSE_ADAPTER)
+
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 }
