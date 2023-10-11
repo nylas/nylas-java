@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [2.0.0-beta.2] - TBD
+
+### Added
+* Added support for the free-busy endpoint
+
 ## [2.0.0-beta.1] - Released 2023-08-16
 
 ### BREAKING CHANGES
