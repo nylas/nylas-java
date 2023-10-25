@@ -29,6 +29,10 @@ class JsonHelper {
       .add(CreateWhenAdapter())
       .add(UpdateWhenAdapter())
       .add(CreateConnectorAdapter())
+      .add(CredentialDataAdapter())
+      .add(MicrosoftAdminConsentCredentialDataAdapter())
+      .add(GoogleServiceAccountCredentialDataAdapter())
+      .add(ConnectorOverrideCredentialDataAdapter())
       // Polymorphic adapters
       .add(WHEN_JSON_FACTORY)
       .add(FREE_BUSY_JSON_FACTORY)

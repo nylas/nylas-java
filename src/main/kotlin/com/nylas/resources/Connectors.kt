@@ -6,6 +6,14 @@ import com.nylas.util.JsonHelper
 
 class Connectors(client: NylasClient) : Resource<Connector>(client, Connector::class.java) {
   /**
+   * Access the Credentials API
+   * @return The Credentials API
+   */
+  fun credentials(): Credentials {
+    return Credentials(client)
+  }
+
+  /**
    * Return all Connectors
    * @param queryParams The query parameters to include in the request
    * @return The list of Connectors
