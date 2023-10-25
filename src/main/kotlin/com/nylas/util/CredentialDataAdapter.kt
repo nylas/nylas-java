@@ -11,9 +11,9 @@ class CredentialDataAdapter {
   @FromJson
   fun fromJson(
     reader: JsonReader,
-    microsoftAdapter: JsonAdapter<MicrosoftAdminConsentCredentialData>,
-    googleAdapter: JsonAdapter<GoogleServiceAccountCredentialData>,
-    overrideAdapter: JsonAdapter<ConnectorOverrideCredentialData>,
+    microsoftAdapter: JsonAdapter<CredentialData.MicrosoftAdminConsent>,
+    googleAdapter: JsonAdapter<CredentialData.GoogleServiceAccount>,
+    overrideAdapter: JsonAdapter<CredentialData.ConnectorOverride>,
   ): CredentialData? {
     val map = reader.readJsonValue() as? Map<*, *> ?: return null
     return when {
@@ -27,26 +27,26 @@ class CredentialDataAdapter {
   fun toJson(
     writer: JsonWriter,
     value: CredentialData?,
-    microsoftAdapter: JsonAdapter<MicrosoftAdminConsentCredentialData>,
-    googleAdapter: JsonAdapter<GoogleServiceAccountCredentialData>,
-    overrideAdapter: JsonAdapter<ConnectorOverrideCredentialData>,
+    microsoftAdapter: JsonAdapter<CredentialData.MicrosoftAdminConsent>,
+    googleAdapter: JsonAdapter<CredentialData.GoogleServiceAccount>,
+    overrideAdapter: JsonAdapter<CredentialData.ConnectorOverride>,
   ) {
     when (value) {
-      is MicrosoftAdminConsentCredentialData -> microsoftAdapter.toJson(writer, value)
-      is GoogleServiceAccountCredentialData -> googleAdapter.toJson(writer, value)
-      is ConnectorOverrideCredentialData -> overrideAdapter.toJson(writer, value)
+      is CredentialData.MicrosoftAdminConsent -> microsoftAdapter.toJson(writer, value)
+      is CredentialData.GoogleServiceAccount -> googleAdapter.toJson(writer, value)
+      is CredentialData.ConnectorOverride -> overrideAdapter.toJson(writer, value)
       else -> writer.nullValue()
     }
   }
 }
 
 /**
- * This class is used to serialize and deserialize the MicrosoftAdminConsentCredentialData object.
+ * This class is used to serialize and deserialize the CredentialData.MicrosoftAdminConsent object.
  * @suppress Not for public use.
  */
 class MicrosoftAdminConsentCredentialDataAdapter {
   @FromJson
-  fun fromJson(reader: JsonReader): MicrosoftAdminConsentCredentialData {
+  fun fromJson(reader: JsonReader): CredentialData.MicrosoftAdminConsent {
     var clientId = ""
     var clientSecret = ""
     val extraProperties = mutableMapOf<String, String>()
@@ -61,11 +61,11 @@ class MicrosoftAdminConsentCredentialDataAdapter {
     }
     reader.endObject()
 
-    return MicrosoftAdminConsentCredentialData(clientId, clientSecret, extraProperties)
+    return CredentialData.MicrosoftAdminConsent(clientId, clientSecret, extraProperties)
   }
 
   @ToJson
-  fun toJson(writer: JsonWriter, value: MicrosoftAdminConsentCredentialData?) {
+  fun toJson(writer: JsonWriter, value: CredentialData.MicrosoftAdminConsent?) {
     writer.beginObject()
     writer.name("client_id").value(value?.clientId)
     writer.name("client_secret").value(value?.clientSecret)
@@ -77,12 +77,12 @@ class MicrosoftAdminConsentCredentialDataAdapter {
 }
 
 /**
- * This class is used to serialize and deserialize the GoogleServiceAccountCredentialData object.
+ * This class is used to serialize and deserialize the CredentialData.GoogleServiceAccount object.
  * @suppress Not for public use.
  */
 class GoogleServiceAccountCredentialDataAdapter {
   @FromJson
-  fun fromJson(reader: JsonReader): GoogleServiceAccountCredentialData {
+  fun fromJson(reader: JsonReader): CredentialData.GoogleServiceAccount {
     var privateKeyId = ""
     var privateKey = ""
     var clientEmail = ""
@@ -99,11 +99,11 @@ class GoogleServiceAccountCredentialDataAdapter {
     }
     reader.endObject()
 
-    return GoogleServiceAccountCredentialData(privateKeyId, privateKey, clientEmail, extraProperties)
+    return CredentialData.GoogleServiceAccount(privateKeyId, privateKey, clientEmail, extraProperties)
   }
 
   @ToJson
-  fun toJson(writer: JsonWriter, value: GoogleServiceAccountCredentialData?) {
+  fun toJson(writer: JsonWriter, value: CredentialData.GoogleServiceAccount?) {
     writer.beginObject()
     writer.name("private_key_id").value(value?.privateKeyId)
     writer.name("private_key").value(value?.privateKey)
@@ -116,12 +116,12 @@ class GoogleServiceAccountCredentialDataAdapter {
 }
 
 /**
- * This class is used to serialize and deserialize the ConnectorOverrideCredentialData object.
+ * This class is used to serialize and deserialize the CredentialData.ConnectorOverride object.
  * @suppress Not for public use.
  */
 class ConnectorOverrideCredentialDataAdapter {
   @FromJson
-  fun fromJson(reader: JsonReader): ConnectorOverrideCredentialData {
+  fun fromJson(reader: JsonReader): CredentialData.ConnectorOverride {
     val extraProperties = mutableMapOf<String, String>()
 
     reader.beginObject()
@@ -132,11 +132,11 @@ class ConnectorOverrideCredentialDataAdapter {
     }
     reader.endObject()
 
-    return ConnectorOverrideCredentialData(extraProperties)
+    return CredentialData.ConnectorOverride(extraProperties)
   }
 
   @ToJson
-  fun toJson(writer: JsonWriter, value: ConnectorOverrideCredentialData?) {
+  fun toJson(writer: JsonWriter, value: CredentialData.ConnectorOverride?) {
     writer.beginObject()
     value?.extraProperties?.forEach { (k, v) ->
       writer.name(k).value(v)

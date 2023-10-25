@@ -37,13 +37,13 @@ class Connectors(client: NylasClient) : Resource<Connector>(client, Connector::c
   }
 
   /**
-   * Create a Connector via Custom Authentication
+   * Create a Connector
    * @param requestBody The values to create the Connector with
    * @return The created Connector
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun create(requestBody: CreateConnectorRequest): Response<Connector> {
-    val path = "v3/connect/custom"
+    val path = "v3/connectors"
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(CreateConnectorRequest::class.java)
       .toJson(requestBody)
