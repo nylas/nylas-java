@@ -28,6 +28,7 @@ class JsonHelper {
       .add(UpdateConferencingAdapter())
       .add(CreateWhenAdapter())
       .add(UpdateWhenAdapter())
+      .add(CreateWhenAdapter())
       // Polymorphic adapters
       .add(WHEN_JSON_FACTORY)
       .add(FREE_BUSY_JSON_FACTORY)

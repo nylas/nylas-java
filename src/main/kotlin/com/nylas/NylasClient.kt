@@ -104,6 +104,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Threads API
+   * @return The Threads API
+   */
+  fun threads(): Threads {
+    return Threads(this)
+  }
+
+  /**
    * Access the Webhooks API
    * @return The Webhooks API
    */

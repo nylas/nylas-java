@@ -111,7 +111,7 @@ data class Message(
    */
   @Json(name = "metadata")
   val metadata: Map<String, Any>?,
-) {
+) : IMessage {
   /**
    * Get the type of object.
    * @return The type of object.

@@ -100,7 +100,7 @@ class Draft(
    */
   @Json(name = "attachments")
   val attachments: List<File>?,
-) {
+) : IMessage {
   /**
    * Get the type of object.
    * @return The type of object.
