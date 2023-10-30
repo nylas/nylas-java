@@ -104,6 +104,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Messages API
+   * @return The Messages API
+   */
+  fun messages(): Messages {
+    return Messages(this)
+  }
+
+  /**
    * Access the Threads API
    * @return The Threads API
    */

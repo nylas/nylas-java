@@ -94,7 +94,7 @@ data class ListMessagesQueryParams(
    */
   @Json(name = "search_query_native")
   val searchQueryNative: String? = null,
-) {
+) : IQueryParams {
   class Builder {
     private var limit: Int? = null
     private var pageToken: String? = null
