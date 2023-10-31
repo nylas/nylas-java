@@ -4,6 +4,7 @@ import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.FileUtils
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.Types
 
 class Messages(client: NylasClient) : Resource<Message>(client, Message::class.java) {
   /**
@@ -66,6 +67,12 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
     return destroyResource(path)
   }
 
+  /**
+   * Send an email
+   * @param identifier The identifier of the grant to act upon
+   * @param requestBody The values to send the email with
+   * @return The sent email
+   */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun send(identifier: String, requestBody: SendMessageRequest): Response<Message> {
     val path = String.format("v3/grants/%s/messages/send", identifier)
@@ -77,5 +84,43 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
     val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
 
     return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, Message::class.java)
+  }
+
+  /**
+   * Retrieve your scheduled messages
+   * @param identifier The identifier of the grant to act upon
+   * @return The list of scheduled messages
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun listScheduledMessages(identifier: String): Response<ScheduledMessagesList> {
+    val path = String.format("v3/grants/%s/messages/schedules", identifier)
+    val responseType = Types.newParameterizedType(Response::class.java, ScheduledMessagesList::class.java)
+    return client.executeGet(path, responseType)
+  }
+
+  /**
+   * Retrieve a scheduled message
+   * @param identifier The identifier of the grant to act upon
+   * @param scheduleId The id of the scheduled message to retrieve
+   * @return The scheduled message
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun findScheduledMessage(identifier: String, scheduleId: String): Response<ScheduledMessage> {
+    val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, scheduleId)
+    val responseType = Types.newParameterizedType(Response::class.java, ScheduledMessage::class.java)
+    return client.executeGet(path, responseType)
+  }
+
+  /**
+   * Stop a scheduled message
+   * @param identifier The identifier of the grant to act upon
+   * @param scheduleId The id of the scheduled message to stop
+   * @return The confirmation of the stopped scheduled message
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun stopScheduledMessage(identifier: String, scheduleId: String): Response<StopScheduledMessageResponse> {
+    val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, scheduleId)
+    val responseType = Types.newParameterizedType(Response::class.java, StopScheduledMessageResponse::class.java)
+    return client.executeDelete(path, responseType)
   }
 }
