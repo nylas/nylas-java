@@ -3,9 +3,9 @@ package com.nylas.models
 import com.squareup.moshi.Json
 
 /**
- * Class representation of a Nylas file object
+ * Class representation of a Nylas attachment object
  */
-data class File(
+data class Attachment(
   /**
    * Globally unique object identifier.
    */
@@ -17,17 +17,17 @@ data class File(
   @Json(name = "grant_id")
   val grantId: String,
   /**
-   * The filename of the file.
+   * The filename of the attachment.
    */
   @Json(name = "filename")
   val filename: String,
   /**
-   * The content type of the file.
+   * The content type of the attachment.
    */
   @Json(name = "content_type")
   val contentType: String,
   /**
-   * The size of the file in bytes.
+   * The size of the attachment in bytes.
    */
   @Json(name = "size")
   val size: Int,
@@ -37,12 +37,12 @@ data class File(
   @Json(name = "is_inline")
   val isInline: Boolean?,
   /**
-   * The content ID of the file.
+   * The content ID of the attachment.
    */
   @Json(name = "content_id")
   val contentId: String?,
   /**
-   * The content disposition if the file is located inline.
+   * The content disposition if the attachment is located inline.
    */
   @Json(name = "content_disposition")
   val contentDisposition: Long?,
