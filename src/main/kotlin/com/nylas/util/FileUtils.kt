@@ -1,6 +1,6 @@
 package com.nylas.util
 
-import com.nylas.models.CreateFileRequest
+import com.nylas.models.CreateAttachmentRequest
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okio.BufferedSink
@@ -48,19 +48,19 @@ class FileUtils {
     }
 
     /**
-     * Generates a [CreateFileRequest] from a file path.
+     * Generates a [CreateAttachmentRequest] from a file path.
      * @param filePath The path to the file to upload.
-     * @return A [CreateFileRequest] that can be used to upload the file.
+     * @return A [CreateAttachmentRequest] that can be used to upload the file.
      */
     @JvmStatic
-    fun createFileRequestBuilder(filePath: String): CreateFileRequest {
+    fun createFileRequestBuilder(filePath: String): CreateAttachmentRequest {
       val path = Paths.get(filePath)
       val filename = path.fileName.toString()
       val contentType = Files.probeContentType(path) ?: "application/octet-stream"
       val content = Files.newInputStream(path)
       val size = Files.size(path)
 
-      return CreateFileRequest(
+      return CreateAttachmentRequest(
         filename = filename,
         contentType = contentType,
         size = size.toInt(),

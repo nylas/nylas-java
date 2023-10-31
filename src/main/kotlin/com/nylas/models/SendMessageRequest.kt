@@ -23,7 +23,7 @@ data class SendMessageRequest(
   /**
    * An array of files to attach to the message.
    */
-  val attachments: List<CreateFileRequest>?,
+  val attachments: List<CreateAttachmentRequest>?,
   /**
    * A short snippet of the message body.
    * This is the first 100 characters of the message body, with any HTML tags removed.
@@ -79,7 +79,7 @@ data class SendMessageRequest(
     private var bcc: List<EmailName>? = null
     private var cc: List<EmailName>? = null
     private var replyTo: List<EmailName>? = null
-    private var attachments: List<CreateFileRequest>? = null
+    private var attachments: List<CreateAttachmentRequest>? = null
     private var snippet: String? = null
     private var subject: String? = null
     private var threadId: String? = null
@@ -117,7 +117,7 @@ data class SendMessageRequest(
      * @param attachments The files to attach to the message.
      * @return The builder.
      */
-    fun attachments(attachments: List<CreateFileRequest>?) = apply { this.attachments = attachments }
+    fun attachments(attachments: List<CreateAttachmentRequest>?) = apply { this.attachments = attachments }
 
     /**
      * Sets the snippet of the message body.

@@ -99,7 +99,7 @@ data class Message(
    * An array of files attached to the message.
    */
   @Json(name = "attachments")
-  val attachments: List<File>?,
+  val attachments: List<Attachment>?,
   /**
    * The message headers.
    * Only present if the 'fields' query parameter is set to includeHeaders.

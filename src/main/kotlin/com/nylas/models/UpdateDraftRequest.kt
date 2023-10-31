@@ -23,7 +23,7 @@ data class UpdateDraftRequest(
   /**
    * An array of files to attach to the message.
    */
-  val attachments: List<CreateFileRequest>?,
+  val attachments: List<CreateAttachmentRequest>?,
   /**
    * A short snippet of the message body.
    * This is the first 100 characters of the message body, with any HTML tags removed.
