@@ -2,10 +2,8 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
-import com.nylas.util.FileUtils.Companion.toStreamingRequestBody
+import com.nylas.util.FileUtils
 import com.nylas.util.JsonHelper
-import okhttp3.MediaType
-import okhttp3.MultipartBody
 
 class Messages(client: NylasClient) : Resource<Message>(client, Message::class.java) {
   /**
@@ -72,19 +70,12 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   fun send(identifier: String, requestBody: SendMessageRequest): Response<Message> {
     val path = String.format("v3/grants/%s/messages/send", identifier)
 
-    val multipartBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
-    val messagePayload = requestBody.copy(attachments = null)
-    val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
-    val serializedRequestBody = adapter.toJson(messagePayload)
-    multipartBuilder.addFormDataPart("message", serializedRequestBody)
+    val attachmentLessPayload = requestBody.copy(attachments = null)
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(SendMessageRequest::class.java)
+      .toJson(attachmentLessPayload)
+    val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
 
-    // Add a separate form field for each attachment
-    requestBody.attachments?.forEachIndexed { index, attachment ->
-      val contentType = MediaType.parse(attachment.contentType)
-      val contentBody = attachment.content.toStreamingRequestBody(contentType)
-      multipartBuilder.addFormDataPart("file$index", attachment.filename, contentBody)
-    }
-
-    return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipartBuilder.build(), Message::class.java)
+    return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, Message::class.java)
   }
 }

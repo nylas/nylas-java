@@ -63,7 +63,7 @@ data class ListDraftsQueryParams(
    */
   @Json(name = "has_attachment")
   val hasAttachment: Boolean? = null,
-) {
+) : IQueryParams {
   /**
    * Builder for [ListDraftsQueryParams].
    */

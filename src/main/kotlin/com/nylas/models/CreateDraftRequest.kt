@@ -23,7 +23,7 @@ data class CreateDraftRequest(
   /**
    * An array of files to attach to the message.
    */
-  val attachments: List<CreateAttachmentRequest>?,
+  override val attachments: List<CreateAttachmentRequest>?,
   /**
    * A short snippet of the message body.
    * This is the first 100 characters of the message body, with any HTML tags removed.
@@ -63,7 +63,7 @@ data class CreateDraftRequest(
    * Options for tracking opens, links, and thread replies.
    */
   val trackingOptions: TrackingOptions?,
-) {
+) : IMessageAttachmentRequest {
   /**
    * Builder for [CreateDraftRequest].
    * @property to An array of message recipients.

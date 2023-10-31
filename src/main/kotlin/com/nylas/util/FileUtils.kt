@@ -1,7 +1,10 @@
 package com.nylas.util
 
 import com.nylas.models.CreateAttachmentRequest
+import com.nylas.models.IMessageAttachmentRequest
+import com.nylas.util.FileUtils.Companion.toStreamingRequestBody
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okio.BufferedSink
 import okio.source
@@ -66,6 +69,21 @@ class FileUtils {
         size = size.toInt(),
         content = content,
       )
+    }
+
+    @JvmStatic
+    fun <T : IMessageAttachmentRequest> buildFormRequest(requestBody: T, attachmentLessPayload: String): MultipartBody {
+      val multipartBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+      multipartBuilder.addFormDataPart("message", attachmentLessPayload)
+
+      // Add a separate form field for each attachment
+      requestBody.attachments?.forEachIndexed { index, attachment ->
+        val contentType = MediaType.parse(attachment.contentType)
+        val contentBody = attachment.content.toStreamingRequestBody(contentType)
+        multipartBuilder.addFormDataPart("file$index", attachment.filename, contentBody)
+      }
+
+      return multipartBuilder.build()
     }
   }
 }

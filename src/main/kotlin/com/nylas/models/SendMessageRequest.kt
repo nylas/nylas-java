@@ -23,7 +23,7 @@ data class SendMessageRequest(
   /**
    * An array of files to attach to the message.
    */
-  val attachments: List<CreateAttachmentRequest>?,
+  override val attachments: List<CreateAttachmentRequest>?,
   /**
    * A short snippet of the message body.
    * This is the first 100 characters of the message body, with any HTML tags removed.
@@ -68,7 +68,7 @@ data class SendMessageRequest(
    * This is primarily used when dealing with large attachments.
    */
   val useDraft: Boolean?,
-) {
+) : IMessageAttachmentRequest {
   /**
    * Builder for [SendMessageRequest].
    * @property to An array of message recipients.
