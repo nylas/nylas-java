@@ -2,16 +2,10 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
+import com.nylas.util.FileUtils.Companion.toStreamingRequestBody
 import com.nylas.util.JsonHelper
 import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okio.BufferedSink
-import okio.source
-import java.io.IOException
-import java.io.InputStream
-import java.nio.file.Files
-import java.nio.file.Paths
 
 class Messages(client: NylasClient) : Resource<Message>(client, Message::class.java) {
   /**
@@ -92,40 +86,5 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
     }
 
     return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipartBuilder.build(), Message::class.java)
-  }
-
-  fun createFileRequestBuilder(filePath: String): CreateFileRequest {
-    val path = Paths.get(filePath)
-    val filename = path.fileName.toString()
-    val contentType = Files.probeContentType(path) ?: "application/octet-stream"
-    val content = Files.newInputStream(path)
-    val size = Files.size(path)
-
-    return CreateFileRequest(
-      filename = filename,
-      contentType = contentType,
-      size = size.toInt(),
-      content = content,
-    )
-  }
-
-  fun InputStream.toStreamingRequestBody(contentType: MediaType? = null): RequestBody {
-    return object : RequestBody() {
-      override fun contentType() = contentType
-
-      override fun writeTo(sink: BufferedSink) {
-        source().use { source ->
-          sink.writeAll(source)
-        }
-      }
-
-      override fun contentLength(): Long {
-        return try {
-          this@toStreamingRequestBody.available().toLong()
-        } catch (e: IOException) {
-          -1
-        }
-      }
-    }
   }
 }
