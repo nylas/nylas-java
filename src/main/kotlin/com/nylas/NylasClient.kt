@@ -231,6 +231,27 @@ class NylasClient(
     return executeRequest(url, HttpMethod.DELETE, null, resultType)
   }
 
+  /**
+   * Execute a request with a form-body payload to the Nylas API.
+   * @param path The path to request.
+   * @param method The HTTP method to use.
+   * @param requestBody The form-data request body.
+   * @param resultType The type of the response body.
+   * @param queryParams The query parameters.
+   * @suppress Not for public use.
+   */
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  fun <T> executeFormRequest(
+    path: String,
+    method: HttpMethod,
+    requestBody: RequestBody,
+    resultType: Type? = null,
+    queryParams: IQueryParams? = null,
+  ): T {
+    val url = buildUrl(path, queryParams)
+    return executeRequest(url, method, requestBody, resultType)
+  }
+
   private fun buildRequest(
     url: HttpUrl.Builder,
     method: HttpMethod,

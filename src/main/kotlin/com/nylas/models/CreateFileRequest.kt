@@ -1,6 +1,7 @@
 package com.nylas.models
 
 import com.squareup.moshi.Json
+import java.io.InputStream
 
 /**
  * Class representing a Nylas file object.
@@ -17,6 +18,11 @@ class CreateFileRequest(
   @Json(name = "content_type")
   val contentType: String,
   /**
+   * The content of the file.
+   */
+  @Json(name = "content")
+  val content: InputStream,
+  /**
    * The size of the file in bytes.
    */
   @Json(name = "size")
@@ -25,17 +31,17 @@ class CreateFileRequest(
    * If it's an inline attachment.
    */
   @Json(name = "is_inline")
-  val isInline: Boolean?,
+  val isInline: Boolean? = null,
   /**
    * The content ID of the file.
    */
   @Json(name = "content_id")
-  val contentId: String?,
+  val contentId: String? = null,
   /**
    * The content disposition if the file is located inline.
    */
   @Json(name = "content_disposition")
-  val contentDisposition: Long?,
+  val contentDisposition: Long? = null,
 ) {
   /**
    * Builder for [CreateFileRequest].
@@ -46,6 +52,7 @@ class CreateFileRequest(
   data class Builder(
     private val filename: String,
     private val contentType: String,
+    private val content: InputStream,
     private val size: Int,
   ) {
     private var isInline: Boolean? = null
@@ -80,6 +87,7 @@ class CreateFileRequest(
     fun build() = CreateFileRequest(
       filename = filename,
       contentType = contentType,
+      content = content,
       size = size,
       isInline = isInline,
       contentId = contentId,
