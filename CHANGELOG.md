@@ -4,6 +4,7 @@
 
 ### Added
 * Added support for the free-busy endpoint
+* Add Messages, Drafts, and Smart Compose APIs support
 
 ## [2.0.0-beta.1] - Released 2023-08-16
 
