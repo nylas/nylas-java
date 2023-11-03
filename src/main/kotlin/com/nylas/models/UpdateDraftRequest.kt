@@ -7,52 +7,52 @@ data class UpdateDraftRequest(
   /**
    * An array of message recipients.
    */
-  val to: List<EmailName>?,
+  val to: List<EmailName>? = null,
   /**
    * An array of bcc recipients.
    */
-  val bcc: List<EmailName>?,
+  val bcc: List<EmailName>? = null,
   /**
    * An array of cc recipients.
    */
-  val cc: List<EmailName>?,
+  val cc: List<EmailName>? = null,
   /**
    * An array of name and email pairs that override the sent reply-to headers.
    */
-  val replyTo: List<EmailName>?,
+  val replyTo: List<EmailName>? = null,
   /**
    * An array of files to attach to the message.
    */
-  override val attachments: List<CreateAttachmentRequest>?,
+  override val attachments: List<CreateAttachmentRequest>? = null,
   /**
    * The message subject.
    */
-  val subject: String?,
+  val subject: String? = null,
   /**
    * The full HTML message body.
    * Messages with only plain-text representations are up-converted to HTML.
    */
-  val body: String?,
+  val body: String? = null,
   /**
    * Whether or not the message has been starred by the user.
    */
-  val starred: Boolean?,
+  val starred: Boolean? = null,
   /**
    * Whether or not the message has been read by the user.
    */
-  val unread: Boolean?,
+  val unread: Boolean? = null,
   /**
    * Unix timestamp to send the message at.
    */
-  val sendAt: Int?,
+  val sendAt: Int? = null,
   /**
    * The ID of the message that you are replying to.
    */
-  val replyToMessageId: String?,
+  val replyToMessageId: String? = null,
   /**
    * Options for tracking opens, links, and thread replies.
    */
-  val trackingOptions: TrackingOptions?,
+  val trackingOptions: TrackingOptions? = null,
 ) : IMessageAttachmentRequest {
   /**
    * Builder for [UpdateDraftRequest].

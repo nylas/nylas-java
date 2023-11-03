@@ -17,33 +17,33 @@ data class Attachment(
   @Json(name = "grant_id")
   val grantId: String,
   /**
-   * The filename of the attachment.
-   */
-  @Json(name = "filename")
-  val filename: String,
-  /**
-   * The content type of the attachment.
-   */
-  @Json(name = "content_type")
-  val contentType: String,
-  /**
    * The size of the attachment in bytes.
    */
   @Json(name = "size")
   val size: Int,
   /**
+   * The filename of the attachment.
+   */
+  @Json(name = "filename")
+  val filename: String? = null,
+  /**
+   * The content type of the attachment.
+   */
+  @Json(name = "content_type")
+  val contentType: String? = null,
+  /**
    * If it's an inline attachment.
    */
   @Json(name = "is_inline")
-  val isInline: Boolean?,
+  val isInline: Boolean? = null,
   /**
    * The content ID of the attachment.
    */
   @Json(name = "content_id")
-  val contentId: String?,
+  val contentId: String? = null,
   /**
    * The content disposition if the attachment is located inline.
    */
   @Json(name = "content_disposition")
-  val contentDisposition: Long?,
+  val contentDisposition: Long? = null,
 )

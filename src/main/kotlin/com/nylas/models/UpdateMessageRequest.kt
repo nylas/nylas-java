@@ -10,22 +10,22 @@ data class UpdateMessageRequest(
    * Sets the message as starred or unstarred.
    */
   @Json(name = "starred")
-  val starred: Boolean?,
+  val starred: Boolean? = null,
   /**
    * Sets the message as read or unread.
    */
   @Json(name = "unread")
-  val unread: Boolean?,
+  val unread: Boolean? = null,
   /**
    * The IDs of the folders the message should appear in.
    */
   @Json(name = "folders")
-  val folders: List<String>?,
+  val folders: List<String>? = null,
   /**
    * A list of key-value pairs storing additional data.
    */
   @Json(name = "metadata")
-  val metadata: Map<String, Any>?,
+  val metadata: Map<String, Any>? = null,
 ) {
   /**
    * Builder for [UpdateMessageRequest].

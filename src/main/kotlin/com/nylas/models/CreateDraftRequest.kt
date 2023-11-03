@@ -7,70 +7,68 @@ data class CreateDraftRequest(
   /**
    * An array of message recipients.
    */
-  val to: List<EmailName>,
+  val to: List<EmailName>? = null,
   /**
    * An array of bcc recipients.
    */
-  val bcc: List<EmailName>?,
+  val bcc: List<EmailName>? = null,
   /**
    * An array of cc recipients.
    */
-  val cc: List<EmailName>?,
+  val cc: List<EmailName>? = null,
   /**
    * An array of name and email pairs that override the sent reply-to headers.
    */
-  val replyTo: List<EmailName>?,
+  val replyTo: List<EmailName>? = null,
   /**
    * An array of files to attach to the message.
    */
-  override val attachments: List<CreateAttachmentRequest>?,
+  override val attachments: List<CreateAttachmentRequest>? = null,
   /**
    * A short snippet of the message body.
    * This is the first 100 characters of the message body, with any HTML tags removed.
    */
-  val snippet: String?,
+  val snippet: String? = null,
   /**
    * The message subject.
    */
-  val subject: String?,
+  val subject: String? = null,
   /**
    * A reference to the parent thread object.
    * If this is a new draft, the thread will be empty.
    */
-  val threadId: String?,
+  val threadId: String? = null,
   /**
    * The full HTML message body.
    * Messages with only plain-text representations are up-converted to HTML.
    */
-  val body: String?,
+  val body: String? = null,
   /**
    * Whether or not the message has been starred by the user.
    */
-  val starred: Boolean?,
+  val starred: Boolean? = null,
   /**
    * Whether or not the message has been read by the user.
    */
-  val unread: Boolean?,
+  val unread: Boolean? = null,
   /**
    * Unix timestamp to send the message at.
    */
-  val sendAt: Int?,
+  val sendAt: Int? = null,
   /**
    * The ID of the message that you are replying to.
    */
-  val replyToMessageId: String?,
+  val replyToMessageId: String? = null,
   /**
    * Options for tracking opens, links, and thread replies.
    */
-  val trackingOptions: TrackingOptions?,
+  val trackingOptions: TrackingOptions? = null,
 ) : IMessageAttachmentRequest {
   /**
    * Builder for [CreateDraftRequest].
-   * @property to An array of message recipients.
    */
-  data class Builder(
-    private val to: List<EmailName>,
-  ) {
+  class Builder {
+    private var to: List<EmailName>? = null
     private var bcc: List<EmailName>? = null
     private var cc: List<EmailName>? = null
     private var replyTo: List<EmailName>? = null
@@ -84,6 +82,13 @@ data class CreateDraftRequest(
     private var sendAt: Int? = null
     private var replyToMessageId: String? = null
     private var trackingOptions: TrackingOptions? = null
+
+    /**
+     * Sets the recipients.
+     * @param to The recipients.
+     * @return The builder.
+     */
+    fun to(to: List<EmailName>?) = apply { this.to = to }
 
     /**
      * Sets the bcc recipients.
