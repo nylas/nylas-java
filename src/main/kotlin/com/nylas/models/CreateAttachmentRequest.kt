@@ -41,7 +41,7 @@ class CreateAttachmentRequest(
    * The content disposition if the attachment is located inline.
    */
   @Json(name = "content_disposition")
-  val contentDisposition: Long? = null,
+  val contentDisposition: String? = null,
 ) {
   /**
    * Builder for [CreateAttachmentRequest].
@@ -57,7 +57,7 @@ class CreateAttachmentRequest(
   ) {
     private var isInline: Boolean? = null
     private var contentId: String? = null
-    private var contentDisposition: Long? = null
+    private var contentDisposition: String? = null
 
     /**
      * Set if the attachment is inline.
@@ -78,7 +78,7 @@ class CreateAttachmentRequest(
      * @param contentDisposition The content disposition of the attachment.
      * @return The builder.
      */
-    fun contentDisposition(contentDisposition: Long) = apply { this.contentDisposition = contentDisposition }
+    fun contentDisposition(contentDisposition: String) = apply { this.contentDisposition = contentDisposition }
 
     /**
      * Build the [CreateAttachmentRequest].

@@ -99,7 +99,7 @@ data class Message(
    * The message headers.
    * Only present if the 'fields' query parameter is set to includeHeaders.
    */
-  @Json(name = "metadata")
+  @Json(name = "headers")
   val headers: List<MessageHeaders>? = null,
   /**
    * Unix timestamp of when the message was created.

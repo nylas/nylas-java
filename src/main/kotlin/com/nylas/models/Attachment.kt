@@ -45,5 +45,5 @@ data class Attachment(
    * The content disposition if the attachment is located inline.
    */
   @Json(name = "content_disposition")
-  val contentDisposition: Long? = null,
+  val contentDisposition: String? = null,
 )
