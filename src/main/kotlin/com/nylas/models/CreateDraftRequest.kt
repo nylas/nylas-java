@@ -1,5 +1,7 @@
 package com.nylas.models
 
+import com.squareup.moshi.Json
+
 /**
  * Class representing a request to create a draft.
  */
@@ -7,61 +9,75 @@ data class CreateDraftRequest(
   /**
    * An array of message recipients.
    */
+  @Json(name = "to")
   val to: List<EmailName>? = null,
   /**
    * An array of bcc recipients.
    */
+  @Json(name = "bcc")
   val bcc: List<EmailName>? = null,
   /**
    * An array of cc recipients.
    */
+  @Json(name = "cc")
   val cc: List<EmailName>? = null,
   /**
    * An array of name and email pairs that override the sent reply-to headers.
    */
+  @Json(name = "reply_to")
   val replyTo: List<EmailName>? = null,
   /**
    * An array of files to attach to the message.
    */
+  @Transient
   override val attachments: List<CreateAttachmentRequest>? = null,
   /**
    * A short snippet of the message body.
    * This is the first 100 characters of the message body, with any HTML tags removed.
    */
+  @Json(name = "snippet")
   val snippet: String? = null,
   /**
    * The message subject.
    */
+  @Json(name = "subject")
   val subject: String? = null,
   /**
    * A reference to the parent thread object.
    * If this is a new draft, the thread will be empty.
    */
+  @Json(name = "thread_id")
   val threadId: String? = null,
   /**
    * The full HTML message body.
    * Messages with only plain-text representations are up-converted to HTML.
    */
+  @Json(name = "body")
   val body: String? = null,
   /**
    * Whether or not the message has been starred by the user.
    */
+  @Json(name = "starred")
   val starred: Boolean? = null,
   /**
    * Whether or not the message has been read by the user.
    */
+  @Json(name = "unread")
   val unread: Boolean? = null,
   /**
    * Unix timestamp to send the message at.
    */
+  @Json(name = "send_at")
   val sendAt: Int? = null,
   /**
    * The ID of the message that you are replying to.
    */
+  @Json(name = "reply_to_message_id")
   val replyToMessageId: String? = null,
   /**
    * Options for tracking opens, links, and thread replies.
    */
+  @Json(name = "tracking_options")
   val trackingOptions: TrackingOptions? = null,
 ) : IMessageAttachmentRequest {
   /**

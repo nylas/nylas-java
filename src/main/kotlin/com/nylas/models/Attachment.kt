@@ -10,17 +10,17 @@ data class Attachment(
    * Globally unique object identifier.
    */
   @Json(name = "id")
-  val id: String,
+  val id: String? = null,
   /**
    * Nylas grant ID that is now successfully created.
    */
   @Json(name = "grant_id")
-  val grantId: String,
+  val grantId: String? = null,
   /**
    * The size of the attachment in bytes.
    */
   @Json(name = "size")
-  val size: Int,
+  val size: Int? = null,
   /**
    * The filename of the attachment.
    */
