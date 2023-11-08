@@ -141,8 +141,8 @@ class JsonHelper {
      * @suppress Not for public use.
      */
     @JvmStatic
-    val jsonMapAdapter = moshi.adapter<Map<String, String>>(
-      mapTypeOf(String::class.java, String::class.java),
+    val jsonMapAdapter = moshi.adapter<Map<String, Any>>(
+      mapTypeOf(String::class.java, Any::class.java),
     ).indent("  ")
 
     /**
