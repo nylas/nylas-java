@@ -96,6 +96,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Drafts API
+   * @return The Drafts API
+   */
+  fun drafts(): Drafts {
+    return Drafts(this)
+  }
+
+  /**
    * Access the Events API
    * @return The Events API
    */
