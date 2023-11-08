@@ -21,7 +21,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   /**
    * Return a Thread
    * @param identifier The identifier of the grant to act upon
-   * @param threadId The id of the Thread to retrieve. Use "primary" to refer to the primary thread associated with grant.
+   * @param threadId The id of the Thread to retrieve.
    * @return The Thread
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
@@ -33,7 +33,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   /**
    * Update a Thread
    * @param identifier The identifier of the grant to act upon
-   * @param threadId The id of the Thread to update. Use "primary" to refer to the primary thread associated with grant.
+   * @param threadId The id of the Thread to update.
    * @param requestBody The values to update the Thread with
    * @return The updated Thread
    */
@@ -48,7 +48,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   /**
    * Delete a Thread
    * @param identifier The identifier of the grant to act upon
-   * @param threadId The id of the Thread to delete. Use "primary" to refer to the primary thread associated with grant.
+   * @param threadId The id of the Thread to delete.
    * @return The deletion response
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)

@@ -31,7 +31,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   /**
    * Return a Message
    * @param identifier The identifier of the grant to act upon
-   * @param messageId The id of the Message to retrieve. Use "primary" to refer to the primary message associated with grant.
+   * @param messageId The id of the Message to retrieve.
    * @return The Message
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
@@ -43,7 +43,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   /**
    * Update a Message
    * @param identifier The identifier of the grant to act upon
-   * @param messageId The id of the Message to update. Use "primary" to refer to the primary message associated with grant.
+   * @param messageId The id of the Message to update.
    * @param requestBody The values to update the Message with
    * @return The updated Message
    */
@@ -58,7 +58,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   /**
    * Delete a Message
    * @param identifier The identifier of the grant to act upon
-   * @param messageId The id of the Message to delete. Use "primary" to refer to the primary message associated with grant.
+   * @param messageId The id of the Message to delete.
    * @return The deletion response
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
