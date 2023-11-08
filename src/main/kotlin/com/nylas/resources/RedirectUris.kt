@@ -29,7 +29,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun find(redirectUriId: String): Response<RedirectUri> {
-    val path = String.format("v3/grants/redirect-uris/%s", redirectUriId)
+    val path = String.format("v3/applications/redirect-uris/%s", redirectUriId)
     return findResource(path)
   }
 
@@ -56,7 +56,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun update(redirectUriId: String, requestBody: UpdateRedirectUriRequest): Response<RedirectUri> {
-    val path = String.format("v3/grants/redirect-uris/%s", redirectUriId)
+    val path = String.format("v3/applications/redirect-uris/%s", redirectUriId)
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(UpdateRedirectUriRequest::class.java)
       .toJson(requestBody)
@@ -71,7 +71,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun destroy(redirectUriId: String): DeleteResponse {
-    val path = String.format("v3/grants/redirect-uris/%s", redirectUriId)
+    val path = String.format("v3/applications/redirect-uris/%s", redirectUriId)
     return destroyResource(path)
   }
 }

@@ -10,7 +10,7 @@ interface IQueryParams {
    * Convert the query parameters to a json-formatted map.
    * @return Map of query parameters
    */
-  fun convertToMap(): Map<String, String> {
+  fun convertToMap(): Map<String, Any> {
     val json = JsonHelper.moshi()
       .adapter(this.javaClass)
       .toJson(this)

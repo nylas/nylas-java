@@ -358,7 +358,21 @@ class NylasClient(
 
   private fun addQueryParams(url: HttpUrl.Builder, params: Map<String, Any>): HttpUrl.Builder {
     for ((key, value) in params) {
-      url.addQueryParameter(key, value.toString())
+      when (value) {
+        is List<*> -> {
+          for (item in value) {
+            url.addQueryParameter(key, item.toString())
+          }
+        }
+        is Map<*, *> -> {
+          for ((k, v) in value) {
+            url.addQueryParameter(key, "$k:$v")
+          }
+        }
+        else -> {
+          url.addQueryParameter(key, value.toString())
+        }
+      }
     }
     return url
   }
