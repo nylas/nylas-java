@@ -2,7 +2,6 @@ package com.nylas.util
 
 import com.nylas.models.CreateAttachmentRequest
 import com.nylas.models.IMessageAttachmentRequest
-import com.nylas.util.FileUtils.Companion.toStreamingRequestBody
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -51,12 +50,12 @@ class FileUtils {
     }
 
     /**
-     * Generates a [CreateAttachmentRequest] from a file path.
-     * @param filePath The path to the file to upload.
-     * @return A [CreateAttachmentRequest] that can be used to upload the file.
+     * Build the request to attach a file to a message/draft object.
+     * @param filePath The path to the file to attach.
+     * @return A [CreateAttachmentRequest] that will attach the file to the message/draft.
      */
     @JvmStatic
-    fun createFileRequestBuilder(filePath: String): CreateAttachmentRequest {
+    fun attachFileRequestBuilder(filePath: String): CreateAttachmentRequest {
       val path = Paths.get(filePath)
       val filename = path.fileName.toString()
       val contentType = Files.probeContentType(path) ?: "application/octet-stream"
