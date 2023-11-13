@@ -96,6 +96,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Connectors API
+   * @return The Connectors API
+   */
+  fun connectors(): Connectors {
+    return Connectors(this)
+  }
+
+  /**
    * Access the Events API
    * @return The Events API
    */

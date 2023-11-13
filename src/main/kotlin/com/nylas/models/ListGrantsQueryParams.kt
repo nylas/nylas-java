@@ -1,5 +1,7 @@
 package com.nylas.models
 
+import com.squareup.moshi.Json
+
 /**
  * Class representation of the query parameters for listing grants.
  */
@@ -8,42 +10,52 @@ data class ListGrantsQueryParams(
    * The maximum number of objects to return.
    * This field defaults to 10. The maximum allowed value is 200.
    */
+  @Json(name = "limit")
   val limit: Int? = null,
   /**
    * Offset grant results by this number.
    */
+  @Json(name = "offset")
   val offset: Int? = null,
   /**
    * Sort entries by field name
    */
-  val sortBy: String? = null,
+  @Json(name = "sort_by")
+  val sortBy: SortBy? = null,
   /**
    * Specify ascending or descending order.
    */
-  val orderBy: String? = null,
+  @Json(name = "order_by")
+  val orderBy: OrderBy? = null,
   /**
    * Scope grants from a specific point in time by Unix timestamp.
    */
+  @Json(name = "since")
   val since: Int? = null,
   /**
    * Scope grants to a specific point in time by Unix timestamp.
    */
+  @Json(name = "before")
   val before: Int? = null,
   /**
    * Filtering your query based on grant email address (if applicable)
    */
+  @Json(name = "email")
   val email: String? = null,
   /**
    * Filtering your query based on grant email status (if applicable)
    */
+  @Json(name = "grant_status")
   val grantStatus: String? = null,
   /**
    * Filtering your query based on grant IP address
    */
+  @Json(name = "ip")
   val ip: String? = null,
   /**
    * Filtering your query based on OAuth provider
    */
+  @Json(name = "provider")
   val provider: AuthProvider? = null,
 ) : IQueryParams {
   /**
@@ -52,8 +64,8 @@ data class ListGrantsQueryParams(
   class Builder {
     private var limit: Int? = null
     private var offset: Int? = null
-    private var sortBy: String? = null
-    private var orderBy: String? = null
+    private var sortBy: SortBy? = null
+    private var orderBy: OrderBy? = null
     private var since: Int? = null
     private var before: Int? = null
     private var email: String? = null
@@ -81,14 +93,14 @@ data class ListGrantsQueryParams(
      * @param sortBy The sort entries by field name.
      * @return The builder.
      */
-    fun sortBy(sortBy: String?) = apply { this.sortBy = sortBy }
+    fun sortBy(sortBy: SortBy?) = apply { this.sortBy = sortBy }
 
     /**
      * Sets the specify ascending or descending order.
      * @param orderBy The specify ascending or descending order.
      * @return The builder.
      */
-    fun orderBy(orderBy: String?) = apply { this.orderBy = orderBy }
+    fun orderBy(orderBy: OrderBy?) = apply { this.orderBy = orderBy }
 
     /**
      * Sets the scope grants from a specific point in time by Unix timestamp.

@@ -14,4 +14,7 @@ enum class AuthProvider(val value: String) {
 
   @Json(name = "imap")
   IMAP("imap"),
+
+  @Json(name = "virtual-calendar")
+  VIRTUAL_CALENDAR("virtual-calendar"),
 }
