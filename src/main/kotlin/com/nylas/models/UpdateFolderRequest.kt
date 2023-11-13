@@ -4,9 +4,21 @@ package com.nylas.models
  * Class representation of the Nylas folder update request.
  */
 data class UpdateFolderRequest(
+  /**
+   * The name of the folder.
+   */
   val name: String? = null,
+  /**
+   * The parent ID of the folder. (Microsoft only)
+   */
   val parentId: String? = null,
+  /**
+   * The background color of the folder. (Google only)
+   */
   val backgroundColor: String? = null,
+  /**
+   * The text color of the folder. (Google only)
+   */
   val textColor: String? = null,
 ) {
   /**
@@ -26,21 +38,29 @@ data class UpdateFolderRequest(
     fun name(name: String) = apply { this.name = name }
 
     /**
-     * Set the parent ID of the folder.
+     * Set the parent ID of the folder. (Microsoft only)
      * @param parentId The parent ID of the folder.
      * @return The builder.
      */
     fun parentId(parentId: String) = apply { this.parentId = parentId }
 
     /**
-     * Set the background color of the folder.
+     * Set the background color of the folder. (Google only)
+     *
+     * The background color of the folder in the hexadecimal format `#0099EE`.
+     * See Google Defined Values for more information.
+     *
      * @param backgroundColor The background color of the folder.
      * @return The builder.
      */
     fun backgroundColor(backgroundColor: String) = apply { this.backgroundColor = backgroundColor }
 
     /**
-     * Set the text color of the folder.
+     * Set the text color of the folder. (Google only)
+     *
+     * The text color of the folder in the hexadecimal format `#0099EE`.
+     * See Google Defined Values for more information.
+     *
      * @param textColor The text color of the folder.
      * @return The builder.
      */
