@@ -28,6 +28,8 @@ class JsonHelper {
       .add(UpdateConferencingAdapter())
       .add(CreateWhenAdapter())
       .add(UpdateWhenAdapter())
+      .add(CreateWhenAdapter())
+      .add(IMessageAdapter())
       .add(CreateConnectorAdapter())
       .add(CredentialDataAdapter())
       .add(MicrosoftAdminConsentCredentialDataAdapter())
