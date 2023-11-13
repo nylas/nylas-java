@@ -102,7 +102,7 @@ class NylasClient(
   fun connectors(): Connectors {
     return Connectors(this)
   }
-  
+
   /**
    * Access the Drafts API
    * @return The Drafts API
