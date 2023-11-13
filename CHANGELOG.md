@@ -4,7 +4,12 @@
 
 ### Added
 * Added support for the free-busy endpoint
-* Add Messages, Drafts, and Smart Compose APIs support
+* Added Messages, Drafts, and Smart Compose APIs support
+* Added support for custom authentication, connectors, and credentials APIs
+
+### Changed
+* Return webhook object with secret when creating a webhook
+* Fixed HTTP method for rotating webhook secret
 
 ## [2.0.0-beta.1] - Released 2023-08-16
 
