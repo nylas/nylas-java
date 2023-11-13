@@ -17,35 +17,15 @@ data class Folder(
   @Json(name = "grant_id")
   val grantId: String,
   /**
-   * Indicates if the folder is user created or system created. (Google Only)
+   * Folder name
    */
-  @Json(name = "system_folder")
-  val systemFolder: Boolean,
-  /**
-   * The number of immediate child folders in the current folder. (Microsoft only)
-   */
-  @Json(name = "child_count")
-  val childCount: Int,
-  /**
-   * The number of unread items inside of a folder.
-   */
-  @Json(name = "unread_count")
-  val unreadCount: Int,
-  /**
-   * The number of items inside of a folder.
-   */
-  @Json(name = "total_count")
-  val totalCount: Int,
+  @Json(name = "name")
+  val name: String? = null,
   /**
    * The type of object.
    */
   @Json(name = "object")
   val obj: String = "folder",
-  /**
-   * Folder name
-   */
-  @Json(name = "name")
-  val name: String? = null,
   /**
    * ID of the parent folder. (Microsoft only)
    */
@@ -61,4 +41,30 @@ data class Folder(
    */
   @Json(name = "text_color")
   val textColor: String? = null,
-)
+  /**
+   * Indicates if the folder is user created or system created. (Google Only)
+   */
+  @Json(name = "system_folder")
+  val systemFolder: Boolean? = null,
+  /**
+   * The number of immediate child folders in the current folder. (Microsoft only)
+   */
+  @Json(name = "child_count")
+  val childCount: Int? = null,
+  /**
+   * The number of unread items inside of a folder.
+   */
+  @Json(name = "unread_count")
+  val unreadCount: Int? = null,
+  /**
+   * The number of items inside of a folder.
+   */
+  @Json(name = "total_count")
+  val totalCount: Int? = null,
+) {
+  /**
+   * Get the type of object.
+   * @return The type of object.
+   */
+  fun getObject() = obj
+}
