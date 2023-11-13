@@ -10,6 +10,7 @@
 ### Changed
 * Return webhook object with secret when creating a webhook
 * Fixed HTTP method for rotating webhook secret
+* Fixed optional field for `GetAvailabilityResponse`
 
 ## [2.0.0-beta.1] - Released 2023-08-16
 
