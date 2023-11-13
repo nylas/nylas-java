@@ -35,7 +35,7 @@ sealed class CreateCredentialRequest(
      * Data that specifies some special data required for a Microsoft credential
      */
     @Json(name = "credential_data")
-    override val credentialData: MicrosoftAdminConsentCredentialData,
+    override val credentialData: CredentialData.MicrosoftAdminConsent,
   ) : CreateCredentialRequest(name, credentialData, CredentialType.ADMINCONSENT)
 
   /**
@@ -51,7 +51,7 @@ sealed class CreateCredentialRequest(
      * Data that specifies some special data required for a Google credential
      */
     @Json(name = "credential_data")
-    override val credentialData: GoogleServiceAccountCredentialData,
+    override val credentialData: CredentialData.GoogleServiceAccount,
   ) : CreateCredentialRequest(name, credentialData, CredentialType.SERVICEACCOUNT)
 
   /**
@@ -67,6 +67,6 @@ sealed class CreateCredentialRequest(
      * Data that specifies some special data required for an override credential
      */
     @Json(name = "credential_data")
-    override val credentialData: ConnectorOverrideCredentialData,
+    override val credentialData: CredentialData.ConnectorOverride,
   ) : CreateCredentialRequest(name, credentialData, CredentialType.CONNECTOR)
 }
