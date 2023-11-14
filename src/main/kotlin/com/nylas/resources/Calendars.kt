@@ -94,7 +94,9 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
       .adapter(GetAvailabilityRequest::class.java)
       .toJson(request)
 
-    return client.executePost(path, GetAvailabilityResponse::class.java, serializedRequestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, GetAvailabilityResponse::class.java)
+
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 
   /**
