@@ -120,6 +120,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Folders API
+   * @return The Folders API
+   */
+  fun folders(): Folders {
+    return Folders(this)
+  }
+
+  /**
    * Access the Messages API
    * @return The Messages API
    */
