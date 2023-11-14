@@ -14,7 +14,7 @@ sealed class Conferencing {
      * The conferencing provider
      */
     @Json(name = "provider")
-    val provider: ConferencingProvider,
+    val provider: ConferencingProvider? = null,
     /**
      * Empty dict to indicate an intention to autocreate a video link.
      * Additional provider settings may be included in autocreate.settings, but Nylas does not validate these.
@@ -31,7 +31,7 @@ sealed class Conferencing {
      * The conferencing provider
      */
     @Json(name = "provider")
-    val provider: ConferencingProvider,
+    val provider: ConferencingProvider? = null,
     /**
      * The conferencing details
      */
@@ -39,7 +39,7 @@ sealed class Conferencing {
     val details: Config,
   ) : Conferencing() {
     /**
-     * Class representation of a the configuration for a conferencing object
+     * Class representation of the configuration for a conferencing object
      */
     data class Config(
       /**
