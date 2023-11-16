@@ -118,7 +118,7 @@ class Auth(private val client: NylasClient) {
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun revoke(token: String): Boolean {
     val path = "v3/connect/revoke?token=$token"
-    client.executePost<Any>(path)
+    client.executePost<Any>(path, MutableMap::class.java)
 
     return true
   }
