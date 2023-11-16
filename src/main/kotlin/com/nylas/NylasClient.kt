@@ -80,6 +80,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Attachments API
+   * @return The Attachments API
+   */
+  fun attachments(): Attachments {
+    return Attachments(this)
+  }
+
+  /**
    * Access the Auth API
    * @return The Auth API
    */
