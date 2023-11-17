@@ -55,6 +55,9 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun downloadBytes(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams): ByteArray {
-    return download(identifier, attachmentId, queryParams).bytes()
+    val download = download(identifier, attachmentId, queryParams)
+    val fileBytes = download.bytes()
+    download.close()
+    return fileBytes
   }
 }
