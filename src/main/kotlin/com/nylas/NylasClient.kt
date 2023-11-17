@@ -311,7 +311,9 @@ class NylasClient(
   ): T {
     val responseBody = this.executeRequestRawResponse(url, method, body)
     val adapter = JsonHelper.moshi().adapter<T>(resultType)
-    return adapter?.fromJson(responseBody.source()) ?: throw Exception("Failed to deserialize response body")
+    val serializedObject = adapter?.fromJson(responseBody.source()) ?: throw Exception("Failed to deserialize response body")
+    responseBody.close()
+    return serializedObject
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -332,10 +334,9 @@ class NylasClient(
     val request = buildRequest(url, method, body)
     val finalUrl = url.build()
     try {
-      httpClient.newCall(request).execute().use { response ->
-        throwAndCloseOnFailedRequest(finalUrl, response)
-        return response.body() ?: throw Exception("Unexpected null response body")
-      }
+      val response = httpClient.newCall(request).execute()
+      throwAndCloseOnFailedRequest(finalUrl, response)
+      return response.body() ?: throw Exception("Unexpected null response body")
     } catch (e: SocketTimeoutException) {
       throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis())
     }
