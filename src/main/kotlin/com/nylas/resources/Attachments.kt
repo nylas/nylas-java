@@ -30,6 +30,7 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
    *
    * This method returns a [ResponseBody] which can be used to stream the attachment data,
    * and exposes useful headers such as the content type and content length.
+   * **NOTE**: The caller is responsible for closing the response body.
    *
    * Alternatively, you can use [downloadBytes] to download the attachment as a byte array.
    *
