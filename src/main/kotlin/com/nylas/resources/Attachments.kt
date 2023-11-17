@@ -40,7 +40,7 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun download(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams): ResponseBody {
-    val path = String.format("v3/grants/%s/events/%s/download", identifier, attachmentId)
+    val path = String.format("v3/grants/%s/attachments/%s/download", identifier, attachmentId)
 
     return client.downloadResponse(path, queryParams)
   }
