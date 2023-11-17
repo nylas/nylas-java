@@ -52,6 +52,12 @@ sealed class GetFreeBusyResponse {
     override val email: String,
   ) : GetFreeBusyResponse()
 
+  /**
+   * Returns the type of object.
+   * @return The type of object.
+   */
+  fun getObject() = obj
+
   companion object {
     /**
      * A JsonAdapter factory for the [GetFreeBusyResponse] sealed class (used for deserialization).
