@@ -106,7 +106,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @return The free/busy response
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun getFreeBusy(identifier: String, request: GetFreeBusyRequest): Response<GetFreeBusyResponse> {
+  fun getFreeBusy(identifier: String, request: GetFreeBusyRequest): Response<List<GetFreeBusyResponse>> {
     val path = String.format("v3/grants/%s/calendars/free-busy", identifier)
 
     val serializedRequestBody = JsonHelper.moshi()
