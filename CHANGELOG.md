@@ -6,6 +6,7 @@
 * Added support for the free-busy endpoint
 * Added Messages, Drafts, and Smart Compose APIs support
 * Added support for custom authentication, connectors, and credentials APIs
+* Added support for attachments API
 
 ### Changed
 * Return webhook object with secret when creating a webhook
