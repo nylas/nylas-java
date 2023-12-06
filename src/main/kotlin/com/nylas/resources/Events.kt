@@ -80,4 +80,21 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
     val path = String.format("v3/grants/%s/events/%s", identifier, eventId)
     return destroyResource(path, queryParams)
   }
+
+  /**
+   * Send RSVP. Allows users to respond to events they have been added to as an attendee.
+   * @param identifier The identifier of the grant to act upon
+   * @param eventId The id of the Event to update.
+   * @param requestBody The values to send the RSVP with
+   * @param queryParams The query parameters to include in the request
+   * @return The send-rsvp response
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun sendRsvp(identifier: String, requestBody: SendRsvpRequest, queryParams: SendRsvpQueryParams): Response<Event> {
+    val path = String.format("v3/grants/%s/events/%s/send-rsvp", identifier, eventId)
+    val adapter = JsonHelper.moshi().adapter(SendRsvpRequest::class.java)
+    val serializedRequestBody = adapter.toJson(requestBody)
+    return createResource(path, serializedRequestBody, queryParams)
+  }
+
 }
