@@ -1,5 +1,6 @@
 package com.nylas.util
 
+import com.nylas.models.GetFreeBusyResponse.Companion.FREE_BUSY_JSON_FACTORY
 import com.nylas.models.When.Companion.WHEN_JSON_FACTORY
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
@@ -27,8 +28,16 @@ class JsonHelper {
       .add(UpdateConferencingAdapter())
       .add(CreateWhenAdapter())
       .add(UpdateWhenAdapter())
+      .add(CreateWhenAdapter())
+      .add(IMessageAdapter())
+      .add(CreateConnectorAdapter())
+      .add(CredentialDataAdapter())
+      .add(MicrosoftAdminConsentCredentialDataAdapter())
+      .add(GoogleServiceAccountCredentialDataAdapter())
+      .add(ConnectorOverrideCredentialDataAdapter())
       // Polymorphic adapters
       .add(WHEN_JSON_FACTORY)
+      .add(FREE_BUSY_JSON_FACTORY)
       .add(KotlinJsonAdapterFactory())
       .build()
 
@@ -139,8 +148,8 @@ class JsonHelper {
      * @suppress Not for public use.
      */
     @JvmStatic
-    val jsonMapAdapter = moshi.adapter<Map<String, String>>(
-      mapTypeOf(String::class.java, String::class.java),
+    val jsonMapAdapter = moshi.adapter<Map<String, Any>>(
+      mapTypeOf(String::class.java, Any::class.java),
     ).indent("  ")
 
     /**

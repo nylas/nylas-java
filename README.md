@@ -69,7 +69,7 @@ Nylas maintains a [reference guide for the Kotlin and Java SDK](https://nylas-ja
 
 ## ✨ Upgrading from 1.x
 
-See [UPGRADING.md](UPGRADING.md) for instructions on upgrading from 1.x to 2.x.
+See [UPGRADE.md](UPGRADING.md) for instructions on upgrading from 1.x to 2.x.
 
 **Note**: The Kotlin/Java SDK 2.x is not compatible with the Nylas API earlier than v3-beta.
 

@@ -40,11 +40,12 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
    * @return The created webhook destination
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun create(requestBody: CreateWebhookRequest): Response<Webhook> {
+  fun create(requestBody: CreateWebhookRequest): Response<WebhookWithSecret> {
     val path = "v3/webhooks"
     val adapter = JsonHelper.moshi().adapter(CreateWebhookRequest::class.java)
+    val responseType = Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody)
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 
   /**
@@ -79,7 +80,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
   fun rotateSecret(webhookId: String): Response<WebhookWithSecret> {
     val path = String.format("v3/webhooks/%s/rotate-secret", webhookId)
     val responseType = Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java)
-    return client.executePut(path, responseType)
+    return client.executePost(path, responseType)
   }
 
   /**

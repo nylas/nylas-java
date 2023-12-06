@@ -2,7 +2,9 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
+import com.nylas.models.GetFreeBusyResponse.Companion.GET_FREE_BUSY_RESPONSE_ADAPTER
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.Types
 
 /**
  * Nylas Calendar API
@@ -15,7 +17,7 @@ import com.nylas.util.JsonHelper
 class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::class.java) {
   /**
    * Return all Calendars
-   * @param identifier The identifier of the grant to act upon
+   * @param identifier Grant ID or email account to query.
    * @param queryParams The query parameters to include in the request
    * @return The list of Calendars
    */
@@ -28,9 +30,9 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
 
   /**
    * Return a Calendar
-   * @param identifier The identifier of the grant to act upon
+   * @param identifier Grant ID or email account to query.
    * @param calendarId The id of the Calendar to retrieve. Use "primary" to refer to the primary calendar associated with grant.
-   * @return The Calendar
+   * @return The calendar
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun find(identifier: String, calendarId: String): Response<Calendar> {
@@ -40,9 +42,9 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
 
   /**
    * Create a Calendar
-   * @param identifier The identifier of the grant to act upon
-   * @param requestBody The values to create the Calendar with
-   * @return The created Calendar
+   * @param identifier Grant ID or email account in which to create the object.
+   * @param requestBody The values to create the calendar with
+   * @return The created calendar
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun create(identifier: String, requestBody: CreateCalendarRequest): Response<Calendar> {
@@ -54,10 +56,10 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
 
   /**
    * Update a Calendar
-   * @param identifier The identifier of the grant to act upon
-   * @param calendarId The id of the Calendar to update. Use "primary" to refer to the primary calendar associated with grant.
-   * @param requestBody The values to update the Calendar with
-   * @return The updated Calendar
+   * @param identifier Grant ID or email account in which to update an object.
+   * @param calendarId The id of the calendar to update. Use "primary" to refer to the primary calendar associated with grant.
+   * @param requestBody The values to update the calendar with
+   * @return The updated calendar
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun update(identifier: String, calendarId: String, requestBody: UpdateCalendarRequest): Response<Calendar> {
@@ -69,7 +71,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
 
   /**
    * Delete a Calendar
-   * @param identifier The identifier of the grant to act upon
+   * @param identifier Grant ID or email account from which to delete an object.
    * @param calendarId The id of the Calendar to delete. Use "primary" to refer to the primary calendar associated with grant.
    * @return The deletion response
    */
@@ -84,6 +86,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * @param request The availability request
    * @return The availability response
    */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun getAvailability(request: GetAvailabilityRequest): Response<GetAvailabilityResponse> {
     val path = "v3/calendars/availability"
 
@@ -91,6 +94,27 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
       .adapter(GetAvailabilityRequest::class.java)
       .toJson(request)
 
-    return client.executePost(path, GetAvailabilityResponse::class.java, serializedRequestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, GetAvailabilityResponse::class.java)
+
+    return client.executePost(path, responseType, serializedRequestBody)
+  }
+
+  /**
+   * Get the free/busy schedule for a list of email addresses
+   * @param identifier The identifier of the grant to act upon
+   * @param request The free/busy request
+   * @return The free/busy response
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun getFreeBusy(identifier: String, request: GetFreeBusyRequest): Response<List<GetFreeBusyResponse>> {
+    val path = String.format("v3/grants/%s/calendars/free-busy", identifier)
+
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(GetFreeBusyRequest::class.java)
+      .toJson(request)
+
+    val responseType = Types.newParameterizedType(Response::class.java, GET_FREE_BUSY_RESPONSE_ADAPTER)
+
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 }

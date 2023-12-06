@@ -81,6 +81,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Attachments API
+   * @return The Attachments API
+   */
+  fun attachments(): Attachments {
+    return Attachments(this)
+  }
+
+  /**
    * Access the Auth API
    * @return The Auth API
    */
@@ -97,11 +105,51 @@ class NylasClient(
   }
 
   /**
+   * Access the Connectors API
+   * @return The Connectors API
+   */
+  fun connectors(): Connectors {
+    return Connectors(this)
+  }
+
+  /**
+   * Access the Drafts API
+   * @return The Drafts API
+   */
+  fun drafts(): Drafts {
+    return Drafts(this)
+  }
+
+  /**
    * Access the Events API
    * @return The Events API
    */
   fun events(): Events {
     return Events(this)
+  }
+
+  /**
+   * Access the Folders API
+   * @return The Folders API
+   */
+  fun folders(): Folders {
+    return Folders(this)
+  }
+
+  /**
+   * Access the Messages API
+   * @return The Messages API
+   */
+  fun messages(): Messages {
+    return Messages(this)
+  }
+
+  /**
+   * Access the Threads API
+   * @return The Threads API
+   */
+  fun threads(): Threads {
+    return Threads(this)
   }
 
   /**
@@ -129,7 +177,7 @@ class NylasClient(
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executeGet(
     path: String,
-    resultType: Type? = null,
+    resultType: Type,
     queryParams: IQueryParams? = null,
   ): T {
     val url = buildUrl(path, queryParams)
@@ -147,7 +195,7 @@ class NylasClient(
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executePut(
     path: String,
-    resultType: Type? = null,
+    resultType: Type,
     requestBody: String? = null,
     queryParams: IQueryParams? = null,
   ): T {
@@ -167,7 +215,7 @@ class NylasClient(
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executePatch(
     path: String,
-    resultType: Type? = null,
+    resultType: Type,
     requestBody: String? = null,
     queryParams: IQueryParams? = null,
   ): T {
@@ -187,7 +235,7 @@ class NylasClient(
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executePost(
     path: String,
-    resultType: Type? = null,
+    resultType: Type,
     requestBody: String? = null,
     queryParams: IQueryParams? = null,
   ): T {
@@ -209,11 +257,32 @@ class NylasClient(
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   fun <T> executeDelete(
     path: String,
-    resultType: Type? = null,
+    resultType: Type,
     queryParams: IQueryParams? = null,
   ): T {
     val url = buildUrl(path, queryParams)
     return executeRequest(url, HttpMethod.DELETE, null, resultType)
+  }
+
+  /**
+   * Execute a request with a form-body payload to the Nylas API.
+   * @param path The path to request.
+   * @param method The HTTP method to use.
+   * @param requestBody The form-data request body.
+   * @param resultType The type of the response body.
+   * @param queryParams The query parameters.
+   * @suppress Not for public use.
+   */
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  fun <T> executeFormRequest(
+    path: String,
+    method: HttpMethod,
+    requestBody: RequestBody,
+    resultType: Type,
+    queryParams: IQueryParams? = null,
+  ): T {
+    val url = buildUrl(path, queryParams)
+    return executeRequest(url, method, requestBody, resultType)
   }
 
   private fun buildRequest(
@@ -239,22 +308,36 @@ class NylasClient(
     url: HttpUrl.Builder,
     method: HttpMethod,
     body: RequestBody?,
-    resultType: Type?,
+    resultType: Type,
   ): T {
+    val responseBody = this.executeRequestRawResponse(url, method, body)
+    val adapter = JsonHelper.moshi().adapter<T>(resultType)
+    val serializedObject = adapter?.fromJson(responseBody.source()) ?: throw Exception("Failed to deserialize response body")
+    responseBody.close()
+    return serializedObject
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  fun downloadResponse(
+    path: String,
+    queryParams: IQueryParams? = null,
+  ): ResponseBody {
+    val url = buildUrl(path, queryParams)
+    return this.executeRequestRawResponse(url, HttpMethod.GET, null)
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  private fun executeRequestRawResponse(
+    url: HttpUrl.Builder,
+    method: HttpMethod,
+    body: RequestBody?,
+  ): ResponseBody {
     val request = buildRequest(url, method, body)
     val finalUrl = url.build()
     try {
-      httpClient.newCall(request).execute().use { response ->
-        throwAndCloseOnFailedRequest(finalUrl, response)
-        val responseBody = response.body()
-        if (resultType == null || responseBody == null) {
-          throw Exception("Unexpected null response body")
-        }
-
-        val adapter = JsonHelper.moshi().adapter<T>(resultType)
-
-        return adapter?.fromJson(responseBody.source()) ?: throw Exception("Failed to deserialize response body")
-      }
+      val response = httpClient.newCall(request).execute()
+      throwAndCloseOnFailedRequest(finalUrl, response)
+      return response.body() ?: throw Exception("Unexpected null response body")
     } catch (e: SocketTimeoutException) {
       throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis())
     }
@@ -333,7 +416,21 @@ class NylasClient(
 
   private fun addQueryParams(url: HttpUrl.Builder, params: Map<String, Any>): HttpUrl.Builder {
     for ((key, value) in params) {
-      url.addQueryParameter(key, value.toString())
+      when (value) {
+        is List<*> -> {
+          for (item in value) {
+            url.addQueryParameter(key, item.toString())
+          }
+        }
+        is Map<*, *> -> {
+          for ((k, v) in value) {
+            url.addQueryParameter(key, "$k:$v")
+          }
+        }
+        else -> {
+          url.addQueryParameter(key, value.toString())
+        }
+      }
     }
     return url
   }

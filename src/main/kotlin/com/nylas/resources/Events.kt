@@ -14,9 +14,9 @@ import com.nylas.util.JsonHelper
 class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   /**
    * Return all Events
-   * @param identifier The identifier of the grant to act upon
+   * @param identifier Grant ID or email account to query
    * @param queryParams The query parameters to include in the request
-   * @return The list of Events
+   * @return The list of events
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun list(identifier: String, queryParams: ListEventQueryParams): ListResponse<Event> {
@@ -26,10 +26,10 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
 
   /**
    * Return an Event
-   * @param identifier The identifier of the grant to act upon
-   * @param eventId The id of the Event to retrieve.
+   * @param identifier Grant ID or email account to query
+   * @param eventId The id of the event to retrieve.
    * @param queryParams The query parameters to include in the request
-   * @return The Event
+   * @return The event
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun find(identifier: String, eventId: String, queryParams: FindEventQueryParams): Response<Event> {
@@ -39,10 +39,10 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
 
   /**
    * Create an Event
-   * @param identifier The identifier of the grant to act upon
-   * @param requestBody The values to create the Event with
+   * @param identifier Grant ID or email account in which to create the object
+   * @param requestBody The values to create the event with
    * @param queryParams The query parameters to include in the request
-   * @return The created Event
+   * @return The created event
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun create(identifier: String, requestBody: CreateEventRequest, queryParams: CreateEventQueryParams): Response<Event> {
@@ -55,10 +55,10 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   /**
    * Update an Event
    * @param identifier The identifier of the grant to act upon
-   * @param eventId The id of the Event to update.
+   * @param eventId The id of the event to update.
    * @param requestBody The values to update the Event with
    * @param queryParams The query parameters to include in the request
-   * @return The updated Event
+   * @return The updated event
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun update(identifier: String, eventId: String, requestBody: UpdateEventRequest, queryParams: UpdateEventQueryParams): Response<Event> {
@@ -71,7 +71,7 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   /**
    * Delete an Event
    * @param identifier The identifier of the grant to act upon
-   * @param eventId The id of the Event to delete.
+   * @param eventId The id of the event to delete.
    * @param queryParams The query parameters to include in the request
    * @return The deletion response
    */

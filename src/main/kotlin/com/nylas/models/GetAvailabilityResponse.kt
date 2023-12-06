@@ -11,10 +11,10 @@ data class GetAvailabilityResponse(
    * It will contain the order in which the accounts would be next in line to attend the proposed meeting.
    */
   @Json(name = "order")
-  val order: List<String>,
+  val order: List<String>? = null,
   /**
    * The available time slots where a new meeting can be created for the requested preferences.
    */
   @Json(name = "time_slots")
-  val timeSlots: List<TimeSlot>,
+  val timeSlots: List<TimeSlot>? = null,
 )

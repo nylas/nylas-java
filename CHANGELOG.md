@@ -1,5 +1,23 @@
 # Nylas Java SDK Changelog
 
+## [2.0.0-beta.2] - Released 2023-11-21
+
+### Added
+* Added support for the free-busy endpoint
+* Added support for Messages, Drafts, and Smart Compose APIs
+* Added support for custom authentication, connectors, and credentials APIs
+* Added support for folders API
+* Added support for attachments API
+* Added getter for `GetFreeBusyResponse` `object` field
+
+### Changed
+* Return webhook object with secret when creating a webhook
+* Fixed HTTP method for rotating webhook secret
+* Fixed Redirect URI endpoint path
+* Fixed query parameter serialization
+* Fixed optional field for `GetAvailabilityResponse`
+* Fixed optional field for `Conferencing`
+
 ## [2.0.0-beta.1] - Released 2023-08-16
 
 ### BREAKING CHANGES
@@ -395,7 +413,9 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.21.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.0.0-beta.2...HEAD
+[2.0.0-beta.2]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.2
+[2.0.0-beta.1]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.1
 [1.21.0]: https://github.com/nylas/nylas-java/releases/tag/v1.21.0
 [1.20.1]: https://github.com/nylas/nylas-java/releases/tag/v1.20.1
 [1.20.0]: https://github.com/nylas/nylas-java/releases/tag/v1.20.0
