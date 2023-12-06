@@ -111,6 +111,12 @@ class NylasClientTest {
     }
 
     @Test
+    fun `attachments returns a valid Applications instance`() {
+      val result = nylasClient.attachments()
+      assertNotNull(result)
+    }
+
+    @Test
     fun `auth returns a valid Auth instance`() {
       val result = nylasClient.auth()
       assertNotNull(result)
@@ -123,8 +129,38 @@ class NylasClientTest {
     }
 
     @Test
+    fun `connectors returns a valid Calendars instance`() {
+      val result = nylasClient.connectors()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `drafts returns a valid Calendars instance`() {
+      val result = nylasClient.drafts()
+      assertNotNull(result)
+    }
+
+    @Test
     fun `events returns a valid Events instance`() {
       val result = nylasClient.events()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `folders returns a valid Events instance`() {
+      val result = nylasClient.folders()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `messages returns a valid Events instance`() {
+      val result = nylasClient.messages()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `threads returns a valid Events instance`() {
+      val result = nylasClient.threads()
       assertNotNull(result)
     }
 
@@ -291,6 +327,17 @@ class NylasClientTest {
 
       assertEquals("Failed to deserialize response body", exception.message)
     }*/
+
+    @Test
+    fun `should handle download request`() {
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+      whenever(mockResponse.isSuccessful).thenReturn(true)
+      whenever(mockResponse.body()).thenReturn(mockResponseBody)
+
+      val result = nylasClient.downloadResponse("test/path")
+
+      assertEquals(mockResponseBody, result)
+    }
   }
 
   @Nested
