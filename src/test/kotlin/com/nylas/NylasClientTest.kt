@@ -4,6 +4,7 @@ import com.nylas.models.NylasApiError
 import com.nylas.models.NylasOAuthError
 import com.nylas.models.NylasSdkTimeoutError
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.adapter
 import okhttp3.*
 import okio.Buffer
 import org.junit.jupiter.api.Assertions.*
@@ -18,6 +19,7 @@ import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import java.net.SocketTimeoutException
+import java.nio.charset.StandardCharsets
 import kotlin.test.assertFailsWith
 
 class NylasClientTest {
@@ -360,7 +362,84 @@ class NylasClientTest {
 
     @Test
     fun `executeGet should set up the request with the correct params`() {
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executeGet<Map<String, String>>("test/path", JsonHelper.mapTypeOf(String::class.java, String::class.java))
 
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
+
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method(), "GET")
+    }
+
+    @Test
+    fun `executePut should set up the request with the correct params`() {
+      val putBody = "{ \"test\": \"updated\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executePut<Map<String, String>>("test/path", type, putBody)
+
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
+      val reqBody = capturedRequest.body()
+      val buffer = Buffer()
+      reqBody?.writeTo(buffer)
+      val requestBodyBuffer = buffer.readString(StandardCharsets.UTF_8)
+
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method(), "PUT")
+      assertEquals(requestBodyBuffer, putBody)
+    }
+
+    @Test
+    fun `executePatch should set up the request with the correct params`() {
+      val patchBody = "{ \"test\": \"updated\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executePatch<Map<String, String>>("test/path", type, patchBody)
+
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
+      val reqBody = capturedRequest.body()
+      val buffer = Buffer()
+      reqBody?.writeTo(buffer)
+      val requestBodyBuffer = buffer.readString(StandardCharsets.UTF_8)
+
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method(), "PATCH")
+      assertEquals(requestBodyBuffer, patchBody)
+    }
+
+    @Test
+    fun `executePost should set up the request with the correct params`() {
+      val postBody = "{ \"test\": \"updated\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executePost<Map<String, String>>("test/path", type, postBody)
+
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
+      val reqBody = capturedRequest.body()
+      val buffer = Buffer()
+      reqBody?.writeTo(buffer)
+      val requestBodyBuffer = buffer.readString(StandardCharsets.UTF_8)
+
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method(), "POST")
+      assertEquals(requestBodyBuffer, postBody)
+    }
+
+    @Test
+    fun `executeDelete should set up the request with the correct params`() {
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executeDelete<Map<String, String>>("test/path", type)
+
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
+
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method(), "DELETE")
     }
   }
 
