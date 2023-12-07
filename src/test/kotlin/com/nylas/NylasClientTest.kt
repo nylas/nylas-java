@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import java.net.SocketTimeoutException
@@ -178,8 +182,12 @@ class NylasClientTest {
     private val mockResponse: Response = mock(Response::class.java)
     private val mockResponseBody: ResponseBody = mock(ResponseBody::class.java)
 
+    @Captor
+    private lateinit var requestCaptor: ArgumentCaptor<Request>
+
     @BeforeEach
     fun setup() {
+      MockitoAnnotations.openMocks(this)
       val mockOkHttpClientBuilder: OkHttpClient.Builder = mock()
       whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
       whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
@@ -196,8 +204,13 @@ class NylasClientTest {
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
 
       val result = nylasClient.executeRequest<Map<String, String>>(urlBuilder, NylasClient.HttpMethod.GET, null, JsonHelper.mapTypeOf(String::class.java, String::class.java))
+      // Capture the request passed to newCall
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
 
       assertEquals("bar", result["foo"])
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/")
+      assertEquals(capturedRequest.method(), "GET")
     }
 
     @Test
