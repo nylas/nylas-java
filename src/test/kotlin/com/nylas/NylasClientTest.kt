@@ -192,19 +192,18 @@ class NylasClientTest {
       whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
       whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
       whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+      whenever(mockResponse.isSuccessful).thenReturn(true)
+      whenever(mockResponse.body()).thenReturn(mockResponseBody)
       nylasClient = NylasClient("testApiKey", mockOkHttpClientBuilder)
     }
 
     @Test
     fun `should handle successful request`() {
       val urlBuilder = nylasClient.newUrlBuilder()
-      whenever(mockCall.execute()).thenReturn(mockResponse)
-      whenever(mockResponse.isSuccessful).thenReturn(true)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
 
       val result = nylasClient.executeRequest<Map<String, String>>(urlBuilder, NylasClient.HttpMethod.GET, null, JsonHelper.mapTypeOf(String::class.java, String::class.java))
-      // Capture the request passed to newCall
       verify(mockHttpClient).newCall(requestCaptor.capture())
       val capturedRequest = requestCaptor.value
 
@@ -218,10 +217,8 @@ class NylasClientTest {
       val tokenUrlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/connect/token")
       val revokeUrlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/connect/revoke")
       val oauthUrls = listOf(tokenUrlBuilder, revokeUrlBuilder)
-      whenever(mockCall.execute()).thenReturn(mockResponse)
       whenever(mockResponse.isSuccessful).thenReturn(false)
       whenever(mockResponse.code()).thenReturn(401)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
       whenever(mockResponseBody.string()).thenReturn("{ \"error\": \"internal_error\", \"error_code\": 500, \"error_description\": \"Internal error, contact administrator\", \"error_uri\": \"https://accounts.nylas.io/#tag/Event-Codes\", \"request_id\": \"eccc9c3f-7150-48e1-965e-4f89714ab51a\" }")
 
       for (urlBuilder in oauthUrls) {
@@ -242,10 +239,8 @@ class NylasClientTest {
       val tokenUrlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/connect/token")
       val revokeUrlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/connect/revoke")
       val oauthUrls = listOf(tokenUrlBuilder, revokeUrlBuilder)
-      whenever(mockCall.execute()).thenReturn(mockResponse)
       whenever(mockResponse.isSuccessful).thenReturn(false)
       whenever(mockResponse.code()).thenReturn(500)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
       whenever(mockResponseBody.string()).thenReturn("not a json")
 
       for (urlBuilder in oauthUrls) {
@@ -264,10 +259,8 @@ class NylasClientTest {
     @Test
     fun `should throw NylasApiError on error from non-oauth endpoints`() {
       val urlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/some/other/path")
-      whenever(mockCall.execute()).thenReturn(mockResponse)
       whenever(mockResponse.isSuccessful).thenReturn(false)
       whenever(mockResponse.code()).thenReturn(400)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
       whenever(mockResponseBody.string()).thenReturn("{ \"request_id\": \"4c2740b4-52a4-412e-bdee-49a6c6671b22\", \"error\": { \"type\": \"provider_error\", \"message\": \"Unauthorized\", \"provider_error\": { \"error\": \"Request had invalid authentication credentials.\" } } }")
 
       val exception = assertFailsWith<NylasApiError> {
@@ -284,10 +277,8 @@ class NylasClientTest {
     @Test
     fun `should throw NylasApiError on error from non-oauth endpoints even if unexpected response from API`() {
       val urlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/some/other/path")
-      whenever(mockCall.execute()).thenReturn(mockResponse)
       whenever(mockResponse.isSuccessful).thenReturn(false)
       whenever(mockResponse.code()).thenReturn(400)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
       whenever(mockResponseBody.string()).thenReturn("not a json")
 
       val exception = assertFailsWith<NylasApiError> {
@@ -314,8 +305,6 @@ class NylasClientTest {
     @Test
     fun `should handle unexpected null response body`() {
       val urlBuilder = nylasClient.newUrlBuilder()
-      whenever(mockCall.execute()).thenReturn(mockResponse)
-      whenever(mockResponse.isSuccessful).thenReturn(true)
       whenever(mockResponse.body()).thenReturn(null)
 
       val exception = assertFailsWith<Exception> {
@@ -329,9 +318,6 @@ class NylasClientTest {
     /*@Test
     fun `should handle failed deserialization of response body`() {
       val urlBuilder = nylasClient.newUrlBuilder()
-      whenever(mockCall.execute()).thenReturn(mockResponse)
-      whenever(mockResponse.isSuccessful).thenReturn(true)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("invalid json"))
 
       val exception = assertFailsWith<Exception> {
@@ -343,10 +329,6 @@ class NylasClientTest {
 
     @Test
     fun `should handle download request`() {
-      whenever(mockCall.execute()).thenReturn(mockResponse)
-      whenever(mockResponse.isSuccessful).thenReturn(true)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
-
       val result = nylasClient.downloadResponse("test/path")
       verify(mockHttpClient).newCall(requestCaptor.capture())
       val capturedRequest = requestCaptor.value
