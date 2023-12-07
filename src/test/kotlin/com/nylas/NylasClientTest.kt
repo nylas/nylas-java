@@ -348,8 +348,37 @@ class NylasClientTest {
       whenever(mockResponse.body()).thenReturn(mockResponseBody)
 
       val result = nylasClient.downloadResponse("test/path")
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
 
       assertEquals(mockResponseBody, result)
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method(), "GET")
+    }
+
+    @Test
+    fun `should handle multipart request`() {
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+
+      val multipartBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+      multipartBuilder.addFormDataPart("message", "abc123")
+
+      nylasClient.executeFormRequest<Map<String, String>>(
+        "test/path",
+        NylasClient.HttpMethod.POST,
+        multipartBuilder.build(),
+        JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      )
+
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.value
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method(), "POST")
+    }
+
+    @Test
+    fun `executeGet should set up the request with the correct params`() {
+
     }
   }
 
