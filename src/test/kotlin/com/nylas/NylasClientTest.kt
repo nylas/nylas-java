@@ -4,7 +4,6 @@ import com.nylas.models.NylasApiError
 import com.nylas.models.NylasOAuthError
 import com.nylas.models.NylasSdkTimeoutError
 import com.nylas.util.JsonHelper
-import com.squareup.moshi.adapter
 import okhttp3.*
 import okio.Buffer
 import org.junit.jupiter.api.Assertions.*
@@ -381,10 +380,7 @@ class NylasClientTest {
 
       verify(mockHttpClient).newCall(requestCaptor.capture())
       val capturedRequest = requestCaptor.value
-      val reqBody = capturedRequest.body()
-      val buffer = Buffer()
-      reqBody?.writeTo(buffer)
-      val requestBodyBuffer = buffer.readString(StandardCharsets.UTF_8)
+      val requestBodyBuffer = capturedRequest.body().asString()
 
       assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method(), "PUT")
@@ -400,10 +396,7 @@ class NylasClientTest {
 
       verify(mockHttpClient).newCall(requestCaptor.capture())
       val capturedRequest = requestCaptor.value
-      val reqBody = capturedRequest.body()
-      val buffer = Buffer()
-      reqBody?.writeTo(buffer)
-      val requestBodyBuffer = buffer.readString(StandardCharsets.UTF_8)
+      val requestBodyBuffer = capturedRequest.body().asString()
 
       assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method(), "PATCH")
@@ -419,10 +412,7 @@ class NylasClientTest {
 
       verify(mockHttpClient).newCall(requestCaptor.capture())
       val capturedRequest = requestCaptor.value
-      val reqBody = capturedRequest.body()
-      val buffer = Buffer()
-      reqBody?.writeTo(buffer)
-      val requestBodyBuffer = buffer.readString(StandardCharsets.UTF_8)
+      val requestBodyBuffer = capturedRequest.body().asString()
 
       assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method(), "POST")
@@ -440,6 +430,16 @@ class NylasClientTest {
 
       assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method(), "DELETE")
+    }
+
+    /**
+     * Helper function to get the string value of a RequestBody
+     * @return String value of the RequestBody
+     */
+    private fun RequestBody?.asString(): String {
+      val buffer = Buffer()
+      this?.writeTo(buffer)
+      return buffer.readString(StandardCharsets.UTF_8)
     }
   }
 
