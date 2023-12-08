@@ -1,5 +1,6 @@
 package com.nylas
 
+import com.nylas.models.IQueryParams
 import com.nylas.models.NylasApiError
 import com.nylas.models.NylasOAuthError
 import com.nylas.models.NylasSdkTimeoutError
@@ -361,13 +362,23 @@ class NylasClientTest {
 
     @Test
     fun `executeGet should set up the request with the correct params`() {
+      val mockQueryParams: IQueryParams = mock()
+      whenever(mockQueryParams.convertToMap()).thenReturn(mapOf(
+        "foo" to "bar",
+        "list" to listOf("a", "b", "c"),
+        "map" to mapOf("key1" to "value1", "key2" to "value2")
+      ))
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
-      nylasClient.executeGet<Map<String, String>>("test/path", JsonHelper.mapTypeOf(String::class.java, String::class.java))
+      nylasClient.executeGet<Map<String, String>>(
+        "test/path",
+        JsonHelper.mapTypeOf(String::class.java, String::class.java),
+        mockQueryParams
+      )
 
       verify(mockHttpClient).newCall(requestCaptor.capture())
       val capturedRequest = requestCaptor.value
 
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path?foo=bar&list=a&list=b&list=c&map=key1%3Avalue1&map=key2%3Avalue2")
       assertEquals(capturedRequest.method(), "GET")
     }
 
