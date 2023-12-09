@@ -202,4 +202,105 @@ class CalendarsTest {
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
   }
+
+  @Nested
+  inner class OtherMethodTests {
+    private lateinit var grantId: String
+    private lateinit var mockNylasClient: NylasClient
+    private lateinit var calendars: Calendars
+
+    @BeforeEach
+    fun setup() {
+      mockNylasClient = Mockito.mock(NylasClient::class.java)
+      calendars = Calendars(mockNylasClient)
+    }
+
+    @Test
+    fun `getting availability calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(GetAvailabilityRequest::class.java)
+      val getAvailabilityRequest = GetAvailabilityRequest(
+        startTime = 1620000000,
+        endTime = 1620000000,
+        participants = listOf(
+          AvailabilityParticipant(
+            email = "test@nylas.com",
+            calendarIds = listOf("calendar-123"),
+            openHours = listOf(
+              OpenHours(
+                days = listOf(0, 1, 2),
+                start = "09:00",
+                end = "17:00",
+                timezone = "America/Los_Angeles",
+                exdates = listOf("2021-05-03", "2021-05-04")
+              )
+            )
+          )
+        ),
+        durationMinutes = 30,
+        intervalMinutes = 15,
+        roundTo30Minutes = true,
+        availabilityRules = AvailabilityRules(
+          availabilityMethod = AvailabilityMethod.MAX_AVAILABILITY,
+          buffer = MeetingBuffer(
+            before = 15,
+            after = 15
+          ),
+          defaultOpenHours = listOf(
+            OpenHours(
+              days = listOf(0, 1, 2),
+              start = "09:00",
+              end = "17:00",
+              timezone = "America/Los_Angeles",
+              exdates = listOf("2021-05-03", "2021-05-04")
+            )
+          ),
+          roundRobinEventId = "event-123"
+        )
+      )
+
+      calendars.getAvailability(getAvailabilityRequest)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture()
+      )
+
+      assertEquals("v3/calendars/availability", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, GetAvailabilityResponse::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(getAvailabilityRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `getting free busy calls requests with the correct params`() {
+      val grantId = "abc-123-grant-id"
+      val adapter = JsonHelper.moshi().adapter(GetFreeBusyRequest::class.java)
+      val getFreeBusyRequest = GetFreeBusyRequest(
+        startTime = 1620000000,
+        endTime = 1620000000,
+        emails = listOf("test@nylas.com")
+      )
+
+      calendars.getFreeBusy(grantId, getFreeBusyRequest)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture()
+      )
+
+      val listOfFreeBusy = Types.newParameterizedType(List::class.java, GetFreeBusyResponse::class.java)
+      assertEquals("v3/grants/$grantId/calendars/free-busy", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, listOfFreeBusy), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(getFreeBusyRequest), requestBodyCaptor.firstValue)
+    }
+  }
 }
