@@ -1,5 +1,8 @@
 # Nylas Java SDK Changelog
 
+## [2.0.0-beta.3] - TBD
+* Fixed int type being serialized to double sometimes
+
 ## [2.0.0-beta.2] - Released 2023-11-21
 
 ### Added
