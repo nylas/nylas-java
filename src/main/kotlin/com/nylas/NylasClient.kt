@@ -415,6 +415,9 @@ class NylasClient(
             url.addQueryParameter(key, "$k:$v")
           }
         }
+        is Double -> {
+          url.addQueryParameter(key, value.toInt().toString())
+        }
         else -> {
           url.addQueryParameter(key, value.toString())
         }
