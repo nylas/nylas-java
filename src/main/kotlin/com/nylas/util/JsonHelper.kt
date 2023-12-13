@@ -193,7 +193,7 @@ class JsonHelper {
       return json
     }
 
-    private val jsonType = MediaType.parse("application/json; charset=utf-8")
+    private val jsonType = MediaType.parse("application/json")
 
     /**
      * Get the JSON media type.
@@ -225,7 +225,7 @@ class JsonHelper {
      */
     @JvmStatic
     fun jsonRequestBody(json: String): RequestBody {
-      return RequestBody.create(jsonType(), json)
+      return RequestBody.create(jsonType(), json.toByteArray())
     }
   }
 }
