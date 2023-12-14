@@ -29,5 +29,10 @@ data class NylasOAuthError(
   /**
    * The HTTP status code of the error response.
    */
+  @Json(name = "request_id")
+  override var requestId: String? = null,
+  /**
+   * The HTTP status code of the error response.
+   */
   override var statusCode: Int? = null,
-) : AbstractNylasApiError(error, statusCode)
+) : AbstractNylasApiError(error, statusCode, requestId)
