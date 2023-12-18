@@ -68,8 +68,9 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
       .adapter(UpdateDraftRequest::class.java)
       .toJson(attachmentLessPayload)
     val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, Draft::class.java)
 
-    return client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, Draft::class.java)
+    return client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, responseType)
   }
 
   /**
