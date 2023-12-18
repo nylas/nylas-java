@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 /**
  * Enum representing the allowed RSVP status values.
  */
-enum class ParticipantStatus {
+enum class RsvpStatus {
   @Json(name = "yes")
   YES,
 

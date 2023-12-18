@@ -10,5 +10,5 @@ data class SendRsvpRequest(
    * RSVP status. must be yes, no, or maybe
    */
   @Json(name = "status")
-  val status: String,
+  val status: RsvpStatus,
 )
