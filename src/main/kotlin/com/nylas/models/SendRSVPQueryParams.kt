@@ -3,19 +3,6 @@ package com.nylas.models
 import com.squareup.moshi.Json
 
 /**
- * Enum representing the allowed RSVP status values.
- */
-enum class RsvpStatus(val value: String) {
-  YES("yes"),
-  NO("no"),
-  MAYBE("maybe");
-
-  override fun toString(): String {
-    return value
-  }
-}
-
-/**
  * Class representation of the query parameters for sending RSVP.
  */
 data class SendRsvpQueryParams(

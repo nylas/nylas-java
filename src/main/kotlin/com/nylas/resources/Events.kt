@@ -90,7 +90,7 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
    * @return The send-rsvp response
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun sendRsvp(identifier: String, requestBody: SendRsvpRequest, queryParams: SendRsvpQueryParams): Response<Event> {
+  fun sendRsvp(identifier: String, requestBody: SendRsvpRequest, queryParams: SendRsvpQueryParams): DeleteResponse{
     val path = String.format("v3/grants/%s/events/%s/send-rsvp", identifier, eventId)
     val adapter = JsonHelper.moshi().adapter(SendRsvpRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
