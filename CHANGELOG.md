@@ -1,8 +1,10 @@
 # Nylas Java SDK Changelog
 
-## [2.0.0-beta.3] - TBD
+## [2.0.0-beta.3] - Released 2023-12-18
+* Added support for event send RSVP
 * Fixed int type being serialized to double sometimes
 * Fixed `Auth.exchangeCodeForToken` always returning 401
+* Fixed error when sending message or updating draft
 
 ## [2.0.0-beta.2] - Released 2023-11-21
 
