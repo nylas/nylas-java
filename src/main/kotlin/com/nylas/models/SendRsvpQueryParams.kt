@@ -10,7 +10,7 @@ data class SendRsvpQueryParams(
    * The RSVP status for the event. Must be yes, no, or maybe
    */
   @Json(name = "status")
-  val status: RsvpStatus
+  val status: RsvpStatus,
 ) : IQueryParams {
 
   /**
