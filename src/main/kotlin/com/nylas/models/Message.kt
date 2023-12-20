@@ -112,6 +112,18 @@ data class Message(
    */
   @Json(name = "metadata")
   val metadata: Map<String, Any>? = null,
+  /**
+   * The ID of the scheduled message.
+   * Only present if the message was scheduled to be sent.
+   */
+  @Json(name = "schedule_id")
+  val scheduleId: String? = null,
+  /**
+   * The time the message was scheduled to be sent, in epoch time.
+   * Only present if the message was scheduled to be sent.
+   */
+  @Json(name = "send_at")
+  val sendAt: Long? = null,
 ) : IMessage {
   /**
    * Get the type of object.
