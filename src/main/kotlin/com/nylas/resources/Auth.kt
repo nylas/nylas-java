@@ -95,6 +95,22 @@ class Auth(private val client: NylasClient) {
   }
 
   /**
+   * Create a grant via custom authentication
+   * @param requestBody The values to create the grant with
+   * @return The created grant
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun customAuthentication(requestBody: CreateGrantRequest): Response<Grant> {
+    val path = "v3/connect/custom"
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(CreateGrantRequest::class.java)
+      .toJson(requestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, Grant::class.java)
+
+    return client.executePost(path, responseType, serializedRequestBody)
+  }
+
+  /**
    * Refresh an access token
    * @param request The refresh token request
    * @return The response containing the new access token
