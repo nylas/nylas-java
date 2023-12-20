@@ -17,15 +17,6 @@ import java.util.*
  * @param client The configured Nylas API client
  */
 class Auth(private val client: NylasClient) {
-
-  /**
-   * Access the Grants API
-   * @return The Grants API
-   */
-  fun grants(): Grants {
-    return Grants(client)
-  }
-
   /**
    * Build the URL for authenticating users to your application with OAuth 2.0
    * @param config The configuration for building the URL
