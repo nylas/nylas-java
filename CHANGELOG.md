@@ -1,5 +1,13 @@
 # Nylas Java SDK Changelog
 
+## [2.0.0-beta.4] - TBD
+
+### Added
+* Added support for sending drafts
+
+### Changed
+* Fixed issue with sending scheduled messages
+
 ## [2.0.0-beta.3] - Released 2023-12-18
 
 ### Added
