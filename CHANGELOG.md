@@ -1,5 +1,11 @@
 # Nylas Java SDK Changelog
 
+## [2.0.0-beta.4] - TBD
+
+### BREAKING CHANGES
+* Moved grants API out of `Auth` to `NylasClient`
+* Moved `Grants.create()` to `Auth.customAuthentication()`
+
 ## [2.0.0-beta.3] - Released 2023-12-18
 
 ### Added
