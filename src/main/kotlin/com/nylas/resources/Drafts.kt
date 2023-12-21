@@ -84,4 +84,17 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
     val path = String.format("v3/grants/%s/drafts/%s", identifier, draftId)
     return destroyResource(path)
   }
+
+  /**
+   * Send a Draft
+   * @param identifier The identifier of the grant to act upon
+   * @param draftId The id of the Draft to send.
+   * @return The sent Draft
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun send(identifier: String, draftId: String): Response<Message> {
+    val path = String.format("v3/grants/%s/drafts/%s", identifier, draftId)
+    val responseType = Types.newParameterizedType(Response::class.java, Message::class.java)
+    return client.executePost(path, responseType)
+  }
 }
