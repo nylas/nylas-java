@@ -42,7 +42,7 @@ data class UpdateContactRequest(
   @Json(name = "source")
   val source: SourceType? = null,
   @Json(name = "groups")
-  val groups: List<ContactGroup>? = null,
+  val groups: List<ContactGroupId>? = null,
 ) {
   class Builder {
     private var displayName: String? = null
@@ -64,7 +64,7 @@ data class UpdateContactRequest(
     private var webPages: List<WebPage>? = null
     private var picture: String? = null
     private var source: SourceType? = null
-    private var groups: List<ContactGroup>? = null
+    private var groups: List<ContactGroupId>? = null
 
     fun displayName(displayName: String?) = apply { this.displayName = displayName }
     fun birthday(birthday: String?) = apply { this.birthday = birthday }
@@ -85,7 +85,7 @@ data class UpdateContactRequest(
     fun webPages(webPages: List<WebPage>?) = apply { this.webPages = webPages }
     fun picture(picture: String?) = apply { this.picture = picture }
     fun source(source: SourceType?) = apply { this.source = source }
-    fun groups(groups: List<ContactGroup>?) = apply { this.groups = groups }
+    fun groups(groups: List<ContactGroupId>?) = apply { this.groups = groups }
 
     fun build() = UpdateContactRequest(
       displayName = displayName,

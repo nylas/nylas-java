@@ -53,5 +53,7 @@ data class Contact(
   @Json(name = "web_pages")
   val webPages: List<WebPage>? = null,
   @Json(name = "groups")
-  val groups: List<ContactGroup>? = null,
-)
+  val groups: List<ContactGroupId>? = null,
+) {
+  fun getObject() = obj
+}
