@@ -44,7 +44,7 @@ data class ListContactsQueryParams(
    */
   @Json(name = "recurse")
   val recurse: Boolean? = null,
-) {
+): IQueryParams {
   class Builder {
     private var limit: Int? = null
     private var pageToken: String? = null
