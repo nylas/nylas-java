@@ -6,6 +6,12 @@
 * Moved grants API out of `Auth` to `NylasClient`
 * Moved `Grants.create()` to `Auth.customAuthentication()`
 
+### Added
+* Added support for sending drafts
+
+### Changed
+* Fixed issue with sending scheduled messages
+
 ## [2.0.0-beta.3] - Released 2023-12-18
 
 ### Added
