@@ -17,15 +17,6 @@ import java.util.*
  * @param client The configured Nylas API client
  */
 class Auth(private val client: NylasClient) {
-
-  /**
-   * Access the Grants API
-   * @return The Grants API
-   */
-  fun grants(): Grants {
-    return Grants(client)
-  }
-
   /**
    * Build the URL for authenticating users to your application with OAuth 2.0
    * @param config The configuration for building the URL
@@ -92,6 +83,22 @@ class Auth(private val client: NylasClient) {
       .addQueryParameter("credential_id", credentialId)
 
     return urlBuilder.build().toString()
+  }
+
+  /**
+   * Create a grant via custom authentication
+   * @param requestBody The values to create the grant with
+   * @return The created grant
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun customAuthentication(requestBody: CreateGrantRequest): Response<Grant> {
+    val path = "v3/connect/custom"
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(CreateGrantRequest::class.java)
+      .toJson(requestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, Grant::class.java)
+
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 
   /**

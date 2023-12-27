@@ -36,21 +36,6 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
   }
 
   /**
-   * Create a Grant via Custom Authentication
-   * @param requestBody The values to create the Grant with
-   * @return The created Grant
-   */
-  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun create(requestBody: CreateGrantRequest): Response<Grant> {
-    val path = "v3/connect/custom"
-    val serializedRequestBody = JsonHelper.moshi()
-      .adapter(CreateGrantRequest::class.java)
-      .toJson(requestBody)
-
-    return createResource(path, serializedRequestBody)
-  }
-
-  /**
    * Update a Grant
    * @param grantId The id of the Grant to update.
    * @param requestBody The values to update the Grant with

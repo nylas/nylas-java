@@ -136,6 +136,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Grants API
+   * @return The Grants API
+   */
+  fun grants(): Grants {
+    return Grants(this)
+  }
+
+  /**
    * Access the Messages API
    * @return The Messages API
    */
