@@ -160,6 +160,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Contacts API
+   * @return The Contacts API
+   */
+  fun contacts(): Contacts {
+    return Contacts(this)
+  }
+
+  /**
    * Get a URL builder instance for the Nylas API.
    */
   fun newUrlBuilder(): HttpUrl.Builder {

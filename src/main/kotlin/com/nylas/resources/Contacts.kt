@@ -34,6 +34,20 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   }
 
   /**
+   * Create a Contact
+   * @param identifier Grant ID or email account in which to create the object
+   * @param requestBody The values to create the event with
+   * @return The created contact
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun create(identifier: String, requestBody: CreateContactRequest): Response<Contact> {
+    val path = String.format("v3/grants/%s/contacts", identifier)
+    val adapter = JsonHelper.moshi().adapter(CreateContactRequest::class.java)
+    val serializedRequestBody = adapter.toJson(requestBody)
+    return createResource(path, serializedRequestBody)
+  }
+
+  /**
    * Update a Contact
    * @param identifier The identifier of the grant to act upon
    * @param contactId The id of the contact to update.
