@@ -11,4 +11,7 @@ enum class ContactType {
 
   @Json(name = "other")
   OTHER,
+
+  @Json(name = "mobile")
+  MOBILE,
 }
