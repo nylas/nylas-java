@@ -2,6 +2,10 @@
 
 ## [2.0.0-beta.4] - TBD
 
+### BREAKING CHANGES
+* Moved grants API out of `Auth` to `NylasClient`
+* Moved `Grants.create()` to `Auth.customAuthentication()`
+
 ### Added
 * Added support for sending drafts
 * Added support for the contacts API
