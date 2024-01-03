@@ -8,6 +8,7 @@
 
 ### Added
 * Added support for sending drafts
+* Added support for the contacts API
 
 ### Changed
 * Fixed issue with sending scheduled messages
