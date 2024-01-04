@@ -12,6 +12,7 @@
 
 ### Changed
 * Fixed issue with sending scheduled messages
+* Fixed incorrect PKCE code challenge generation
 
 ## [2.0.0-beta.3] - Released 2023-12-18
 
