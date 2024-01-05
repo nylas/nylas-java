@@ -7,11 +7,6 @@ import com.squareup.moshi.Json
  */
 data class Message(
   /**
-   * The unique identifier for the message.
-   */
-  @Json(name = "id")
-  val id: String,
-  /**
    * Grant ID of the Nylas account.
    */
   @Json(name = "grant_id")
@@ -22,16 +17,16 @@ data class Message(
   @Json(name = "from")
   val from: List<EmailName>,
   /**
-   * Unix timestamp of when the message was received by the mail server.
-   * This may be different from the unverified Date header in raw message object.
-   */
-  @Json(name = "date")
-  val date: Long,
-  /**
    * The type of object.
    */
   @Json(name = "object")
   private val obj: String = "message",
+  /**
+   * The unique identifier for the message.
+   * Note: The ID may not be present for scheduled messages until the message is sent.
+   */
+  @Json(name = "id")
+  val id: String? = null,
   /**
    * An array of bcc recipients.
    */
@@ -107,10 +102,28 @@ data class Message(
   @Json(name = "created_at")
   val createdAt: Long? = null,
   /**
+   * Unix timestamp of when the message was received by the mail server.
+   * This may be different from the unverified Date header in raw message object.
+   */
+  @Json(name = "date")
+  val date: Long? = null,
+  /**
    * A list of key-value pairs storing additional data.
    */
   @Json(name = "metadata")
   val metadata: Map<String, Any>? = null,
+  /**
+   * The ID of the scheduled message.
+   * Only present if the message was scheduled to be sent.
+   */
+  @Json(name = "schedule_id")
+  val scheduleId: String? = null,
+  /**
+   * The time the message was scheduled to be sent, in epoch time.
+   * Only present if the message was scheduled to be sent.
+   */
+  @Json(name = "send_at")
+  val sendAt: Long? = null,
 ) : IMessage {
   /**
    * Get the type of object.

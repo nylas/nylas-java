@@ -1,5 +1,7 @@
 package com.nylas.models
 
+import com.squareup.moshi.Json
+
 /**
  * Class representing a request to update a draft.
  */
@@ -7,51 +9,63 @@ data class UpdateDraftRequest(
   /**
    * An array of message recipients.
    */
+  @Json(name = "to")
   val to: List<EmailName>? = null,
   /**
    * An array of bcc recipients.
    */
+  @Json(name = "bcc")
   val bcc: List<EmailName>? = null,
   /**
    * An array of cc recipients.
    */
+  @Json(name = "cc")
   val cc: List<EmailName>? = null,
   /**
    * An array of name and email pairs that override the sent reply-to headers.
    */
+  @Json(name = "reply_to")
   val replyTo: List<EmailName>? = null,
   /**
    * An array of files to attach to the message.
    */
+  @Transient
   override val attachments: List<CreateAttachmentRequest>? = null,
   /**
    * The message subject.
    */
+  @Json(name = "subject")
   val subject: String? = null,
   /**
    * The full HTML message body.
    * Messages with only plain-text representations are up-converted to HTML.
    */
+  @Json(name = "body")
   val body: String? = null,
   /**
    * Whether or not the message has been starred by the user.
    */
+  @Json(name = "starred")
   val starred: Boolean? = null,
   /**
    * Whether or not the message has been read by the user.
    */
+  @Json(name = "unread")
   val unread: Boolean? = null,
   /**
    * Unix timestamp to send the message at.
    */
+  @Json(name = "send_at")
   val sendAt: Int? = null,
   /**
    * The ID of the message that you are replying to.
    */
+  @Json(name = "reply_to_message_id")
   val replyToMessageId: String? = null,
   /**
    * Options for tracking opens, links, and thread replies.
    */
+  @Json(name = "tracking_options")
   val trackingOptions: TrackingOptions? = null,
 ) : IMessageAttachmentRequest {
   /**

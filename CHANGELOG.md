@@ -1,5 +1,29 @@
 # Nylas Java SDK Changelog
 
+## [2.0.0-beta.4] - TBD
+
+### BREAKING CHANGES
+* Moved grants API out of `Auth` to `NylasClient`
+* Moved `Grants.create()` to `Auth.customAuthentication()`
+
+### Added
+* Added support for sending drafts
+* Added support for the contacts API
+
+### Changed
+* Fixed issue with sending scheduled messages
+* Fixed incorrect PKCE code challenge generation
+
+## [2.0.0-beta.3] - Released 2023-12-18
+
+### Added
+* Added support for event send RSVP
+
+### Changed
+* Fixed int type being serialized to double sometimes
+* Fixed `Auth.exchangeCodeForToken` always returning 401
+* Fixed error when sending message or updating draft
+
 ## [2.0.0-beta.2] - Released 2023-11-21
 
 ### Added
@@ -413,7 +437,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.0.0-beta.2...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.0.0-beta.3...HEAD
+[2.0.0-beta.3]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.3
 [2.0.0-beta.2]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.2
 [2.0.0-beta.1]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.1
 [1.21.0]: https://github.com/nylas/nylas-java/releases/tag/v1.21.0

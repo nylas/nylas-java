@@ -17,15 +17,6 @@ import java.util.*
  * @param client The configured Nylas API client
  */
 class Auth(private val client: NylasClient) {
-
-  /**
-   * Access the Grants API
-   * @return The Grants API
-   */
-  fun grants(): Grants {
-    return Grants(client)
-  }
-
   /**
    * Build the URL for authenticating users to your application with OAuth 2.0
    * @param config The configuration for building the URL
@@ -67,8 +58,7 @@ class Auth(private val client: NylasClient) {
     val urlBuilder = urlAuthBuilder(config)
     val secret = UUID.randomUUID().toString()
 
-    val sha256Digest = MessageDigest.getInstance("SHA-256").digest(secret.toByteArray())
-    val secretHash = Base64.getEncoder().encodeToString(sha256Digest)
+    val secretHash = hashPkceSecret(secret)
 
     urlBuilder
       .addQueryParameter("response_type", "code")
@@ -92,6 +82,22 @@ class Auth(private val client: NylasClient) {
       .addQueryParameter("credential_id", credentialId)
 
     return urlBuilder.build().toString()
+  }
+
+  /**
+   * Create a grant via custom authentication
+   * @param requestBody The values to create the grant with
+   * @return The created grant
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun customAuthentication(requestBody: CreateGrantRequest): Response<Grant> {
+    val path = "v3/connect/custom"
+    val serializedRequestBody = JsonHelper.moshi()
+      .adapter(CreateGrantRequest::class.java)
+      .toJson(requestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, Grant::class.java)
+
+    return client.executePost(path, responseType, serializedRequestBody)
   }
 
   /**
@@ -134,6 +140,18 @@ class Auth(private val client: NylasClient) {
     val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
 
     return client.executePost(path, responseType, queryParams = params)
+  }
+
+  /**
+   * Hash a plain text secret for use in PKCE
+   * @param secret The plain text secret to hash
+   * @return The hashed secret with base64 encoding (without padding)
+   */
+  private fun hashPkceSecret(secret: String): String {
+    val sha256Digest = MessageDigest.getInstance("SHA-256")
+    sha256Digest.update(secret.toByteArray())
+    val hexString = sha256Digest.digest().joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
+    return Base64.getEncoder().withoutPadding().encodeToString(hexString.toByteArray())
   }
 
   /**

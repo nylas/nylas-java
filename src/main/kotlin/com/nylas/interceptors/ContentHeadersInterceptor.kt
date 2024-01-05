@@ -15,15 +15,21 @@ class ContentHeadersInterceptor : Interceptor {
     val path = request.url().encodedPath()
     val contentHeader = request.header(NylasClient.HttpHeaders.CONTENT_TYPE.headerName)
     if (contentHeader == null && !isDownloadablePath(path)) {
-      val enhancedRequest = request
-        .newBuilder()
-        .header(
+      val enhancedRequest = request.newBuilder()
+      if (request.body() != null && request.body()!!.contentType() != null) {
+        enhancedRequest.header(
+          NylasClient.HttpHeaders.CONTENT_TYPE.headerName,
+          request.body()!!.contentType()!!.toString(),
+        )
+      } else if (request.body() != null) {
+        enhancedRequest.header(
           NylasClient.HttpHeaders.CONTENT_TYPE.headerName,
           NylasClient.MediaType.APPLICATION_JSON.mediaType,
         )
-        .header(NylasClient.HttpHeaders.ACCEPT.headerName, NylasClient.MediaType.APPLICATION_JSON.mediaType)
-        .build()
-      return chain.proceed(enhancedRequest)
+      }
+
+      enhancedRequest.header(NylasClient.HttpHeaders.ACCEPT.headerName, NylasClient.MediaType.APPLICATION_JSON.mediaType)
+      return chain.proceed(enhancedRequest.build())
     }
     return chain.proceed(request)
   }

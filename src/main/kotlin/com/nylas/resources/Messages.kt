@@ -82,8 +82,9 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
       .adapter(SendMessageRequest::class.java)
       .toJson(attachmentLessPayload)
     val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, Message::class.java)
 
-    return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, Message::class.java)
+    return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType)
   }
 
   /**

@@ -68,8 +68,9 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
       .adapter(UpdateDraftRequest::class.java)
       .toJson(attachmentLessPayload)
     val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
+    val responseType = Types.newParameterizedType(Response::class.java, Draft::class.java)
 
-    return client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, Draft::class.java)
+    return client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, responseType)
   }
 
   /**
@@ -82,5 +83,18 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   fun destroy(identifier: String, draftId: String): DeleteResponse {
     val path = String.format("v3/grants/%s/drafts/%s", identifier, draftId)
     return destroyResource(path)
+  }
+
+  /**
+   * Send a Draft
+   * @param identifier The identifier of the grant to act upon
+   * @param draftId The id of the Draft to send.
+   * @return The sent Draft
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun send(identifier: String, draftId: String): Response<Message> {
+    val path = String.format("v3/grants/%s/drafts/%s", identifier, draftId)
+    val responseType = Types.newParameterizedType(Response::class.java, Message::class.java)
+    return client.executePost(path, responseType)
   }
 }

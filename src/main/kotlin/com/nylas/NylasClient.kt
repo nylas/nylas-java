@@ -137,6 +137,14 @@ class NylasClient(
   }
 
   /**
+   * Access the Grants API
+   * @return The Grants API
+   */
+  fun grants(): Grants {
+    return Grants(this)
+  }
+
+  /**
    * Access the Messages API
    * @return The Messages API
    */
@@ -158,6 +166,14 @@ class NylasClient(
    */
   fun webhooks(): Webhooks {
     return Webhooks(this)
+  }
+
+  /**
+   * Access the Contacts API
+   * @return The Contacts API
+   */
+  fun contacts(): Contacts {
+    return Contacts(this)
   }
 
   /**
@@ -426,6 +442,9 @@ class NylasClient(
           for ((k, v) in value) {
             url.addQueryParameter(key, "$k:$v")
           }
+        }
+        is Double -> {
+          url.addQueryParameter(key, value.toInt().toString())
         }
         else -> {
           url.addQueryParameter(key, value.toString())
