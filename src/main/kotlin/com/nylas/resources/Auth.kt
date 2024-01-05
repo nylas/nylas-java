@@ -58,8 +58,7 @@ class Auth(private val client: NylasClient) {
     val urlBuilder = urlAuthBuilder(config)
     val secret = UUID.randomUUID().toString()
 
-    val sha256Digest = MessageDigest.getInstance("SHA-256").digest(secret.toByteArray())
-    val secretHash = Base64.getEncoder().encodeToString(sha256Digest)
+    val secretHash = hashPkceSecret(secret)
 
     urlBuilder
       .addQueryParameter("response_type", "code")
@@ -141,6 +140,18 @@ class Auth(private val client: NylasClient) {
     val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
 
     return client.executePost(path, responseType, queryParams = params)
+  }
+
+  /**
+   * Hash a plain text secret for use in PKCE
+   * @param secret The plain text secret to hash
+   * @return The hashed secret with base64 encoding (without padding)
+   */
+  private fun hashPkceSecret(secret: String): String {
+    val sha256Digest = MessageDigest.getInstance("SHA-256")
+    sha256Digest.update(secret.toByteArray())
+    val hexString = sha256Digest.digest().joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
+    return Base64.getEncoder().withoutPadding().encodeToString(hexString.toByteArray())
   }
 
   /**
