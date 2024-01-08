@@ -45,6 +45,22 @@ public class Events extends RestfulDAO<Event> {
 	}
 	
 	public Event update(Event event, boolean notifyParticipants) throws IOException, RequestFailedException {
+		return update(event, null, notifyParticipants);
+	}
+
+	/**
+	 * Update the event with the given id. Useful for updating
+	 * a single instance of a recurring event.
+	 * @param event The event to update
+	 * @param overrideId The ID of the event to update. If null, the ID of the event will be used.
+	 * @param notifyParticipants Whether or not to notify participants of the event update
+	 * @return The updated event
+	 */
+	public Event update(Event event, String overrideId, boolean notifyParticipants) throws IOException, RequestFailedException {
+		if(overrideId != null) {
+			event.setId(overrideId);
+		}
+
 		event.validate();
 		return super.update(event, getExtraQueryParams(notifyParticipants));
 	}

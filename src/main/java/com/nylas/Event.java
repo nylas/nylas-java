@@ -346,6 +346,10 @@ public class Event extends AccountOwnedModel implements JsonObject {
 				"The number of participants in the event exceeds the set capacity");
 	}
 
+	protected void setId(String id) {
+		this.id = id;
+	}
+
 	@Override
 	protected Map<String, Object> getWritableFields(boolean creation) {
 		if (!creation) {

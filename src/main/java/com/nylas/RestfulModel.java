@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class RestfulModel {
 
-	private String id;
+	String id;
 	
 	private String job_status_id;
 
