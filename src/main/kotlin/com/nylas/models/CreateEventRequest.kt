@@ -14,7 +14,7 @@ data class CreateEventRequest(
    * - [CreateEventRequest.When.Timespan]
    */
   @Json(name = "when")
-  val whenObj: When = When.Time(0),
+  val whenObj: When,
   /**
    * Creates an event with the specified title.
    */

@@ -7,22 +7,22 @@ import com.squareup.moshi.Json
  */
 data class SendRsvpQueryParams(
   /**
-   * The RSVP status for the event. Must be yes, no, or maybe
+   * The ID of the calendar to create the event in.
    */
-  @Json(name = "status")
-  val status: RsvpStatus,
+  @Json(name = "calendar_id")
+  val calendarId: String,
 ) : IQueryParams {
 
   /**
    * Builder for [SendRsvpQueryParams].
-   * @param status The RSVP status for the event. Must be yes, no, or maybe
+   * @param calendarId The ID of the calendar to create the event in.
    */
-  data class Builder(private val status: RsvpStatus) {
+  data class Builder(private val calendarId: String) {
 
     /**
      * Builds a [SendRsvpQueryParams] instance.
      * @return The [SendRsvpQueryParams] instance.
      */
-    fun build() = SendRsvpQueryParams(status)
+    fun build() = SendRsvpQueryParams(calendarId)
   }
 }
