@@ -84,7 +84,7 @@ data class UpdateEventRequest(
    * Sets the visibility for the event. The calendar default will be used if this field is omitted.
    */
   @Json(name = "visibility")
-  val visibility: EvenVisibility? = null,
+  val visibility: EventVisibility? = null,
   /**
    * Sets the maximum number of participants that may attend the event.
    */
@@ -519,7 +519,7 @@ data class UpdateEventRequest(
     private var recurrence: List<String>? = null
     private var calendarId: String? = null
     private var readOnly: Boolean? = null
-    private var visibility: EvenVisibility? = null
+    private var visibility: EventVisibility? = null
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
 
@@ -628,7 +628,7 @@ data class UpdateEventRequest(
      * @param visibility Sets the visibility for the event. The calendar default will be used if this field is omitted.
      * @return The builder.
      */
-    fun visibility(visibility: EvenVisibility) = apply { this.visibility = visibility }
+    fun visibility(visibility: EventVisibility) = apply { this.visibility = visibility }
 
     /**
      * Update the capacity of the event.

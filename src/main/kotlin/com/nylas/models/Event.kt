@@ -123,7 +123,7 @@ data class Event(
    * Visibility of the event, if the event is private or public.
    */
   @Json(name = "visibility")
-  val visibility: EvenVisibility? = null,
+  val visibility: EventVisibility? = null,
   /**
    * User who created the event.
    * Not supported for all providers.
