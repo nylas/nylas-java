@@ -165,7 +165,11 @@ class Auth(private val client: NylasClient) {
       .adapter(UrlForAuthenticationConfig::class.java)
       .toJson(config)
     JsonHelper.jsonToMap(json).forEach { (key, value) ->
-      url.addQueryParameter(key, value.toString())
+      if(key == "scope") {
+        url.addQueryParameter("scope", config.scope?.joinToString(separator = " "))
+      } else {
+        url.addQueryParameter(key, value.toString())
+      }
     }
 
     return url
