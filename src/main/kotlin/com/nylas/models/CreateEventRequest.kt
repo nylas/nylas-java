@@ -14,7 +14,7 @@ data class CreateEventRequest(
    * - [CreateEventRequest.When.Timespan]
    */
   @Json(name = "when")
-  val whenObj: When = When.Time(0),
+  val whenObj: When,
   /**
    * Creates an event with the specified title.
    */
@@ -84,7 +84,7 @@ data class CreateEventRequest(
    * Sets the visibility for the event. The calendar default will be used if this field is omitted.
    */
   @Json(name = "visibility")
-  val visibility: EvenVisibility? = null,
+  val visibility: EventVisibility? = null,
   /**
    * Sets the maximum number of participants that may attend the event.
    */
@@ -436,7 +436,7 @@ data class CreateEventRequest(
     private var recurrence: List<String>? = null
     private var calendarId: String? = null
     private var readOnly: Boolean? = null
-    private var visibility: EvenVisibility? = null
+    private var visibility: EventVisibility? = null
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
 
@@ -537,7 +537,7 @@ data class CreateEventRequest(
      * @param visibility The event visibility.
      * @return The builder.
      */
-    fun visibility(visibility: EvenVisibility) = apply { this.visibility = visibility }
+    fun visibility(visibility: EventVisibility) = apply { this.visibility = visibility }
 
     /**
      * Set the maximum number of participants that may attend the event.

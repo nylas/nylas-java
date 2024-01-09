@@ -6,6 +6,7 @@ import com.nylas.interceptors.HttpLoggingInterceptor
 import com.nylas.models.*
 import com.nylas.resources.*
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.JsonDataException
 import okhttp3.*
 import okhttp3.Response
 import java.io.IOException
@@ -372,14 +373,20 @@ class NylasClient(
       try {
         parsedError = JsonHelper.moshi().adapter(NylasOAuthError::class.java)
           .fromJson(responseBody)
-      } catch (e: IOException) {
-        throw NylasOAuthError(
-          error = "unknown",
-          errorDescription = "Unknown error received from the API: $responseBody",
-          errorUri = "unknown",
-          errorCode = "0",
-          statusCode = response.code(),
-        )
+      } catch (ex: Exception) {
+        when (ex) {
+          is IOException, is JsonDataException -> {
+            throw NylasOAuthError(
+              error = "unknown",
+              errorDescription = "Unknown error received from the API: $responseBody",
+              errorUri = "unknown",
+              errorCode = "0",
+              statusCode = response.code(),
+            )
+          }
+
+          else -> throw ex
+        }
       }
     } else {
       try {
@@ -389,12 +396,17 @@ class NylasClient(
         if (parsedError != null) {
           parsedError.requestId = errorResp?.requestId
         }
-      } catch (e: IOException) {
-        throw NylasApiError(
-          type = "unknown",
-          message = "Unknown error received from the API: $responseBody",
-          statusCode = response.code(),
-        )
+      } catch (ex: Exception) {
+        when (ex) {
+          is IOException, is JsonDataException -> {
+            throw NylasApiError(
+              type = "unknown",
+              message = "Unknown error received from the API: $responseBody",
+              statusCode = response.code(),
+            )
+          }
+          else -> throw ex
+        }
       }
     }
 

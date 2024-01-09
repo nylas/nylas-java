@@ -9,10 +9,14 @@
 ### Added
 * Added support for sending drafts
 * Added support for the contacts API
+* Added enum support for OAuth prompt
 
 ### Changed
 * Fixed issue with sending scheduled messages
 * Fixed incorrect PKCE code challenge generation
+* Fixed provider detect endpoint path
+* Fixed scope encoding for OAuth URL
+* Fixed typo in 'EventVisibility' enum
 
 ## [2.0.0-beta.3] - Released 2023-12-18
 

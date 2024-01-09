@@ -31,7 +31,7 @@ data class UrlForAuthenticationConfig(
    * The prompt parameter is used to force the consent screen to be displayed even if the user has already given consent to your application.
    */
   @Json(name = "prompt")
-  val prompt: String? = null,
+  val prompt: Prompt? = null,
   /**
    * A space-delimited list of scopes that identify the resources that your application could access on the user's behalf.
    * If no scope is given, all of the default integration's scopes are used.
@@ -66,7 +66,7 @@ data class UrlForAuthenticationConfig(
   ) {
     private var accessType: AccessType = AccessType.ONLINE
     private var provider: AuthProvider? = null
-    private var prompt: String? = null
+    private var prompt: Prompt? = null
     private var scope: List<String>? = null
     private var includeGrantScopes: Boolean? = null
     private var state: String? = null
@@ -92,7 +92,7 @@ data class UrlForAuthenticationConfig(
      * @param prompt The prompt parameter.
      * @return This builder.
      */
-    fun prompt(prompt: String) = apply { this.prompt = prompt }
+    fun prompt(prompt: Prompt) = apply { this.prompt = prompt }
 
     /**
      * Set the scopes that identify the resources that your application could access on the user's behalf.

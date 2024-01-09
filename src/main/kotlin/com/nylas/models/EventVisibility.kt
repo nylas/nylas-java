@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 /**
  * Enum representation of visibility of the event, if the event is private or public.
  */
-enum class EvenVisibility {
+enum class EventVisibility {
   @Json(name = "public")
   PUBLIC,
 
