@@ -99,7 +99,7 @@ class AuthTests {
   }
 
   @Nested
-  inner class TokenTests  {
+  inner class TokenTests {
     @Test
     fun `exchangeCodeForToken should return the correct URL`() {
       val adapter = JsonHelper.moshi().adapter(CodeExchangeRequest::class.java)
@@ -123,7 +123,7 @@ class AuthTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/connect/token", pathCaptor.firstValue)
@@ -154,7 +154,7 @@ class AuthTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/connect/token", pathCaptor.firstValue)
@@ -186,7 +186,7 @@ class AuthTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/connect/custom", pathCaptor.firstValue)
@@ -212,7 +212,7 @@ class AuthTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/providers/detect", pathCaptor.firstValue)
@@ -234,7 +234,7 @@ class AuthTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/connect/revoke?token=user-token", pathCaptor.firstValue)

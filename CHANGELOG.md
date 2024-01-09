@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [2.0.0-beta.4] - TBD
+## [2.0.0-beta.4] - Released 2024-01-09
 
 ### BREAKING CHANGES
 * Moved grants API out of `Auth` to `NylasClient`

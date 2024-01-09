@@ -351,7 +351,7 @@ class NylasClientTest {
         "test/path",
         NylasClient.HttpMethod.POST,
         multipartBuilder.build(),
-        JsonHelper.mapTypeOf(String::class.java, String::class.java)
+        JsonHelper.mapTypeOf(String::class.java, String::class.java),
       )
 
       verify(mockHttpClient).newCall(requestCaptor.capture())
@@ -363,16 +363,18 @@ class NylasClientTest {
     @Test
     fun `executeGet should set up the request with the correct params`() {
       val mockQueryParams: IQueryParams = mock()
-      whenever(mockQueryParams.convertToMap()).thenReturn(mapOf(
-        "foo" to "bar",
-        "list" to listOf("a", "b", "c"),
-        "map" to mapOf("key1" to "value1", "key2" to "value2")
-      ))
+      whenever(mockQueryParams.convertToMap()).thenReturn(
+        mapOf(
+          "foo" to "bar",
+          "list" to listOf("a", "b", "c"),
+          "map" to mapOf("key1" to "value1", "key2" to "value2"),
+        ),
+      )
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
       nylasClient.executeGet<Map<String, String>>(
         "test/path",
         JsonHelper.mapTypeOf(String::class.java, String::class.java),
-        mockQueryParams
+        mockQueryParams,
       )
 
       verify(mockHttpClient).newCall(requestCaptor.capture())
