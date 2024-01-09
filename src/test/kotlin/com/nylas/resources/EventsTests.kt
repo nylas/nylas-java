@@ -103,7 +103,7 @@ class EventsTests {
               "object": "timespan"
             }
           }
-        """.trimIndent()
+        """.trimIndent(),
       )
 
       val event = adapter.fromJson(jsonBuffer)!!
@@ -177,7 +177,7 @@ class EventsTests {
       verify(mockNylasClient).executeGet<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/events", pathCaptor.firstValue)
@@ -199,7 +199,7 @@ class EventsTests {
       verify(mockNylasClient).executeGet<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
@@ -214,7 +214,7 @@ class EventsTests {
           startTime = 1620000000,
           endTime = 1620000000,
           startTimezone = "America/Los_Angeles",
-          endTimezone = "America/Los_Angeles"
+          endTimezone = "America/Los_Angeles",
         ),
         description = "Description of my new event",
         location = "Los Angeles, CA",
@@ -234,7 +234,7 @@ class EventsTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/events", pathCaptor.firstValue)
@@ -264,7 +264,7 @@ class EventsTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
@@ -287,7 +287,7 @@ class EventsTests {
       verify(mockNylasClient).executeDelete<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
@@ -328,7 +328,7 @@ class EventsTests {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/events/$eventId/send-rsvp", pathCaptor.firstValue)

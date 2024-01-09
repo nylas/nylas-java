@@ -59,7 +59,7 @@ class CalendarsTest {
             "read_only": false,
             "timezone": "America/Los_Angeles"
           }
-        """.trimIndent()
+        """.trimIndent(),
       )
 
       val cal = adapter.fromJson(jsonBuffer)!!
@@ -100,7 +100,7 @@ class CalendarsTest {
       verify(mockNylasClient).executeGet<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/calendars", pathCaptor.firstValue)
@@ -118,7 +118,7 @@ class CalendarsTest {
       verify(mockNylasClient).executeGet<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/calendars/$calendarId", pathCaptor.firstValue)
@@ -133,7 +133,7 @@ class CalendarsTest {
         location = "Los Angeles, CA",
         metadata = mapOf("your-key" to "value"),
         name = "My New Calendar",
-        timezone = "America/Los_Angeles"
+        timezone = "America/Los_Angeles",
       )
 
       calendars.create(grantId, createCalendarRequest)
@@ -145,7 +145,7 @@ class CalendarsTest {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/calendars", pathCaptor.firstValue)
@@ -164,7 +164,7 @@ class CalendarsTest {
         name = "My New Calendar",
         timezone = "America/Los_Angeles",
         hexColor = "#039BE5",
-        hexForegroundColor = "#039BE5"
+        hexForegroundColor = "#039BE5",
       )
 
       calendars.update(grantId, calendarId, updateCalendarRequest)
@@ -176,7 +176,7 @@ class CalendarsTest {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/calendars/$calendarId", pathCaptor.firstValue)
@@ -195,7 +195,7 @@ class CalendarsTest {
       verify(mockNylasClient).executeDelete<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/calendars/$calendarId", pathCaptor.firstValue)
@@ -231,10 +231,10 @@ class CalendarsTest {
                 start = "09:00",
                 end = "17:00",
                 timezone = "America/Los_Angeles",
-                exdates = listOf("2021-05-03", "2021-05-04")
-              )
-            )
-          )
+                exdates = listOf("2021-05-03", "2021-05-04"),
+              ),
+            ),
+          ),
         ),
         durationMinutes = 30,
         intervalMinutes = 15,
@@ -243,7 +243,7 @@ class CalendarsTest {
           availabilityMethod = AvailabilityMethod.MAX_AVAILABILITY,
           buffer = MeetingBuffer(
             before = 15,
-            after = 15
+            after = 15,
           ),
           defaultOpenHours = listOf(
             OpenHours(
@@ -251,11 +251,11 @@ class CalendarsTest {
               start = "09:00",
               end = "17:00",
               timezone = "America/Los_Angeles",
-              exdates = listOf("2021-05-03", "2021-05-04")
-            )
+              exdates = listOf("2021-05-03", "2021-05-04"),
+            ),
           ),
-          roundRobinEventId = "event-123"
-        )
+          roundRobinEventId = "event-123",
+        ),
       )
 
       calendars.getAvailability(getAvailabilityRequest)
@@ -267,7 +267,7 @@ class CalendarsTest {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       assertEquals("v3/calendars/availability", pathCaptor.firstValue)
@@ -282,7 +282,7 @@ class CalendarsTest {
       val getFreeBusyRequest = GetFreeBusyRequest(
         startTime = 1620000000,
         endTime = 1620000000,
-        emails = listOf("test@nylas.com")
+        emails = listOf("test@nylas.com"),
       )
 
       calendars.getFreeBusy(grantId, getFreeBusyRequest)
@@ -294,7 +294,7 @@ class CalendarsTest {
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
-        queryParamCaptor.capture()
+        queryParamCaptor.capture(),
       )
 
       val listOfFreeBusy = Types.newParameterizedType(List::class.java, GetFreeBusyResponse::class.java)
