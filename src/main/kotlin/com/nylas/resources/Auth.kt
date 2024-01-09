@@ -136,7 +136,7 @@ class Auth(private val client: NylasClient) {
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun detectProvider(params: ProviderDetectParams): Response<ProviderDetectResponse> {
-    val path = "v3/grants/connect/providers/detect"
+    val path = "v3/providers/detect"
     val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
 
     return client.executePost(path, responseType, queryParams = params)
