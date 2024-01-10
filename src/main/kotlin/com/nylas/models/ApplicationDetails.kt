@@ -37,10 +37,10 @@ data class ApplicationDetails(
   @Json(name = "hosted_authentication")
   val hostedAuthentication: HostedAuthentication? = null,
   /**
-   * List of redirect URIs
+   * List of callback URIs
    */
-  @Json(name = "redirect_uris")
-  val redirectUris: List<RedirectUri>? = null,
+  @Json(name = "callback_uris")
+  val callbackUris: List<RedirectUri>? = null,
 ) {
   /**
    * Class representation of branding details for the application
