@@ -1,15 +1,24 @@
 package com.nylas.models
 
+import com.squareup.moshi.Json
+
 /**
  * Class representation for a physical address in a contact.
  */
 data class PhysicalAddress(
+  @Json(name = "format")
   val format: String? = null,
+  @Json(name = "street_address")
   val streetAddress: String? = null,
+  @Json(name = "city")
   val city: String? = null,
+  @Json(name = "postal_code")
   val postalCode: String? = null,
+  @Json(name = "state")
   val state: String? = null,
+  @Json(name = "country")
   val country: String? = null,
+  @Json(name = "type")
   val type: ContactType? = null,
 ) {
   class Builder {
