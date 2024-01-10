@@ -10,7 +10,7 @@ import com.squareup.moshi.*
 class CreateConnectorAdapter {
   @FromJson
   @Throws(UnsupportedOperationException::class)
-  fun fromJson(reader: JsonReader): CreateEventRequest.Conferencing? {
+  fun fromJson(reader: JsonReader): CreateConnectorRequest? {
     throw UnsupportedOperationException("CreateConnectorRequest is only used for serialization")
   }
 
