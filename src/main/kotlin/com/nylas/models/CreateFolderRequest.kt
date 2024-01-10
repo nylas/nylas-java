@@ -1,5 +1,7 @@
 package com.nylas.models
 
+import com.squareup.moshi.Json
+
 /**
  * Class representation of the Nylas folder creation request.
  */
@@ -7,18 +9,22 @@ data class CreateFolderRequest(
   /**
    * The name of the folder.
    */
+  @Json(name = "name")
   val name: String,
   /**
    * The parent ID of the folder. (Microsoft only)
    */
+  @Json(name = "parent_id")
   val parentId: String? = null,
   /**
    * The background color of the folder. (Google only)
    */
+  @Json(name = "background_color")
   val backgroundColor: String? = null,
   /**
    * The text color of the folder. (Google only)
    */
+  @Json(name = "text_color")
   val textColor: String? = null,
 ) {
   /**
