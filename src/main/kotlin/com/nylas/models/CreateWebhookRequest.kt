@@ -14,8 +14,8 @@ data class CreateWebhookRequest(
   /**
    * The url to send webhooks to.
    */
-  @Json(name = "callback_url")
-  val callbackUrl: String,
+  @Json(name = "webhook_url")
+  val webhookUrl: String,
   /**
    * A human-readable description of the webhook destination.
    */
@@ -30,11 +30,11 @@ data class CreateWebhookRequest(
   /**
    * A builder for creating a [CreateWebhookRequest].
    * @param triggerTypes Select the event that triggers the webhook.
-   * @param callbackUrl The url to send webhooks to.
+   * @param webhookUrl The url to send webhooks to.
    */
   data class Builder(
     private val triggerTypes: List<WebhookTriggers>,
-    private val callbackUrl: String,
+    private val webhookUrl: String,
   ) {
     private var description: String? = null
     private var notificationEmailAddress: String? = null
@@ -57,6 +57,6 @@ data class CreateWebhookRequest(
      * Build the [CreateWebhookRequest].
      * @return The created [CreateWebhookRequest].
      */
-    fun build() = CreateWebhookRequest(triggerTypes, callbackUrl, description, notificationEmailAddress)
+    fun build() = CreateWebhookRequest(triggerTypes, webhookUrl, description, notificationEmailAddress)
   }
 }

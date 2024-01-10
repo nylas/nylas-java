@@ -14,8 +14,8 @@ data class WebhookWithSecret(
   /**
    * The url to send webhooks to.
    */
-  @Json(name = "callback_url")
-  val callbackUrl: String,
+  @Json(name = "webhook_url")
+  val webhookUrl: String,
   /**
    * A secret value used to encode the X-Nylas-Signature header on webhook requests.
    */
