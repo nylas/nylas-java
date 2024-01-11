@@ -10,7 +10,7 @@ data class ContactGroup(
   val id: String,
   @Json(name = "grant_id")
   val grantId: String? = null,
-  @Json(name="group_type")
+  @Json(name = "group_type")
   val groupType: GroupType? = null,
   @Json(name = "name")
   val name: String? = null,
