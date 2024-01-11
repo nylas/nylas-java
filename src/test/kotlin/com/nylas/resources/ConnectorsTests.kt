@@ -194,4 +194,22 @@ class ConnectorsTests {
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
   }
+
+  @Nested
+  inner class ResourcesTests {
+    private lateinit var mockNylasClient: NylasClient
+    private lateinit var connectors: Connectors
+
+    @BeforeEach
+    fun setup() {
+      mockNylasClient = Mockito.mock(NylasClient::class.java)
+      connectors = Connectors(mockNylasClient)
+    }
+
+    @Test
+    fun `credentials returns a Credentials instance`() {
+      val credentials = connectors.credentials()
+      assertIs<Credentials>(credentials)
+    }
+  }
 }
