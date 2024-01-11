@@ -91,7 +91,7 @@ class CredentialsTests {
         queryParamCaptor.capture(),
       )
 
-      assertEquals("v3/credentials/google/creds", pathCaptor.firstValue)
+      assertEquals("v3/connectors/google/creds", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Credential::class.java), typeCaptor.firstValue)
     }
 
@@ -110,7 +110,7 @@ class CredentialsTests {
         queryParamCaptor.capture(),
       )
 
-      assertEquals("v3/credentials/google/creds/abc-123", pathCaptor.firstValue)
+      assertEquals("v3/connectors/google/creds/abc-123", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Credential::class.java), typeCaptor.firstValue)
     }
 
@@ -139,7 +139,7 @@ class CredentialsTests {
         queryParamCaptor.capture(),
       )
 
-      assertEquals("v3/credentials/google/creds", pathCaptor.firstValue)
+      assertEquals("v3/connectors/google/creds", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Credential::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(createCredentialRequest), requestBodyCaptor.firstValue)
     }
@@ -158,6 +158,7 @@ class CredentialsTests {
       )
 
       credentials.update(AuthProvider.GOOGLE, credentialId, updateCredentialRequest)
+
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
@@ -169,7 +170,7 @@ class CredentialsTests {
         queryParamCaptor.capture(),
       )
 
-      assertEquals("v3/credentials/google/creds/abc-123", pathCaptor.firstValue)
+      assertEquals("v3/connectors/google/creds/abc-123", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Credential::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(updateCredentialRequest), requestBodyCaptor.firstValue)
     }
@@ -188,7 +189,7 @@ class CredentialsTests {
         queryParamCaptor.capture(),
       )
 
-      assertEquals("v3/credentials/imap/abc-123", pathCaptor.firstValue)
+      assertEquals("v3/connectors/imap/creds/abc-123", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
   }

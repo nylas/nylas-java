@@ -2,13 +2,13 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-enum class CredentialType {
+enum class CredentialType(val value: String) {
   @Json(name = "adminconsent")
-  ADMINCONSENT,
+  ADMINCONSENT("adminconsent"),
 
   @Json(name = "serviceaccount")
-  SERVICEACCOUNT,
+  SERVICEACCOUNT("serviceaccount"),
 
   @Json(name = "connector")
-  CONNECTOR,
+  CONNECTOR("connector"),
 }
