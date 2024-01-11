@@ -27,10 +27,10 @@ data class Credential(
    * Timestamp of when the credential was created
    */
   @Json(name = "created_at")
-  val createdAt: Int?,
+  val createdAt: Long?,
   /**
    * Timestamp of when the credential was updated
    */
   @Json(name = "updated_at")
-  val updatedAt: Int?,
+  val updatedAt: Long?,
 )
