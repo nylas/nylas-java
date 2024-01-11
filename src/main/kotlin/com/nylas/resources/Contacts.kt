@@ -83,7 +83,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun listGroups(identifier: String, queryParams: ListContactGroupsQueryParams? = null): ListResponse<ContactGroup> {
-    val path = String.format("v3/grants/%s/messages/contacts/groups", identifier)
+    val path = String.format("v3/grants/%s/contacts/groups", identifier)
     val responseType = Types.newParameterizedType(ListResponse::class.java, ContactGroup::class.java)
     return client.executeGet(path, responseType, queryParams)
   }
