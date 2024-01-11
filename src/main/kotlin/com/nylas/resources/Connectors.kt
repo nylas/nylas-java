@@ -64,7 +64,7 @@ class Connectors(client: NylasClient) : Resource<Connector>(client, Connector::c
       .adapter(UpdateConnectorRequest::class.java)
       .toJson(requestBody)
 
-    return updateResource(path, serializedRequestBody)
+    return patchResource(path, serializedRequestBody)
   }
 
   /**
