@@ -122,36 +122,46 @@ class ContactsTests {
         listOf(
           ContactEmail(
             type = ContactType.WORK,
-            email = "john-work@example.com"
+            email = "john-work@example.com",
           ),
-        ), contact.emails)
+        ),
+        contact.emails,
+      )
       assertEquals(
         listOf(
           ContactGroupId(
             id = "starred",
           ),
-        ), contact.groups)
+        ),
+        contact.groups,
+      )
       assertEquals(
         listOf(
           InstantMessagingAddress(
             type = ContactType.OTHER,
             imAddress = "myjabberaddress",
           ),
-        ), contact.imAddresses)
+        ),
+        contact.imAddresses,
+      )
       assertEquals(
         listOf(
           PhoneNumber(
             type = ContactType.WORK,
             number = "+1-555-555-5555",
           ),
-        ), contact.phoneNumbers)
+        ),
+        contact.phoneNumbers,
+      )
       assertEquals(
         listOf(
           WebPage(
             type = ContactType.WORK,
             url = "http://www.linkedin.com/in/johndoe",
           ),
-        ), contact.webPages)
+        ),
+        contact.webPages,
+      )
       assertEquals(
         listOf(
           PhysicalAddress(
@@ -162,7 +172,9 @@ class ContactsTests {
             country = "US",
             city = "San Francisco",
           ),
-        ), contact.physicalAddresses)
+        ),
+        contact.physicalAddresses,
+      )
     }
   }
 
@@ -183,7 +195,7 @@ class ContactsTests {
     fun `listing contacts calls requests with the correct params`() {
       val queryParams = ListContactsQueryParams(
         limit = 10,
-        email = "test@gmail.com"
+        email = "test@gmail.com",
       )
 
       contacts.list(grantId, queryParams)
@@ -205,7 +217,7 @@ class ContactsTests {
     fun `finding a contact calls requests with the correct params`() {
       val contactId = "contact-123"
       val queryParams = FindContactQueryParams(
-        profilePicture = true
+        profilePicture = true,
       )
 
       contacts.find(grantId, contactId, queryParams)
@@ -232,7 +244,7 @@ class ContactsTests {
         emails = listOf(
           ContactEmail(
             type = ContactType.WORK,
-            email = "test@gmail.com"
+            email = "test@gmail.com",
           ),
         ),
         givenName = "John",
@@ -306,7 +318,7 @@ class ContactsTests {
         emails = listOf(
           ContactEmail(
             type = ContactType.WORK,
-            email = "test@gmail.com"
+            email = "test@gmail.com",
           ),
         ),
         givenName = "John",
@@ -406,7 +418,7 @@ class ContactsTests {
     fun `getting free busy calls requests with the correct params`() {
       val grantId = "abc-123-grant-id"
       val queryParams = ListContactGroupsQueryParams(
-        limit = 10
+        limit = 10,
       )
 
       contacts.listGroups(grantId, queryParams)

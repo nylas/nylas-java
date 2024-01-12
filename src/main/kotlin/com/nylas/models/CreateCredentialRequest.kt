@@ -70,7 +70,7 @@ sealed class CreateCredentialRequest(
     @Json(name = "credential_data")
     override val credentialData: CredentialData.ConnectorOverride,
   ) : CreateCredentialRequest(name, credentialData, CredentialType.CONNECTOR)
-  
+
   companion object {
     @JvmStatic
     val CREATE_CREDENTIAL_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<CreateCredentialRequest> = PolymorphicJsonAdapterFactory.of(CreateCredentialRequest::class.java, "credential_type")

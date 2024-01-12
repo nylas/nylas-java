@@ -153,8 +153,8 @@ class CredentialsTests {
         credentialData = CredentialData.GoogleServiceAccount(
           privateKeyId = "abc",
           privateKey = "123",
-          clientEmail = ""
-        )
+          clientEmail = "",
+        ),
       )
 
       credentials.update(AuthProvider.GOOGLE, credentialId, updateCredentialRequest)
