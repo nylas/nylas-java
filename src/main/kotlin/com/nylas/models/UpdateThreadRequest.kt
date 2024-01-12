@@ -10,17 +10,17 @@ data class UpdateThreadRequest(
    * Sets all messages in the thread as starred or unstarred.
    */
   @Json(name = "starred")
-  val starred: Boolean?,
+  val starred: Boolean? = null,
   /**
    * Sets all messages in the thread as read or unread.
    */
   @Json(name = "unread")
-  val unread: Boolean?,
+  val unread: Boolean? = null,
   /**
    * The IDs of the folders to apply, overwriting all previous folders for all messages in the thread.
    */
   @Json(name = "folders")
-  val folders: List<String>?,
+  val folders: List<String>? = null,
 ) {
   /**
    * Builder for [UpdateThreadRequest].
