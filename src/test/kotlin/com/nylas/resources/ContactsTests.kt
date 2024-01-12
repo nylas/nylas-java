@@ -16,6 +16,7 @@ import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 class ContactsTests {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -211,6 +212,25 @@ class ContactsTests {
 
       assertEquals("v3/grants/$grantId/contacts", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Contact::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing contacts without query params calls requests with the correct params`() {
+      contacts.list(grantId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<ListContactsQueryParams>()
+      verify(mockNylasClient).executeGet<ListResponse<Contact>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/contacts", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Contact::class.java), typeCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
     }
 
     @Test
@@ -233,6 +253,27 @@ class ContactsTests {
 
       assertEquals("v3/grants/$grantId/contacts/$contactId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Contact::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a contact without query params calls requests with the correct params`() {
+      val contactId = "contact-123"
+
+      contacts.find(grantId, contactId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<FindContactQueryParams>()
+      verify(mockNylasClient).executeGet<ListResponse<Contact>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/contacts/$contactId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Contact::class.java), typeCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
     }
 
     @Test
@@ -415,7 +456,7 @@ class ContactsTests {
     }
 
     @Test
-    fun `getting free busy calls requests with the correct params`() {
+    fun `getting contact groups calls requests with the correct params`() {
       val grantId = "abc-123-grant-id"
       val queryParams = ListContactGroupsQueryParams(
         limit = 10,
@@ -434,6 +475,27 @@ class ContactsTests {
 
       assertEquals("v3/grants/$grantId/contacts/groups", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, ContactGroup::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `getting contact groups without query params calls requests with the correct params`() {
+      val grantId = "abc-123-grant-id"
+
+      contacts.listGroups(grantId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<ListContactGroupsQueryParams>()
+      verify(mockNylasClient).executeGet<ListResponse<ContactGroup>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/contacts/groups", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, ContactGroup::class.java), typeCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
     }
   }
 }
