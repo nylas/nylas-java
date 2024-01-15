@@ -30,7 +30,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @JvmOverloads
   fun find(identifier: String, contactId: String, queryParams: FindContactQueryParams? = null): Response<Contact> {
     val path = String.format("v3/grants/%s/contacts/%s", identifier, contactId)
-    return findResource(path)
+    return findResource(path, queryParams)
   }
 
   /**
