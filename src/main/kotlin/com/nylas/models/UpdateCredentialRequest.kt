@@ -10,12 +10,12 @@ data class UpdateCredentialRequest(
    * Unique name of this credential
    */
   @Json(name = "name")
-  val name: String? = null,
+  val name: String?,
   /**
    * Data that specifies some special data required for this credential
    */
   @Json(name = "credential_data")
-  val credentialData: CredentialData? = null,
+  val credentialData: CredentialData?,
 ) {
   /**
    * Builder for [UpdateCredentialRequest]

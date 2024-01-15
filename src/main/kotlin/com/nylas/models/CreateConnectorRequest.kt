@@ -26,7 +26,7 @@ sealed class CreateConnectorRequest(
      * The Google OAuth scopes
      */
     @Json(name = "scope")
-    val scope: List<String>? = null,
+    val scope: List<String>?,
   ) : CreateConnectorRequest(AuthProvider.GOOGLE) {
     /**
      * Builder for Google connector creation requests.
@@ -65,7 +65,7 @@ sealed class CreateConnectorRequest(
      * The Microsoft OAuth scopes
      */
     @Json(name = "scope")
-    val scope: List<String>? = null,
+    val scope: List<String>?,
   ) : CreateConnectorRequest(AuthProvider.MICROSOFT) {
     /**
      * Builder for Microsoft connector creation requests.

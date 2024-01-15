@@ -17,20 +17,20 @@ data class Credential(
    * The type of credential
    */
   @Json(name = "credential_type")
-  val credentialType: CredentialType? = null,
+  val credentialType: CredentialType?,
   /**
    * Hashed value of the credential that you created
    */
   @Json(name = "hashed_data")
-  val hashedData: String? = null,
+  val hashedData: String?,
   /**
    * Timestamp of when the credential was created
    */
   @Json(name = "created_at")
-  val createdAt: Long? = null,
+  val createdAt: Long?,
   /**
    * Timestamp of when the credential was updated
    */
   @Json(name = "updated_at")
-  val updatedAt: Long? = null,
+  val updatedAt: Long?,
 )

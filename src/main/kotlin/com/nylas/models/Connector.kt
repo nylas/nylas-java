@@ -26,7 +26,7 @@ sealed class Connector(
      * The Google OAuth scopes
      */
     @Json(name = "scope")
-    val scope: List<String>? = null,
+    val scope: List<String>?,
   ) : Connector(AuthProvider.GOOGLE)
 
   /**
@@ -42,7 +42,7 @@ sealed class Connector(
      * The Microsoft OAuth scopes
      */
     @Json(name = "scope")
-    val scope: List<String>? = null,
+    val scope: List<String>?,
   ) : Connector(AuthProvider.MICROSOFT)
 
   /**

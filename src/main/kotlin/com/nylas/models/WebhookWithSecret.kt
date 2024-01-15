@@ -14,8 +14,8 @@ data class WebhookWithSecret(
   /**
    * The url to send webhooks to.
    */
-  @Json(name = "webhook_url")
-  val webhookUrl: String,
+  @Json(name = "callback_url")
+  val callbackUrl: String,
   /**
    * A secret value used to encode the X-Nylas-Signature header on webhook requests.
    */
@@ -45,7 +45,7 @@ data class WebhookWithSecret(
    * The time the status field was last updated, represented as a Unix timestamp in seconds.
    */
   @Json(name = "updated_at")
-  val updatedAt: Long,
+  val updatedAt: String,
   /**
    * A human-readable description of the webhook destination.
    */
@@ -54,6 +54,6 @@ data class WebhookWithSecret(
   /**
    * The email addresses that Nylas notifies when a webhook is down for a while.
    */
-  @Json(name = "notification_email_addresses")
-  val notificationEmailAddresses: List<String>? = null,
+  @Json(name = "notification_email_address")
+  val notificationEmailAddress: String? = null,
 )

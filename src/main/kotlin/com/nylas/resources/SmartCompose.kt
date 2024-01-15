@@ -3,10 +3,8 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.ComposeMessageRequest
 import com.nylas.models.ComposeMessageResponse
-import com.nylas.models.Draft
 import com.nylas.models.Response
 import com.nylas.util.JsonHelper
-import com.squareup.moshi.Types
 
 /**
  * A collection of Smart Compose related API endpoints.
@@ -28,9 +26,8 @@ class SmartCompose(private val client: NylasClient) {
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(ComposeMessageRequest::class.java)
       .toJson(requestBody)
-    val responseType = Types.newParameterizedType(Response::class.java, ComposeMessageResponse::class.java)
 
-    return client.executePost(path, responseType, serializedRequestBody)
+    return client.executePost(path, ComposeMessageResponse::class.java, serializedRequestBody)
   }
 
   /**
@@ -46,8 +43,7 @@ class SmartCompose(private val client: NylasClient) {
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(ComposeMessageRequest::class.java)
       .toJson(requestBody)
-    val responseType = Types.newParameterizedType(Response::class.java, ComposeMessageResponse::class.java)
 
-    return client.executePost(path, responseType, serializedRequestBody)
+    return client.executePost(path, ComposeMessageResponse::class.java, serializedRequestBody)
   }
 }

@@ -48,7 +48,7 @@ class Grants(client: NylasClient) : Resource<Grant>(client, Grant::class.java) {
       .adapter(UpdateGrantRequest::class.java)
       .toJson(requestBody)
 
-    return patchResource(path, serializedRequestBody)
+    return updateResource(path, serializedRequestBody)
   }
 
   /**

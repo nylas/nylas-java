@@ -15,7 +15,7 @@ data class Grant(
    * OAuth provider that the user authenticated with.
    */
   @Json(name = "provider")
-  val provider: AuthProvider,
+  val provider: String,
   /**
    * Scopes specified for the grant.
    */
@@ -30,7 +30,7 @@ data class Grant(
    * Status of the grant, if it is still valid or if the user needs to re-authenticate.
    */
   @Json(name = "grant_status")
-  val grantStatus: GrantStatus? = null,
+  val grantStatus: String? = null,
   /**
    * Email address associated with the grant.
    */

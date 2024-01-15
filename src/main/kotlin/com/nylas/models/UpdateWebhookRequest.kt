@@ -14,8 +14,8 @@ data class UpdateWebhookRequest(
   /**
    * The url to send webhooks to.
    */
-  @Json(name = "webhook_url")
-  val webhookUrl: String? = null,
+  @Json(name = "callback_url")
+  val callbackUrl: String? = null,
   /**
    * A human-readable description of the webhook destination.
    */
@@ -24,17 +24,17 @@ data class UpdateWebhookRequest(
   /**
    * The email addresses that Nylas notifies when a webhook is down for a while.
    */
-  @Json(name = "notification_email_addresses")
-  val notificationEmailAddresses: List<String>? = null,
+  @Json(name = "notification_email_address")
+  val notificationEmailAddress: String? = null,
 ) {
   /**
    * A builder for creating a [UpdateWebhookRequest].
    */
   class Builder {
     private var triggerTypes: List<WebhookTriggers>? = null
-    private var webhookUrl: String? = null
+    private var callbackUrl: String? = null
     private var description: String? = null
-    private var notificationEmailAddresses: List<String>? = null
+    private var notificationEmailAddress: String? = null
 
     /**
      * Set the event that triggers the webhook.
@@ -48,7 +48,7 @@ data class UpdateWebhookRequest(
      * @param callbackUrl The url to send webhooks to.
      * @return The builder.
      */
-    fun webhookUrl(webhookUrl: String?) = apply { this.webhookUrl = webhookUrl }
+    fun callbackUrl(callbackUrl: String?) = apply { this.callbackUrl = callbackUrl }
 
     /**
      * Set a human-readable description of the webhook destination.
@@ -59,15 +59,15 @@ data class UpdateWebhookRequest(
 
     /**
      * Set the email addresses that Nylas notifies when a webhook is down for a while.
-     * @param notificationEmailAddresses The email addresses that Nylas notifies when a webhook is down for a while.
+     * @param notificationEmailAddress The email addresses that Nylas notifies when a webhook is down for a while.
      * @return The builder.
      */
-    fun notificationEmailAddresses(notificationEmailAddresses: List<String>?) = apply { this.notificationEmailAddresses = notificationEmailAddresses }
+    fun notificationEmailAddress(notificationEmailAddress: String?) = apply { this.notificationEmailAddress = notificationEmailAddress }
 
     /**
      * Build the [UpdateWebhookRequest].
      * @return The created [UpdateWebhookRequest].
      */
-    fun build() = UpdateWebhookRequest(triggerTypes, webhookUrl, description, notificationEmailAddresses)
+    fun build() = UpdateWebhookRequest(triggerTypes, callbackUrl, description, notificationEmailAddress)
   }
 }

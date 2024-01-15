@@ -14,8 +14,8 @@ data class CreateWebhookRequest(
   /**
    * The url to send webhooks to.
    */
-  @Json(name = "webhook_url")
-  val webhookUrl: String,
+  @Json(name = "callback_url")
+  val callbackUrl: String,
   /**
    * A human-readable description of the webhook destination.
    */
@@ -24,20 +24,20 @@ data class CreateWebhookRequest(
   /**
    * The email addresses that Nylas notifies when a webhook is down for a while.
    */
-  @Json(name = "notification_email_addresses")
-  val notificationEmailAddresses: List<String>? = null,
+  @Json(name = "notification_email_address")
+  val notificationEmailAddress: String? = null,
 ) {
   /**
    * A builder for creating a [CreateWebhookRequest].
    * @param triggerTypes Select the event that triggers the webhook.
-   * @param webhookUrl The url to send webhooks to.
+   * @param callbackUrl The url to send webhooks to.
    */
   data class Builder(
     private val triggerTypes: List<WebhookTriggers>,
-    private val webhookUrl: String,
+    private val callbackUrl: String,
   ) {
     private var description: String? = null
-    private var notificationEmailAddresses: List<String>? = null
+    private var notificationEmailAddress: String? = null
 
     /**
      * Set a human-readable description of the webhook destination.
@@ -48,15 +48,15 @@ data class CreateWebhookRequest(
 
     /**
      * Set the email addresses that Nylas notifies when a webhook is down for a while.
-     * @param notificationEmailAddresses The email addresses that Nylas notifies when a webhook is down for a while.
+     * @param notificationEmailAddress The email addresses that Nylas notifies when a webhook is down for a while.
      * @return The builder.
      */
-    fun notificationEmailAddresses(notificationEmailAddresses: List<String>?) = apply { this.notificationEmailAddresses = notificationEmailAddresses }
+    fun notificationEmailAddress(notificationEmailAddress: String?) = apply { this.notificationEmailAddress = notificationEmailAddress }
 
     /**
      * Build the [CreateWebhookRequest].
      * @return The created [CreateWebhookRequest].
      */
-    fun build() = CreateWebhookRequest(triggerTypes, webhookUrl, description, notificationEmailAddresses)
+    fun build() = CreateWebhookRequest(triggerTypes, callbackUrl, description, notificationEmailAddress)
   }
 }

@@ -20,5 +20,5 @@ data class ScheduledMessage(
    * The time the message was sent or failed to send, in epoch time.
    */
   @Json(name = "close_time")
-  val closeTime: Int? = null,
+  val closeTime: Int?,
 )

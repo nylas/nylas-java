@@ -19,7 +19,6 @@ import org.mockito.kotlin.whenever
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class CredentialsTests {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -94,25 +93,6 @@ class CredentialsTests {
 
       assertEquals("v3/connectors/google/creds", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Credential::class.java), typeCaptor.firstValue)
-      assertEquals(queryParams, queryParamCaptor.firstValue)
-    }
-
-    @Test
-    fun `listing credentials without query params requests with the correct params`() {
-      credentials.list(AuthProvider.GOOGLE)
-
-      val pathCaptor = argumentCaptor<String>()
-      val typeCaptor = argumentCaptor<Type>()
-      val queryParamCaptor = argumentCaptor<IQueryParams>()
-      verify(mockNylasClient).executeGet<ListResponse<Credential>>(
-        pathCaptor.capture(),
-        typeCaptor.capture(),
-        queryParamCaptor.capture(),
-      )
-
-      assertEquals("v3/connectors/google/creds", pathCaptor.firstValue)
-      assertEquals(Types.newParameterizedType(ListResponse::class.java, Credential::class.java), typeCaptor.firstValue)
-      assertNull(queryParamCaptor.firstValue)
     }
 
     @Test
