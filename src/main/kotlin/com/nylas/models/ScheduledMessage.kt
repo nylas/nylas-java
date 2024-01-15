@@ -9,8 +9,8 @@ data class ScheduledMessage(
   /**
    * The unique identifier for the scheduled message.
    */
-  @Json(name = "scheduled_id")
-  val scheduleId: Int,
+  @Json(name = "schedule_id")
+  val scheduleId: String,
   /**
    * The status of the scheduled message.
    */
