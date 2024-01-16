@@ -134,7 +134,7 @@ class WebhooksTests {
         description = "Production webhook destination",
         triggerTypes = listOf(WebhookTriggers.CALENDAR_CREATED),
         webhookUrl = "https://example.com/webhooks",
-        notificationEmailAddresses = listOf("jane@example.com")
+        notificationEmailAddresses = listOf("jane@example.com"),
       )
 
       webhooks.create(createWebhookRequest)
@@ -163,7 +163,7 @@ class WebhooksTests {
         description = "Production webhook destination",
         triggerTypes = listOf(WebhookTriggers.CALENDAR_CREATED),
         webhookUrl = "https://example.com/webhooks",
-        notificationEmailAddresses = listOf("jane@example.com")
+        notificationEmailAddresses = listOf("jane@example.com"),
       )
       val webhookId = "WEBHOOK_ID"
 

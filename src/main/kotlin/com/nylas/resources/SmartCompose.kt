@@ -3,7 +3,6 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.ComposeMessageRequest
 import com.nylas.models.ComposeMessageResponse
-import com.nylas.models.Draft
 import com.nylas.models.Response
 import com.nylas.util.JsonHelper
 import com.squareup.moshi.Types

@@ -158,7 +158,7 @@ class MessagesTests {
         searchQueryNative = "1634832749",
         receivedBefore = 1634832749,
         receivedAfter = 1634832749,
-        fields = MessageFields.INCLUDE_HEADERS
+        fields = MessageFields.INCLUDE_HEADERS,
       )
 
       messages.list(grantId, queryParams)

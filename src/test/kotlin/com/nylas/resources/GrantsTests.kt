@@ -67,6 +67,7 @@ class GrantsTests {
       )
 
       val grant = adapter.fromJson(jsonBuffer)!!
+      assertIs<Grant>(grant)
       assertEquals("e19f8e1a-eb1c-41c0-b6a6-d2e59daf7f47", grant.id)
       assertEquals(AuthProvider.GOOGLE, grant.provider)
       assertEquals(GrantStatus.VALID, grant.grantStatus)
