@@ -256,5 +256,22 @@ class WebhooksTests {
       assertEquals("v3/webhooks/ip-addresses", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, WebhookIpAddressesResponse::class.java), typeCaptor.firstValue)
     }
+
+    @Test
+    fun `extracting challenge parameter from url succeeds if present`() {
+      val url = "https://example.com?challenge=12345"
+      val challenge = webhooks.extractChallengeParameter(url)
+      assertEquals("12345", challenge)
+    }
+
+    @Test
+    fun `extracting challenge parameter from url throws an error if not present`() {
+      val url = "https://example.com?foo=bar"
+      try {
+        webhooks.extractChallengeParameter(url)
+      } catch (e: IllegalArgumentException) {
+        assertIs<IllegalArgumentException>(e)
+      }
+    }
   }
 }
