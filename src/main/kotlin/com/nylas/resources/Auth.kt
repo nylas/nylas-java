@@ -38,6 +38,9 @@ class Auth(private val client: NylasClient) {
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun exchangeCodeForToken(request: CodeExchangeRequest): CodeExchangeResponse {
     val path = "v3/connect/token"
+    if (request.clientSecret == null) {
+      request.clientSecret = client.apiKey
+    }
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(CodeExchangeRequest::class.java)
@@ -108,6 +111,9 @@ class Auth(private val client: NylasClient) {
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   fun refreshAccessToken(request: TokenExchangeRequest): CodeExchangeResponse {
     val path = "v3/connect/token"
+    if (request.clientSecret == null) {
+      request.clientSecret = client.apiKey
+    }
 
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(TokenExchangeRequest::class.java)

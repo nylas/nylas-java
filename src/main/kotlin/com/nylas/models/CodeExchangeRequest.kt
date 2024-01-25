@@ -23,9 +23,10 @@ data class CodeExchangeRequest(
   var clientId: String,
   /**
    * Client secret of the application.
+   * If not provided, the API Key will be used instead.
    */
   @Json(name = "client_secret")
-  var clientSecret: String,
+  var clientSecret: String? = null,
   /**
    * The original plain text code verifier (code_challenge) used in the initial authorization request (PKCE).
    */
@@ -44,15 +45,22 @@ data class CodeExchangeRequest(
    * @param redirectUri Should match the same redirect URI that was used for getting the code during the initial authorization request.
    * @param code OAuth 2.0 code fetched from the previous step.
    * @param clientId Client ID of the application.
-   * @param clientSecret Client secret of the application.
    */
   data class Builder(
     private val redirectUri: String,
     private val code: String,
     private val clientId: String,
-    private val clientSecret: String,
   ) {
+    private var clientSecret: String? = null
     private var codeVerifier: String? = null
+
+    /**
+     * Set the client secret.
+     * If not provided, the API Key will be used instead.
+     * @param clientSecret The client secret.
+     * @return The builder.
+     */
+    fun clientSecret(clientSecret: String) = apply { this.clientSecret = clientSecret }
 
     /**
      * Set the code verifier.
