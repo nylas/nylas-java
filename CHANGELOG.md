@@ -7,6 +7,7 @@ This section contains changes that have been committed but not yet released.
 ### Added
 
 * Added support for overriding the Event ID when updating, for recurring events
+* Added support for `reply_to_message_id` field in `Message`
 
 ### Changed
 
