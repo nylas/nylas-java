@@ -14,8 +14,8 @@ data class Webhook(
   /**
    * The url to send webhooks to.
    */
-  @Json(name = "callback_url")
-  val callbackUrl: String,
+  @Json(name = "webhook_url")
+  val webhookUrl: String,
   /**
    * Select the event that triggers the webhook.
    */

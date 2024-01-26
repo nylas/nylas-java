@@ -14,8 +14,8 @@ data class UpdateWebhookRequest(
   /**
    * The url to send webhooks to.
    */
-  @Json(name = "callback_url")
-  val callbackUrl: String? = null,
+  @Json(name = "webhook_url")
+  val webhookUrl: String? = null,
   /**
    * A human-readable description of the webhook destination.
    */
@@ -32,7 +32,7 @@ data class UpdateWebhookRequest(
    */
   class Builder {
     private var triggerTypes: List<WebhookTriggers>? = null
-    private var callbackUrl: String? = null
+    private var webhookUrl: String? = null
     private var description: String? = null
     private var notificationEmailAddress: String? = null
 
@@ -45,10 +45,10 @@ data class UpdateWebhookRequest(
 
     /**
      * Set the url to send webhooks to.
-     * @param callbackUrl The url to send webhooks to.
+     * @param webhookUrl The url to send webhooks to.
      * @return The builder.
      */
-    fun callbackUrl(callbackUrl: String?) = apply { this.callbackUrl = callbackUrl }
+    fun webhookUrl(webhookUrl: String?) = apply { this.webhookUrl = webhookUrl }
 
     /**
      * Set a human-readable description of the webhook destination.
@@ -68,6 +68,6 @@ data class UpdateWebhookRequest(
      * Build the [UpdateWebhookRequest].
      * @return The created [UpdateWebhookRequest].
      */
-    fun build() = UpdateWebhookRequest(triggerTypes, callbackUrl, description, notificationEmailAddress)
+    fun build() = UpdateWebhookRequest(triggerTypes, webhookUrl, description, notificationEmailAddress)
   }
 }
