@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [2.0.0-beta.5] - TBD
+
+### Changed
+* Changed `clientSecret` to optional for token exchange methods; defaults to API Key now
+
 ## [2.0.0-beta.4] - Released 2024-01-09
 
 ### BREAKING CHANGES

@@ -45,6 +45,7 @@ class AuthTests {
     grantId = "abc-123-grant-id"
     mockNylasClient = Mockito.mock(NylasClient::class.java)
     whenever(mockNylasClient.newUrlBuilder()).thenReturn(HttpUrl.get(baseUrl).newBuilder())
+    whenever(mockNylasClient.apiKey).thenReturn("test-api-key")
     auth = Auth(mockNylasClient)
   }
 
@@ -101,7 +102,7 @@ class AuthTests {
   @Nested
   inner class TokenTests {
     @Test
-    fun `exchangeCodeForToken should return the correct URL`() {
+    fun `exchangeCodeForToken calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(CodeExchangeRequest::class.java)
       val request = CodeExchangeRequest(
         redirectUri = "https://example.com/oauth/callback",
@@ -133,7 +134,46 @@ class AuthTests {
     }
 
     @Test
-    fun `refreshAccessToken should return the correct URL`() {
+    fun `exchangeCodeForToken clientSecret defaults to API key`() {
+      val adapter = JsonHelper.moshi().adapter(CodeExchangeRequest::class.java)
+      val request = CodeExchangeRequest(
+        redirectUri = "https://example.com/oauth/callback",
+        code = "abc-123-code",
+        clientId = "abc-123",
+        codeVerifier = "abc-123-verifier",
+      )
+      val expectedRequest = mapOf(
+        "redirect_uri" to "https://example.com/oauth/callback",
+        "code" to "abc-123-code",
+        "client_id" to "abc-123",
+        "client_secret" to "test-api-key",
+        "code_verifier" to "abc-123-verifier",
+        "grant_type" to "authorization_code",
+      )
+
+      auth.exchangeCodeForToken(request)
+
+      val json = adapter.toJson(request)
+      val jsonMap = JsonHelper.jsonToMap(json)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePost<CodeExchangeResponse>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connect/token", pathCaptor.firstValue)
+      assertEquals(CodeExchangeResponse::class.java, typeCaptor.firstValue)
+      assertEquals(jsonMap, expectedRequest)
+      assertEquals("authorization_code", jsonMap["grant_type"])
+    }
+
+    @Test
+    fun `refreshAccessToken calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(TokenExchangeRequest::class.java)
       val request = TokenExchangeRequest(
         redirectUri = "https://example.com/oauth/callback",
@@ -160,6 +200,43 @@ class AuthTests {
       assertEquals("v3/connect/token", pathCaptor.firstValue)
       assertEquals(CodeExchangeResponse::class.java, typeCaptor.firstValue)
       assertEquals(json, requestBodyCaptor.firstValue)
+      assertEquals("refresh_token", jsonMap["grant_type"])
+    }
+
+    @Test
+    fun `refreshAccessToken clientSecret defaults to API`() {
+      val adapter = JsonHelper.moshi().adapter(TokenExchangeRequest::class.java)
+      val request = TokenExchangeRequest(
+        redirectUri = "https://example.com/oauth/callback",
+        refreshToken = "abc-123-refresh-token",
+        clientId = "abc-123",
+      )
+      val expectedRequest = mapOf(
+        "redirect_uri" to "https://example.com/oauth/callback",
+        "client_id" to "abc-123",
+        "client_secret" to "test-api-key",
+        "refresh_token" to "abc-123-refresh-token",
+        "grant_type" to "refresh_token",
+      )
+
+      auth.refreshAccessToken(request)
+
+      val json = adapter.toJson(request)
+      val jsonMap = JsonHelper.jsonToMap(json)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePost<CodeExchangeResponse>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connect/token", pathCaptor.firstValue)
+      assertEquals(CodeExchangeResponse::class.java, typeCaptor.firstValue)
+      assertEquals(jsonMap, expectedRequest)
       assertEquals("refresh_token", jsonMap["grant_type"])
     }
   }
