@@ -12,6 +12,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 	protected List<NameEmail> cc = Collections.emptyList();
 	protected List<NameEmail> bcc = Collections.emptyList();
 	protected List<NameEmail> reply_to = Collections.emptyList();
+	protected String reply_to_message_id;
 	protected Long date;
 	protected Boolean unread;
 	protected Boolean starred;
@@ -99,6 +100,10 @@ public class Message extends AccountOwnedModel implements JsonObject {
 		return metadata;
 	}
 
+	public String getReplyToMessageId() {
+		return reply_to_message_id;
+	}
+
 	/**
 	 * Return additional RFC2822 headers, only available in expanded view
 	 */
@@ -111,7 +116,7 @@ public class Message extends AccountOwnedModel implements JsonObject {
 		return "Message [id=" + getId() + ", account_id=" + getAccountId() + ", thread_id=" + thread_id + ", subject="
 				+ subject + ", from=" + from + ", to=" + to + ", cc=" + cc + ", bcc=" + bcc + ", reply_to=" + reply_to
 				+ ", date=" + getDate() + ", unread=" + unread + ", starred=" + starred + ", snippet=" + snippet
-				+ ", files=" + files + ", events=" + events + ", folder=" + folder
+				+ ", files=" + files + ", events=" + events + ", folder=" + folder + ", reply_to_message_id=" + reply_to_message_id
 				+ ", labels=" + labels + ", headers=" + headers + ", metadata=" + metadata + "]";
 	}
 	
