@@ -45,7 +45,7 @@ data class UpdateWebhookRequest(
 
     /**
      * Set the url to send webhooks to.
-     * @param callbackUrl The url to send webhooks to.
+     * @param webhookUrl The url to send webhooks to.
      * @return The builder.
      */
     fun webhookUrl(webhookUrl: String?) = apply { this.webhookUrl = webhookUrl }
