@@ -436,7 +436,7 @@ data class CreateEventRequest(
     private var recurrence: List<String>? = null
     private var calendarId: String? = null
     private var readOnly: Boolean? = null
-    private var visibility: EventVisibility? = null
+    private var visibility: EventVisibility? = EventVisibility.PUBLIC
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
 
