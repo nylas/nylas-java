@@ -10,22 +10,22 @@ data class ListCredentialsQueryParams(
    * Limit the number of results
    */
   @Json(name = "limit")
-  val limit: Int?,
+  val limit: Int? = null,
   /**
    * Offset the results by this number
    */
   @Json(name = "offset")
-  val offset: Int?,
+  val offset: Int? = null,
   /**
    * Sort the results by field name
    */
   @Json(name = "sort_by")
-  val sortBy: SortBy?,
+  val sortBy: SortBy? = null,
   /**
    * Order the results by ascending or descending
    */
   @Json(name = "order_by")
-  val orderBy: OrderBy?,
+  val orderBy: OrderBy? = null,
 ) : IQueryParams {
   /**
    * Builder for [ListCredentialsQueryParams].

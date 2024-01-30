@@ -15,6 +15,7 @@
 * Added support for sending drafts
 * Added support for the contacts API
 * Added enum support for OAuth prompt
+* Added additional enum support for Grants
 
 ### Changed
 * Fixed issue with sending scheduled messages
@@ -22,6 +23,9 @@
 * Fixed provider detect endpoint path
 * Fixed scope encoding for OAuth URL
 * Fixed typo in 'EventVisibility' enum
+* Fixed various issues with the connector API
+* Fixed response type for smart compose methods
+* Fixed inaccuracies with webhook related models
 
 ## [2.0.0-beta.3] - Released 2023-12-18
 

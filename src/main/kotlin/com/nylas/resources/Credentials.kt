@@ -60,7 +60,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
       .adapter(UpdateCredentialRequest::class.java)
       .toJson(requestBody)
 
-    return updateResource(path, serializedRequestBody)
+    return patchResource(path, serializedRequestBody)
   }
 
   /**

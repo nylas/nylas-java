@@ -24,8 +24,8 @@ data class CreateGrantRequest(
   /**
    * Optional list of scopes to request. If not specified it will use the integration default scopes.
    */
-  @Json(name = "scopes")
-  val scopes: List<String>? = null,
+  @Json(name = "scope")
+  val scope: List<String>? = null,
 ) {
   /**
    * Builder for [CreateGrantRequest].

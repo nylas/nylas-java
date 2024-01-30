@@ -250,7 +250,7 @@ class AuthTests {
         provider = AuthProvider.GOOGLE,
         settings = mapOf("email" to "test@nylas.com"),
         state = "abc-123-state",
-        scopes = listOf("email.read_only", "calendar", "contacts"),
+        scope = listOf("email.read_only", "calendar", "contacts"),
       )
 
       auth.customAuthentication(request)

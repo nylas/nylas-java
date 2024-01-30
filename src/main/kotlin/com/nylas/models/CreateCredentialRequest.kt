@@ -1,6 +1,7 @@
 package com.nylas.models
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 
 /**
  * Class representing a request to create a credential
@@ -69,4 +70,12 @@ sealed class CreateCredentialRequest(
     @Json(name = "credential_data")
     override val credentialData: CredentialData.ConnectorOverride,
   ) : CreateCredentialRequest(name, credentialData, CredentialType.CONNECTOR)
+
+  companion object {
+    @JvmStatic
+    val CREATE_CREDENTIAL_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<CreateCredentialRequest> = PolymorphicJsonAdapterFactory.of(CreateCredentialRequest::class.java, "credential_type")
+      .withSubtype(Microsoft::class.java, CredentialType.ADMINCONSENT.value)
+      .withSubtype(Google::class.java, CredentialType.SERVICEACCOUNT.value)
+      .withSubtype(Override::class.java, CredentialType.CONNECTOR.value)
+  }
 }

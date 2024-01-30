@@ -24,8 +24,8 @@ data class CreateWebhookRequest(
   /**
    * The email addresses that Nylas notifies when a webhook is down for a while.
    */
-  @Json(name = "notification_email_address")
-  val notificationEmailAddress: String? = null,
+  @Json(name = "notification_email_addresses")
+  val notificationEmailAddresses: List<String>? = null,
 ) {
   /**
    * A builder for creating a [CreateWebhookRequest].
@@ -37,7 +37,7 @@ data class CreateWebhookRequest(
     private val webhookUrl: String,
   ) {
     private var description: String? = null
-    private var notificationEmailAddress: String? = null
+    private var notificationEmailAddresses: List<String>? = null
 
     /**
      * Set a human-readable description of the webhook destination.
@@ -48,15 +48,15 @@ data class CreateWebhookRequest(
 
     /**
      * Set the email addresses that Nylas notifies when a webhook is down for a while.
-     * @param notificationEmailAddress The email addresses that Nylas notifies when a webhook is down for a while.
+     * @param notificationEmailAddresses The email addresses that Nylas notifies when a webhook is down for a while.
      * @return The builder.
      */
-    fun notificationEmailAddress(notificationEmailAddress: String?) = apply { this.notificationEmailAddress = notificationEmailAddress }
+    fun notificationEmailAddresses(notificationEmailAddresses: List<String>?) = apply { this.notificationEmailAddresses = notificationEmailAddresses }
 
     /**
      * Build the [CreateWebhookRequest].
      * @return The created [CreateWebhookRequest].
      */
-    fun build() = CreateWebhookRequest(triggerTypes, webhookUrl, description, notificationEmailAddress)
+    fun build() = CreateWebhookRequest(triggerTypes, webhookUrl, description, notificationEmailAddresses)
   }
 }

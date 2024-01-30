@@ -1,5 +1,7 @@
 package com.nylas.models
 
+import com.squareup.moshi.Json
+
 /**
  * Class representing a request to update a credential
  */
@@ -7,11 +9,13 @@ data class UpdateCredentialRequest(
   /**
    * Unique name of this credential
    */
-  val name: String?,
+  @Json(name = "name")
+  val name: String? = null,
   /**
    * Data that specifies some special data required for this credential
    */
-  val credentialData: CredentialData?,
+  @Json(name = "credential_data")
+  val credentialData: CredentialData? = null,
 ) {
   /**
    * Builder for [UpdateCredentialRequest]
