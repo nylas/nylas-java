@@ -6,6 +6,7 @@ plugins {
   `java-library`
   application
   signing
+  jacoco
 }
 
 repositories {
@@ -48,7 +49,23 @@ dependencies {
   testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 }
 
+tasks.jacocoTestReport {
+  classDirectories.setFrom(
+    files(
+      classDirectories.files.map {
+        fileTree(it) {
+          exclude(
+            "com/nylas/models/**",
+            "com/nylas/interceptors/**",
+          )
+        }
+      },
+    ),
+  )
+}
+
 tasks.test {
+  finalizedBy(tasks.jacocoTestReport)
   useJUnitPlatform()
 }
 
