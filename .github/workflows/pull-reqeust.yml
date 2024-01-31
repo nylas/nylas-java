@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - main
+      - v6.0.0-beta
 
 jobs:
   checks:
