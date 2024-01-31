@@ -216,31 +216,13 @@ class DraftsTests {
       val createDraftRequest =
         CreateDraftRequest(
           body = "Hello, I just sent a message using Nylas!",
-          cc =
-            listOf(
-              EmailName(
-                email = "test@gmail.com",
-                name = "Test",
-              ),
-            ),
-          bcc =
-            listOf(
-              EmailName(
-                email = "bcc@gmail.com",
-                name = "BCC",
-              ),
-            ),
+          cc = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          bcc = listOf(EmailName(email = "bcc@gmail.com", name = "BCC")),
           subject = "Hello from Nylas!",
           starred = true,
           sendAt = 1620000000,
           replyToMessageId = "reply-to-message-id",
-          trackingOptions =
-            TrackingOptions(
-              label = "label",
-              links = true,
-              opens = true,
-              threadReplies = true,
-            ),
+          trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
         )
 
       drafts.create(grantId, createDraftRequest)
