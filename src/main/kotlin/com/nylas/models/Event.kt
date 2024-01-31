@@ -135,6 +135,11 @@ data class Event(
    */
   @Json(name = "html_link")
   val htmlLink: String? = null,
+  /**
+   * The maximum number of participants that may attend the event
+   */
+  @Json(name = "capacity")
+  val capacity: Int? = null,
 ) {
   /**
    * Get the type of object.
