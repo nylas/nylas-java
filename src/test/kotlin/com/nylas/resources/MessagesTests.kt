@@ -41,8 +41,9 @@ class MessagesTests {
     @Test
     fun `Message serializes properly`() {
       val adapter = JsonHelper.moshi().adapter(Message::class.java)
-      val jsonBuffer = Buffer().writeUtf8(
-        """
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
           {
             "body": "Hello, I just sent a message using Nylas!",
             "cc": [
@@ -90,8 +91,8 @@ class MessagesTests {
             ],
             "unread": true
           }
-        """.trimIndent(),
-      )
+          """.trimIndent(),
+        )
 
       val message = adapter.fromJson(jsonBuffer)!!
       assertIs<Message>(message)
@@ -142,24 +143,25 @@ class MessagesTests {
 
     @Test
     fun `listing messages calls requests with the correct params`() {
-      val queryParams = ListMessagesQueryParams(
-        limit = 10,
-        pageToken = "abc-123",
-        subject = "Hello from Nylas!",
-        anyEmail = listOf("test@gmail.com"),
-        to = listOf("rec@gmail.com"),
-        cc = listOf("cc@gmail.com"),
-        bcc = listOf("bcc@gmail.com"),
-        from = listOf("from@gmail.com"),
-        inFolder = listOf("inbox"),
-        unread = true,
-        starred = true,
-        hasAttachment = true,
-        searchQueryNative = "1634832749",
-        receivedBefore = 1634832749,
-        receivedAfter = 1634832749,
-        fields = MessageFields.INCLUDE_HEADERS,
-      )
+      val queryParams =
+        ListMessagesQueryParams(
+          limit = 10,
+          pageToken = "abc-123",
+          subject = "Hello from Nylas!",
+          anyEmail = listOf("test@gmail.com"),
+          to = listOf("rec@gmail.com"),
+          cc = listOf("cc@gmail.com"),
+          bcc = listOf("bcc@gmail.com"),
+          from = listOf("from@gmail.com"),
+          inFolder = listOf("inbox"),
+          unread = true,
+          starred = true,
+          hasAttachment = true,
+          searchQueryNative = "1634832749",
+          receivedBefore = 1634832749,
+          receivedAfter = 1634832749,
+          fields = MessageFields.INCLUDE_HEADERS,
+        )
 
       messages.list(grantId, queryParams)
 
@@ -219,11 +221,12 @@ class MessagesTests {
     fun `updating a message calls requests with the correct params`() {
       val messageId = "message-123"
       val adapter = JsonHelper.moshi().adapter(UpdateMessageRequest::class.java)
-      val updateMessageRequest = UpdateMessageRequest(
-        starred = true,
-        unread = true,
-        folders = listOf("folder-1", "folder-2"),
-      )
+      val updateMessageRequest =
+        UpdateMessageRequest(
+          starred = true,
+          unread = true,
+          folders = listOf("folder-1", "folder-2"),
+        )
 
       messages.update(grantId, messageId, updateMessageRequest)
 
@@ -353,40 +356,18 @@ class MessagesTests {
     @Test
     fun `sending a message calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
-      val sendMessageRequest = SendMessageRequest(
-        to = listOf(
-          EmailName(
-            email = "test@gmail.com",
-            name = "Test",
-          ),
-        ),
-        body = "Hello, I just sent a message using Nylas!",
-        cc = listOf(
-          EmailName(
-            email = "test@gmail.com",
-            name = "Test",
-          ),
-        ),
-        bcc = listOf(
-          EmailName(
-            email = "bcc@gmail.com",
-            name = "BCC",
-          ),
-        ),
-        snippet = "Hello, I just sent a message using Nylas!",
-        threadId = "thread-123",
-        subject = "Hello from Nylas!",
-        unread = false,
-        starred = true,
-        sendAt = 1620000000,
-        replyToMessageId = "reply-to-message-id",
-        trackingOptions = TrackingOptions(
-          label = "label",
-          links = true,
-          opens = true,
-          threadReplies = true,
-        ),
-      )
+      val sendMessageRequest =
+        SendMessageRequest(
+          to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          body = "Hello, I just sent a message using Nylas!",
+          cc = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          bcc = listOf(EmailName(email = "bcc@gmail.com", name = "BCC")),
+          subject = "Hello from Nylas!",
+          starred = true,
+          sendAt = 1620000000,
+          replyToMessageId = "reply-to-message-id",
+          trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+        )
 
       messages.send(grantId, sendMessageRequest)
 

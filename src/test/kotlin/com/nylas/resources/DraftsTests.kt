@@ -44,57 +44,58 @@ class DraftsTests {
     @Test
     fun `Draft serializes properly`() {
       val adapter = JsonHelper.moshi().adapter(Draft::class.java)
-      val jsonBuffer = Buffer().writeUtf8(
-        """
-          {
-            "body": "Hello, I just sent a message using Nylas!",
-            "cc": [
-              {
-                "email": "arya.stark@example.com"
-              }
-            ],
-            "attachments": [
-              {
-                "content_type": "text/calendar",
-                "id": "4kj2jrcoj9ve5j9yxqz5cuv98",
-                "size": 1708
-              }
-            ],
-            "folders": [
-              "8l6c4d11y1p4dm4fxj52whyr9",
-              "d9zkcr2tljpu3m4qpj7l2hbr0"
-            ],
-            "from": [
-              {
-                "name": "Daenerys Targaryen",
-                "email": "daenerys.t@example.com"
-              }
-            ],
-            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
-            "id": "5d3qmne77v32r8l4phyuksl2x",
-            "object": "draft",
-            "reply_to": [
-              {
-                "name": "Daenerys Targaryen",
-                "email": "daenerys.t@example.com"
-              }
-            ],
-            "snippet": "Hello, I just sent a message using Nylas!",
-            "starred": true,
-            "subject": "Hello from Nylas!",
-            "thread_id": "1t8tv3890q4vgmwq6pmdwm8qgsaer",
-            "to": [
-              {
-                "name": "Jon Snow",
-                "email": "j.snow@example.com"
-              }
-            ],
-            "date": 1705084742,
-            "created_at": 1705084926
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
+            {
+              "body": "Hello, I just sent a message using Nylas!",
+              "cc": [
+                {
+                  "email": "arya.stark@example.com"
+                }
+              ],
+              "attachments": [
+                {
+                  "content_type": "text/calendar",
+                  "id": "4kj2jrcoj9ve5j9yxqz5cuv98",
+                  "size": 1708
+                }
+              ],
+              "folders": [
+                "8l6c4d11y1p4dm4fxj52whyr9",
+                "d9zkcr2tljpu3m4qpj7l2hbr0"
+              ],
+              "from": [
+                {
+                  "name": "Daenerys Targaryen",
+                  "email": "daenerys.t@example.com"
+                }
+              ],
+              "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+              "id": "5d3qmne77v32r8l4phyuksl2x",
+              "object": "draft",
+              "reply_to": [
+                {
+                  "name": "Daenerys Targaryen",
+                  "email": "daenerys.t@example.com"
+                }
+              ],
+              "snippet": "Hello, I just sent a message using Nylas!",
+              "starred": true,
+              "subject": "Hello from Nylas!",
+              "thread_id": "1t8tv3890q4vgmwq6pmdwm8qgsaer",
+              "to": [
+                {
+                  "name": "Jon Snow",
+                  "email": "j.snow@example.com"
+                }
+              ],
+              "date": 1705084742,
+              "created_at": 1705084926
+            }
           }
-        }
-        """.trimIndent(),
-      )
+          """.trimIndent(),
+        )
 
       val draft = adapter.fromJson(jsonBuffer)!!
       assertIs<Draft>(draft)
@@ -144,17 +145,18 @@ class DraftsTests {
 
     @Test
     fun `listing drafts calls requests with the correct params`() {
-      val queryParams = ListDraftsQueryParams(
-        limit = 10,
-        threadId = "thread-123",
-        subject = "subject",
-        to = listOf("to"),
-        cc = listOf("cc"),
-        bcc = listOf("bcc"),
-        unread = true,
-        starred = true,
-        hasAttachment = true,
-      )
+      val queryParams =
+        ListDraftsQueryParams(
+          limit = 10,
+          threadId = "thread-123",
+          subject = "subject",
+          to = listOf("to"),
+          cc = listOf("cc"),
+          bcc = listOf("bcc"),
+          unread = true,
+          starred = true,
+          hasAttachment = true,
+        )
 
       drafts.list(grantId, queryParams)
 
@@ -211,34 +213,17 @@ class DraftsTests {
     @Test
     fun `creating a draft calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
-      val createDraftRequest = CreateDraftRequest(
-        body = "Hello, I just sent a message using Nylas!",
-        cc = listOf(
-          EmailName(
-            email = "test@gmail.com",
-            name = "Test",
-          ),
-        ),
-        bcc = listOf(
-          EmailName(
-            email = "bcc@gmail.com",
-            name = "BCC",
-          ),
-        ),
-        snippet = "Hello, I just sent a message using Nylas!",
-        threadId = "thread-123",
-        subject = "Hello from Nylas!",
-        unread = false,
-        starred = true,
-        sendAt = 1620000000,
-        replyToMessageId = "reply-to-message-id",
-        trackingOptions = TrackingOptions(
-          label = "label",
-          links = true,
-          opens = true,
-          threadReplies = true,
-        ),
-      )
+      val createDraftRequest =
+        CreateDraftRequest(
+          body = "Hello, I just sent a message using Nylas!",
+          cc = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          bcc = listOf(EmailName(email = "bcc@gmail.com", name = "BCC")),
+          subject = "Hello from Nylas!",
+          starred = true,
+          sendAt = 1620000000,
+          replyToMessageId = "reply-to-message-id",
+          trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+        )
 
       drafts.create(grantId, createDraftRequest)
 
@@ -270,12 +255,13 @@ class DraftsTests {
     fun `updating a draft calls requests with the correct params`() {
       val draftId = "draft-123"
       val adapter = JsonHelper.moshi().adapter(UpdateDraftRequest::class.java)
-      val updateDraftRequest = UpdateDraftRequest(
-        body = "Hello, I just sent a message using Nylas!",
-        subject = "Hello from Nylas!",
-        unread = false,
-        starred = true,
-      )
+      val updateDraftRequest =
+        UpdateDraftRequest(
+          body = "Hello, I just sent a message using Nylas!",
+          subject = "Hello from Nylas!",
+          unread = false,
+          starred = true,
+        )
 
       drafts.update(grantId, draftId, updateDraftRequest)
 

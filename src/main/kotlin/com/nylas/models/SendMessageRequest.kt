@@ -32,22 +32,10 @@ data class SendMessageRequest(
   @Transient
   override val attachments: List<CreateAttachmentRequest>? = null,
   /**
-   * A short snippet of the message body.
-   * This is the first 100 characters of the message body, with any HTML tags removed.
-   */
-  @Json(name = "snippet")
-  val snippet: String? = null,
-  /**
    * The message subject.
    */
   @Json(name = "subject")
   val subject: String? = null,
-  /**
-   * A reference to the parent thread object.
-   * If this is a new draft, the thread will be empty.
-   */
-  @Json(name = "thread_id")
-  val threadId: String? = null,
   /**
    * The full HTML message body.
    * Messages with only plain-text representations are up-converted to HTML.
@@ -59,11 +47,6 @@ data class SendMessageRequest(
    */
   @Json(name = "starred")
   val starred: Boolean? = null,
-  /**
-   * Whether or not the message has been read by the user.
-   */
-  @Json(name = "unread")
-  val unread: Boolean? = null,
   /**
    * Unix timestamp to send the message at.
    */
@@ -97,12 +80,9 @@ data class SendMessageRequest(
     private var cc: List<EmailName>? = null
     private var replyTo: List<EmailName>? = null
     private var attachments: List<CreateAttachmentRequest>? = null
-    private var snippet: String? = null
     internal var subject: String? = null
-    private var threadId: String? = null
     private var body: String? = null
     private var starred: Boolean? = null
-    private var unread: Boolean? = null
     private var sendAt: Int? = null
     private var replyToMessageId: String? = null
     private var trackingOptions: TrackingOptions? = null
@@ -137,27 +117,11 @@ data class SendMessageRequest(
     fun attachments(attachments: List<CreateAttachmentRequest>?) = apply { this.attachments = attachments }
 
     /**
-     * Sets the snippet of the message body.
-     * This is the first 100 characters of the message body, with any HTML tags removed.
-     * @param snippet The snippet of the message body.
-     * @return The builder.
-     */
-    fun snippet(snippet: String?) = apply { this.snippet = snippet }
-
-    /**
      * Sets the message subject.
      * @param subject The message subject.
      * @return The builder.
      */
     fun subject(subject: String?) = apply { this.subject = subject }
-
-    /**
-     * Sets the reference to the parent thread object.
-     * If this is a new draft, the thread will be empty.
-     * @param threadId The reference to the parent thread object.
-     * @return The builder.
-     */
-    fun threadId(threadId: String?) = apply { this.threadId = threadId }
 
     /**
      * Sets the full HTML message body.
@@ -173,13 +137,6 @@ data class SendMessageRequest(
      * @return The builder.
      */
     fun starred(starred: Boolean?) = apply { this.starred = starred }
-
-    /**
-     * Sets whether or not the message has been read by the user.
-     * @param unread Whether or not the message has been read by the user.
-     * @return The builder.
-     */
-    fun unread(unread: Boolean?) = apply { this.unread = unread }
 
     /**
      * Sets the unix timestamp to send the message at.
@@ -214,22 +171,20 @@ data class SendMessageRequest(
      * Builds a [SendMessageRequest] instance.
      * @return The [SendMessageRequest] instance.
      */
-    fun build() = SendMessageRequest(
-      to,
-      bcc,
-      cc,
-      replyTo,
-      attachments,
-      snippet,
-      subject,
-      threadId,
-      body,
-      starred,
-      unread,
-      sendAt,
-      replyToMessageId,
-      trackingOptions,
-      useDraft,
-    )
+    fun build() =
+      SendMessageRequest(
+        to,
+        bcc,
+        cc,
+        replyTo,
+        attachments,
+        subject,
+        body,
+        starred,
+        sendAt,
+        replyToMessageId,
+        trackingOptions,
+        useDraft,
+      )
   }
 }

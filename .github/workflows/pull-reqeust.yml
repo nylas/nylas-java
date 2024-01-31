@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - main
+      - v2.0.0-beta
 
 jobs:
   checks:
@@ -23,6 +24,9 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Lint project
+        run: ./gradlew lintKotlin
 
       - name: Build project
         run: ./gradlew clean build
