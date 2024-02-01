@@ -7,15 +7,14 @@ import com.squareup.moshi.Json
  */
 data class Reminders(
   /**
-   * The number of minutes before the event start time when a user wants a reminder for this event.
-   * Reminder minutes are in the following format: "[20]".
+   * Whether to use the default reminders for the calendar.
+   * When true, uses the default reminder settings for the calendar
    */
-  @Json(name = "reminder_minutes")
-  val reminderMinutes: String? = null,
-
+  @Json(name = "use_default")
+  val useDefault: Boolean,
   /**
-   * Method to remind the user about the event. (Google only).
+   *  list of reminders for the event if useDefault is set to false.
    */
-  @Json(name = "reminder_method")
-  val reminderMethod: ReminderMethod? = null,
+  @Json(name = "override")
+  val override: List<ReminderOverride>? = null,
 )
