@@ -56,6 +56,11 @@ data class Event(
   @Json(name = "read_only")
   val readOnly: Boolean = false,
   /**
+   * Visibility of the event, if the event is private or public.
+   */
+  @Json(name = "visibility")
+  val visibility: EventVisibility = EventVisibility.DEFAULT,
+  /**
    * Unix timestamp when the event was created.
    */
   @Json(name = "created_at")
@@ -119,11 +124,6 @@ data class Event(
    */
   @Json(name = "title")
   val title: String? = null,
-  /**
-   * Visibility of the event, if the event is private or public.
-   */
-  @Json(name = "visibility")
-  val visibility: EventVisibility? = null,
   /**
    * User who created the event.
    * Not supported for all providers.
