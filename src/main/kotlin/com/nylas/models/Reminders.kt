@@ -15,6 +15,6 @@ data class Reminders(
   /**
    *  list of reminders for the event if useDefault is set to false.
    */
-  @Json(name = "override")
-  val override: List<ReminderOverride>? = null,
+  @Json(name = "overrides")
+  val overrides: List<ReminderOverride>? = null,
 )

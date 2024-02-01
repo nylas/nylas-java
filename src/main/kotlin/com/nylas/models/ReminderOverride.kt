@@ -11,7 +11,7 @@ data class ReminderOverride(
    * Reminder minutes are in the following format: "[20]".
    */
   @Json(name = "reminder_minutes")
-  val reminderMinutes: String? = null,
+  val reminderMinutes: Int? = null,
   /**
    * Method to remind the user about the event. (Google only).
    */
