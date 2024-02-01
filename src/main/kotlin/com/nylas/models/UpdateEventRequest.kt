@@ -48,16 +48,10 @@ data class UpdateEventRequest(
   @Json(name = "conferencing")
   val conferencing: Conferencing? = null,
   /**
-   * The number of minutes before the event start time when a user wants a reminder for this event.
-   * Reminder minutes need to be entered in the following format: "[20]".
+   * A list of reminders to send for the event. If left empty or omitted, the event uses the provider defaults.
    */
-  @Json(name = "reminder_minutes")
-  val reminderMinutes: String? = null,
-  /**
-   * Method to remind the user about the event. (Google only).
-   */
-  @Json(name = "reminder_method")
-  val reminderMethod: ReminderMethod? = null,
+  @Json(name = "reminders")
+  val reminders: Reminders? = null,
   /**
    *  A list of key-value pairs storing additional data.
    */
@@ -96,7 +90,6 @@ data class UpdateEventRequest(
   @Json(name = "hide_participant")
   val hideParticipant: Boolean? = null,
 ) {
-
   /**
    * This sealed class represents the different types of event time configurations.
    */
@@ -503,6 +496,23 @@ data class UpdateEventRequest(
   }
 
   /**
+   * Class representing the reminders field of an event.
+   */
+  data class Reminders(
+    /**
+     * Whether to use the default reminders for the calendar.
+     * When true, uses the default reminder settings for the calendar
+     */
+    @Json(name = "use_default")
+    val useDefault: Boolean? = null,
+    /**
+     * A list of reminders for the event if useDefault is set to false.
+     */
+    @Json(name = "override")
+    val override: List<ReminderOverride>? = null,
+  )
+
+  /**
    * Builder for [UpdateEventRequest].
    */
   class Builder {
@@ -513,8 +523,7 @@ data class UpdateEventRequest(
     private var participants: List<Participant>? = null
     private var busy: Boolean? = null
     private var conferencing: Conferencing? = null
-    private var reminderMinutes: String? = null
-    private var reminderMethod: ReminderMethod? = null
+    private var reminders: Reminders? = null
     private var metadata: Map<String, String>? = null
     private var recurrence: List<String>? = null
     private var calendarId: String? = null
@@ -581,18 +590,11 @@ data class UpdateEventRequest(
     fun conferencing(conferencing: Conferencing) = apply { this.conferencing = conferencing }
 
     /**
-     * Update the reminder minutes of the event.
-     * @param reminderMinutes The number of minutes before the event start time when a user wants a reminder for this event.
+     * Update the reminders of the event.
+     * @param reminders A list of reminders to send for the event. If left empty or omitted, the event uses the provider defaults.
      * @return The builder.
      */
-    fun reminderMinutes(reminderMinutes: String) = apply { this.reminderMinutes = reminderMinutes }
-
-    /**
-     * Update the reminder method of the event.
-     * @param reminderMethod Method to remind the user about the event. (Google only).
-     * @return The builder.
-     */
-    fun reminderMethod(reminderMethod: ReminderMethod) = apply { this.reminderMethod = reminderMethod }
+    fun reminders(reminders: Reminders) = apply { this.reminders = reminders }
 
     /**
      * Update the metadata of the event.
@@ -648,23 +650,23 @@ data class UpdateEventRequest(
      * Builds the [UpdateEventRequest] object.
      * @return [UpdateEventRequest] object.
      */
-    fun build() = UpdateEventRequest(
-      whenObj,
-      title,
-      description,
-      location,
-      participants,
-      busy,
-      conferencing,
-      reminderMinutes,
-      reminderMethod,
-      metadata,
-      recurrence,
-      calendarId,
-      readOnly,
-      visibility,
-      capacity,
-      hideParticipant,
-    )
+    fun build() =
+      UpdateEventRequest(
+        whenObj,
+        title,
+        description,
+        location,
+        participants,
+        busy,
+        conferencing,
+        reminders,
+        metadata,
+        recurrence,
+        calendarId,
+        readOnly,
+        visibility,
+        capacity,
+        hideParticipant,
+      )
   }
 }
