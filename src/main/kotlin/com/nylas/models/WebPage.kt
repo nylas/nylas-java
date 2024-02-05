@@ -9,14 +9,16 @@ data class WebPage(
   @Json(name = "url")
   val url: String? = null,
   @Json(name = "type")
-  val type: ContactType? = null,
+  val type: String? = null,
 ) {
   class Builder {
     private var url: String? = null
-    private var type: ContactType? = null
+    private var type: String? = null
 
     fun url(url: String) = apply { this.url = url }
-    fun type(type: ContactType) = apply { this.type = type }
+
+    fun type(type: String) = apply { this.type = type }
+
     fun build() = WebPage(url, type)
   }
 }

@@ -73,9 +73,10 @@ sealed class CreateCredentialRequest(
 
   companion object {
     @JvmStatic
-    val CREATE_CREDENTIAL_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<CreateCredentialRequest> = PolymorphicJsonAdapterFactory.of(CreateCredentialRequest::class.java, "credential_type")
-      .withSubtype(Microsoft::class.java, CredentialType.ADMINCONSENT.value)
-      .withSubtype(Google::class.java, CredentialType.SERVICEACCOUNT.value)
-      .withSubtype(Override::class.java, CredentialType.CONNECTOR.value)
+    val CREATE_CREDENTIAL_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<CreateCredentialRequest> =
+      PolymorphicJsonAdapterFactory.of(CreateCredentialRequest::class.java, "credential_type")
+        .withSubtype(Microsoft::class.java, CredentialType.ADMINCONSENT.value)
+        .withSubtype(Google::class.java, CredentialType.SERVICEACCOUNT.value)
+        .withSubtype(Override::class.java, CredentialType.CONNECTOR.value)
   }
 }

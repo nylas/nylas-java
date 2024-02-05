@@ -7,10 +7,12 @@
 
 ### Changed
 * Changed `clientSecret` to optional for token exchange methods; defaults to API Key now
+* Updated `reminder` field to reflect the new API schema
 * Fixed various issues with the connector API
 * Fixed response type for smart compose methods
 * Fixed inaccuracies with webhook related models
 * Fixed models for creating drafts and sending messages
+* Removed `ContactType` enum as the field allows for any string value
 
 ## [2.0.0-beta.4] - Released 2024-01-09
 

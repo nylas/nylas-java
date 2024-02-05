@@ -122,7 +122,7 @@ class ContactsTests {
       assertEquals(
         listOf(
           ContactEmail(
-            type = ContactType.WORK,
+            type = "work",
             email = "john-work@example.com",
           ),
         ),
@@ -139,7 +139,7 @@ class ContactsTests {
       assertEquals(
         listOf(
           InstantMessagingAddress(
-            type = ContactType.OTHER,
+            type = "other",
             imAddress = "myjabberaddress",
           ),
         ),
@@ -148,7 +148,7 @@ class ContactsTests {
       assertEquals(
         listOf(
           PhoneNumber(
-            type = ContactType.WORK,
+            type = "work",
             number = "+1-555-555-5555",
           ),
         ),
@@ -157,7 +157,7 @@ class ContactsTests {
       assertEquals(
         listOf(
           WebPage(
-            type = ContactType.WORK,
+            type = "work",
             url = "http://www.linkedin.com/in/johndoe",
           ),
         ),
@@ -166,7 +166,7 @@ class ContactsTests {
       assertEquals(
         listOf(
           PhysicalAddress(
-            type = ContactType.WORK,
+            type = "work",
             streetAddress = "123 Main Street",
             postalCode = "94107",
             state = "CA",
@@ -284,7 +284,7 @@ class ContactsTests {
         companyName = "Nylas",
         emails = listOf(
           ContactEmail(
-            type = ContactType.WORK,
+            type = "work",
             email = "test@gmail.com",
           ),
         ),
@@ -296,7 +296,7 @@ class ContactsTests {
         ),
         imAddresses = listOf(
           InstantMessagingAddress(
-            type = ContactType.OTHER,
+            type = "other",
             imAddress = "myjabberaddress",
           ),
         ),
@@ -308,13 +308,13 @@ class ContactsTests {
         officeLocation = "123 Main Street",
         phoneNumbers = listOf(
           PhoneNumber(
-            type = ContactType.WORK,
+            type = "work",
             number = "+1-555-555-5555",
           ),
         ),
         physicalAddresses = listOf(
           PhysicalAddress(
-            type = ContactType.WORK,
+            type = "work",
             streetAddress = "123 Main Street",
             postalCode = "94107",
             state = "CA",
@@ -326,7 +326,7 @@ class ContactsTests {
         surname = "Doe",
         webPages = listOf(
           WebPage(
-            type = ContactType.WORK,
+            type = "work",
             url = "http://www.linkedin.com/in/johndoe",
           ),
         ),
@@ -358,7 +358,7 @@ class ContactsTests {
         companyName = "Nylas",
         emails = listOf(
           ContactEmail(
-            type = ContactType.WORK,
+            type = "work",
             email = "test@gmail.com",
           ),
         ),
@@ -370,7 +370,7 @@ class ContactsTests {
         ),
         imAddresses = listOf(
           InstantMessagingAddress(
-            type = ContactType.OTHER,
+            type = "other",
             imAddress = "myjabberaddress",
           ),
         ),
@@ -382,13 +382,13 @@ class ContactsTests {
         officeLocation = "123 Main Street",
         phoneNumbers = listOf(
           PhoneNumber(
-            type = ContactType.WORK,
+            type = "work",
             number = "+1-555-555-5555",
           ),
         ),
         physicalAddresses = listOf(
           PhysicalAddress(
-            type = ContactType.WORK,
+            type = "work",
             streetAddress = "123 Main Street",
             postalCode = "94107",
             state = "CA",
@@ -400,7 +400,7 @@ class ContactsTests {
         surname = "Doe",
         webPages = listOf(
           WebPage(
-            type = ContactType.WORK,
+            type = "work",
             url = "http://www.linkedin.com/in/johndoe",
           ),
         ),

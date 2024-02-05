@@ -103,10 +103,11 @@ sealed class CreateConnectorRequest(
 
   companion object {
     @JvmStatic
-    val CREATE_CONNECTOR_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<CreateConnectorRequest> = PolymorphicJsonAdapterFactory.of(CreateConnectorRequest::class.java, "provider")
-      .withSubtype(Google::class.java, AuthProvider.GOOGLE.value)
-      .withSubtype(Microsoft::class.java, AuthProvider.MICROSOFT.value)
-      .withSubtype(Imap::class.java, AuthProvider.IMAP.value)
-      .withSubtype(VirtualCalendar::class.java, AuthProvider.VIRTUAL_CALENDAR.value)
+    val CREATE_CONNECTOR_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<CreateConnectorRequest> =
+      PolymorphicJsonAdapterFactory.of(CreateConnectorRequest::class.java, "provider")
+        .withSubtype(Google::class.java, AuthProvider.GOOGLE.value)
+        .withSubtype(Microsoft::class.java, AuthProvider.MICROSOFT.value)
+        .withSubtype(Imap::class.java, AuthProvider.IMAP.value)
+        .withSubtype(VirtualCalendar::class.java, AuthProvider.VIRTUAL_CALENDAR.value)
   }
 }

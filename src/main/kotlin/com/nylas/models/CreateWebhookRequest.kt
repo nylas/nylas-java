@@ -51,7 +51,9 @@ data class CreateWebhookRequest(
      * @param notificationEmailAddresses The email addresses that Nylas notifies when a webhook is down for a while.
      * @return The builder.
      */
-    fun notificationEmailAddresses(notificationEmailAddresses: List<String>?) = apply { this.notificationEmailAddresses = notificationEmailAddresses }
+    fun notificationEmailAddresses(notificationEmailAddresses: List<String>?) = apply {
+      this.notificationEmailAddresses = notificationEmailAddresses
+    }
 
     /**
      * Build the [CreateWebhookRequest].

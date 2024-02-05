@@ -48,16 +48,10 @@ data class CreateEventRequest(
   @Json(name = "conferencing")
   val conferencing: Conferencing? = null,
   /**
-   * The number of minutes before the event start time when a user wants a reminder for this event.
-   * Reminder minutes need to be entered in the following format: "[20]".
+   * A list of reminders to send for the event. If left empty or omitted, the event uses the provider defaults.
    */
-  @Json(name = "reminder_minutes")
-  val reminderMinutes: String? = null,
-  /**
-   * Method to remind the user about the event. (Google only).
-   */
-  @Json(name = "reminder_method")
-  val reminderMethod: ReminderMethod? = null,
+  @Json(name = "reminders")
+  val reminders: Reminders? = null,
   /**
    *  A list of key-value pairs storing additional data.
    */
@@ -96,7 +90,6 @@ data class CreateEventRequest(
   @Json(name = "hide_participant")
   val hideParticipant: Boolean? = null,
 ) {
-
   /**
    * This sealed class represents the different types of event time configurations.
    */
@@ -430,13 +423,12 @@ data class CreateEventRequest(
     private var participants: List<Participant>? = null
     private var busy: Boolean? = null
     private var conferencing: Conferencing? = null
-    private var reminderMinutes: String? = null
-    private var reminderMethod: ReminderMethod? = null
+    private var reminders: Reminders? = null
     private var metadata: Map<String, String>? = null
     private var recurrence: List<String>? = null
     private var calendarId: String? = null
     private var readOnly: Boolean? = null
-    private var visibility: EventVisibility? = EventVisibility.PUBLIC
+    private var visibility: EventVisibility? = null
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
 
@@ -487,19 +479,12 @@ data class CreateEventRequest(
     fun conferencing(conferencing: Conferencing) = apply { this.conferencing = conferencing }
 
     /**
-     * Set the number of minutes before the event start time when a user wants a reminder for this event.
-     * Reminder minutes need to be entered in the following format: "[20]".
-     * @param reminderMinutes The number of minutes before the event start time when a user wants a reminder for this event.
+     * Set the event reminders.
+     * A list of reminders to send for the event. If left empty or omitted, the event uses the provider defaults.
+     * @param reminders The event reminders.
      * @return The builder.
      */
-    fun reminderMinutes(reminderMinutes: String) = apply { this.reminderMinutes = reminderMinutes }
-
-    /**
-     * Set the method to remind the user about the event. (Google only).
-     * @param reminderMethod Method to remind the user about the event.
-     * @return The builder.
-     */
-    fun reminderMethod(reminderMethod: ReminderMethod) = apply { this.reminderMethod = reminderMethod }
+    fun reminders(reminders: Reminders) = apply { this.reminders = reminders }
 
     /**
      * Set the metadata, which is a key-value pair storing additional data.
@@ -557,23 +542,23 @@ data class CreateEventRequest(
      * Builds the [CreateEventRequest] object.
      * @return [CreateEventRequest] object.
      */
-    fun build() = CreateEventRequest(
-      whenObj,
-      title,
-      description,
-      location,
-      participants,
-      busy,
-      conferencing,
-      reminderMinutes,
-      reminderMethod,
-      metadata,
-      recurrence,
-      calendarId,
-      readOnly,
-      visibility,
-      capacity,
-      hideParticipant,
-    )
+    fun build() =
+      CreateEventRequest(
+        whenObj,
+        title,
+        description,
+        location,
+        participants,
+        busy,
+        conferencing,
+        reminders,
+        metadata,
+        recurrence,
+        calendarId,
+        readOnly,
+        visibility,
+        capacity,
+        hideParticipant,
+      )
   }
 }

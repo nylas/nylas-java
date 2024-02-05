@@ -145,10 +145,13 @@ class HttpLoggingInterceptor : Interceptor {
 (truncated ${buf.size} byte body after $bytesToLog bytes)"""
     }
     val charset = contentType!!.charset(StandardCharsets.UTF_8)
-    return """
+    val str =
+      """
         $prefix
         ${buf.readString(bytesToLog, charset!!)}$truncationMessage
-    """.trimIndent()
+      """.trimIndent()
+
+    return str
   }
 
   private fun getContentLength(response: Response?): Long {
