@@ -1,66 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [2.0.0-beta.5] - Released 2024-02-05
-
-### Added
-* Added additional enum support for Grants
-
-### Changed
-* Changed `clientSecret` to optional for token exchange methods; defaults to API Key now
-* Updated `reminder` field to reflect the new API schema
-* Fixed various issues with the connector API
-* Fixed response type for smart compose methods
-* Fixed inaccuracies with webhook related models
-* Fixed models for creating drafts and sending messages
-* Removed `ContactType` enum as the field allows for any string value
-
-## [2.0.0-beta.4] - Released 2024-01-09
-
-### BREAKING CHANGES
-* Moved grants API out of `Auth` to `NylasClient`
-* Moved `Grants.create()` to `Auth.customAuthentication()`
-
-### Added
-* Added support for sending drafts
-* Added support for the contacts API
-* Added enum support for OAuth prompt
-
-### Changed
-* Fixed issue with sending scheduled messages
-* Fixed incorrect PKCE code challenge generation
-* Fixed provider detect endpoint path
-* Fixed scope encoding for OAuth URL
-* Fixed typo in 'EventVisibility' enum
-
-## [2.0.0-beta.3] - Released 2023-12-18
-
-### Added
-* Added support for event send RSVP
-
-### Changed
-* Fixed int type being serialized to double sometimes
-* Fixed `Auth.exchangeCodeForToken` always returning 401
-* Fixed error when sending message or updating draft
-
-## [2.0.0-beta.2] - Released 2023-11-21
-
-### Added
-* Added support for the free-busy endpoint
-* Added support for Messages, Drafts, and Smart Compose APIs
-* Added support for custom authentication, connectors, and credentials APIs
-* Added support for folders API
-* Added support for attachments API
-* Added getter for `GetFreeBusyResponse` `object` field
-
-### Changed
-* Return webhook object with secret when creating a webhook
-* Fixed HTTP method for rotating webhook secret
-* Fixed Redirect URI endpoint path
-* Fixed query parameter serialization
-* Fixed optional field for `GetAvailabilityResponse`
-* Fixed optional field for `Conferencing`
-
-## [2.0.0-beta.1] - Released 2023-08-16
+## [2.0.0] - Released 2024-02-05
 
 ### BREAKING CHANGES
 
@@ -455,10 +395,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.0.0-beta.3...HEAD
-[2.0.0-beta.3]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.3
-[2.0.0-beta.2]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.2
-[2.0.0-beta.1]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0-beta.1
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0
 [1.21.0]: https://github.com/nylas/nylas-java/releases/tag/v1.21.0
 [1.20.1]: https://github.com/nylas/nylas-java/releases/tag/v1.20.1
 [1.20.0]: https://github.com/nylas/nylas-java/releases/tag/v1.20.0
