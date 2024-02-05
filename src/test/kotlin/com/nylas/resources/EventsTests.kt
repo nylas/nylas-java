@@ -222,12 +222,12 @@ class EventsTests {
       val createEventRequest =
         CreateEventRequest(
           whenObj =
-            CreateEventRequest.When.Timespan(
-              startTime = 1620000000,
-              endTime = 1620000000,
-              startTimezone = "America/Los_Angeles",
-              endTimezone = "America/Los_Angeles",
-            ),
+          CreateEventRequest.When.Timespan(
+            startTime = 1620000000,
+            endTime = 1620000000,
+            startTimezone = "America/Los_Angeles",
+            endTimezone = "America/Los_Angeles",
+          ),
           description = "Description of my new event",
           location = "Los Angeles, CA",
           metadata = mapOf("your-key" to "value"),

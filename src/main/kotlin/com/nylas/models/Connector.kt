@@ -57,10 +57,11 @@ sealed class Connector(
 
   companion object {
     @JvmStatic
-    val CONNECTOR_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<Connector> = PolymorphicJsonAdapterFactory.of(Connector::class.java, "provider")
-      .withSubtype(Google::class.java, AuthProvider.GOOGLE.value)
-      .withSubtype(Microsoft::class.java, AuthProvider.MICROSOFT.value)
-      .withSubtype(Imap::class.java, AuthProvider.IMAP.value)
-      .withSubtype(VirtualCalendar::class.java, AuthProvider.VIRTUAL_CALENDAR.value)
+    val CONNECTOR_JSON_ADAPTER_FACTORY: PolymorphicJsonAdapterFactory<Connector> =
+      PolymorphicJsonAdapterFactory.of(Connector::class.java, "provider")
+        .withSubtype(Google::class.java, AuthProvider.GOOGLE.value)
+        .withSubtype(Microsoft::class.java, AuthProvider.MICROSOFT.value)
+        .withSubtype(Imap::class.java, AuthProvider.IMAP.value)
+        .withSubtype(VirtualCalendar::class.java, AuthProvider.VIRTUAL_CALENDAR.value)
   }
 }
