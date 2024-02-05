@@ -16,7 +16,7 @@ This makes it consistent with the other Nylas SDK offerings, and reflects that t
 To upgrade to the new SDK, change the dependency in your `build.gradle` file to the following:
 
 ```groovy
-implementation ('com.nylas.sdk:nylas:2.0.0-beta.1')
+implementation ('com.nylas.sdk:nylas:2.0.0')
 ```
 
 The first step to use the Nylas Java SDK is to create a new `NylasClient` object. This object is used to make all API requests.
