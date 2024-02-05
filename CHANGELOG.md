@@ -24,6 +24,14 @@
 * Non-builder ways for initializing `NylasClient`
 * Local Webhook development support is removed due to incompatibility with the new API version
 
+## [1.22.0] - Released 2024-01-29
+
+### Added
+
+* Added support for querying events using customer event ID
+* Added support for overriding the Event ID when updating, for recurring events
+* Added support for `reply_to_message_id` field in `Message`
+
 ## [1.21.0] - Released 2023-02-14
 
 ### Added
