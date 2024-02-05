@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [2.0.0-beta.5] - TBD
+## [2.0.0-beta.5] - Released 2024-02-05
 
 ### Added
 * Added additional enum support for Grants
