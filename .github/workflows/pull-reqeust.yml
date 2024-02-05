@@ -32,3 +32,6 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
