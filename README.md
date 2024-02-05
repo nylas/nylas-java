@@ -4,6 +4,9 @@
 
 # Nylas SDK for Kotlin & Java
 
+![Maven Central Version](https://img.shields.io/maven-central/v/com.nylas.sdk/nylas)
+[![codecov](https://codecov.io/gh/nylas/nylas-java/graph/badge.svg?token=R94RD91GZ3)](https://codecov.io/gh/nylas/nylas-java)
+
 This is the GitHub repository for the Nylas SDK for Kotlin and Java. This repo is primarily for anyone who wants to make contributions to the SDK or install it from source. For documentation on how to use this SDK to access the Nylas Email, Calendar, or Contacts APIs, see the official [Java SDK Quickstart Guide](https://developer.nylas.com/docs/sdks/java/).
 
 The Nylas Communications Platform provides REST APIs for [Email](https://developer.nylas.com/docs/email/), [Calendar](https://developer.nylas.com/docs/calendar/), and [Contacts](https://developer.nylas.com/docs/contacts/), and the Nylas SDK is the quickest way to build your integration using Kotlin or Java.
