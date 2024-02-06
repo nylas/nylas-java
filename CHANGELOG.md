@@ -1,20 +1,28 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [2.0.0] - Released 2024-02-05
 
-This section contains changes that have been committed but not yet released.
+### BREAKING CHANGES
+
+* Renamed artifact from `nylas-java-sdk` to `nylas`.
+* Nylas SDK v2 supports the Nylas API v3 exclusively, dropping support for any endpoints that are not available in v3.
+* Removed all REST calls from models and moved them directly into resources
 
 ### Added
 
+* Full Kotlin support
+* Created models for all API resources and endpoints, for all HTTP methods to reduce confusion on which fields are available for each endpoint
+* Created error classes for the different API errors as well as SDK-specific errors
+
 ### Changed
 
-### Deprecated
-
-### Fixed
+* Leveraged Moshi annotations for JSON serialization/deserialization as opposed to manually writing JSON maps
+* Removed all REST calls from models and moved them directly into resources
 
 ### Removed
 
-### Security
+* Non-builder ways for initializing `NylasClient`
+* Local Webhook development support is removed due to incompatibility with the new API version
 
 ## [1.22.0] - Released 2024-01-29
 
@@ -395,8 +403,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v1.22.0...HEAD
-[1.22.0]: https://github.com/nylas/nylas-java/releases/tag/v1.22.0
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0
 [1.21.0]: https://github.com/nylas/nylas-java/releases/tag/v1.21.0
 [1.20.1]: https://github.com/nylas/nylas-java/releases/tag/v1.20.1
 [1.20.0]: https://github.com/nylas/nylas-java/releases/tag/v1.20.0

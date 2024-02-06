@@ -12,7 +12,7 @@ on:
 jobs:
   checks:
     runs-on: ubuntu-latest
-    name: Java unit tests
+    name: Lint, Build, Test, and Upload Coverage
     steps:
       - uses: actions/checkout@v3
       - name: Setup Java 8
@@ -24,8 +24,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Lint project
+        run: ./gradlew lintKotlin
+
       - name: Build project
         run: ./gradlew clean build
 
       - name: Run tests
         run: ./gradlew test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
