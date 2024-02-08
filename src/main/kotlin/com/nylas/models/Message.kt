@@ -12,15 +12,15 @@ data class Message(
   @Json(name = "grant_id")
   val grantId: String,
   /**
-   * An array of message senders.
-   */
-  @Json(name = "from")
-  val from: List<EmailName>,
-  /**
    * The type of object.
    */
   @Json(name = "object")
   private val obj: String = "message",
+  /**
+   * An array of message senders.
+   */
+  @Json(name = "from")
+  val from: List<EmailName>? = null,
   /**
    * The unique identifier for the message.
    * Note: The ID may not be present for scheduled messages until the message is sent.
