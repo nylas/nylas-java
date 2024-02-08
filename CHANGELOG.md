@@ -1,5 +1,9 @@
 # Nylas Java SDK Changelog
 
+## Unreleased
+
+* Fix schema issue in the `Event` model
+
 ## [2.0.0] - Released 2024-02-05
 
 ### BREAKING CHANGES
