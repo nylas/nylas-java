@@ -61,16 +61,6 @@ data class Event(
   @Json(name = "visibility")
   val visibility: EventVisibility = EventVisibility.DEFAULT,
   /**
-   * Unix timestamp when the event was created.
-   */
-  @Json(name = "created_at")
-  val createdAt: Long = 0,
-  /**
-   * Unix timestamp when the event was last updated.
-   */
-  @Json(name = "updated_at")
-  val updatedAt: Long = 0,
-  /**
    * Representation of conferencing details for events. Conferencing object can be in one of two formats (sub-objects):
    * - [Conferencing.Autocreate]
    * - [Conferencing.Details]
@@ -140,6 +130,16 @@ data class Event(
    */
   @Json(name = "capacity")
   val capacity: Int? = null,
+  /**
+   * Unix timestamp when the event was created.
+   */
+  @Json(name = "created_at")
+  val createdAt: Long? = null,
+  /**
+   * Unix timestamp when the event was last updated.
+   */
+  @Json(name = "updated_at")
+  val updatedAt: Long? = null,
 ) {
   /**
    * Get the type of object.
