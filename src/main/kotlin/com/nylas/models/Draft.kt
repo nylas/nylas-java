@@ -17,11 +17,6 @@ class Draft(
   @Json(name = "grant_id")
   val grantId: String,
   /**
-   * An array of message senders.
-   */
-  @Json(name = "from")
-  val from: List<EmailName>,
-  /**
    * Unix timestamp of when the message was received by the mail server.
    * This may be different from the unverified Date header in raw message object.
    */
@@ -32,6 +27,11 @@ class Draft(
    */
   @Json(name = "object")
   private val obj: String = "draft",
+  /**
+   * An array of message senders.
+   */
+  @Json(name = "from")
+  val from: List<EmailName>? = null,
   /**
    * An array of bcc recipients.
    */
