@@ -318,5 +318,45 @@ class AuthTests {
       assertNull(requestBodyCaptor.firstValue)
       assertEquals(true, res)
     }
+
+    @Test
+    fun `idTokenInfo calls requests with the correct params`() {
+      val idToken = "user-id-token"
+
+      auth.idTokenInfo(idToken)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<TokenInfoRequest>()
+      verify(mockNylasClient).executeGet<Response<TokenInfoResponse>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connect/tokeninfo", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, TokenInfoResponse::class.java), typeCaptor.firstValue)
+      assertEquals(TokenInfoRequest(idToken = idToken), queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `accessTokenInfo calls requests with the correct params`() {
+      val accessToken = "nylas-access-token"
+
+      auth.accessTokenInfo(accessToken)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<TokenInfoRequest>()
+      verify(mockNylasClient).executeGet<Response<TokenInfoResponse>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connect/tokeninfo", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, TokenInfoResponse::class.java), typeCaptor.firstValue)
+      assertEquals(TokenInfoRequest(accessToken = accessToken), queryParamCaptor.firstValue)
+    }
   }
 }
