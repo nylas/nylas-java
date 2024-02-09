@@ -149,6 +149,28 @@ class Auth(private val client: NylasClient) {
   }
 
   /**
+   * Get info about an ID token
+   * @param idToken The ID token to query
+   * @return The token information
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun idTokenInfo(idToken: String): Response<TokenInfoResponse> {
+    val params = TokenInfoRequest(idToken = idToken)
+    return getTokenInfo(params)
+  }
+
+  /**
+   * Get info about an access token
+   * @param accessToken The access token to query
+   * @return The token information
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun accessTokenInfo(accessToken: String): Response<TokenInfoResponse> {
+    val params = TokenInfoRequest(accessToken = accessToken)
+    return getTokenInfo(params)
+  }
+
+  /**
    * Hash a plain text secret for use in PKCE
    * @param secret The plain text secret to hash
    * @return The hashed secret with base64 encoding (without padding)
@@ -179,5 +201,11 @@ class Auth(private val client: NylasClient) {
     }
 
     return url
+  }
+
+  private fun getTokenInfo(params: TokenInfoRequest): Response<TokenInfoResponse> {
+    val path = "v3/connect/tokeninfo"
+    val responseType = Types.newParameterizedType(Response::class.java, TokenInfoResponse::class.java)
+    return client.executeGet(path, responseType, queryParams = params)
   }
 }

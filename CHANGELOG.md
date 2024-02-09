@@ -2,7 +2,12 @@
 
 ## Unreleased
 
-* Fix schema issue in the `Event`, `Message`, and `Draft` models
+### Added
+
+* Add support for getting OAuth token info
+
+### Changed
+* Fix schema issues in the `Event`, `Message`, `Draft`, and `CodeExchangeResponse` models
 
 ## [2.0.0] - Released 2024-02-05
 
