@@ -27,6 +27,11 @@ data class CodeExchangeResponse(
   @Json(name = "scope")
   val scope: String,
   /**
+   * Email address of the grant that is created.
+   */
+  @Json(name = "email")
+  val email: String? = null,
+  /**
    * Only returned if the code was requested using [AccessType.OFFLINE][com.nylas.models.AccessType.OFFLINE].
    */
   @Json(name = "refresh_token")
