@@ -13,17 +13,17 @@ data class FindAttachmentQueryParams(
   val messageId: String,
 ) : IQueryParams {
   /**
-   * Builder for [FindEventQueryParams].
+   * Builder for [FindAttachmentQueryParams].
    * @property messageId Message ID to find the attachment in.
    */
   data class Builder(
     private val messageId: String,
   ) {
     /**
-     * Builds a new [FindEventQueryParams] instance.
-     * @return [FindEventQueryParams]
+     * Builds a new [FindAttachmentQueryParams] instance.
+     * @return [FindAttachmentQueryParams]
      */
-    fun build() = FindEventQueryParams(
+    fun build() = FindAttachmentQueryParams(
       messageId,
     )
   }
