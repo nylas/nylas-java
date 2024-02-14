@@ -20,7 +20,7 @@ data class Grant(
    * Scopes specified for the grant.
    */
   @Json(name = "scope")
-  val scope: List<String>,
+  val scope: List<String>? = null,
   /**
    * Unix timestamp when the grant was created.
    */
