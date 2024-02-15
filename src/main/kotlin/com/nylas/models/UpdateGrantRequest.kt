@@ -14,15 +14,15 @@ data class UpdateGrantRequest(
   /**
    * List of integration scopes for the grant.
    */
-  @Json(name = "scopes")
-  val scopes: List<String>? = null,
+  @Json(name = "scope")
+  val scope: List<String>? = null,
 ) {
   /**
    * Builder for [UpdateGrantRequest].
    */
   class Builder {
     private var settings: Map<String, Any>? = null
-    private var scopes: List<String>? = null
+    private var scope: List<String>? = null
 
     /**
      * Update the settings required by provider.
@@ -36,12 +36,12 @@ data class UpdateGrantRequest(
      * @param scopes List of scopes
      * @return This builder
      */
-    fun scopes(scopes: List<String>) = apply { this.scopes = scopes }
+    fun scopes(scopes: List<String>) = apply { this.scope = scopes }
 
     /**
      * Build the [UpdateGrantRequest].
      * @return The built [UpdateGrantRequest]
      */
-    fun build() = UpdateGrantRequest(settings, scopes)
+    fun build() = UpdateGrantRequest(settings, scope)
   }
 }
