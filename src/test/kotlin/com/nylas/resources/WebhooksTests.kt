@@ -235,7 +235,7 @@ class WebhooksTests {
         queryParamCaptor.capture(),
       )
 
-      assertEquals("v3/webhooks/$webhookId/rotate-secret", pathCaptor.firstValue)
+      assertEquals("v3/webhooks/rotate-secret/$webhookId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java), typeCaptor.firstValue)
       assertNull(requestBodyCaptor.firstValue)
     }
