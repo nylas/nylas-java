@@ -87,9 +87,9 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
    * Get the current list of IP addresses that Nylas sends webhooks from
    * @returns The list of IP addresses that Nylas sends webhooks from
    */
-  fun ipAddresses(): ListResponse<WebhookIpAddressesResponse> {
+  fun ipAddresses(): Response<WebhookIpAddressesResponse> {
     val path = "v3/webhooks/ip-addresses"
-    val responseType = Types.newParameterizedType(ListResponse::class.java, WebhookIpAddressesResponse::class.java)
+    val responseType = Types.newParameterizedType(Response::class.java, WebhookIpAddressesResponse::class.java)
     return client.executeGet(path, responseType)
   }
 

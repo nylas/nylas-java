@@ -254,7 +254,7 @@ class WebhooksTests {
       )
 
       assertEquals("v3/webhooks/ip-addresses", pathCaptor.firstValue)
-      assertEquals(Types.newParameterizedType(ListResponse::class.java, WebhookIpAddressesResponse::class.java), typeCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, WebhookIpAddressesResponse::class.java), typeCaptor.firstValue)
     }
 
     @Test
