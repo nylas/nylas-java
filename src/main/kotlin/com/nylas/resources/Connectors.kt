@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.Types
 
 class Connectors(client: NylasClient) : Resource<Connector>(client, Connector::class.java) {
   /**
@@ -76,5 +77,18 @@ class Connectors(client: NylasClient) : Resource<Connector>(client, Connector::c
   fun destroy(provider: AuthProvider): DeleteResponse {
     val path = String.format("v3/connectors/%s", provider.value)
     return destroyResource(path)
+  }
+
+  /**
+   * Detect provider from email address
+   * @param params The parameters to include in the request
+   * @return The detected provider, if found
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun detectProvider(params: ProviderDetectConnectorParams): Response<ProviderDetectResponse> {
+    val path = "v3/providers/detect"
+    val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
+
+    return client.executePost(path, responseType, queryParams = params)
   }
 }
