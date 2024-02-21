@@ -78,7 +78,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
    * @returns The updated webhook destination
    */
   fun rotateSecret(webhookId: String): Response<WebhookWithSecret> {
-    val path = String.format("v3/webhooks/%s/rotate-secret", webhookId)
+    val path = String.format("v3/webhooks/rotate-secret/%s", webhookId)
     val responseType = Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java)
     return client.executePost(path, responseType)
   }
