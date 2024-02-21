@@ -160,7 +160,7 @@ class GrantsTests {
         settings = mapOf(
           "key" to "value",
         ),
-        scopes = listOf(
+        scope = listOf(
           "Mail.Read",
           "User.Read",
           "offline_access",
