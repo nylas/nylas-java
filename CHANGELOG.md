@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## Unreleased
+
+### Added
+* Added support for `roundTo` field in availability response
+
 ## [2.1.0] - Released 2024-02-12
 
 ### Added

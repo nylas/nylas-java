@@ -37,6 +37,7 @@ data class GetAvailabilityRequest(
    * When set to true, the availability time slots will start at 30 minutes past or on the hour.
    * For example, a free slot starting at 16:10 is considered available only from 16:30.
    */
+  @Deprecated("Use roundTo instead")
   @Json(name = "round_to_30_minutes")
   val roundTo30Minutes: Boolean? = null,
   /**
@@ -44,6 +45,14 @@ data class GetAvailabilityRequest(
    */
   @Json(name = "availability_rules")
   val availabilityRules: AvailabilityRules? = null,
+  /**
+   * The number of minutes to round the time slots to.
+   * This allows for rounding to any multiple of 5 minutes, up to a maximum of 60 minutes.
+   * The default value is set to 15 minutes.
+   * When this variable is assigned a value, it overrides the behavior of the [roundTo30Minutes] flag, if it was set.
+   */
+  @Json(name = "round_to")
+  val roundTo: Int? = null,
 ) {
   /**
    * A builder for creating a [GetAvailabilityRequest].
@@ -62,6 +71,7 @@ data class GetAvailabilityRequest(
     private var intervalMinutes: Int? = null
     private var roundTo30Minutes: Boolean? = null
     private var availabilityRules: AvailabilityRules? = null
+    private var roundTo: Int? = null
 
     /**
      * Set the Nylas checks from the nearest interval of the passed [startTime].
@@ -78,6 +88,7 @@ data class GetAvailabilityRequest(
      * @param roundTo30Minutes When set to true, the availability time slots will start at 30 minutes past or on the hour.
      * @return The builder.
      */
+    @Deprecated("Use roundTo instead")
     fun roundTo30Minutes(roundTo30Minutes: Boolean) = apply { this.roundTo30Minutes = roundTo30Minutes }
 
     /**
@@ -86,6 +97,16 @@ data class GetAvailabilityRequest(
      * @return The builder.
      */
     fun availabilityRules(availabilityRules: AvailabilityRules) = apply { this.availabilityRules = availabilityRules }
+
+    /**
+     * Set the number of minutes to round the time slots to.
+     * This allows for rounding to any multiple of 5 minutes, up to a maximum of 60 minutes.
+     * The default value is set to 15 minutes.
+     * When this variable is assigned a value, it overrides the behavior of the [roundTo30Minutes] flag, if it was set.
+     * @param roundTo The number of minutes to round the time slots to.
+     * @return The builder.
+     */
+    fun roundTo(roundTo: Int) = apply { this.roundTo = roundTo }
 
     /**
      * Build the [GetAvailabilityRequest].
@@ -99,6 +120,7 @@ data class GetAvailabilityRequest(
       intervalMinutes,
       roundTo30Minutes,
       availabilityRules,
+      roundTo,
     )
   }
 }
