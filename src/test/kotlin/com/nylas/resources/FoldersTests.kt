@@ -54,7 +54,8 @@ class FoldersTests {
             "parent_id": "ascsf21412",
             "background_color": "#039BE5",
             "text_color": "#039BE5",
-            "total_count": 0
+            "total_count": 0,
+            "attributes": ["\\SENT"]
           }
         """.trimIndent(),
       )
@@ -72,6 +73,7 @@ class FoldersTests {
       assertEquals("#039BE5", folder.backgroundColor)
       assertEquals("#039BE5", folder.textColor)
       assertEquals(0, folder.totalCount)
+      assertEquals(listOf("\\SENT"), folder.attributes)
     }
   }
 

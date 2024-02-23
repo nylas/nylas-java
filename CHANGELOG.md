@@ -1,5 +1,13 @@
 # Nylas Java SDK Changelog
 
+## Unreleased
+
+### Added
+* Added support for `roundTo` field in availability response
+* Added support for `attributes` field in folder model
+* Added support for icloud as an auth provider
+* Removed unnecessary `clientId` from detectProvider params
+
 ## [2.1.0] - Released 2024-02-12
 
 ### Added

@@ -12,11 +12,6 @@ data class ProviderDetectParams(
   @Json(name = "email")
   val email: String,
   /**
-   * Client ID of the Nylas application.
-   */
-  @Json(name = "client_id")
-  var clientId: String,
-  /**
    * Search by all providers regardless of created integrations. If unset, defaults to false.
    */
   @Json(name = "all_provider_types")
@@ -25,11 +20,9 @@ data class ProviderDetectParams(
   /**
    * Builder for [ProviderDetectParams].
    * @property email Email address to detect the provider for.
-   * @property clientId Client ID of the Nylas application.
    */
   data class Builder(
     private val email: String,
-    private val clientId: String,
   ) {
     private var allProviderTypes: Boolean? = null
 
@@ -47,7 +40,6 @@ data class ProviderDetectParams(
      */
     fun build() = ProviderDetectParams(
       email,
-      clientId,
       allProviderTypes,
     )
   }

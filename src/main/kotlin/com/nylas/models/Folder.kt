@@ -61,6 +61,14 @@ data class Folder(
    */
   @Json(name = "total_count")
   val totalCount: Int? = null,
+  /**
+   * Common attribute descriptors shared by system folders across providers.
+   * For example, Sent email folders have the `["\\Sent"]` attribute.
+   * For IMAP grants, IMAP providers provide the attributes.
+   * For Google and Microsoft Graph, Nylas matches system folders to a set of common attributes.
+   */
+  @Json(name = "attributes")
+  val attributes: List<String>? = null,
 ) {
   /**
    * Get the type of object.
