@@ -275,7 +275,6 @@ class AuthTests {
     fun `detectProvider calls requests with the correct params`() {
       val request = ProviderDetectParams(
         email = "test@nylas.com",
-        clientId = "abc-123",
         allProviderTypes = true,
       )
 
