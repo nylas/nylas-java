@@ -17,4 +17,7 @@ enum class AuthProvider(val value: String) {
 
   @Json(name = "virtual-calendar")
   VIRTUAL_CALENDAR("virtual-calendar"),
+
+  @Json(name = "icloud")
+  ICLOUD("icloud"),
 }
