@@ -1,11 +1,20 @@
 # Nylas Java SDK Changelog
 
-## Unreleased
+## [2.2.0] - Released 2024-02-27
 
 ### Added
 * Added support for `roundTo` field in availability response
 * Added support for `attributes` field in folder model
 * Added support for icloud as an auth provider
+
+### Changed
+* Fixed builder for FindAttachmentQueryParams
+* Fixed scopes to be optional for IMAP grants
+* Fixed typo in updating grant schema
+* Fixed endpoint for rotating webhook secrets
+* Fixed response type for returning webhook IP addresses
+
+### Removed
 * Removed unnecessary `clientId` from detectProvider params
 
 ## [2.1.0] - Released 2024-02-12
@@ -419,7 +428,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/nylas/nylas-java/releases/tag/v2.2.0
 [2.1.0]: https://github.com/nylas/nylas-java/releases/tag/v2.1.0
 [2.0.0]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0
 [1.21.0]: https://github.com/nylas/nylas-java/releases/tag/v1.21.0
