@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Nested
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.*
+import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -372,6 +373,94 @@ class MessagesTests {
       messages.send(grantId, sendMessageRequest)
 
       val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePost<Response<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `sending a message with a small attachment calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
+      val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val sendMessageRequest =
+        SendMessageRequest(
+          to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          body = "Hello, I just sent a message using Nylas!",
+          cc = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          bcc = listOf(EmailName(email = "bcc@gmail.com", name = "BCC")),
+          subject = "Hello from Nylas!",
+          starred = true,
+          sendAt = 1620000000,
+          replyToMessageId = "reply-to-message-id",
+          trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+          attachments = listOf(
+            CreateAttachmentRequest(
+              content = testInputStream,
+              contentType = "text/plain",
+              filename = "attachment.txt",
+              size = 100,
+            ),
+          ),
+        )
+
+      messages.send(grantId, sendMessageRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePost<Response<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `sending a message with a large attachment calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
+      val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val sendMessageRequest =
+        SendMessageRequest(
+          to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          body = "Hello, I just sent a message using Nylas!",
+          cc = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          bcc = listOf(EmailName(email = "bcc@gmail.com", name = "BCC")),
+          subject = "Hello from Nylas!",
+          starred = true,
+          sendAt = 1620000000,
+          replyToMessageId = "reply-to-message-id",
+          trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+          attachments = listOf(
+            CreateAttachmentRequest(
+              content = testInputStream,
+              contentType = "text/plain",
+              filename = "attachment.txt",
+              size = 3 * 1024 * 1024,
+            ),
+          ),
+        )
+
+      messages.send(grantId, sendMessageRequest)
+
+      val pathCaptor = argumentCaptor<String>()
       val methodCaptor = argumentCaptor<NylasClient.HttpMethod>()
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<RequestBody>()
@@ -389,10 +478,13 @@ class MessagesTests {
       assertEquals(NylasClient.HttpMethod.POST, methodCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
       val multipart = requestBodyCaptor.firstValue as MultipartBody
-      assertEquals(1, multipart.size())
+      assertEquals(2, multipart.size())
       val buffer = Buffer()
+      val fileBuffer = Buffer()
       multipart.part(0).body().writeTo(buffer)
+      multipart.part(1).body().writeTo(fileBuffer)
       assertEquals(adapter.toJson(sendMessageRequest), buffer.readUtf8())
+      assertEquals("test data", fileBuffer.readUtf8())
     }
   }
 
