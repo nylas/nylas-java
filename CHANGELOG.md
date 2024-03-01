@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## Unreleased
+
+### Changed
+* Improved message sending and draft create/update performance
+
 ## [2.2.0] - Released 2024-02-27
 
 ### Added
