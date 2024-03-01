@@ -47,7 +47,7 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
     // Use form data only if the attachment size is greater than 3mb
     val attachmentSize = requestBody.attachments?.sumOf { it.size } ?: 0
 
-    return if (attachmentSize >= FileUtils.FORM_DATA_ATTACHMENT_SIZE) {
+    return if (attachmentSize >= FileUtils.MAXIMUM_JSON_ATTACHMENT_SIZE) {
       val attachmentLessPayload = requestBody.copy(attachments = null)
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
@@ -75,7 +75,7 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
     // Use form data only if the attachment size is greater than 3mb
     val attachmentSize = requestBody.attachments?.sumOf { it.size } ?: 0
 
-    return if (attachmentSize >= FileUtils.FORM_DATA_ATTACHMENT_SIZE) {
+    return if (attachmentSize >= FileUtils.MAXIMUM_JSON_ATTACHMENT_SIZE) {
       val attachmentLessPayload = requestBody.copy(attachments = null)
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)

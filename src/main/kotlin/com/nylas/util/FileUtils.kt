@@ -14,8 +14,11 @@ import java.nio.file.Paths
 
 class FileUtils {
   companion object {
+    /**
+     * The maximum size of an attachment that can be sent using json.
+     */
     @JvmStatic
-    val FORM_DATA_ATTACHMENT_SIZE = 3 * 1024 * 1024
+    val MAXIMUM_JSON_ATTACHMENT_SIZE = 3 * 1024 * 1024
 
     /**
      * Converts an [InputStream] into a streaming [RequestBody] for use with [okhttp3] requests.
