@@ -14,6 +14,9 @@ import java.nio.file.Paths
 
 class FileUtils {
   companion object {
+    @JvmStatic
+    val FORM_DATA_ATTACHMENT_SIZE = 3 * 1024 * 1024
+
     /**
      * Converts an [InputStream] into a streaming [RequestBody] for use with [okhttp3] requests.
      *

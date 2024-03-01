@@ -41,15 +41,22 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun create(identifier: String, requestBody: CreateDraftRequest): Response<Draft> {
     val path = String.format("v3/grants/%s/drafts", identifier)
-
-    val attachmentLessPayload = requestBody.copy(attachments = null)
-    val serializedRequestBody = JsonHelper.moshi()
-      .adapter(CreateDraftRequest::class.java)
-      .toJson(attachmentLessPayload)
-    val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
     val responseType = Types.newParameterizedType(Response::class.java, Draft::class.java)
+    val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
 
-    return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType)
+    // Use form data only if the attachment size is greater than 3mb
+    val attachmentSize = requestBody.attachments?.sumOf { it.size } ?: 0
+
+    return if (attachmentSize >= FileUtils.FORM_DATA_ATTACHMENT_SIZE) {
+      val attachmentLessPayload = requestBody.copy(attachments = null)
+      val serializedRequestBody = adapter.toJson(attachmentLessPayload)
+      val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
+
+      client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType)
+    } else {
+      val serializedRequestBody = adapter.toJson(requestBody)
+      createResource(path, serializedRequestBody)
+    }
   }
 
   /**
@@ -62,15 +69,22 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun update(identifier: String, draftId: String, requestBody: UpdateDraftRequest): Response<Draft> {
     val path = String.format("v3/grants/%s/drafts/%s", identifier, draftId)
-
-    val attachmentLessPayload = requestBody.copy(attachments = null)
-    val serializedRequestBody = JsonHelper.moshi()
-      .adapter(UpdateDraftRequest::class.java)
-      .toJson(attachmentLessPayload)
-    val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
     val responseType = Types.newParameterizedType(Response::class.java, Draft::class.java)
+    val adapter = JsonHelper.moshi().adapter(UpdateDraftRequest::class.java)
 
-    return client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, responseType)
+    // Use form data only if the attachment size is greater than 3mb
+    val attachmentSize = requestBody.attachments?.sumOf { it.size } ?: 0
+
+    return if (attachmentSize >= FileUtils.FORM_DATA_ATTACHMENT_SIZE) {
+      val attachmentLessPayload = requestBody.copy(attachments = null)
+      val serializedRequestBody = adapter.toJson(attachmentLessPayload)
+      val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
+
+      client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, responseType)
+    } else {
+      val serializedRequestBody = adapter.toJson(requestBody)
+      updateResource(path, serializedRequestBody)
+    }
   }
 
   /**

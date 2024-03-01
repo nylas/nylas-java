@@ -76,15 +76,22 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun send(identifier: String, requestBody: SendMessageRequest): Response<Message> {
     val path = String.format("v3/grants/%s/messages/send", identifier)
-
-    val attachmentLessPayload = requestBody.copy(attachments = null)
-    val serializedRequestBody = JsonHelper.moshi()
-      .adapter(SendMessageRequest::class.java)
-      .toJson(attachmentLessPayload)
-    val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
     val responseType = Types.newParameterizedType(Response::class.java, Message::class.java)
+    val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
 
-    return client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType)
+    // Use form data only if the attachment size is greater than 3mb
+    val attachmentSize = requestBody.attachments?.sumOf { it.size } ?: 0
+
+    return if (attachmentSize >= FileUtils.FORM_DATA_ATTACHMENT_SIZE) {
+      val attachmentLessPayload = requestBody.copy(attachments = null)
+      val serializedRequestBody = adapter.toJson(attachmentLessPayload)
+      val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
+
+      client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType)
+    } else {
+      val serializedRequestBody = adapter.toJson(requestBody)
+      createResource(path, serializedRequestBody)
+    }
   }
 
   /**
