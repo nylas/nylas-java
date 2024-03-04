@@ -477,9 +477,9 @@ class NylasClient(
      *
      * By default, the NylasClient configures it as follows:
      * .protocols(Arrays.asList(Protocol.HTTP_1_1))
-     * .connectTimeout(60, TimeUnit.SECONDS)
-     * .readTimeout(60, TimeUnit.SECONDS)
-     * .writeTimeout(60,  TimeUnit.SECONDS)
+     * .connectTimeout(90, TimeUnit.SECONDS)
+     * .readTimeout(90, TimeUnit.SECONDS)
+     * .writeTimeout(90,  TimeUnit.SECONDS)
      * .addNetworkInterceptor(new HttpLoggingInterceptor()
      *
      * @param httpClient The custom OkHttpClient.Builder to use.
@@ -500,9 +500,9 @@ class NylasClient(
     val DEFAULT_BASE_URL = Region.US.nylasApiUrl
     private fun defaultHttpClient(): OkHttpClient.Builder {
       return OkHttpClient.Builder()
-        .connectTimeout(60, TimeUnit.SECONDS)
-        .readTimeout(60, TimeUnit.SECONDS)
-        .writeTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(90, TimeUnit.SECONDS)
+        .readTimeout(90, TimeUnit.SECONDS)
+        .writeTimeout(90, TimeUnit.SECONDS)
         .protocols(listOf(Protocol.HTTP_1_1))
         .addNetworkInterceptor(HttpLoggingInterceptor())
     }
