@@ -4,6 +4,7 @@
 
 ### Changed
 * Improved message sending and draft create/update performance
+* Change default timeout to match API (90 seconds)
 
 ## [2.2.0] - Released 2024-02-27
 
