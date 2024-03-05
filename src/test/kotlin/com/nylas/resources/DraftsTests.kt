@@ -15,6 +15,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -228,6 +229,92 @@ class DraftsTests {
       drafts.create(grantId, createDraftRequest)
 
       val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePost<Response<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/drafts", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(createDraftRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `creating a draft with small attachment calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
+      val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val createDraftRequest =
+        CreateDraftRequest(
+          body = "Hello, I just sent a message using Nylas!",
+          cc = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          bcc = listOf(EmailName(email = "bcc@gmail.com", name = "BCC")),
+          subject = "Hello from Nylas!",
+          starred = true,
+          sendAt = 1620000000,
+          replyToMessageId = "reply-to-message-id",
+          trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+          attachments = listOf(
+            CreateAttachmentRequest(
+              content = testInputStream,
+              contentType = "text/plain",
+              filename = "attachment.txt",
+              size = 100,
+            ),
+          ),
+        )
+
+      drafts.create(grantId, createDraftRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePost<Response<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/drafts", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(createDraftRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `creating a draft with large attachment calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
+      val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val createDraftRequest =
+        CreateDraftRequest(
+          body = "Hello, I just sent a message using Nylas!",
+          cc = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          bcc = listOf(EmailName(email = "bcc@gmail.com", name = "BCC")),
+          subject = "Hello from Nylas!",
+          starred = true,
+          sendAt = 1620000000,
+          replyToMessageId = "reply-to-message-id",
+          trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+          attachments = listOf(
+            CreateAttachmentRequest(
+              content = testInputStream,
+              contentType = "text/plain",
+              filename = "attachment.txt",
+              size = 3 * 1024 * 1024,
+            ),
+          ),
+        )
+
+      drafts.create(grantId, createDraftRequest)
+
+      val pathCaptor = argumentCaptor<String>()
       val methodCaptor = argumentCaptor<NylasClient.HttpMethod>()
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<RequestBody>()
@@ -245,10 +332,13 @@ class DraftsTests {
       assertEquals(NylasClient.HttpMethod.POST, methodCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
       val multipart = requestBodyCaptor.firstValue as MultipartBody
-      assertEquals(1, multipart.size())
+      assertEquals(2, multipart.size())
       val buffer = Buffer()
+      val fileBuffer = Buffer()
       multipart.part(0).body().writeTo(buffer)
+      multipart.part(1).body().writeTo(fileBuffer)
       assertEquals(adapter.toJson(createDraftRequest), buffer.readUtf8())
+      assertEquals("test data", fileBuffer.readUtf8())
     }
 
     @Test
@@ -261,6 +351,86 @@ class DraftsTests {
           subject = "Hello from Nylas!",
           unread = false,
           starred = true,
+        )
+
+      drafts.update(grantId, draftId, updateDraftRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePut<Response<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/drafts/$draftId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(updateDraftRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating a draft with small attachments calls requests with the correct params`() {
+      val draftId = "draft-123"
+      val adapter = JsonHelper.moshi().adapter(UpdateDraftRequest::class.java)
+      val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val updateDraftRequest =
+        UpdateDraftRequest(
+          body = "Hello, I just sent a message using Nylas!",
+          subject = "Hello from Nylas!",
+          unread = false,
+          starred = true,
+          attachments = listOf(
+            CreateAttachmentRequest(
+              content = testInputStream,
+              contentType = "text/plain",
+              filename = "attachment.txt",
+              size = 100,
+            ),
+          ),
+        )
+
+      drafts.update(grantId, draftId, updateDraftRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      verify(mockNylasClient).executePut<Response<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/drafts/$draftId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(updateDraftRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating a draft with large attachments calls requests with the correct params`() {
+      val draftId = "draft-123"
+      val adapter = JsonHelper.moshi().adapter(UpdateDraftRequest::class.java)
+      val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val updateDraftRequest =
+        UpdateDraftRequest(
+          body = "Hello, I just sent a message using Nylas!",
+          subject = "Hello from Nylas!",
+          unread = false,
+          starred = true,
+          attachments = listOf(
+            CreateAttachmentRequest(
+              content = testInputStream,
+              contentType = "text/plain",
+              filename = "attachment.txt",
+              size = 3 * 1024 * 1024,
+            ),
+          ),
         )
 
       drafts.update(grantId, draftId, updateDraftRequest)
@@ -283,10 +453,13 @@ class DraftsTests {
       assertEquals(NylasClient.HttpMethod.PUT, methodCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
       val multipart = requestBodyCaptor.firstValue as MultipartBody
-      assertEquals(1, multipart.size())
+      assertEquals(2, multipart.size())
       val buffer = Buffer()
+      val fileBuffer = Buffer()
       multipart.part(0).body().writeTo(buffer)
+      multipart.part(1).body().writeTo(fileBuffer)
       assertEquals(adapter.toJson(updateDraftRequest), buffer.readUtf8())
+      assertEquals("test data", fileBuffer.readUtf8())
     }
 
     @Test
