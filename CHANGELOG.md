@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## Unreleased
+## [2.2.1] - Released 2024-03-05
 
 ### Changed
 * Improved message sending and draft create/update performance
@@ -434,7 +434,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.2.1...HEAD
+[2.2.1]: https://github.com/nylas/nylas-java/releases/tag/v2.2.1
 [2.2.0]: https://github.com/nylas/nylas-java/releases/tag/v2.2.0
 [2.1.0]: https://github.com/nylas/nylas-java/releases/tag/v2.1.0
 [2.0.0]: https://github.com/nylas/nylas-java/releases/tag/v2.0.0
