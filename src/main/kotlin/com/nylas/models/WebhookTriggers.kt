@@ -36,9 +36,27 @@ enum class WebhookTriggers {
   @Json(name = "grant.expired")
   GRANT_EXPIRED,
 
+  @Json(name = "message.created")
+  MESSAGE_CREATED,
+
+  @Json(name = "message.updated")
+  MESSAGE_UPDATED,
+
   @Json(name = "message.send_success")
   MESSAGE_SEND_SUCCESS,
 
   @Json(name = "message.send_failed")
   MESSAGE_SEND_FAILED,
+
+  @Json(name = "message.bounce_detected")
+  MESSAGE_BOUNCE_DETECTED,
+
+  @Json(name = "message.opened")
+  MESSAGE_OPENED,
+
+  @Json(name = "message.link_clicked")
+  MESSAGE_LINK_CLICKED,
+
+  @Json(name = "thread.replied")
+  THREAD_REPLIED,
 }
