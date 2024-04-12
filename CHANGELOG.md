@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+### [Unreleased]
+
+### Added
+* Add support for custom headers field for Drafts and Messages
+
 ## [2.2.1] - Released 2024-03-05
 
 ### Changed
