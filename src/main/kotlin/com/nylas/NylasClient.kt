@@ -305,9 +305,13 @@ class NylasClient(
     url: HttpUrl.Builder,
     method: HttpMethod,
     body: RequestBody?,
+    userHeaders: Map<String, String> = emptyMap(),
   ): Request {
     val builder = Request.Builder().url(url.build())
     builder.addHeader(HttpHeaders.AUTHORIZATION.headerName, "Bearer $apiKey")
+    for ((key, value) in userHeaders) {
+      builder.addHeader(key, value)
+    }
     return builder.method(method.toString(), body).build()
   }
 
