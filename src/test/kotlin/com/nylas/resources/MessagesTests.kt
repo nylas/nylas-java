@@ -368,6 +368,7 @@ class MessagesTests {
           sendAt = 1620000000,
           replyToMessageId = "reply-to-message-id",
           trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+          customHeaders = listOf(CustomHeader(name = "header-name", value = "header-value")),
         )
 
       messages.send(grantId, sendMessageRequest)
@@ -412,6 +413,7 @@ class MessagesTests {
               size = 100,
             ),
           ),
+          customHeaders = listOf(CustomHeader(name = "header-name", value = "header-value")),
         )
 
       messages.send(grantId, sendMessageRequest)
@@ -456,6 +458,7 @@ class MessagesTests {
               size = 3 * 1024 * 1024,
             ),
           ),
+          customHeaders = listOf(CustomHeader(name = "header-name", value = "header-value")),
         )
 
       messages.send(grantId, sendMessageRequest)
