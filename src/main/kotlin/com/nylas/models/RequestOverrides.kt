@@ -15,7 +15,7 @@ data class RequestOverrides(
   /**
    * The timeout to use for the request.
    */
-  val timeout: Int? = null,
+  val timeout: Long? = null,
   /**
    * Additional headers to include in the request.
    */
@@ -27,7 +27,7 @@ data class RequestOverrides(
   class Builder {
     private var apiKey: String? = null
     private var apiUri: String? = null
-    private var timeout: Int? = null
+    private var timeout: Long? = null
     private var headers: Map<String, String>? = null
 
     /**
@@ -43,7 +43,7 @@ data class RequestOverrides(
     /**
      * Set the timeout to use for the request.
      */
-    fun timeout(timeout: Int) = apply { this.timeout = timeout }
+    fun timeout(timeout: Long) = apply { this.timeout = timeout }
 
     /**
      * Add additional headers to include in the request.
