@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## Unreleased
+
+### Added
+* Added support for overriding various fields of outgoing requests
+
 ## [2.2.1] - Released 2024-03-05
 
 ### Changed
