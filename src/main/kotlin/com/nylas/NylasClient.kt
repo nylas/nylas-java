@@ -188,6 +188,7 @@ class NylasClient(
    * @param path The path to request.
    * @param resultType The type of the response body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -207,6 +208,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @param requestBody The request body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -228,6 +230,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @param requestBody The request body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -249,6 +252,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @param requestBody The request body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -272,6 +276,7 @@ class NylasClient(
    * @param path The path to request.
    * @param resultType The type of the response body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -292,6 +297,7 @@ class NylasClient(
    * @param requestBody The form-data request body.
    * @param resultType The type of the response body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
