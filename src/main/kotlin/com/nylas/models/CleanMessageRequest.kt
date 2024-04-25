@@ -37,20 +37,19 @@ data class CleanMessageRequest(
   @Json(name = "remove_conclusion_phrases")
   val removeConclusionPhrases: Boolean? = null,
 ) {
-  class Builder {
-    private var messageId: List<String> = emptyList()
+
+  /**
+   * Builder for the [CleanMessageRequest] class.
+   * @param messageId IDs of the email messages to clean.
+   */
+  data class Builder(
+    private val messageId: List<String>,
+  ) {
     private var ignoreLinks: Boolean? = null
     private var ignoreImages: Boolean? = null
     private var imagesAsMarkdown: Boolean? = null
     private var ignoreTables: Boolean? = null
     private var removeConclusionPhrases: Boolean? = null
-
-    /**
-     * IDs of the email messages to clean.
-     * @param messageId The list of message IDs to clean.
-     * @return The [Builder] instance.
-     */
-    fun messageId(messageId: List<String>) = apply { this.messageId = messageId }
 
     /**
      * If true, removes link-related tags (<a>) from the email message while keeping the text.
