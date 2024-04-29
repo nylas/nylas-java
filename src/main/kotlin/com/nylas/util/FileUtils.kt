@@ -7,10 +7,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okio.BufferedSink
 import okio.source
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
 
 class FileUtils {
   companion object {
@@ -89,6 +91,17 @@ class FileUtils {
       }
 
       return multipartBuilder.build()
+    }
+
+    /**
+     * Encode an [InputStream] to a base64 string.
+     * @param inputStream The input stream to encode.
+     * @return The base64 encoded string.
+     */
+    fun encodeStreamToBase64(inputStream: InputStream): String {
+      val buffer = ByteArrayOutputStream()
+      inputStream.copyTo(buffer)
+      return Base64.getEncoder().encodeToString(buffer.toByteArray())
     }
   }
 }
