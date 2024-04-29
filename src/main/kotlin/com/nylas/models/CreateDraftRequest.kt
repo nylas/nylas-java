@@ -29,7 +29,7 @@ data class CreateDraftRequest(
   /**
    * An array of files to attach to the message.
    */
-  @Transient
+  @Json(name = "attachments")
   override val attachments: List<CreateAttachmentRequest>? = null,
   /**
    * The message subject.
