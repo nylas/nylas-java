@@ -12,10 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
+import org.mockito.kotlin.*
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -94,10 +91,12 @@ class AttachmentsTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<FindAttachmentQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<Response<Attachment>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/attachments/$attachmentId", pathCaptor.firstValue)
@@ -110,9 +109,11 @@ class AttachmentsTests {
 
       val pathCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).downloadResponse(
         pathCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/attachments/$attachmentId/download", pathCaptor.firstValue)
@@ -122,15 +123,17 @@ class AttachmentsTests {
     fun `downloadBytes makes a GET request to the correct path`() {
       val byteArray = byteArrayOf(0b00000100, 0b00000010, 0b00000011)
       whenever(mockResponseBody.bytes()).thenReturn(byteArray)
-      whenever(mockNylasClient.downloadResponse(any(), any())).thenReturn(mockResponseBody)
+      whenever(mockNylasClient.downloadResponse(any(), any(), overrides = eq(null))).thenReturn(mockResponseBody)
 
       val bytes = attachments.downloadBytes(grantId, attachmentId, queryParams)
 
       val pathCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).downloadResponse(
         pathCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/attachments/$attachmentId/download", pathCaptor.firstValue)

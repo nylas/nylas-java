@@ -188,6 +188,7 @@ class NylasClient(
    * @param path The path to request.
    * @param resultType The type of the response body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -195,9 +196,10 @@ class NylasClient(
     path: String,
     resultType: Type,
     queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
   ): T {
-    val url = buildUrl(path, queryParams)
-    return executeRequest(url, HttpMethod.GET, null, resultType)
+    val url = buildUrl(path, queryParams, overrides)
+    return executeRequest(url, HttpMethod.GET, null, resultType, overrides)
   }
 
   /**
@@ -206,6 +208,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @param requestBody The request body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -214,10 +217,11 @@ class NylasClient(
     resultType: Type,
     requestBody: String? = null,
     queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
   ): T {
-    val url = buildUrl(path, queryParams)
+    val url = buildUrl(path, queryParams, overrides)
     val jsonBody = if (requestBody != null) JsonHelper.jsonRequestBody(requestBody) else null
-    return executeRequest(url, HttpMethod.PUT, jsonBody, resultType)
+    return executeRequest(url, HttpMethod.PUT, jsonBody, resultType, overrides)
   }
 
   /**
@@ -226,6 +230,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @param requestBody The request body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -234,10 +239,11 @@ class NylasClient(
     resultType: Type,
     requestBody: String? = null,
     queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
   ): T {
-    val url = buildUrl(path, queryParams)
+    val url = buildUrl(path, queryParams, overrides)
     val jsonBody = if (requestBody != null) JsonHelper.jsonRequestBody(requestBody) else null
-    return executeRequest(url, HttpMethod.PATCH, jsonBody, resultType)
+    return executeRequest(url, HttpMethod.PATCH, jsonBody, resultType, overrides)
   }
 
   /**
@@ -246,6 +252,7 @@ class NylasClient(
    * @param resultType The type of the response body.
    * @param requestBody The request body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -254,13 +261,14 @@ class NylasClient(
     resultType: Type,
     requestBody: String? = null,
     queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
   ): T {
-    val url = buildUrl(path, queryParams)
+    val url = buildUrl(path, queryParams, overrides)
     var jsonBody = RequestBody.create(null, ByteArray(0))
     if (requestBody != null) {
       jsonBody = JsonHelper.jsonRequestBody(requestBody)
     }
-    return executeRequest(url, HttpMethod.POST, jsonBody, resultType)
+    return executeRequest(url, HttpMethod.POST, jsonBody, resultType, overrides)
   }
 
   /**
@@ -268,6 +276,7 @@ class NylasClient(
    * @param path The path to request.
    * @param resultType The type of the response body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -275,9 +284,10 @@ class NylasClient(
     path: String,
     resultType: Type,
     queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
   ): T {
-    val url = buildUrl(path, queryParams)
-    return executeRequest(url, HttpMethod.DELETE, null, resultType)
+    val url = buildUrl(path, queryParams, overrides)
+    return executeRequest(url, HttpMethod.DELETE, null, resultType, overrides)
   }
 
   /**
@@ -287,6 +297,7 @@ class NylasClient(
    * @param requestBody The form-data request body.
    * @param resultType The type of the response body.
    * @param queryParams The query parameters.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -296,18 +307,31 @@ class NylasClient(
     requestBody: RequestBody,
     resultType: Type,
     queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
   ): T {
-    val url = buildUrl(path, queryParams)
-    return executeRequest(url, method, requestBody, resultType)
+    val url = buildUrl(path, queryParams, overrides)
+    return executeRequest(url, method, requestBody, resultType, overrides)
   }
 
   private fun buildRequest(
     url: HttpUrl.Builder,
     method: HttpMethod,
     body: RequestBody?,
+    overrides: RequestOverrides?,
   ): Request {
     val builder = Request.Builder().url(url.build())
+
+    // Override the API key if it is provided in the override
+    val apiKey = overrides?.apiKey ?: this.apiKey
     builder.addHeader(HttpHeaders.AUTHORIZATION.headerName, "Bearer $apiKey")
+
+    // Add additional headers
+    if (overrides?.headers != null) {
+      for ((key, value) in overrides.headers) {
+        builder.addHeader(key, value)
+      }
+    }
+
     return builder.method(method.toString(), body).build()
   }
 
@@ -317,6 +341,7 @@ class NylasClient(
    * @param method The HTTP method to use.
    * @param body The request body.
    * @param resultType The type of the response body.
+   * @param overrides The request overrides.
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -325,8 +350,9 @@ class NylasClient(
     method: HttpMethod,
     body: RequestBody?,
     resultType: Type,
+    overrides: RequestOverrides? = null,
   ): T {
-    val responseBody = this.executeRequestRawResponse(url, method, body)
+    val responseBody = this.executeRequestRawResponse(url, method, body, overrides)
     val adapter = JsonHelper.moshi().adapter<T>(resultType)
     val serializedObject = adapter?.fromJson(responseBody.source()) ?: throw Exception("Failed to deserialize response body")
     responseBody.close()
@@ -337,9 +363,10 @@ class NylasClient(
   fun downloadResponse(
     path: String,
     queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
   ): ResponseBody {
-    val url = buildUrl(path, queryParams)
-    return this.executeRequestRawResponse(url, HttpMethod.GET, null)
+    val url = buildUrl(path, queryParams, overrides)
+    return this.executeRequestRawResponse(url, HttpMethod.GET, null, overrides)
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -347,10 +374,20 @@ class NylasClient(
     url: HttpUrl.Builder,
     method: HttpMethod,
     body: RequestBody?,
+    overrides: RequestOverrides?,
   ): ResponseBody {
-    val request = buildRequest(url, method, body)
+    val request = buildRequest(url, method, body, overrides)
     val finalUrl = url.build()
     try {
+      // Use the provided timeout if it is set in the overrides.
+      val httpClient = overrides?.timeout?.let { timeout ->
+        httpClient.newBuilder()
+          .callTimeout(timeout, TimeUnit.SECONDS)
+          .readTimeout(timeout, TimeUnit.SECONDS)
+          .writeTimeout(timeout, TimeUnit.SECONDS)
+          .build()
+      } ?: httpClient
+
       val response = httpClient.newCall(request).execute()
       throwAndCloseOnFailedRequest(finalUrl, response)
       return response.body() ?: throw Exception("Unexpected null response body")
@@ -422,11 +459,18 @@ class NylasClient(
     )
   }
 
-  private fun buildUrl(path: String, queryParams: IQueryParams?): HttpUrl.Builder {
-    var url = newUrlBuilder().addPathSegments(path)
+  private fun buildUrl(path: String, queryParams: IQueryParams?, overrides: RequestOverrides?): HttpUrl.Builder {
+    // Sets the API URI if it is provided in the overrides.
+    var url = if (overrides?.apiUri != null) {
+      HttpUrl.get(overrides.apiUri).newBuilder().addPathSegments(path)
+    } else {
+      newUrlBuilder().addPathSegments(path)
+    }
+
     if (queryParams != null) {
       url = addQueryParams(url, queryParams.convertToMap())
     }
+
     return url
   }
 

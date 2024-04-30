@@ -33,10 +33,12 @@ class Auth(private val client: NylasClient) {
   /**
    * Exchange an authorization code for an access token
    * @param request The code exchange request
+   * @param overrides Optional request overrides to apply
    * @return The response containing the access token
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
-  fun exchangeCodeForToken(request: CodeExchangeRequest): CodeExchangeResponse {
+  @JvmOverloads
+  fun exchangeCodeForToken(request: CodeExchangeRequest, overrides: RequestOverrides? = null): CodeExchangeResponse {
     val path = "v3/connect/token"
     if (request.clientSecret == null) {
       request.clientSecret = client.apiKey
@@ -46,7 +48,7 @@ class Auth(private val client: NylasClient) {
       .adapter(CodeExchangeRequest::class.java)
       .toJson(request)
 
-    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
+    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -90,26 +92,30 @@ class Auth(private val client: NylasClient) {
   /**
    * Create a grant via custom authentication
    * @param requestBody The values to create the grant with
+   * @param overrides Optional request overrides to apply
    * @return The created grant
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun customAuthentication(requestBody: CreateGrantRequest): Response<Grant> {
+  @JvmOverloads
+  fun customAuthentication(requestBody: CreateGrantRequest, overrides: RequestOverrides? = null): Response<Grant> {
     val path = "v3/connect/custom"
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(CreateGrantRequest::class.java)
       .toJson(requestBody)
     val responseType = Types.newParameterizedType(Response::class.java, Grant::class.java)
 
-    return client.executePost(path, responseType, serializedRequestBody)
+    return client.executePost(path, responseType, serializedRequestBody, overrides = overrides)
   }
 
   /**
    * Refresh an access token
    * @param request The refresh token request
+   * @param overrides Optional request overrides to apply
    * @return The response containing the new access token
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
-  fun refreshAccessToken(request: TokenExchangeRequest): CodeExchangeResponse {
+  @JvmOverloads
+  fun refreshAccessToken(request: TokenExchangeRequest, overrides: RequestOverrides? = null): CodeExchangeResponse {
     val path = "v3/connect/token"
     if (request.clientSecret == null) {
       request.clientSecret = client.apiKey
@@ -119,18 +125,20 @@ class Auth(private val client: NylasClient) {
       .adapter(TokenExchangeRequest::class.java)
       .toJson(request)
 
-    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody)
+    return client.executePost(path, CodeExchangeResponse::class.java, serializedRequestBody, overrides = overrides)
   }
 
   /**
    * Revoke a token (and the grant attached to the token)
    * @param token The token to revoke
+   * @param overrides Optional request overrides to apply
    * @return True if the token was revoked successfully
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
-  fun revoke(token: String): Boolean {
+  @JvmOverloads
+  fun revoke(token: String, overrides: RequestOverrides? = null): Boolean {
     val path = "v3/connect/revoke?token=$token"
-    client.executePost<Any>(path, MutableMap::class.java)
+    client.executePost<Any>(path, MutableMap::class.java, overrides = overrides)
 
     return true
   }
@@ -138,36 +146,42 @@ class Auth(private val client: NylasClient) {
   /**
    * Detect provider from email address
    * @param params The parameters to include in the request
+   * @param overrides Optional request overrides to apply
    * @return The detected provider, if found
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun detectProvider(params: ProviderDetectParams): Response<ProviderDetectResponse> {
+  @JvmOverloads
+  fun detectProvider(params: ProviderDetectParams, overrides: RequestOverrides? = null): Response<ProviderDetectResponse> {
     val path = "v3/providers/detect"
     val responseType = Types.newParameterizedType(Response::class.java, ProviderDetectResponse::class.java)
 
-    return client.executePost(path, responseType, queryParams = params)
+    return client.executePost(path, responseType, queryParams = params, overrides = overrides)
   }
 
   /**
    * Get info about an ID token
    * @param idToken The ID token to query
+   * @param overrides Optional request overrides to apply
    * @return The token information
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun idTokenInfo(idToken: String): Response<TokenInfoResponse> {
+  @JvmOverloads
+  fun idTokenInfo(idToken: String, overrides: RequestOverrides? = null): Response<TokenInfoResponse> {
     val params = TokenInfoRequest(idToken = idToken)
-    return getTokenInfo(params)
+    return getTokenInfo(params, overrides)
   }
 
   /**
    * Get info about an access token
    * @param accessToken The access token to query
+   * @param overrides Optional request overrides to apply
    * @return The token information
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun accessTokenInfo(accessToken: String): Response<TokenInfoResponse> {
+  @JvmOverloads
+  fun accessTokenInfo(accessToken: String, overrides: RequestOverrides? = null): Response<TokenInfoResponse> {
     val params = TokenInfoRequest(accessToken = accessToken)
-    return getTokenInfo(params)
+    return getTokenInfo(params, overrides)
   }
 
   /**
@@ -203,9 +217,9 @@ class Auth(private val client: NylasClient) {
     return url
   }
 
-  private fun getTokenInfo(params: TokenInfoRequest): Response<TokenInfoResponse> {
+  private fun getTokenInfo(params: TokenInfoRequest, overrides: RequestOverrides?): Response<TokenInfoResponse> {
     val path = "v3/connect/tokeninfo"
     val responseType = Types.newParameterizedType(Response::class.java, TokenInfoResponse::class.java)
-    return client.executeGet(path, responseType, queryParams = params)
+    return client.executeGet(path, responseType, queryParams = params, overrides = overrides)
   }
 }
