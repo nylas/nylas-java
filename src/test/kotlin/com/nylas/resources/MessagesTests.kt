@@ -541,9 +541,9 @@ class MessagesTests {
     @Test
     fun `cleaning a message calls requests with the correct params`() {
       val messageId = "message-123"
-      val adapter = JsonHelper.moshi().adapter(CleanMessageRequest::class.java)
-      val cleanMessageRequest =
-        CleanMessageRequest.Builder(listOf(messageId))
+      val adapter = JsonHelper.moshi().adapter(CleanMessagesRequest::class.java)
+      val cleanMessagesRequest =
+        CleanMessagesRequest.Builder(listOf(messageId))
           .ignoreLinks(true)
           .ignoreImages(true)
           .imagesAsMarkdown(true)
@@ -551,14 +551,14 @@ class MessagesTests {
           .removeConclusionPhrases(true)
           .build()
 
-      messages.cleanConversation(grantId, cleanMessageRequest)
+      messages.cleanMessages(grantId, cleanMessagesRequest)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<Response<CleanMessageResponse>>(
+      verify(mockNylasClient).executePut<Response<CleanMessagesResponse>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -567,8 +567,8 @@ class MessagesTests {
       )
 
       assertEquals("v3/grants/$grantId/messages/clean", pathCaptor.firstValue)
-      assertEquals(Types.newParameterizedType(ListResponse::class.java, CleanMessageResponse::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(cleanMessageRequest), requestBodyCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, CleanMessagesResponse::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(cleanMessagesRequest), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
   }
