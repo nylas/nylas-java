@@ -2,7 +2,7 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-data class CleanMessageResponse(
+data class CleanMessagesResponse(
   /**
    * Grant ID of the Nylas account.
    */
