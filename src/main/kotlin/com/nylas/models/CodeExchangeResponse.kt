@@ -32,6 +32,11 @@ data class CodeExchangeResponse(
   @Json(name = "email")
   val email: String? = null,
   /**
+   * The provider that the code was exchanged with.
+   */
+  @Json(name = "provider")
+  val provider: AuthProvider? = null,
+  /**
    * Only returned if the code was requested using [AccessType.OFFLINE][com.nylas.models.AccessType.OFFLINE].
    */
   @Json(name = "refresh_token")
