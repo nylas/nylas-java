@@ -17,12 +17,14 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
    * @param identifier Grant ID or email account to query
    * @param attachmentId The id of the attachment to retrieve.
    * @param queryParams The query parameters to include in the request
+   * @param overrides Optional request overrides to apply
    * @return The attachment metadata
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
-  fun find(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams): Response<Attachment> {
+  @JvmOverloads
+  fun find(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams, overrides: RequestOverrides? = null): Response<Attachment> {
     val path = String.format("v3/grants/%s/attachments/%s", identifier, attachmentId)
-    return findResource(path, queryParams)
+    return findResource(path, queryParams, overrides = overrides)
   }
 
   /**
@@ -37,13 +39,15 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
    * @param identifier Grant ID or email account to query
    * @param attachmentId The id of the attachment to download.
    * @param queryParams The query parameters to include in the request
+   * @param overrides Optional request overrides to apply
    * @return The [ResponseBody] containing the file data
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
-  fun download(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams): ResponseBody {
+  @JvmOverloads
+  fun download(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams, overrides: RequestOverrides? = null): ResponseBody {
     val path = String.format("v3/grants/%s/attachments/%s/download", identifier, attachmentId)
 
-    return client.downloadResponse(path, queryParams)
+    return client.downloadResponse(path, queryParams, overrides = overrides)
   }
 
   /**
@@ -51,11 +55,13 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
    * @param identifier Grant ID or email account to query
    * @param attachmentId The id of the attachment to download.
    * @param queryParams The query parameters to include in the request
+   * @param overrides Optional request overrides to apply
    * @return The raw file data
    */
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
-  fun downloadBytes(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams): ByteArray {
-    val download = download(identifier, attachmentId, queryParams)
+  @JvmOverloads
+  fun downloadBytes(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams, overrides: RequestOverrides? = null): ByteArray {
+    val download = download(identifier, attachmentId, queryParams, overrides)
     val fileBytes = download.bytes()
     download.close()
     return fileBytes

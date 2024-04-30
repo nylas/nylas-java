@@ -3,9 +3,13 @@
 ### [Unreleased]
 
 ### Added
-* Add support for custom headers field for Drafts and Messages
+* Added support for custom headers field for Drafts and Messages
+* Added support for overriding various fields of outgoing requests
 
 ## [2.2.1] - Released 2024-03-05
+
+### Added
+* Added support for `provider` field in code exchange response
 
 ### Changed
 * Improved message sending and draft create/update performance
