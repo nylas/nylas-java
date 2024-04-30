@@ -93,10 +93,12 @@ class RedirectUriTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<ListResponse<RedirectUri>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/applications/redirect-uris", pathCaptor.firstValue)
@@ -111,10 +113,12 @@ class RedirectUriTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<ListResponse<RedirectUri>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/applications/redirect-uris/$redirectUriId", pathCaptor.firstValue)
@@ -142,11 +146,13 @@ class RedirectUriTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePost<ListResponse<RedirectUri>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/applications/redirect-uris", pathCaptor.firstValue)
@@ -176,11 +182,13 @@ class RedirectUriTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePatch<ListResponse<RedirectUri>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/applications/redirect-uris/$redirectUriId", pathCaptor.firstValue)
@@ -196,10 +204,12 @@ class RedirectUriTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeDelete<ListResponse<RedirectUri>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/applications/redirect-uris/$redirectUriId", pathCaptor.firstValue)

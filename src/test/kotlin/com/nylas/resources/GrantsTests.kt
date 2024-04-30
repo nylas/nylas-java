@@ -99,10 +99,12 @@ class GrantsTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<ListResponse<Grant>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants", pathCaptor.firstValue)
@@ -122,10 +124,12 @@ class GrantsTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<ListResponse<Grant>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants", pathCaptor.firstValue)
@@ -142,10 +146,12 @@ class GrantsTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<Response<Grant>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId", pathCaptor.firstValue)
@@ -174,11 +180,13 @@ class GrantsTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePatch<Response<Grant>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId", pathCaptor.firstValue)
@@ -196,10 +204,12 @@ class GrantsTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeDelete<DeleteResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId", pathCaptor.firstValue)

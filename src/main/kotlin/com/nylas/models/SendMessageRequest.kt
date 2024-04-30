@@ -29,7 +29,7 @@ data class SendMessageRequest(
   /**
    * An array of files to attach to the message.
    */
-  @Transient
+  @Json(name = "attachments")
   override val attachments: List<CreateAttachmentRequest>? = null,
   /**
    * The message subject.
@@ -68,6 +68,11 @@ data class SendMessageRequest(
    */
   @Json(name = "use_draft")
   val useDraft: Boolean? = null,
+  /**
+   * A list of custom headers to add to the message.
+   */
+  @Json(name = "custom_headers")
+  val customHeaders: List<CustomHeader>? = null,
 ) : IMessageAttachmentRequest {
   /**
    * Builder for [SendMessageRequest].
@@ -87,6 +92,7 @@ data class SendMessageRequest(
     private var replyToMessageId: String? = null
     private var trackingOptions: TrackingOptions? = null
     private var useDraft: Boolean? = null
+    private var customHeaders: List<CustomHeader>? = null
 
     /**
      * Sets the bcc recipients.
@@ -168,6 +174,13 @@ data class SendMessageRequest(
     fun useDraft(useDraft: Boolean?) = apply { this.useDraft = useDraft }
 
     /**
+     * Sets the custom headers to add to the message.
+     * @param customHeaders The custom headers to add to the message.
+     * @return The builder.
+     */
+    fun customHeaders(customHeaders: List<CustomHeader>?) = apply { this.customHeaders = customHeaders }
+
+    /**
      * Builds a [SendMessageRequest] instance.
      * @return The [SendMessageRequest] instance.
      */
@@ -185,6 +198,7 @@ data class SendMessageRequest(
         replyToMessageId,
         trackingOptions,
         useDraft,
+        customHeaders,
       )
   }
 }

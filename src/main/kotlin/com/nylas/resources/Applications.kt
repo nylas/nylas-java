@@ -1,10 +1,7 @@
 package com.nylas.resources
 
 import com.nylas.NylasClient
-import com.nylas.models.ApplicationDetails
-import com.nylas.models.NylasApiError
-import com.nylas.models.NylasSdkTimeoutError
-import com.nylas.models.Response
+import com.nylas.models.*
 import com.squareup.moshi.Types
 
 /**
@@ -23,12 +20,14 @@ class Applications(private val client: NylasClient) {
 
   /**
    * Get application details
+   * @param overrides Optional request overrides to apply
    * @return The application details
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun getDetails(): Response<ApplicationDetails> {
+  @JvmOverloads
+  fun getDetails(overrides: RequestOverrides? = null): Response<ApplicationDetails> {
     val path = "v3/applications"
     val responseType = Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java)
-    return client.executeGet(path, responseType)
+    return client.executeGet(path, responseType, overrides = overrides)
   }
 }

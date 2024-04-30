@@ -20,7 +20,7 @@ class CreateAttachmentRequest(
   /**
    * The content of the attachment.
    */
-  @Transient
+  @Json(name = "content")
   val content: InputStream,
   /**
    * The size of the attachment in bytes.

@@ -169,10 +169,12 @@ class MessagesTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<ListResponse<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages", pathCaptor.firstValue)
@@ -187,10 +189,12 @@ class MessagesTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<ListResponse<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages", pathCaptor.firstValue)
@@ -207,10 +211,12 @@ class MessagesTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<ListResponse<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/$messageId", pathCaptor.firstValue)
@@ -235,11 +241,13 @@ class MessagesTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePut<ListResponse<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/$messageId", pathCaptor.firstValue)
@@ -257,10 +265,12 @@ class MessagesTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeDelete<ListResponse<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/$messageId", pathCaptor.firstValue)
@@ -289,10 +299,12 @@ class MessagesTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<Response<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/schedules", pathCaptor.firstValue)
@@ -309,10 +321,12 @@ class MessagesTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<Response<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/schedules/$scheduledMessageId", pathCaptor.firstValue)
@@ -329,10 +343,12 @@ class MessagesTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeDelete<Response<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/schedules/$scheduledMessageId", pathCaptor.firstValue)
@@ -368,6 +384,7 @@ class MessagesTests {
           sendAt = 1620000000,
           replyToMessageId = "reply-to-message-id",
           trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+          customHeaders = listOf(CustomHeader(name = "header-name", value = "header-value")),
         )
 
       messages.send(grantId, sendMessageRequest)
@@ -376,11 +393,13 @@ class MessagesTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePost<Response<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
@@ -393,6 +412,7 @@ class MessagesTests {
     fun `sending a message with a small attachment calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
       val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val testInputStreamCopy = ByteArrayInputStream("test data".toByteArray())
       val sendMessageRequest =
         SendMessageRequest(
           to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
@@ -412,7 +432,18 @@ class MessagesTests {
               size = 100,
             ),
           ),
+          customHeaders = listOf(CustomHeader(name = "header-name", value = "header-value")),
         )
+      val expectedRequestBody = sendMessageRequest.copy(
+        attachments = listOf(
+          CreateAttachmentRequest(
+            content = testInputStreamCopy,
+            contentType = "text/plain",
+            filename = "attachment.txt",
+            size = 100,
+          ),
+        ),
+      )
 
       messages.send(grantId, sendMessageRequest)
 
@@ -420,16 +451,18 @@ class MessagesTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePost<Response<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
+      assertEquals(adapter.toJson(expectedRequestBody), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
 
@@ -456,7 +489,9 @@ class MessagesTests {
               size = 3 * 1024 * 1024,
             ),
           ),
+          customHeaders = listOf(CustomHeader(name = "header-name", value = "header-value")),
         )
+      val attachmentLessRequest = sendMessageRequest.copy(attachments = null)
 
       messages.send(grantId, sendMessageRequest)
 
@@ -465,12 +500,14 @@ class MessagesTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<RequestBody>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeFormRequest<Response<Message>>(
         pathCaptor.capture(),
         methodCaptor.capture(),
         requestBodyCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
 
       assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
@@ -483,7 +520,7 @@ class MessagesTests {
       val fileBuffer = Buffer()
       multipart.part(0).body().writeTo(buffer)
       multipart.part(1).body().writeTo(fileBuffer)
-      assertEquals(adapter.toJson(sendMessageRequest), buffer.readUtf8())
+      assertEquals(adapter.toJson(attachmentLessRequest), buffer.readUtf8())
       assertEquals("test data", fileBuffer.readUtf8())
     }
   }

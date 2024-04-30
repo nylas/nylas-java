@@ -29,7 +29,7 @@ data class CreateDraftRequest(
   /**
    * An array of files to attach to the message.
    */
-  @Transient
+  @Json(name = "attachments")
   override val attachments: List<CreateAttachmentRequest>? = null,
   /**
    * The message subject.
@@ -62,6 +62,11 @@ data class CreateDraftRequest(
    */
   @Json(name = "tracking_options")
   val trackingOptions: TrackingOptions? = null,
+  /**
+   * A list of custom headers to add to the message.
+   */
+  @Json(name = "custom_headers")
+  val customHeaders: List<CustomHeader>? = null,
 ) : IMessageAttachmentRequest {
   /**
    * Builder for [CreateDraftRequest].
@@ -78,6 +83,7 @@ data class CreateDraftRequest(
     private var sendAt: Int? = null
     private var replyToMessageId: String? = null
     private var trackingOptions: TrackingOptions? = null
+    private var customHeaders: List<CustomHeader>? = null
 
     /**
      * Sets the recipients.
@@ -158,6 +164,13 @@ data class CreateDraftRequest(
     fun trackingOptions(trackingOptions: TrackingOptions?) = apply { this.trackingOptions = trackingOptions }
 
     /**
+     * Sets the custom headers to add to the message.
+     * @param customHeaders The custom headers to add to the message.
+     * @return The builder.
+     */
+    fun customHeaders(customHeaders: List<CustomHeader>?) = apply { this.customHeaders = customHeaders }
+
+    /**
      * Builds a [SendMessageRequest] instance.
      * @return The [SendMessageRequest] instance.
      */
@@ -174,6 +187,7 @@ data class CreateDraftRequest(
         sendAt,
         replyToMessageId,
         trackingOptions,
+        customHeaders,
       )
   }
 }
