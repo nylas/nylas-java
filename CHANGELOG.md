@@ -1,8 +1,9 @@
 # Nylas Java SDK Changelog
 
-## Unreleased
+### [Unreleased]
 
 ### Added
+* Added support for custom headers field for Drafts and Messages
 * Added support for overriding various fields of outgoing requests
 
 ## [2.2.1] - Released 2024-03-05

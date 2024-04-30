@@ -230,6 +230,7 @@ class DraftsTests {
           sendAt = 1620000000,
           replyToMessageId = "reply-to-message-id",
           trackingOptions = TrackingOptions(label = "label", links = true, opens = true, threadReplies = true),
+          customHeaders = listOf(CustomHeader(name = "header", value = "value")),
         )
 
       drafts.create(grantId, createDraftRequest)
@@ -275,6 +276,7 @@ class DraftsTests {
               size = 100,
             ),
           ),
+          customHeaders = listOf(CustomHeader(name = "header", value = "value")),
         )
 
       drafts.create(grantId, createDraftRequest)
@@ -320,6 +322,7 @@ class DraftsTests {
               size = 3 * 1024 * 1024,
             ),
           ),
+          customHeaders = listOf(CustomHeader(name = "header", value = "value")),
         )
 
       drafts.create(grantId, createDraftRequest)
