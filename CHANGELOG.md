@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-### [Unreleased]
+### [2.3.0] - Released 2024-04-30
 
 ### Added
 * Added missing webhook triggers
@@ -449,7 +449,8 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.2.1...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/nylas/nylas-java/releases/tag/v2.3.0
 [2.2.1]: https://github.com/nylas/nylas-java/releases/tag/v2.2.1
 [2.2.0]: https://github.com/nylas/nylas-java/releases/tag/v2.2.0
 [2.1.0]: https://github.com/nylas/nylas-java/releases/tag/v2.1.0
