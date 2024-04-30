@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 /**
  * Class representation of a Nylas clean message request
  */
-data class CleanMessageRequest(
+data class CleanMessagesRequest(
   /**
    * IDs of the email messages to clean.
    */
@@ -39,7 +39,7 @@ data class CleanMessageRequest(
 ) {
 
   /**
-   * Builder for the [CleanMessageRequest] class.
+   * Builder for the [CleanMessagesRequest] class.
    * @param messageId IDs of the email messages to clean.
    */
   data class Builder(
@@ -87,10 +87,10 @@ data class CleanMessageRequest(
     fun removeConclusionPhrases(removeConclusionPhrases: Boolean) = apply { this.removeConclusionPhrases = removeConclusionPhrases }
 
     /**
-     * Builds the [CleanMessageRequest] instance.
-     * @return The [CleanMessageRequest] instance.
+     * Builds the [CleanMessagesRequest] instance.
+     * @return The [CleanMessagesRequest] instance.
      */
-    fun build() = CleanMessageRequest(
+    fun build() = CleanMessagesRequest(
       messageId = messageId,
       ignoreLinks = ignoreLinks,
       ignoreImages = ignoreImages,
