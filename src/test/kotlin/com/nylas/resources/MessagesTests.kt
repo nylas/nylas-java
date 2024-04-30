@@ -393,6 +393,7 @@ class MessagesTests {
     fun `sending a message with a small attachment calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
       val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val testInputStreamCopy = ByteArrayInputStream("test data".toByteArray())
       val sendMessageRequest =
         SendMessageRequest(
           to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
@@ -413,6 +414,16 @@ class MessagesTests {
             ),
           ),
         )
+      val expectedRequestBody = sendMessageRequest.copy(
+        attachments = listOf(
+          CreateAttachmentRequest(
+            content = testInputStreamCopy,
+            contentType = "text/plain",
+            filename = "attachment.txt",
+            size = 100,
+          ),
+        ),
+      )
 
       messages.send(grantId, sendMessageRequest)
 
@@ -429,7 +440,7 @@ class MessagesTests {
 
       assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
+      assertEquals(adapter.toJson(expectedRequestBody), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
 
@@ -457,6 +468,7 @@ class MessagesTests {
             ),
           ),
         )
+      val attachmentLessRequest = sendMessageRequest.copy(attachments = null)
 
       messages.send(grantId, sendMessageRequest)
 
@@ -483,7 +495,7 @@ class MessagesTests {
       val fileBuffer = Buffer()
       multipart.part(0).body().writeTo(buffer)
       multipart.part(1).body().writeTo(fileBuffer)
-      assertEquals(adapter.toJson(sendMessageRequest), buffer.readUtf8())
+      assertEquals(adapter.toJson(attachmentLessRequest), buffer.readUtf8())
       assertEquals("test data", fileBuffer.readUtf8())
     }
   }

@@ -249,6 +249,7 @@ class DraftsTests {
     fun `creating a draft with small attachment calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
       val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val testInputStreamCopy = ByteArrayInputStream("test data".toByteArray())
       val createDraftRequest =
         CreateDraftRequest(
           body = "Hello, I just sent a message using Nylas!",
@@ -268,6 +269,16 @@ class DraftsTests {
             ),
           ),
         )
+      val expectedRequest = createDraftRequest.copy(
+        attachments = listOf(
+          CreateAttachmentRequest(
+            content = testInputStreamCopy,
+            contentType = "text/plain",
+            filename = "attachment.txt",
+            size = 100,
+          ),
+        ),
+      )
 
       drafts.create(grantId, createDraftRequest)
 
@@ -284,7 +295,7 @@ class DraftsTests {
 
       assertEquals("v3/grants/$grantId/drafts", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(createDraftRequest), requestBodyCaptor.firstValue)
+      assertEquals(adapter.toJson(expectedRequest), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
 
@@ -311,6 +322,7 @@ class DraftsTests {
             ),
           ),
         )
+      val attachmentLessRequest = createDraftRequest.copy(attachments = null)
 
       drafts.create(grantId, createDraftRequest)
 
@@ -337,7 +349,7 @@ class DraftsTests {
       val fileBuffer = Buffer()
       multipart.part(0).body().writeTo(buffer)
       multipart.part(1).body().writeTo(fileBuffer)
-      assertEquals(adapter.toJson(createDraftRequest), buffer.readUtf8())
+      assertEquals(adapter.toJson(attachmentLessRequest), buffer.readUtf8())
       assertEquals("test data", fileBuffer.readUtf8())
     }
 
@@ -377,6 +389,7 @@ class DraftsTests {
       val draftId = "draft-123"
       val adapter = JsonHelper.moshi().adapter(UpdateDraftRequest::class.java)
       val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val testInputStreamCopy = ByteArrayInputStream("test data".toByteArray())
       val updateDraftRequest =
         UpdateDraftRequest(
           body = "Hello, I just sent a message using Nylas!",
@@ -392,6 +405,16 @@ class DraftsTests {
             ),
           ),
         )
+      val expectedRequest = updateDraftRequest.copy(
+        attachments = listOf(
+          CreateAttachmentRequest(
+            content = testInputStreamCopy,
+            contentType = "text/plain",
+            filename = "attachment.txt",
+            size = 100,
+          ),
+        ),
+      )
 
       drafts.update(grantId, draftId, updateDraftRequest)
 
@@ -408,7 +431,7 @@ class DraftsTests {
 
       assertEquals("v3/grants/$grantId/drafts/$draftId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(updateDraftRequest), requestBodyCaptor.firstValue)
+      assertEquals(adapter.toJson(expectedRequest), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
 
@@ -432,6 +455,7 @@ class DraftsTests {
             ),
           ),
         )
+      val attachmentLessRequest = updateDraftRequest.copy(attachments = null)
 
       drafts.update(grantId, draftId, updateDraftRequest)
 
@@ -458,7 +482,7 @@ class DraftsTests {
       val fileBuffer = Buffer()
       multipart.part(0).body().writeTo(buffer)
       multipart.part(1).body().writeTo(fileBuffer)
-      assertEquals(adapter.toJson(updateDraftRequest), buffer.readUtf8())
+      assertEquals(adapter.toJson(attachmentLessRequest), buffer.readUtf8())
       assertEquals("test data", fileBuffer.readUtf8())
     }
 
