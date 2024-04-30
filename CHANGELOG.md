@@ -3,8 +3,14 @@
 ### [Unreleased]
 
 ### Added
+* Added missing webhook triggers
+* Added provider field to token exchange response
+* Added support for clean messages endpoint
 * Added support for custom headers field for Drafts and Messages
 * Added support for overriding various fields of outgoing requests
+
+### Changed
+* Fixed issue where attachments < 3mb were not being encoded correctly
 
 ## [2.2.1] - Released 2024-03-05
 
