@@ -526,6 +526,54 @@ class MessagesTests {
   }
 
   @Nested
+  inner class CleanMessageTests {
+    private lateinit var grantId: String
+    private lateinit var mockNylasClient: NylasClient
+    private lateinit var messages: Messages
+
+    @BeforeEach
+    fun setup() {
+      grantId = "abc-123-grant-id"
+      mockNylasClient = Mockito.mock(NylasClient::class.java)
+      messages = Messages(mockNylasClient)
+    }
+
+    @Test
+    fun `cleaning a message calls requests with the correct params`() {
+      val messageId = "message-123"
+      val adapter = JsonHelper.moshi().adapter(CleanMessageRequest::class.java)
+      val cleanMessageRequest =
+        CleanMessageRequest.Builder(listOf(messageId))
+          .ignoreLinks(true)
+          .ignoreImages(true)
+          .imagesAsMarkdown(true)
+          .ignoreTables(true)
+          .removeConclusionPhrases(true)
+          .build()
+
+      messages.cleanConversation(grantId, cleanMessageRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePut<Response<CleanMessageResponse>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/clean", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, CleanMessageResponse::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(cleanMessageRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+  }
+
+  @Nested
   inner class ResourceTests {
     private lateinit var grantId: String
     private lateinit var mockNylasClient: NylasClient
