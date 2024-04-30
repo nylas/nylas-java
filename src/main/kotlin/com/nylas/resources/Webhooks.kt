@@ -15,82 +15,99 @@ import java.util.*
 class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.java) {
   /**
    * List all webhook destinations for the application
+   * @param overrides Optional request overrides to apply
    * @return The list of webhook destinations
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun list(): ListResponse<Webhook> {
+  @JvmOverloads
+  fun list(overrides: RequestOverrides? = null): ListResponse<Webhook> {
     val path = "v3/webhooks"
-    return listResource(path)
+    return listResource(path, overrides = overrides)
   }
 
   /**
    * Return a webhook destination
    * @param webhookId The id of the webhook destination to retrieve.
+   * @param overrides Optional request overrides to apply
    * @return The webhook destination
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun find(webhookId: String): Response<Webhook> {
+  @JvmOverloads
+  fun find(webhookId: String, overrides: RequestOverrides? = null): Response<Webhook> {
     val path = String.format("v3/webhooks/%s", webhookId)
-    return findResource(path)
+    return findResource(path, overrides = overrides)
   }
 
   /**
    * Create a webhook destination
    * @param requestBody The values to create the webhook destination with
+   * @param overrides Optional request overrides to apply
    * @return The created webhook destination
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun create(requestBody: CreateWebhookRequest): Response<WebhookWithSecret> {
+  @JvmOverloads
+  fun create(requestBody: CreateWebhookRequest, overrides: RequestOverrides? = null): Response<WebhookWithSecret> {
     val path = "v3/webhooks"
     val adapter = JsonHelper.moshi().adapter(CreateWebhookRequest::class.java)
     val responseType = Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return client.executePost(path, responseType, serializedRequestBody)
+    return client.executePost(path, responseType, serializedRequestBody, overrides = overrides)
   }
 
   /**
    * Update a webhook destination
    * @param webhookId The id of the webhook destination to update.
    * @param requestBody The values to update the webhook destination with
+   * @param overrides Optional request overrides to apply
    * @return The updated webhook destination
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun update(webhookId: String, requestBody: UpdateWebhookRequest): Response<Webhook> {
+  @JvmOverloads
+  fun update(webhookId: String, requestBody: UpdateWebhookRequest, overrides: RequestOverrides? = null): Response<Webhook> {
     val path = String.format("v3/webhooks/%s", webhookId)
     val adapter = JsonHelper.moshi().adapter(UpdateWebhookRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody)
+    return updateResource(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
    * Delete a webhook destination
    * @param webhookId The id of the webhook destination to delete.
+   * @param overrides Optional request overrides to apply
    * @return The deleted webhook response
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun destroy(webhookId: String): WebhookDeleteResponse {
+  @JvmOverloads
+  fun destroy(webhookId: String, overrides: RequestOverrides? = null): WebhookDeleteResponse {
     val path = String.format("v3/webhooks/%s", webhookId)
-    return client.executeDelete(path, WebhookDeleteResponse::class.java)
+    return client.executeDelete(path, WebhookDeleteResponse::class.java, overrides = overrides)
   }
 
   /**
    * Update the webhook secret value for a destination
+   * @param webhookId The id of the webhook destination to update the secret for.
+   * @param overrides Optional request overrides to apply
    * @returns The updated webhook destination
    */
-  fun rotateSecret(webhookId: String): Response<WebhookWithSecret> {
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  @JvmOverloads
+  fun rotateSecret(webhookId: String, overrides: RequestOverrides? = null): Response<WebhookWithSecret> {
     val path = String.format("v3/webhooks/rotate-secret/%s", webhookId)
     val responseType = Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java)
-    return client.executePost(path, responseType)
+    return client.executePost(path, responseType, overrides = overrides)
   }
 
   /**
    * Get the current list of IP addresses that Nylas sends webhooks from
+   * @param overrides Optional request overrides to apply
    * @returns The list of IP addresses that Nylas sends webhooks from
    */
-  fun ipAddresses(): Response<WebhookIpAddressesResponse> {
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  @JvmOverloads
+  fun ipAddresses(overrides: RequestOverrides? = null): Response<WebhookIpAddressesResponse> {
     val path = "v3/webhooks/ip-addresses"
     val responseType = Types.newParameterizedType(Response::class.java, WebhookIpAddressesResponse::class.java)
-    return client.executeGet(path, responseType)
+    return client.executeGet(path, responseType, overrides = overrides)
   }
 
   /**
