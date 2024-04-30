@@ -528,7 +528,7 @@ class MessagesTests {
       )
 
       assertEquals("v3/grants/$grantId/messages/clean", pathCaptor.firstValue)
-      assertEquals(Types.newParameterizedType(Response::class.java, CleanMessageResponse::class.java), typeCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, CleanMessageResponse::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(cleanMessageRequest), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
