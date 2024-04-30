@@ -136,14 +136,14 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
    * Clean messages
    * @param identifier The identifier of the grant to act upon
    * @param requestBody The values to clean the message with
-   * @return Clean multiple messages
+   * @return The list of cleaned messages
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
-  fun cleanConversation(identifier: String, requestBody: CleanMessageRequest): Response<CleanMessageResponse> {
+  fun cleanConversation(identifier: String, requestBody: CleanMessageRequest): ListResponse<CleanMessageResponse> {
     val path = String.format("v3/grants/%s/messages/clean", identifier)
     val adapter = JsonHelper.moshi().adapter(CleanMessageRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    val responseType = Types.newParameterizedType(Response::class.java, CleanMessageResponse::class.java)
+    val responseType = Types.newParameterizedType(ListResponse::class.java, CleanMessageResponse::class.java)
     return client.executePut(path, responseType, serializedRequestBody)
   }
 }
