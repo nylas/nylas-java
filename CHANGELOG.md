@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+### [2.3.1] - Released 2024-06-10
+
+### Changed
+* Fixed code exchange response for scope value
+
 ### [2.3.0] - Released 2024-04-30
 
 ### Added
