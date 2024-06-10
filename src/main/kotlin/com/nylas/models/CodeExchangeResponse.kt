@@ -25,7 +25,7 @@ data class CodeExchangeResponse(
    * List of scopes associated with this token.
    */
   @Json(name = "scope")
-  val scope: String,
+  val scope: String? = null,
   /**
    * Email address of the grant that is created.
    */
