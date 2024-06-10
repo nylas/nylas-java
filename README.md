@@ -30,7 +30,7 @@ If you have a question about the Nylas Communications Platform, [contact Nylas S
 If you're using Gradle, add the following to the dependencies section of `build.gradle`:
 
 ```groovy
-implementation("com.nylas.sdk:nylas:2.3.0")
+implementation("com.nylas.sdk:nylas:2.3.1")
 ```
 
 ### Build from source
@@ -42,7 +42,7 @@ git clone https://github.com/nylas/nylas-java.git && cd nylas-java
 ./gradlew build uberJar
 ```
 
-This creates a new jar file in `build/libs/nylas-java-sdk-2.3.0-uber.jar`.
+This creates a new jar file in `build/libs/nylas-java-sdk-2.3.1-uber.jar`.
 
 See the Gradle documentation on [Building Libraries](https://guides.gradle.org/building-java-libraries/)
 or the [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) for more information.
