@@ -7,6 +7,11 @@ import com.squareup.moshi.Json
  */
 data class CreateDraftRequest(
   /**
+   * From address. (Optional) If not provided, the default address will be used.
+   */
+  @Json(name = "from")
+  val from: List<EmailName>? = null,
+  /**
    * An array of message recipients.
    */
   @Json(name = "to")
@@ -72,6 +77,7 @@ data class CreateDraftRequest(
    * Builder for [CreateDraftRequest].
    */
   class Builder {
+    private var from: List<EmailName>? = null
     private var to: List<EmailName>? = null
     private var bcc: List<EmailName>? = null
     private var cc: List<EmailName>? = null
@@ -84,6 +90,13 @@ data class CreateDraftRequest(
     private var replyToMessageId: String? = null
     private var trackingOptions: TrackingOptions? = null
     private var customHeaders: List<CustomHeader>? = null
+
+    /**
+     * Sets the from address.
+     * @param from The from address.
+     * @return The builder.
+     */
+    fun from(from: List<EmailName>?) = apply { this.from = from }
 
     /**
      * Sets the recipients.
@@ -176,6 +189,7 @@ data class CreateDraftRequest(
      */
     fun build() =
       CreateDraftRequest(
+        from,
         to,
         bcc,
         cc,
