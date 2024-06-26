@@ -29,7 +29,7 @@ sealed class When {
     val date: String,
   ) : When() {
     @Json(name = "object")
-    override val obj: WhenType = WhenType.DATESPAN
+    override val obj: WhenType = WhenType.DATE
   }
 
   /**
