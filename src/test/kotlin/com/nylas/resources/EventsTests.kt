@@ -156,6 +156,56 @@ class EventsTests {
       assertEquals("America/New_York", whenTimespan.startTimezone)
       assertEquals("America/New_York", whenTimespan.endTimezone)
     }
+
+    @Test
+    fun `Event serializes when with date type properly`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
+          {
+            "busy": true,
+            "calendar_id": "7d93zl2palhxqdy6e5qinsakt",
+            "created_at": 1661874192,
+            "description": "Description of my new calendar",
+            "hide_participants": false,
+            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+            "html_link": "https://www.google.com/calendar/event?eid=bTMzcGJrNW4yYjk4bjk3OWE4Ef3feD2VuM29fMjAyMjA2MjdUMjIwMDAwWiBoYWxsYUBueWxhcy5jb20",
+            "id": "5d3qmne77v32r8l4phyuksl2x",
+            "location": "Roller Rink",
+            "object": "event",
+            "organizer": {
+              "email": "organizer@example.com",
+              "name": ""
+            },
+            "read_only": false,
+            "reminders": {
+              "use_default": false,
+              "overrides": [
+                {
+                  "reminder_minutes": 10,
+                  "reminder_method": "email"
+                }
+              ]
+            },
+            "status": "confirmed",
+            "title": "Birthday Party",
+            "updated_at": 1661874192,
+            "visibility": "private",
+            "when": {
+              "date": "2024-06-18",
+              "object": "date"
+            }
+          }
+          """.trimIndent(),
+        )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+      assertIs<Event>(event)
+      assertIs<When.Date>(event.getWhen())
+      val whenDate = event.getWhen() as When.Date
+      assertEquals("2024-06-18", whenDate.date)
+    }
   }
 
   @Nested
