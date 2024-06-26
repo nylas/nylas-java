@@ -1,5 +1,11 @@
 # Nylas Java SDK Changelog
 
+### [2.3.2] - Released 2024-06-26
+
+### Changed
+* Fixed default When type
+* Fixed issue where from field was not accessible when creating drafts
+
 ### [2.3.1] - Released 2024-06-10
 
 ### Changed
@@ -454,7 +460,9 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.3.2...HEAD
+[2.3.2]: https://github.com/nylas/nylas-java/releases/tag/v2.3.2
+[2.3.1]: https://github.com/nylas/nylas-java/releases/tag/v2.3.1
 [2.3.0]: https://github.com/nylas/nylas-java/releases/tag/v2.3.0
 [2.2.1]: https://github.com/nylas/nylas-java/releases/tag/v2.2.1
 [2.2.0]: https://github.com/nylas/nylas-java/releases/tag/v2.2.0
