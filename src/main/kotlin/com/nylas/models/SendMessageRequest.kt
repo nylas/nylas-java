@@ -12,6 +12,11 @@ data class SendMessageRequest(
   @Json(name = "to")
   val to: List<EmailName>,
   /**
+   * An array of message senders.
+   */
+  @Json(name = "from")
+  val from: List<EmailName>? = null,
+  /**
    * An array of bcc recipients.
    */
   @Json(name = "bcc")
@@ -81,6 +86,7 @@ data class SendMessageRequest(
   data class Builder(
     private val to: List<EmailName>,
   ) {
+    private var from: List<EmailName>? = null
     private var bcc: List<EmailName>? = null
     private var cc: List<EmailName>? = null
     private var replyTo: List<EmailName>? = null
@@ -100,6 +106,13 @@ data class SendMessageRequest(
      * @return The builder.
      */
     fun bcc(bcc: List<EmailName>?) = apply { this.bcc = bcc }
+
+    /**
+     * Sets the from sender.
+     * @param bcc The from sender.
+     * @return The builder.
+     */
+    fun from(from: List<EmailName>?) = apply { this.from = from }
 
     /**
      * Sets the cc recipients.
@@ -187,6 +200,7 @@ data class SendMessageRequest(
     fun build() =
       SendMessageRequest(
         to,
+        from,
         bcc,
         cc,
         replyTo,
