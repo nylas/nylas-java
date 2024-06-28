@@ -1,5 +1,13 @@
 # Nylas Java SDK Changelog
 
+### [2.4.0] - Released 2024-06-28
+
+### Added
+* Added webhook validation support
+
+### Changed
+* Fixed issue where from field was not accessible when sending messages
+
 ### [2.3.2] - Released 2024-06-26
 
 ### Changed
