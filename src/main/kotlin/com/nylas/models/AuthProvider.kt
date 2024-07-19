@@ -20,4 +20,7 @@ enum class AuthProvider(val value: String) {
 
   @Json(name = "icloud")
   ICLOUD("icloud"),
+
+  @Json(name = "ews")
+  EWS("ews"),
 }
