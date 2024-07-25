@@ -94,6 +94,11 @@ data class Event(
   @Json(name = "organizer")
   val organizer: EmailName? = null,
   /**
+   * Organizer of the event.
+   */
+  @Json(name = "master_event_id")
+  val masterEventId: String? = null,
+  /**
    * A list of RRULE and EXDATE strings.
    * @see <a href="https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.5">RFC-5545</a>
    */
