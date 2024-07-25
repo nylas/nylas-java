@@ -8,4 +8,21 @@ data class TokenParams(
    */
   @Json(name = "token")
   val token: String,
-) : IQueryParams
+) : IQueryParams {
+  /**
+   * Builder for [TokenParams].
+   * @property token Token to be revoked.
+   */
+  data class Builder(
+    private val token: String,
+  ) {
+
+    /**
+     * Build the [TokenParams] object
+     * @return The [TokenParams] object
+     */
+    fun build() = TokenParams(
+      token,
+    )
+  }
+}
