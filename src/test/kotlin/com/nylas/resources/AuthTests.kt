@@ -312,7 +312,7 @@ class AuthTests {
     fun `revoke calls requests with the correct params`() {
       val token = "user-token"
 
-      val res = auth.revoke(token)
+      val res = auth.revoke(TokenParams(token))
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -327,7 +327,7 @@ class AuthTests {
         overrideParamCaptor.capture(),
       )
 
-      assertEquals("v3/connect/revoke?token=user-token", pathCaptor.firstValue)
+      assertEquals("v3/connect/revoke", pathCaptor.firstValue)
       assertNull(requestBodyCaptor.firstValue)
       assertEquals(true, res)
     }
