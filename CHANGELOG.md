@@ -1,5 +1,12 @@
 # Nylas Java SDK Changelog
 
+### [2.4.1] - Released 2024-07-26
+
+### Changed
+* Added missing `masterEventId` field in `Event` model
+* Added missing `EWS` provider in `Provider` enum
+* Fixed issue where the revoke OAuth token function was not working correctly
+
 ### [2.4.0] - Released 2024-06-28
 
 ### Added
