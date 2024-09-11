@@ -393,6 +393,14 @@ class NylasClient(
       return response.body() ?: throw Exception("Unexpected null response body")
     } catch (e: SocketTimeoutException) {
       throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis())
+    } catch (e: SocketException) {
+      throw NylasSdkRemoteClosedError(finalUrl.toString(), e.message ?: "Unknown error")
+    } catch (e: Exception) {
+      throw NylasApiError(
+        type = "unknown",
+        message = "Unknown error occurred: ${e.message}",
+        statusCode = 0,
+      )
     }
   }
 
