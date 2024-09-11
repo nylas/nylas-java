@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+### Unreleased
+
+### Added
+* Added new error class `NylasSdkRemoteClosedError` for when the remote connection is closed
+
 ### [2.4.1] - Released 2024-07-26
 
 ### Changed
