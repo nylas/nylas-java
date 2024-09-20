@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+### Unreleased
+
+### Added
+* Added support for new filter fields for listing events
+
 ### [2.4.1] - Released 2024-07-26
 
 ### Changed
