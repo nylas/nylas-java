@@ -82,6 +82,48 @@ data class ListEventQueryParams(
    */
   @Json(name = "participants")
   val orderBy: String? = null,
+  /**
+   * Filter for events with the specified ical_uid.
+   * You cannot apply other filters if you use this parameter.
+   * (Not supported for iCloud)
+   */
+  @Json(name = "ical_uid")
+  val icalUid: String? = null,
+  /**
+   * Filter for instances of recurring events with the specified master_event_id.
+   * masterEventId is not respected by metadata filtering.
+   * (Not supported for iCloud)
+   */
+  @Json(name = "master_event_id")
+  val masterEventId: String? = null,
+  /**
+   * Filter for events that have been updated after the specified time, in Unix epoch format.
+   * updatedBefore is not respected by metadata filtering.
+   * (Google, Microsoft, and EWS only)
+   */
+  @Json(name = "updated_before")
+  val updatedBefore: Long? = null,
+  /**
+   * Filter for events that have been updated after the specified time, in Unix epoch format.
+   * updatedAfter is not respected by metadata filtering.
+   * (Google, Microsoft, and EWS only)
+   */
+  @Json(name = "updated_after")
+  val updatedAfter: Long? = null,
+  /**
+   * Filter for events that include the specified attendees.
+   * This parameter accepts a comma-delimited list of email addresses.
+   * (Not supported for virtual calendars)
+   */
+  @Json(name = "attendees")
+  val attendees: List<String>? = null,
+  /**
+   * Filter for events with the specified event type.
+   * You can pass this query parameter multiple times to select or exclude multiple event types.
+   * (Google only)
+   */
+  @Json(name = "event_type")
+  val eventType: EventType? = null,
 ) : IQueryParams {
   /**
    * Builder for [ListEventQueryParams].
@@ -104,6 +146,12 @@ data class ListEventQueryParams(
     private var expandRecurring: Boolean? = null
     private var busy: Boolean? = null
     private var orderBy: String? = null
+    private var icalUid: String? = null
+    private var masterEventId: String? = null
+    private var updatedBefore: Long? = null
+    private var updatedAfter: Long? = null
+    private var attendees: List<String>? = null
+    private var eventType: EventType? = null
 
     /**
      * Sets the maximum number of objects to return.
@@ -198,6 +246,60 @@ data class ListEventQueryParams(
     fun orderBy(orderBy: String?) = apply { this.orderBy = orderBy }
 
     /**
+     * Sets the ical_uid to filter for events with.
+     * You cannot apply other filters if you use this parameter.
+     * (Not supported for iCloud)
+     * @param icalUid The ical_uid to filter for events with.
+     * @return The builder.
+     */
+    fun icalUid(icalUid: String?) = apply { this.icalUid = icalUid }
+
+    /**
+     * Sets the master_event_id to filter for instances of recurring events with.
+     * masterEventId is not respected by metadata filtering.
+     * (Not supported for iCloud)
+     * @param masterEventId The master_event_id to filter for instances of recurring events with.
+     * @return The builder.
+     */
+    fun masterEventId(masterEventId: String?) = apply { this.masterEventId = masterEventId }
+
+    /**
+     * Sets the updated_before time to filter for events that have been updated after.
+     * updatedBefore is not respected by metadata filtering.
+     * (Google, Microsoft, and EWS only)
+     * @param updatedBefore The updated_before time to filter for events that have been updated after.
+     * @return The builder.
+     */
+    fun updatedBefore(updatedBefore: Long?) = apply { this.updatedBefore = updatedBefore }
+
+    /**
+     * Sets the updated_after time to filter for events that have been updated after.
+     * updatedAfter is not respected by metadata filtering.
+     * (Google, Microsoft, and EWS only)
+     * @param updatedAfter The updated_after time to filter for events that have been updated after.
+     * @return The builder.
+     */
+    fun updatedAfter(updatedAfter: Long?) = apply { this.updatedAfter = updatedAfter }
+
+    /**
+     * Sets the attendees to filter for events with.
+     * This parameter accepts a comma-delimited list of email addresses.
+     * (Not supported for virtual calendars)
+     * @param attendees The attendees to filter for events with.
+     * @return The builder.
+     */
+    fun attendees(attendees: List<String>?) = apply { this.attendees = attendees }
+
+    /**
+     * Sets the event type to filter for events with.
+     * You can pass this query parameter multiple times to select or exclude multiple event types.
+     * (Google only)
+     * @param eventType The event type to filter for events with.
+     * @return The builder.
+     */
+    fun eventType(eventType: EventType?) = apply { this.eventType = eventType }
+
+    /**
      * Builds a [ListEventQueryParams] instance.
      * @return The [ListEventQueryParams] instance.
      */
@@ -215,6 +317,12 @@ data class ListEventQueryParams(
       expandRecurring,
       busy,
       orderBy,
+      icalUid,
+      masterEventId,
+      updatedBefore,
+      updatedAfter,
+      attendees,
+      eventType,
     )
   }
 }
