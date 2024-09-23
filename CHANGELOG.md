@@ -4,6 +4,7 @@
 
 ### Added
 * Added new error class `NylasSdkRemoteClosedError` for when the remote connection is closed
+* Added support for new filter fields for listing events
 
 ### [2.4.1] - Released 2024-07-26
 
