@@ -368,6 +368,8 @@ class NylasClient(
       throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis())
     } catch (e: SocketException) {
       throw NylasSdkRemoteClosedError(finalUrl.toString(), e.message ?: "Unknown error")
+    } catch (e: AbstractNylasApiError) {
+      throw e
     } catch (e: Exception) {
       throw NylasApiError(
         type = "unknown",
