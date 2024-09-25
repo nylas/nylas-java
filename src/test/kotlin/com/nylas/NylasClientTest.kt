@@ -309,11 +309,12 @@ class NylasClientTest {
       val urlBuilder = nylasClient.newUrlBuilder()
       whenever(mockResponse.body()).thenReturn(null)
 
-      val exception = assertFailsWith<Exception> {
+      val exception = assertFailsWith<NylasApiError> {
         nylasClient.executeRequest(urlBuilder, NylasClient.HttpMethod.GET, null, String::class.java)
       }
 
-      assertEquals("Unexpected null response body", exception.message)
+      assertEquals("Unknown error occurred: Unexpected null response body", exception.message)
+      assertEquals("unknown", exception.type)
     }
 
     // TODO::Should we handle this case?
