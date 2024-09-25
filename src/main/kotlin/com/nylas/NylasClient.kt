@@ -12,6 +12,7 @@ import okhttp3.Response
 import java.io.IOException
 import java.lang.Exception
 import java.lang.reflect.Type
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
@@ -76,112 +77,84 @@ class NylasClient(
    * Access the Applications API
    * @return The Applications API
    */
-  fun applications(): Applications {
-    return Applications(this)
-  }
+  fun applications(): Applications = Applications(this)
 
   /**
    * Access the Attachments API
    * @return The Attachments API
    */
-  fun attachments(): Attachments {
-    return Attachments(this)
-  }
+  fun attachments(): Attachments = Attachments(this)
 
   /**
    * Access the Auth API
    * @return The Auth API
    */
-  fun auth(): Auth {
-    return Auth(this)
-  }
+  fun auth(): Auth = Auth(this)
 
   /**
    * Access the Calendars API
    * @return The Calendars API
    */
-  fun calendars(): Calendars {
-    return Calendars(this)
-  }
+  fun calendars(): Calendars = Calendars(this)
 
   /**
    * Access the Connectors API
    * @return The Connectors API
    */
-  fun connectors(): Connectors {
-    return Connectors(this)
-  }
+  fun connectors(): Connectors = Connectors(this)
 
   /**
    * Access the Drafts API
    * @return The Drafts API
    */
-  fun drafts(): Drafts {
-    return Drafts(this)
-  }
+  fun drafts(): Drafts = Drafts(this)
 
   /**
    * Access the Events API
    * @return The Events API
    */
-  fun events(): Events {
-    return Events(this)
-  }
+  fun events(): Events = Events(this)
 
   /**
    * Access the Folders API
    * @return The Folders API
    */
-  fun folders(): Folders {
-    return Folders(this)
-  }
+  fun folders(): Folders = Folders(this)
 
   /**
    * Access the Grants API
    * @return The Grants API
    */
-  fun grants(): Grants {
-    return Grants(this)
-  }
+  fun grants(): Grants = Grants(this)
 
   /**
    * Access the Messages API
    * @return The Messages API
    */
-  fun messages(): Messages {
-    return Messages(this)
-  }
+  fun messages(): Messages = Messages(this)
 
   /**
    * Access the Threads API
    * @return The Threads API
    */
-  fun threads(): Threads {
-    return Threads(this)
-  }
+  fun threads(): Threads = Threads(this)
 
   /**
    * Access the Webhooks API
    * @return The Webhooks API
    */
-  fun webhooks(): Webhooks {
-    return Webhooks(this)
-  }
+  fun webhooks(): Webhooks = Webhooks(this)
 
   /**
    * Access the Contacts API
    * @return The Contacts API
    */
-  fun contacts(): Contacts {
-    return Contacts(this)
-  }
+  fun contacts(): Contacts = Contacts(this)
 
   /**
    * Get a URL builder instance for the Nylas API.
    */
-  fun newUrlBuilder(): HttpUrl.Builder {
-    return apiUri.newBuilder()
-  }
+  fun newUrlBuilder(): HttpUrl.Builder = apiUri.newBuilder()
 
   /**
    * Execute a GET request to the Nylas API.
@@ -393,6 +366,16 @@ class NylasClient(
       return response.body() ?: throw Exception("Unexpected null response body")
     } catch (e: SocketTimeoutException) {
       throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis())
+    } catch (e: SocketException) {
+      throw NylasSdkRemoteClosedError(finalUrl.toString(), e.message ?: "Unknown error")
+    } catch (e: AbstractNylasApiError) {
+      throw e
+    } catch (e: Exception) {
+      throw NylasApiError(
+        type = "unknown",
+        message = "Unknown error occurred: ${e.message}",
+        statusCode = 0,
+      )
     }
   }
 
@@ -542,13 +525,11 @@ class NylasClient(
    */
   companion object {
     val DEFAULT_BASE_URL = Region.US.nylasApiUrl
-    private fun defaultHttpClient(): OkHttpClient.Builder {
-      return OkHttpClient.Builder()
-        .connectTimeout(90, TimeUnit.SECONDS)
-        .readTimeout(90, TimeUnit.SECONDS)
-        .writeTimeout(90, TimeUnit.SECONDS)
-        .protocols(listOf(Protocol.HTTP_1_1))
-        .addNetworkInterceptor(HttpLoggingInterceptor())
-    }
+    private fun defaultHttpClient(): OkHttpClient.Builder = OkHttpClient.Builder()
+      .connectTimeout(90, TimeUnit.SECONDS)
+      .readTimeout(90, TimeUnit.SECONDS)
+      .writeTimeout(90, TimeUnit.SECONDS)
+      .protocols(listOf(Protocol.HTTP_1_1))
+      .addNetworkInterceptor(HttpLoggingInterceptor())
   }
 }

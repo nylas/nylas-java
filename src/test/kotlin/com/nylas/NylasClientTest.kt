@@ -1,11 +1,9 @@
 package com.nylas
 
-import com.nylas.models.IQueryParams
-import com.nylas.models.NylasApiError
-import com.nylas.models.NylasOAuthError
-import com.nylas.models.NylasSdkTimeoutError
+import com.nylas.models.*
 import com.nylas.util.JsonHelper
 import okhttp3.*
+import okhttp3.Response
 import okio.Buffer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -18,6 +16,7 @@ import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
+import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.nio.charset.StandardCharsets
 import kotlin.test.assertFailsWith
@@ -305,15 +304,28 @@ class NylasClientTest {
     }
 
     @Test
+    fun `should handle socket exception`() {
+      val urlBuilder = nylasClient.newUrlBuilder()
+      whenever(mockCall.execute()).thenThrow(SocketException())
+
+      val exception = assertFailsWith<NylasSdkRemoteClosedError> {
+        nylasClient.executeRequest(urlBuilder, NylasClient.HttpMethod.GET, null, String::class.java)
+      }
+
+      assertNotNull(exception)
+    }
+
+    @Test
     fun `should handle unexpected null response body`() {
       val urlBuilder = nylasClient.newUrlBuilder()
       whenever(mockResponse.body()).thenReturn(null)
 
-      val exception = assertFailsWith<Exception> {
+      val exception = assertFailsWith<NylasApiError> {
         nylasClient.executeRequest(urlBuilder, NylasClient.HttpMethod.GET, null, String::class.java)
       }
 
-      assertEquals("Unexpected null response body", exception.message)
+      assertEquals("Unknown error occurred: Unexpected null response body", exception.message)
+      assertEquals("unknown", exception.type)
     }
 
     // TODO::Should we handle this case?
