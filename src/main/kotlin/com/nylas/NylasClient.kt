@@ -434,6 +434,7 @@ class NylasClient(
 
     if (parsedError != null) {
       parsedError.statusCode = response.code()
+      parsedError.headers = response.headers().toMultimap()
       throw parsedError
     }
 
