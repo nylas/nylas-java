@@ -182,6 +182,8 @@ class NylasClientTest {
     private val mockCall: Call = mock(Call::class.java)
     private val mockResponse: Response = mock(Response::class.java)
     private val mockResponseBody: ResponseBody = mock(ResponseBody::class.java)
+    private val mockHeaderResponse: Headers = mock(Headers::class.java)
+    private val headersMultiMap = mapOf("header1" to listOf("value1"), "header2" to listOf("value2"))
 
     @Captor
     private lateinit var requestCaptor: ArgumentCaptor<Request>
@@ -196,6 +198,8 @@ class NylasClientTest {
       whenever(mockCall.execute()).thenReturn(mockResponse)
       whenever(mockResponse.isSuccessful).thenReturn(true)
       whenever(mockResponse.body()).thenReturn(mockResponseBody)
+      whenever(mockResponse.headers()).thenReturn(mockHeaderResponse)
+      whenever(mockHeaderResponse.toMultimap()).thenReturn(headersMultiMap)
       nylasClient = NylasClient("testApiKey", mockOkHttpClientBuilder)
     }
 
@@ -232,6 +236,8 @@ class NylasClientTest {
         assertEquals("https://accounts.nylas.io/#tag/Event-Codes", exception.errorUri)
         assertEquals("500", exception.errorCode)
         assertEquals(401, exception.statusCode)
+        assertEquals("eccc9c3f-7150-48e1-965e-4f89714ab51a", exception.requestId)
+        assertEquals(headersMultiMap, exception.headers)
       }
     }
 
@@ -254,6 +260,7 @@ class NylasClientTest {
         assertEquals("unknown", exception.errorUri)
         assertEquals("0", exception.errorCode)
         assertEquals(500, exception.statusCode)
+        assertEquals(headersMultiMap, exception.headers)
       }
     }
 
@@ -273,6 +280,7 @@ class NylasClientTest {
       assertEquals("Request had invalid authentication credentials.", exception.providerError?.get("error"))
       assertEquals("4c2740b4-52a4-412e-bdee-49a6c6671b22", exception.requestId)
       assertEquals(400, exception.statusCode)
+      assertEquals(headersMultiMap, exception.headers)
     }
 
     @Test
@@ -289,6 +297,7 @@ class NylasClientTest {
       assertEquals("unknown", exception.type)
       assertEquals("Unknown error received from the API: not a json", exception.message)
       assertEquals(400, exception.statusCode)
+      assertEquals(headersMultiMap, exception.headers)
     }
 
     @Test
