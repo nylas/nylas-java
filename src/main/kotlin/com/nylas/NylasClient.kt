@@ -402,6 +402,7 @@ class NylasClient(
               errorUri = "unknown",
               errorCode = "0",
               statusCode = response.code(),
+              headers = response.headers().toMultimap(),
             )
           }
 
@@ -423,6 +424,7 @@ class NylasClient(
               type = "unknown",
               message = "Unknown error received from the API: $responseBody",
               statusCode = response.code(),
+              headers = response.headers().toMultimap(),
             )
           }
           else -> throw ex
@@ -439,6 +441,7 @@ class NylasClient(
       type = "unknown",
       message = "Unknown error received from the API: $responseBody",
       statusCode = response.code(),
+      headers = response.headers().toMultimap(),
     )
   }
 
