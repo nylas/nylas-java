@@ -1,5 +1,8 @@
 # Nylas Java SDK Changelog
 
+### Unreleased
+* Added support for `Accept-Encoding: gzip` in HTTP headers
+
 ### [2.5.0] - Released 2024-09-25
 
 ### Added
