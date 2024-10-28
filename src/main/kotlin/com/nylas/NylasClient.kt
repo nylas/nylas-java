@@ -63,6 +63,7 @@ class NylasClient(
     ACCEPT("Accept"),
     AUTHORIZATION("Authorization"),
     CONTENT_TYPE("Content-Type"),
+    ACCEPT_ENCODING("Accept-Encoding"),
   }
 
   init {
