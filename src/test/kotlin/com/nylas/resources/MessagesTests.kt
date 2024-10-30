@@ -300,7 +300,7 @@ class MessagesTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Message>>(
+      verify(mockNylasClient).executeGet<ListResponse<ScheduledMessage>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -308,7 +308,7 @@ class MessagesTests {
       )
 
       assertEquals("v3/grants/$grantId/messages/schedules", pathCaptor.firstValue)
-      assertEquals(Types.newParameterizedType(Response::class.java, ScheduledMessagesList::class.java), typeCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, ScheduledMessage::class.java), typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
 
