@@ -111,9 +111,9 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
-  fun listScheduledMessages(identifier: String, overrides: RequestOverrides? = null): Response<ScheduledMessagesList> {
+  fun listScheduledMessages(identifier: String, overrides: RequestOverrides? = null): ListResponse<ScheduledMessage> {
     val path = String.format("v3/grants/%s/messages/schedules", identifier)
-    val responseType = Types.newParameterizedType(Response::class.java, ScheduledMessagesList::class.java)
+    val responseType = Types.newParameterizedType(ListResponse::class.java, ScheduledMessage::class.java)
     return client.executeGet(path, responseType, overrides = overrides)
   }
 

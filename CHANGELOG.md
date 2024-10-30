@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Added support for `Accept-Encoding: gzip` in HTTP headers
+* Fixed response type for returning list of scheduled messages
 
 ### [2.5.0] - Released 2024-09-25
 
