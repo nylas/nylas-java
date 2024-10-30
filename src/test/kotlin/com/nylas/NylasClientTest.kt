@@ -503,7 +503,6 @@ class NylasClientTest {
       assertEquals("Accept", NylasClient.HttpHeaders.ACCEPT.headerName)
       assertEquals("Authorization", NylasClient.HttpHeaders.AUTHORIZATION.headerName)
       assertEquals("Content-Type", NylasClient.HttpHeaders.CONTENT_TYPE.headerName)
-      assertEquals("Accept-Encoding", NylasClient.HttpHeaders.ACCEPT_ENCODING.headerName)
     }
   }
 }

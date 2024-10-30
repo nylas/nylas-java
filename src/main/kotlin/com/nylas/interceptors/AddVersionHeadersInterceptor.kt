@@ -13,7 +13,6 @@ class AddVersionHeadersInterceptor : Interceptor {
   override fun intercept(chain: Interceptor.Chain): Response {
     val requestBuilder = chain.request().newBuilder()
       .header("User-Agent", USER_AGENT)
-      .header("Accept-Encoding", "gzip")
     return chain.proceed(requestBuilder.build())
   }
 
