@@ -3,7 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import com.squareup.moshi.Types
+import com.squareup.moshi.Json
 
 /**
  * Nylas Configurations API
@@ -30,7 +30,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
   fun list(
     identifier: String,
     queryParams: ListConfigurationsParams? = null,
-    overrides: RequestOverrides? = null
+    overrides: RequestOverrides? = null,
   ): ListResponse<Configuration> {
     val path = String.format("v3/grants/%s/scheduling/configurations", identifier)
     return listResource(path, queryParams, overrides)
@@ -48,7 +48,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
   fun find(
     identifier: String,
     configId: String,
-    overrides: RequestOverrides? = null
+    overrides: RequestOverrides? = null,
   ): Response<Configuration> {
     val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, configId)
     return findResource(path, overrides = overrides)
@@ -66,7 +66,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
   fun create(
     identifier: String,
     requestBody: CreateConfigurationRequest,
-    overrides: RequestOverrides? = null
+    overrides: RequestOverrides? = null,
   ): Response<Configuration> {
     val path = String.format("v3/grants/%s/scheduling/configurations", identifier)
     val adapter = JsonHelper.moshi().adapter(CreateConfigurationRequest::class.java)
@@ -88,7 +88,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     identifier: String,
     configId: String,
     requestBody: UpdateConfigurationRequest,
-    overrides: RequestOverrides? = null
+    overrides: RequestOverrides? = null,
   ): Response<Configuration> {
     val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, configId)
     val adapter = JsonHelper.moshi().adapter(UpdateConfigurationRequest::class.java)
@@ -107,24 +107,11 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
   fun destroy(
     identifier: String,
     configId: String,
-    overrides: RequestOverrides? = null
+    overrides: RequestOverrides? = null,
   ): DeleteResponse {
     val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, configId)
     return destroyResource(path, overrides = overrides)
   }
-}
-
-/**
- * Class representation of the query parameters for listing configurations.
- *
- * @property limit The maximum number of objects to return. Defaults to 50. The maximum allowed value is 200.
- * @property pageToken An identifier that specifies which page of data to return. This value should be taken from a ListResponse object's next_cursor parameter.
- */
-class ListConfigurationsParams : ListQueryParams() {
-  /**
-   * The identifier of the Grant to act upon.
-   */
-  var identifier: String? = null
 }
 
 /**
@@ -165,7 +152,7 @@ data class CreateConfigurationRequest(
    * Appearance settings for the Scheduler UI.
    */
   @Json(name = "appearance")
-  val appearance: Map<String, String>? = null
+  val appearance: Map<String, String>? = null,
 )
 
 /**
@@ -206,5 +193,5 @@ data class UpdateConfigurationRequest(
    * Appearance settings for the Scheduler UI.
    */
   @Json(name = "appearance")
-  val appearance: Map<String, String>? = null
+  val appearance: Map<String, String>? = null,
 )

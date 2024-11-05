@@ -1,7 +1,6 @@
 package com.nylas.resources
 
 import com.nylas.NylasClient
-import com.nylas.resources.configurations.Configurations
 
 /**
  * Nylas Scheduler API
@@ -17,7 +16,5 @@ class Scheduler(private val client: NylasClient) {
    *
    * @return The Configurations API.
    */
-  fun configurations(): Configurations {
-    return Configurations(client)
-  }
+  fun configurations(): Configurations = Configurations(client)
 }

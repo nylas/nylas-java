@@ -534,63 +534,115 @@ data class RescheduleBookingRequest(
  * Enum for additional field types.
  */
 enum class AdditionalFieldType {
-  @Json(name = "text") TEXT,
-  @Json(name = "multi_line_text") MULTI_LINE_TEXT,
-  @Json(name = "email") EMAIL,
-  @Json(name = "phone_number") PHONE_NUMBER,
-  @Json(name = "dropdown") DROPDOWN,
-  @Json(name = "date") DATE,
-  @Json(name = "checkbox") CHECKBOX,
-  @Json(name = "radio_button") RADIO_BUTTON,
+  @Json(name = "text")
+  TEXT,
+
+  @Json(name = "multi_line_text")
+  MULTI_LINE_TEXT,
+
+  @Json(name = "email")
+  EMAIL,
+
+  @Json(name = "phone_number")
+  PHONE_NUMBER,
+
+  @Json(name = "dropdown")
+  DROPDOWN,
+
+  @Json(name = "date")
+  DATE,
+
+  @Json(name = "checkbox")
+  CHECKBOX,
+
+  @Json(name = "radio_button")
+  RADIO_BUTTON,
 }
 
 /**
  * Enum for additional field options types.
  */
 enum class AdditonalFieldOptionsType {
-  @Json(name = "text") TEXT,
-  @Json(name = "email") EMAIL,
-  @Json(name = "phone_number") PHONE_NUMBER,
-  @Json(name = "date") DATE,
-  @Json(name = "checkbox") CHECKBOX,
-  @Json(name = "radio_button") RADIO_BUTTON,
+  @Json(name = "text")
+  TEXT,
+
+  @Json(name = "email")
+  EMAIL,
+
+  @Json(name = "phone_number")
+  PHONE_NUMBER,
+
+  @Json(name = "date")
+  DATE,
+
+  @Json(name = "checkbox")
+  CHECKBOX,
+
+  @Json(name = "radio_button")
+  RADIO_BUTTON,
 }
 
 /**
  * Enum for booking types.
  */
 enum class BookingType {
-  @Json(name = "booking") BOOKING,
-  @Json(name = "organizer-confirmation") ORGANIZER_CONFIRMATION,
+  @Json(name = "booking")
+  BOOKING,
+
+  @Json(name = "organizer-confirmation")
+  ORGANIZER_CONFIRMATION,
 }
 
 /**
  * Enum for email language options.
  */
 enum class EmailLanguage {
-  @Json(name = "en") EN,
-  @Json(name = "es") ES,
-  @Json(name = "fr") FR,
-  @Json(name = "de") DE,
-  @Json(name = "nl") NL,
-  @Json(name = "sv") SV,
-  @Json(name = "ja") JA,
-  @Json(name = "zh") ZH,
+  @Json(name = "en")
+  EN,
+
+  @Json(name = "es")
+  ES,
+
+  @Json(name = "fr")
+  FR,
+
+  @Json(name = "de")
+  DE,
+
+  @Json(name = "nl")
+  NL,
+
+  @Json(name = "sv")
+  SV,
+
+  @Json(name = "ja")
+  JA,
+
+  @Json(name = "zh")
+  ZH,
 }
 
 /**
  * Enum for booking statuses.
  */
 enum class BookingStatus {
-  @Json(name = "pending") PENDING,
-  @Json(name = "confirmed") CONFIRMED,
-  @Json(name = "cancelled") CANCELLED,
+  @Json(name = "pending")
+  PENDING,
+
+  @Json(name = "confirmed")
+  CONFIRMED,
+
+  @Json(name = "cancelled")
+  CANCELLED,
 }
 
 /**
  * Enum for confirm booking statuses.
  */
 enum class ConfirmBookingStatus {
-  @Json(name = "confirm") CONFIRM,
-  @Json(name = "cancel") CANCEL,
+  @Json(name = "confirm")
+  CONFIRM,
+
+  @Json(name = "cancel")
+  CANCEL,
 }
