@@ -15,17 +15,17 @@ data class Configuration(
    * List of participants included in the scheduled event.
    */
   @Json(name = "participants")
-  val participants: List<ConfigParticipant>,
+  val participants: List<ConfigurationParticipant>,
   /**
    * Rules that determine available time slots for the event.
    */
   @Json(name = "availability")
-  val availability: Availability,
+  val availability: ConfigurationAvailability,
   /**
    * Booking data for the event.
    */
   @Json(name = "event_booking")
-  val eventBooking: EventBooking,
+  val eventBooking: ConfigurationEventBooking,
   /**
    * Unique identifier for the Configuration object.
    */
@@ -40,218 +40,12 @@ data class Configuration(
    * Settings for the Scheduler UI.
    */
   @Json(name = "scheduler")
-  val scheduler: SchedulerSettings? = null,
+  val scheduler: ConfigurationSchedulerSettings? = null,
   /**
    * Appearance settings for the Scheduler UI.
    */
   @Json(name = "appearance")
   val appearance: Map<String, String>? = null,
-)
-
-/**
- * Class representation of a booking participant.
- */
-data class ConfigParticipant(
-  /**
-   * Participant's email address.
-   */
-  @Json(name = "email")
-  val email: String,
-  /**
-   * Availability data for the participant.
-   */
-  @Json(name = "availability")
-  val availability: ParticipantAvailability,
-  /**
-   * Booking data for the participant.
-   */
-  @Json(name = "booking")
-  val booking: ParticipantBooking,
-  /**
-   * Participant's name.
-   */
-  @Json(name = "name")
-  val name: String? = null,
-  /**
-   * Whether the participant is the organizer of the event.
-   */
-  @Json(name = "is_organizer")
-  val isOrganizer: Boolean? = null,
-  /**
-   * The participant's timezone.
-   */
-  @Json(name = "timezone")
-  val timezone: String? = null,
-)
-
-/**
- * Class representation of availability settings.
- */
-data class Availability(
-  /**
-   * The total number of minutes the event should last.
-   */
-  @Json(name = "duration_minutes")
-  val durationMinutes: Int,
-  /**
-   * The interval between meetings in minutes.
-   */
-  @Json(name = "interval_minutes")
-  val intervalMinutes: Int? = null,
-  /**
-   * Nylas rounds each time slot to the nearest multiple of this number of minutes.
-   */
-  @Json(name = "round_to")
-  val roundTo: Int? = null,
-  /**
-   * Availability rules for scheduling configuration.
-   */
-  @Json(name = "availability_rules")
-  val availabilityRules: AvailabilityRules? = null,
-)
-
-/**
- * Class representation of participant availability.
- */
-data class ParticipantAvailability(
-  /**
-   * List of calendar IDs associated with the participant's email address.
-   */
-  @Json(name = "calendar_ids")
-  val calendarIds: List<String>,
-  /**
-   * Open hours for this participant. The endpoint searches for free time slots during these open hours.
-   */
-  @Json(name = "open_hours")
-  val openHours: List<OpenHours>? = null,
-)
-
-/**
- * Class representation of a participant booking.
- */
-data class ParticipantBooking(
-  /**
-   * The calendar ID that the event is created in.
-   */
-  @Json(name = "calendar_id")
-  val calendarId: String,
-)
-
-/**
- * Class representation of an event booking.
- */
-data class EventBooking(
-  /**
-   * The title of the event.
-   */
-  @Json(name = "title")
-  val title: String,
-  /**
-   * The description of the event.
-   */
-  @Json(name = "description")
-  val description: String? = null,
-  /**
-   * The location of the event.
-   */
-  @Json(name = "location")
-  val location: String? = null,
-  /**
-   * The timezone for displaying times in confirmation email messages and reminders.
-   */
-  @Json(name = "timezone")
-  val timezone: String? = null,
-  /**
-   * The type of booking.
-   */
-  @Json(name = "booking_type")
-  val bookingType: BookingType? = null,
-  /**
-   * Conference details for the event.
-   */
-  @Json(name = "conferencing")
-  val conferencing: Conferencing? = null,
-  /**
-   * Whether Nylas sends email messages when an event is booked, cancelled, or rescheduled.
-   */
-  @Json(name = "disable_emails")
-  val disableEmails: Boolean? = null,
-  /**
-   * The list of reminders to send to participants before the event starts.
-   */
-  @Json(name = "reminders")
-  val reminders: List<BookingReminder>? = null,
-)
-
-/**
- * Class representation of scheduler settings.
- */
-data class SchedulerSettings(
-  /**
-   * Definitions for additional fields to be displayed in the Scheduler UI.
-   */
-  @Json(name = "additional_fields")
-  val additionalFields: Map<String, AdditionalField>? = null,
-  /**
-   * Number of days in the future that Scheduler is available for scheduling events.
-   */
-  @Json(name = "available_days_in_future")
-  val availableDaysInFuture: Int? = null,
-  /**
-   * Minimum number of minutes in the future that a user can make a new booking.
-   */
-  @Json(name = "min_booking_notice")
-  val minBookingNotice: Int? = null,
-  /**
-   * Minimum number of minutes before a booking can be cancelled.
-   */
-  @Json(name = "min_cancellation_notice")
-  val minCancellationNotice: Int? = null,
-  /**
-   * A message about the cancellation policy to display when booking an event.
-   */
-  @Json(name = "cancellation_policy")
-  val cancellationPolicy: String? = null,
-  /**
-   * The URL used to reschedule bookings.
-   */
-  @Json(name = "rescheduling_url")
-  val reschedulingUrl: String? = null,
-  /**
-   * The URL used to cancel bookings.
-   */
-  @Json(name = "cancellation_url")
-  val cancellationUrl: String? = null,
-  /**
-   * The URL used to confirm or cancel pending bookings.
-   */
-  @Json(name = "organizer_confirmation_url")
-  val organizerConfirmationUrl: String? = null,
-  /**
-   * The custom URL to redirect to once the booking is confirmed.
-   */
-  @Json(name = "confirmation_redirect_url")
-  val confirmationRedirectUrl: String? = null,
-  /**
-   * Whether the option to reschedule an event is hidden in booking confirmations and notifications.
-   */
-  @Json(name = "hide_rescheduling_options")
-  val hideReschedulingOptions: Boolean? = null,
-  /**
-   * Whether the option to cancel an event is hidden in booking confirmations and notifications.
-   */
-  @Json(name = "hide_cancellation_options")
-  val hideCancellationOptions: Boolean? = null,
-  /**
-   * Whether to hide the additional guests field on the scheduling page.
-   */
-  @Json(name = "hide_additional_guests")
-  val hideAdditionalGuests: Boolean? = null,
-  /**
-   * Configurable settings for booking emails.
-   */
-  @Json(name = "email_template")
-  val emailTemplate: EmailTemplate? = null,
 )
 
 /**
@@ -374,17 +168,6 @@ data class BookingGuest(
 )
 
 /**
- * Class representation of a booking participant.
- */
-data class BookingParticipant(
-  /**
-   * The email address of the participant to include in the booking.
-   */
-  @Json(name = "email")
-  val email: String,
-)
-
-/**
  * Class representation of a create booking request.
  */
 data class CreateBookingRequest(
@@ -407,7 +190,7 @@ data class CreateBookingRequest(
    * List of participant email addresses from the Configuration object to include in the booking.
    */
   @Json(name = "participants")
-  val participants: List<BookingParticipant>? = null,
+  val participants: List<ConfigurationBookingParticipant>? = null,
   /**
    * The guest's timezone that is used in email notifications.
    */

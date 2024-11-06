@@ -115,47 +115,6 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
 }
 
 /**
- * Class representation of a request to create a configuration.
- */
-data class CreateConfigurationRequest(
-  /**
-   * List of participants included in the scheduled event.
-   */
-  @Json(name = "participants")
-  val participants: List<ConfigParticipant>,
-  /**
-   * Rules that determine available time slots for the event.
-   */
-  @Json(name = "availability")
-  val availability: Availability,
-  /**
-   * Booking data for the event.
-   */
-  @Json(name = "event_booking")
-  val eventBooking: EventBooking,
-  /**
-   * Unique identifier for the Configuration object.
-   */
-  @Json(name = "slug")
-  val slug: String? = null,
-  /**
-   * If true, scheduling Availability and Bookings endpoints require a valid session ID.
-   */
-  @Json(name = "requires_session_auth")
-  val requiresSessionAuth: Boolean? = null,
-  /**
-   * Settings for the Scheduler UI.
-   */
-  @Json(name = "scheduler")
-  val scheduler: SchedulerSettings? = null,
-  /**
-   * Appearance settings for the Scheduler UI.
-   */
-  @Json(name = "appearance")
-  val appearance: Map<String, String>? = null,
-)
-
-/**
  * Class representation of a request to update a configuration.
  */
 data class UpdateConfigurationRequest(
@@ -163,17 +122,17 @@ data class UpdateConfigurationRequest(
    * List of participants included in the scheduled event.
    */
   @Json(name = "participants")
-  val participants: List<ConfigParticipant>? = null,
+  val participants: List<ConfigurationParticipant>? = null,
   /**
    * Rules that determine available time slots for the event.
    */
   @Json(name = "availability")
-  val availability: Availability? = null,
+  val availability: ConfigurationAvailability? = null,
   /**
    * Booking data for the event.
    */
   @Json(name = "event_booking")
-  val eventBooking: EventBooking? = null,
+  val eventBooking: ConfigurationEventBooking? = null,
   /**
    * Unique identifier for the Configuration object.
    */
@@ -188,7 +147,7 @@ data class UpdateConfigurationRequest(
    * Settings for the Scheduler UI.
    */
   @Json(name = "scheduler")
-  val scheduler: SchedulerSettings? = null,
+  val scheduler: ConfigurationSchedulerSettings? = null,
   /**
    * Appearance settings for the Scheduler UI.
    */
