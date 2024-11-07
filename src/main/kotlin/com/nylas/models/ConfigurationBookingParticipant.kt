@@ -10,7 +10,7 @@ data class ConfigurationBookingParticipant(
    * The calendar ID that the event is created in.
    */
   @Json(name = "calendar_id")
-  val calendarId: String,
+  val calendarId: String? = null,
 ) {
   /**
    * Builder for [ConfigurationBookingParticipant].

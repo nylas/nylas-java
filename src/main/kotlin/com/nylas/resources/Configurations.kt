@@ -28,7 +28,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
   @JvmOverloads
   fun list(
     identifier: String,
-    queryParams: ListConfigurationsParams? = null,
+    queryParams: ListConfigurationsQueryParams? = null,
     overrides: RequestOverrides? = null,
   ): ListResponse<Configuration> {
     val path = String.format("v3/grants/%s/scheduling/configurations", identifier)

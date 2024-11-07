@@ -27,8 +27,8 @@ data class AvailabilityRules(
    * The ID on events that Nylas considers when calculating the order of round-robin participants.
    * This is used for both max-fairness and max-availability methods.
    */
-  @Json(name = "round_robin_event_id")
-  val roundRobinEventId: String? = null,
+  @Json(name = "round_robin_group_id")
+  val roundRobinGroupId: String? = null,
 ) {
   /**
    * A builder for creating a [AvailabilityRules].
@@ -37,7 +37,7 @@ data class AvailabilityRules(
     private var availabilityMethod: AvailabilityMethod? = null
     private var buffer: MeetingBuffer? = null
     private var defaultOpenHours: List<OpenHours>? = null
-    private var roundRobinEventId: String? = null
+    private var roundRobinGroupId: String? = null
 
     /**
      * Set the method used to determine availability for a meeting.
@@ -65,10 +65,10 @@ data class AvailabilityRules(
     /**
      * Set the ID on events that Nylas considers when calculating the order of round-robin participants.
      * This is used for both max-fairness and max-availability methods.
-     * @param roundRobinEventId The ID on events that Nylas considers when calculating the order of round-robin participants.
+     * @param roundRobinGroupId The ID on events that Nylas considers when calculating the order of round-robin participants.
      * @return The builder.
      */
-    fun roundRobinEventId(roundRobinEventId: String) = apply { this.roundRobinEventId = roundRobinEventId }
+    fun roundRobinGroupId(roundRobinGroupId: String) = apply { this.roundRobinGroupId = roundRobinGroupId }
 
     /**
      * Build the [AvailabilityRules] object.
@@ -78,7 +78,7 @@ data class AvailabilityRules(
       availabilityMethod = availabilityMethod,
       buffer = buffer,
       defaultOpenHours = defaultOpenHours,
-      roundRobinEventId = roundRobinEventId,
+      roundRobinGroupId = roundRobinGroupId,
     )
   }
 }

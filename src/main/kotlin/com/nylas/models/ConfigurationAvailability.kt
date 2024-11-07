@@ -10,7 +10,7 @@ data class ConfigurationAvailability(
    * The total number of minutes the event should last.
    */
   @Json(name = "duration_minutes")
-  val durationMinutes: Int,
+  val durationMinutes: Int? = null,
   /**
    * The interval between meetings in minutes.
    */

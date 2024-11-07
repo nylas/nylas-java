@@ -2,7 +2,7 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-data class ListConfigurationsParams(
+data class ListConfigurationsQueryParams(
   /**
    * The maximum number of objects to return.
    * Defaults to 50. The maximum allowed value is 200.
@@ -18,7 +18,7 @@ data class ListConfigurationsParams(
 ) : IQueryParams
 
 /**
- * Builder for [ListConfigurationsParams].
+ * Builder for [ListConfigurationsQueryParams].
  */
 class Builder {
   private var limit: Int? = null
@@ -43,8 +43,8 @@ class Builder {
   fun pageToken(pageToken: String?) = apply { this.pageToken = pageToken }
 
   /**
-   * Builds a [ListConfigurationsParams] instance.
-   * @return The [ListConfigurationsParams] instance.
+   * Builds a [ListConfigurationsQueryParams] instance.
+   * @return The [ListConfigurationsQueryParams] instance.
    */
-  fun build() = ListConfigurationsParams(limit, pageToken)
+  fun build() = ListConfigurationsQueryParams(limit, pageToken)
 }
