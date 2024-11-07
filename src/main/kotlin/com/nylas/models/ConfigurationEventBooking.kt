@@ -10,7 +10,7 @@ data class ConfigurationEventBooking(
    * The title of the event.
    */
   @Json(name = "title")
-  val title: String,
+  val title: String? = null,
   /**
    * The description of the event.
    */
@@ -49,11 +49,9 @@ data class ConfigurationEventBooking(
 ) {
   /**
    * Builder for [ConfigurationEventBooking].
-   * @property title The title of the event.
    */
-  data class Builder(
-    private val title: String,
-  ) {
+  class Builder {
+    private var title: String? = null
     private var description: String? = null
     private var location: String? = null
     private var timezone: String? = null
@@ -61,6 +59,13 @@ data class ConfigurationEventBooking(
     private var conferencing: Conferencing? = null
     private var disableEmails: Boolean? = null
     private var reminders: List<BookingReminder>? = null
+
+    /**
+     * Set the title of the event.
+     * @param title The title of the event.
+     * @return The builder.
+     */
+    fun title(title: String?) = apply { this.title = title }
 
     /**
      * Sets the description of the event.

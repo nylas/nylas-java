@@ -14,11 +14,17 @@ data class ConfigurationBookingParticipant(
 ) {
   /**
    * Builder for [ConfigurationBookingParticipant].
-   * @param calendarId The calendar ID that the event is created in.
    */
-  data class Builder(
-    private val calendarId: String,
-  ) {
+  class Builder {
+    private var calendarId: String? = null
+
+    /**
+     * Set the calendar ID for this participant.
+     * @param calendarId The calendar ID for this participant.
+     * @return The builder.
+     */
+    fun calendarId(calendarId: String?) = apply { this.calendarId = calendarId }
+
     /**
      * Builds a [ConfigurationBookingParticipant] instance.
      * @return The [ConfigurationBookingParticipant] instance.

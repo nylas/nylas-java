@@ -27,33 +27,39 @@ data class ConfigurationAvailability(
   @Json(name = "availability_rules")
   val availabilityRules: AvailabilityRules? = null,
 ) {
-  data class Builder(
-    private val durationMinutes: Int,
-  ) {
+  class Builder {
+    private var durationMinutes: Int? = null
     private var intervalMinutes: Int? = null
     private var roundTo: Int? = null
     private var availabilityRules: AvailabilityRules? = null
+
+    /**
+     * Set the duration of the event in minutes.
+     * @param durationMinutes The duration of the event in minutes.
+     * @return The builder.
+     */
+    fun durationMinutes(durationMinutes: Int?) = apply { this.durationMinutes = durationMinutes }
 
     /**
      * Set the interval between meetings in minutes.
      * @param intervalMinutes The interval between meetings in minutes.
      * @return The builder.
      */
-    fun intervalMinutes(intervalMinutes: Int) = apply { this.intervalMinutes = intervalMinutes }
+    fun intervalMinutes(intervalMinutes: Int?) = apply { this.intervalMinutes = intervalMinutes }
 
     /**
      * Set Nylas rounds each time slot to the nearest multiple of this number of minutes.
      * @param roundTo Nylas rounds each time slot to the nearest multiple of this number of minutes.
      * @return The builder.
      */
-    fun roundTo(roundTo: Int) = apply { this.roundTo = roundTo }
+    fun roundTo(roundTo: Int?) = apply { this.roundTo = roundTo }
 
     /**
      * Set availability rules for scheduling configuration.
      * @param availabilityRules Availability rules for scheduling configuration.
      * @return The builder.
      */
-    fun availabilityRules(availabilityRules: AvailabilityRules) = apply { this.availabilityRules = availabilityRules }
+    fun availabilityRules(availabilityRules: AvailabilityRules?) = apply { this.availabilityRules = availabilityRules }
 
     /**
      * Build the [ConfigurationAvailability].

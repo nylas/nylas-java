@@ -11,7 +11,7 @@ data class ConfigurationAvailabilityParticipant(
    * @param calendarIds The calendar IDs that the event is created in.
    */
   @Json(name = "calendar_ids")
-  val calendarIds: List<String>,
+  val calendarIds: List<String>? = emptyList(),
   /**
    * Open hours for this participant. The endpoint searches for free time slots during these open hours.
    */
@@ -21,10 +21,16 @@ data class ConfigurationAvailabilityParticipant(
   /**
    * Builder for [ConfigurationAvailabilityParticipant].
    */
-  data class Builder(
-    private val calendarIds: List<String>,
-  ) {
+  class Builder {
+    private var calendarIds: List<String>? = null
     private var openHours: List<OpenHours>? = null
+
+    /**
+     * Set the calendar IDs for this participant.
+     * @param calendarIds Calendar IDs for this participant.
+     * @return The builder.
+     */
+    fun calendarIds(calendarIds: List<String>) = apply { this.calendarIds = calendarIds }
 
     /**
      * Set the open hours for this participant.

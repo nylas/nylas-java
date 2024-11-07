@@ -3,7 +3,6 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
-import com.squareup.moshi.Json
 
 /**
  * Nylas Configurations API
@@ -113,44 +112,3 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     return destroyResource(path, overrides = overrides)
   }
 }
-
-/**
- * Class representation of a request to update a configuration.
- */
-data class UpdateConfigurationRequest(
-  /**
-   * List of participants included in the scheduled event.
-   */
-  @Json(name = "participants")
-  val participants: List<ConfigurationParticipant>? = null,
-  /**
-   * Rules that determine available time slots for the event.
-   */
-  @Json(name = "availability")
-  val availability: ConfigurationAvailability? = null,
-  /**
-   * Booking data for the event.
-   */
-  @Json(name = "event_booking")
-  val eventBooking: ConfigurationEventBooking? = null,
-  /**
-   * Unique identifier for the Configuration object.
-   */
-  @Json(name = "slug")
-  val slug: String? = null,
-  /**
-   * If true, scheduling Availability and Bookings endpoints require a valid session ID.
-   */
-  @Json(name = "requires_session_auth")
-  val requiresSessionAuth: Boolean? = null,
-  /**
-   * Settings for the Scheduler UI.
-   */
-  @Json(name = "scheduler")
-  val scheduler: ConfigurationSchedulerSettings? = null,
-  /**
-   * Appearance settings for the Scheduler UI.
-   */
-  @Json(name = "appearance")
-  val appearance: Map<String, String>? = null,
-)
