@@ -17,4 +17,11 @@ class Scheduler(private val client: NylasClient) {
    * @return The Configurations API.
    */
   fun configurations(): Configurations = Configurations(client)
+
+  /**
+   * Access the Sessions API.
+   *
+   * @return The Sessions API.
+   */
+  fun sessions(): Sessions = Sessions(client)
 }
