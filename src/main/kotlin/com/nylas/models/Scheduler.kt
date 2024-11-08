@@ -115,32 +115,6 @@ data class BookingConfirmedTemplate(
 )
 
 /**
- * Class representation of a booking reminder.
- */
-data class BookingReminder(
-  /**
-   * The reminder type.
-   */
-  @Json(name = "type")
-  val type: String,
-  /**
-   * The number of minutes before the event to send the reminder.
-   */
-  @Json(name = "minutes_before_event")
-  val minutesBeforeEvent: Int,
-  /**
-   * The recipient of the reminder.
-   */
-  @Json(name = "recipient")
-  val recipient: String? = null,
-  /**
-   * The subject of the email reminder.
-   */
-  @Json(name = "email_subject")
-  val emailSubject: String? = null,
-)
-
-/**
  * Class representation of a session.
  */
 data class Session(
@@ -149,84 +123,6 @@ data class Session(
    */
   @Json(name = "session_id")
   val sessionId: String,
-)
-
-/**
- * Class representation of a booking guest.
- */
-data class BookingGuest(
-  /**
-   * The email address of the guest.
-   */
-  @Json(name = "email")
-  val email: String,
-  /**
-   * The name of the guest.
-   */
-  @Json(name = "name")
-  val name: String,
-)
-
-/**
- * Class representation of a create booking request.
- */
-data class CreateBookingRequest(
-  /**
-   * The event's start time, in Unix epoch format.
-   */
-  @Json(name = "start_time")
-  val startTime: Long,
-  /**
-   * The event's end time, in Unix epoch format.
-   */
-  @Json(name = "end_time")
-  val endTime: Long,
-  /**
-   * Details about the guest that is creating the booking.
-   */
-  @Json(name = "guest")
-  val guest: BookingGuest,
-  /**
-   * List of participant email addresses from the Configuration object to include in the booking.
-   */
-  @Json(name = "participants")
-  val participants: List<ConfigurationBookingParticipant>? = null,
-  /**
-   * The guest's timezone that is used in email notifications.
-   */
-  @Json(name = "timezone")
-  val timezone: String? = null,
-  /**
-   * The language of the guest email notifications.
-   */
-  @Json(name = "email_language")
-  val emailLanguage: EmailLanguage? = null,
-  /**
-   * List of additional guest email addresses to include in the booking.
-   */
-  @Json(name = "additional_guests")
-  val additionalGuests: List<BookingGuest>? = null,
-  /**
-   * Dictionary of additional field keys mapped to values populated by the guest in the booking form.
-   */
-  @Json(name = "additional_fields")
-  val additionalFields: Map<String, String>? = null,
-)
-
-/**
- * Class representation of a booking organizer.
- */
-data class BookingOrganizer(
-  /**
-   * The email address of the participant designated as the organizer of the event.
-   */
-  @Json(name = "email")
-  val email: String,
-  /**
-   * The name of the participant designated as the organizer of the event.
-   */
-  @Json(name = "name")
-  val name: String? = null,
 )
 
 /**
@@ -263,54 +159,6 @@ data class Booking(
    */
   @Json(name = "description")
   val description: String? = null,
-)
-
-/**
- * Class representation of a confirm booking request.
- */
-data class ConfirmBookingRequest(
-  /**
-   * The salt extracted from the booking reference embedded in the organizer confirmation link.
-   */
-  @Json(name = "salt")
-  val salt: String,
-  /**
-   * The action to take on the pending booking.
-   */
-  @Json(name = "status")
-  val status: ConfirmBookingStatus,
-  /**
-   * The reason the booking is being cancelled.
-   */
-  @Json(name = "cancellation_reason")
-  val cancellationReason: String? = null,
-)
-
-/**
- * Class representation of a delete booking request.
- */
-data class DeleteBookingRequest(
-  /**
-   * The reason the booking is being cancelled.
-   */
-  @Json(name = "cancellation_reason")
-  val cancellationReason: String? = null,
-)
-
-/**
- * Class representation of a reschedule booking request.
- */
-data class RescheduleBookingRequest(
-  /**
-   * The event's start time, in Unix epoch format.
-   */
-  @Json(name = "start_time")
-  val startTime: Long,
-  /**
-   * The event's end time, in Unix epoch format.
-   */
-  @Json(name = "end_time")
-  val endTime: Long,
 )
 
 /**
