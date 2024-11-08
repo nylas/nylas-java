@@ -35,7 +35,7 @@ class Sessions(client: NylasClient) : Resource<Session>(client, Session::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(sessionId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = "v3/scheduling/sessions/$sessionId"
+    val path = String.format("v3/scheduling/sessions/%s", sessionId)
     return destroyResource(path, overrides = overrides)
   }
 }
