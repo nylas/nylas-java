@@ -45,17 +45,17 @@ class ConfigurationsTest {
         """
         {
           "id": "abc-123-configuration-id",
-          "slug": None,
+          "slug": null,
           "participants": [
               {
                   "email": "test@nylas.com",
-                  "isOrganizer": true,
+                  "is_organizer": true,
                   "name": "Test",
                   "availability": {
-                      "calendarIds": [
+                      "calendar_ids": [
                           "primary"
                       ],
-                      "openHours": [
+                      "open_hours": [
                           {
                               "days": [
                                   0,
@@ -66,7 +66,7 @@ class ConfigurationsTest {
                                   5,
                                   6
                               ],
-                              "exdates": None,
+                              "exdates": null,
                               "timezone": "",
                               "start": "09:00",
                               "end": "17:00"
@@ -74,23 +74,23 @@ class ConfigurationsTest {
                       ]
                   },
                   "booking": {
-                      "calendarId": "primary"
+                      "calendar_id": "primary"
                   },
                   "timezone": ""
               }
           ],
-          "requiresSessionAuth": false,
+          "requires_session_auth": false,
           "availability": {
-              "durationMinutes": 30,
-              "intervalMinutes": 15,
-              "roundTo": 15,
-              "availabilityRules": {
-                  "availabilityMethod": "collective",
+              "duration_minutes": 30,
+              "interval_minutes": 15,
+              "round_to": 15,
+              "availability_rules": {
+                  "availability_method": "collective",
                   "buffer": {
                       "before": 60,
                       "after": 0
                   },
-                  "defaultOpenHours": [
+                  "default_open_hours": [
                       {
                           "days": [
                               0,
@@ -99,47 +99,47 @@ class ConfigurationsTest {
                               5,
                               6
                           ],
-                          "exdates": None,
+                          "exdates": null,
                           "timezone": "",
                           "start": "09:00",
                           "end": "18:00"
                       }
                   ],
-                  "roundRobinGroupId": ""
+                  "round_robin_group_id": ""
               }
           },
-          "eventBooking": {
+          "event_booking": {
               "title": "Updated Title",
               "timezone": "utc",
               "description": "",
-              "location": "none",
-              "bookingType": "booking",
+              "location": null,
+              "booking_type": "booking",
               "conferencing": {
                   "provider": "Microsoft Teams",
                   "autocreate": {
                       "conf_grant_id": "",
-                      "conf_settings": None
+                      "conf_settings": null
                   }
               },
-              "hideParticipants": null,
-              "disableEmails": null
+              "hide_participants": null,
+              "disable_emails": null
           },
           "scheduler": {
-              "availableDaysInFuture": 7,
-              "minCancellationNotice": 60,
-              "minBookingNotice": 120,
-              "confirmationRedirectUrl": "",
-              "hideReschedulingOptions": false,
-              "hideCancellationOptions": false,
-              "hideAdditionalGuests": true,
-              "cancellationPolicy": "",
-              "emailTemplate": {
-                  "bookingConfirmed": {}
+              "available_days_in_future": 7,
+              "min_cancellation_notice": 60,
+              "min_booking_notice": 120,
+              "confirmation_redirect_url": "",
+              "hide_rescheduling_options": false,
+              "hide_cancellation_options": false,
+              "hide_additional_guests": true,
+              "cancellation_policy": "",
+              "email_template": {
+                  "booking_confirmed": {}
               }
           },
           "appearance": {
-              "submitButtonLabel": "submit",
-              "thankYouMessage": "thank you for your business. your booking was successful."
+              "submit_button_label": "submit",
+              "thank_you_message": "thank you for your business. your booking was successful."
           }
         }
         """.trimIndent(),
@@ -157,18 +157,28 @@ class ConfigurationsTest {
       assertEquals(false, config.scheduler?.hideCancellationOptions)
       assertEquals(true, config.scheduler?.hideAdditionalGuests)
       assertEquals("", config.scheduler?.cancellationPolicy)
-      assertEquals("submit", config.appearance?.get("submitButtonLabel"))
-      assertEquals("thank you for your business. your booking was successful.", config.appearance?.get("thankYouMessage"))
-      assertEquals(15, config.availability.durationMinutes)
+      assertEquals("submit", config.appearance?.get("submit_button_label"))
+      assertEquals(30, config.availability.durationMinutes)
       assertEquals(15, config.availability.intervalMinutes)
       assertEquals(15, config.availability.roundTo)
       assertEquals(AvailabilityMethod.COLLECTIVE, config.availability.availabilityRules?.availabilityMethod)
       assertEquals(60, config.availability.availabilityRules?.buffer?.before)
       assertEquals(0, config.availability.availabilityRules?.buffer?.after)
       assertEquals("", config.availability.availabilityRules?.roundRobinGroupId)
-      assertEquals(0, config.availability.availabilityRules?.defaultOpenHours?.first()?.days?.size)
+      assertEquals(5, config.availability.availabilityRules?.defaultOpenHours?.first()?.days?.size)
       assertEquals("09:00", config.availability.availabilityRules?.defaultOpenHours?.first()?.start)
       assertEquals("18:00", config.availability.availabilityRules?.defaultOpenHours?.first()?.end)
+      assertEquals("Updated Title", config.eventBooking.title)
+      assertEquals("utc", config.eventBooking.timezone)
+      assertEquals("", config.eventBooking.description)
+      assertEquals(null, config.eventBooking.location)
+      assertEquals(BookingType.BOOKING, config.eventBooking.bookingType)
+      assertEquals(null, config.eventBooking.hideParticipants)
+      assertEquals(null, config.eventBooking.disableEmails)
+      assertEquals(true, config.participants.first().isOrganizer)
+      assertEquals("test@nylas.com", config.participants.first().email)
+      assertEquals("Test", config.participants.first().name)
+      assertEquals("", config.participants.first().timezone)
     }
   }
 
@@ -199,7 +209,7 @@ class ConfigurationsTest {
         overrideParamCaptor.capture(),
       )
 
-      assertEquals("v3/grants/$grantId/configurations", pathCaptor.firstValue)
+      assertEquals("v3/grants/$grantId/scheduling/configurations", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Configuration::class.java), typeCaptor.firstValue)
     }
 
@@ -238,12 +248,16 @@ class ConfigurationsTest {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePost<Response<Configuration>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
-      assertEquals("v3/grants/$grantId/configurations", pathCaptor.firstValue)
+      assertEquals("v3/grants/$grantId/scheduling/configurations", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Configuration::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(createConfigurationRequest), requestBodyCaptor.firstValue)
     }
@@ -253,19 +267,23 @@ class ConfigurationsTest {
       val adapter = JsonHelper.moshi().adapter(UpdateConfigurationRequest::class.java)
       val configId = "abc-123-configuration-id"
       val config = ConfigurationSchedulerSettings.Builder().minBookingNotice(120).build()
-      val updateConfigurationRequest = UpdateConfigurationRequest().Builder().scheduler(config).build()
-    
+      val updateConfigurationRequest = UpdateConfigurationRequest.Builder().scheduler(config).build()
+
       configurations.update(grantId, configId, updateConfigurationRequest)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executePut<Response<Configuration>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
-      assertEquals("v3/grants/$grantId/configurations/$configId", pathCaptor.firstValue)
+      assertEquals("v3/grants/$grantId/scheduling/configurations/$configId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Configuration::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(updateConfigurationRequest), requestBodyCaptor.firstValue)
     }
@@ -277,13 +295,16 @@ class ConfigurationsTest {
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeGet<Response<Configuration>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
-      assertEquals("v3/grants/$grantId/configurations/$configId", pathCaptor.firstValue)
+      assertEquals("v3/grants/$grantId/scheduling/configurations/$configId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Configuration::class.java), typeCaptor.firstValue)
-
     }
 
     @Test
@@ -292,13 +313,15 @@ class ConfigurationsTest {
       configurations.destroy(grantId, configId)
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
       verify(mockNylasClient).executeDelete<DeleteResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
-        overrideParamCaptor.capture(),  
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
       )
-      assertEquals("v3/grants/$grantId/configurations/$configId", pathCaptor.firstValue)
+      assertEquals("v3/grants/$grantId/scheduling/configurations/$configId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
   }

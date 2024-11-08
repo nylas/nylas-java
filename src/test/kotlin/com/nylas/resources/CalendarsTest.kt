@@ -264,7 +264,7 @@ class CalendarsTest {
               exdates = listOf("2021-05-03", "2021-05-04"),
             ),
           ),
-          roundRobinEventId = "event-123",
+          roundRobinGroupId = "event-123",
         ),
       )
 

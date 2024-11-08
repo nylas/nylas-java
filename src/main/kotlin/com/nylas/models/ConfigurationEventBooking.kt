@@ -46,6 +46,11 @@ data class ConfigurationEventBooking(
    */
   @Json(name = "reminders")
   val reminders: List<BookingReminder>? = null,
+  /**
+   * Whether to hide participants from the event booking.
+   */
+  @Json(name = "hide_participants")
+  val hideParticipants: Boolean? = null,
 ) {
   /**
    * Builder for [ConfigurationEventBooking].
@@ -59,6 +64,7 @@ data class ConfigurationEventBooking(
     private var conferencing: Conferencing? = null
     private var disableEmails: Boolean? = null
     private var reminders: List<BookingReminder>? = null
+    private var hideParticipants: Boolean? = null
 
     /**
      * Set the title of the event.
@@ -117,6 +123,13 @@ data class ConfigurationEventBooking(
     fun reminders(reminders: List<BookingReminder>?) = apply { this.reminders = reminders }
 
     /**
+     * Sets whether to hide participants from the event booking.
+     * @param hideParticipants Whether to hide participants from the event booking.
+     * @return The builder.
+     */
+    fun hideParticipants(hideParticipants: Boolean?) = apply { this.hideParticipants = hideParticipants }
+
+    /**
      * Builds an [ConfigurationEventBooking] instance.
      * @return The [ConfigurationEventBooking] instance.
      */
@@ -129,6 +142,7 @@ data class ConfigurationEventBooking(
       conferencing,
       disableEmails,
       reminders,
+      hideParticipants,
     )
   }
 }

@@ -14,7 +14,7 @@ data class AvailabilityRules(
   /**
    * The buffer to add to the start and end of a meeting.
    */
-  @Json(name = "meeting_buffer")
+  @Json(name = "buffer")
   val buffer: MeetingBuffer? = null,
   /**
    * A default set of open hours to apply to all participants.
