@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-### Unreleased
+### [2.5.1] - Released 2024-11-12
 * Fixed response type for returning list of scheduled messages
 
 ### [2.5.0] - Released 2024-09-25
