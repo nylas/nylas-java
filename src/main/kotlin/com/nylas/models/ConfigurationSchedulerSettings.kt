@@ -213,3 +213,121 @@ data class ConfigurationSchedulerSettings(
     )
   }
 }
+
+/**
+ * Class representation of an additional field.
+ */
+data class AdditionalField(
+  /**
+   * The text label to be displayed in the Scheduler UI.
+   */
+  @Json(name = "label")
+  val label: String,
+  /**
+   * The field type.
+   * Supported values are text, multi_line_text, email, phone_number, dropdown, date, checkbox, and radio_button.
+   */
+  @Json(name = "type")
+  val type: AdditionalFieldType,
+  /**
+   * Whether the field is required to be filled out by the guest when booking an event.
+   */
+  @Json(name = "required")
+  val required: Boolean,
+  /**
+   * A regular expression pattern that the value of the field must match.
+   */
+  @Json(name = "pattern")
+  val pattern: String? = null,
+  /**
+   * The order in which the field will be displayed in the Scheduler UI.
+   * Fields with lower order values will be displayed first.
+   */
+  @Json(name = "order")
+  val order: Int? = null,
+  /**
+   * A list of options for the dropdown or radio_button types.
+   * This field is required for the dropdown and radio_button types.
+   */
+  @Json(name = "options")
+  val options: AdditonalFieldOptionsType? = null,
+)
+
+/**
+ * Class representation of an email template.
+ */
+data class EmailTemplate(
+  /**
+   * Configurable settings specifically for booking confirmed emails.
+   */
+  @Json(name = "booking_confirmed")
+  val bookingConfirmed: BookingConfirmedTemplate? = null,
+)
+
+/**
+ * Class representation of booking confirmed template settings.
+ */
+data class BookingConfirmedTemplate(
+  /**
+   * The title to replace the default 'Booking Confirmed' title.
+   */
+  @Json(name = "title")
+  val title: String? = null,
+  /**
+   * The additional body to be appended after the default body.
+   */
+  @Json(name = "body")
+  val body: String? = null,
+)
+
+/**
+ * Enum for additional field types.
+ */
+enum class AdditionalFieldType {
+  @Json(name = "text")
+  TEXT,
+
+  @Json(name = "multi_line_text")
+  MULTI_LINE_TEXT,
+
+  @Json(name = "email")
+  EMAIL,
+
+  @Json(name = "phone_number")
+  PHONE_NUMBER,
+
+  @Json(name = "dropdown")
+  DROPDOWN,
+
+  @Json(name = "date")
+  DATE,
+
+  @Json(name = "checkbox")
+  CHECKBOX,
+
+  @Json(name = "radio_button")
+  RADIO_BUTTON,
+}
+
+/**
+ * Enum for additional field options types.
+ */
+enum class AdditonalFieldOptionsType {
+  @Json(name = "text")
+  TEXT,
+
+  @Json(name = "email")
+  EMAIL,
+
+  @Json(name = "phone_number")
+  PHONE_NUMBER,
+
+  @Json(name = "date")
+  DATE,
+
+  @Json(name = "checkbox")
+  CHECKBOX,
+
+  @Json(name = "radio_button")
+  RADIO_BUTTON,
+}
