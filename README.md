@@ -42,7 +42,7 @@ git clone https://github.com/nylas/nylas-java.git && cd nylas-java
 ./gradlew build uberJar
 ```
 
-This creates a new jar file in `build/libs/nylas-java-sdk-1-uber.jar`.
+This creates a new jar file in `build/libs/nylas-java-sdk-2.5.1-uber.jar`.
 
 See the Gradle documentation on [Building Libraries](https://guides.gradle.org/building-java-libraries/)
 or the [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) for more information.
