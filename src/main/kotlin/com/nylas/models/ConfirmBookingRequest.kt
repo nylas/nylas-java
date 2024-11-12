@@ -7,7 +7,7 @@ import com.squareup.moshi.Json
  */
 data class ConfirmBookingRequest(
   @Json(name = "status")
-  val status: String? = null,
+  val status: ConfirmBookingStatus? = null,
   /**
    * The salt extracted from the booking reference embedded in the organizer confirmation link.
    */
@@ -23,7 +23,7 @@ data class ConfirmBookingRequest(
    * Builder for [ConfirmBookingRequest].
    */
   class Builder {
-    private var status: String? = null
+    private var status: ConfirmBookingStatus? = null
     private var salt: String? = null
     private var cancellationReason: String? = null
 
@@ -32,7 +32,7 @@ data class ConfirmBookingRequest(
      * @param status The status of the booking.
      * @return The builder.
      */
-    fun status(status: String) = apply { this.status = status }
+    fun status(status: ConfirmBookingStatus) = apply { this.status = status }
 
     /**
      * Set the salt of the booking.

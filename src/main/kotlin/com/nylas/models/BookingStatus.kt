@@ -9,8 +9,8 @@ enum class BookingStatus {
   @Json(name = "pending")
   PENDING,
 
-  @Json(name = "confirmed")
-  CONFIRMED,
+  @Json(name = "booked")
+  BOOKED,
 
   @Json(name = "cancelled")
   CANCELLED,
