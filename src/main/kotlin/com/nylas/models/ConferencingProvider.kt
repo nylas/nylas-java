@@ -20,4 +20,7 @@ enum class ConferencingProvider {
 
   @Json(name = "GoToMeeting")
   GOTOMEETING,
+
+  @Json(name = "skypeForConsumer")
+  SKYPE_FOR_CONSUMER,
 }
