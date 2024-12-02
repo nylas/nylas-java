@@ -1,7 +1,7 @@
 # Nylas Java SDK Changelog
 
-### Unreleased
-* Add support for `skypeForConsumer` as conferencing provider
+### [2.5.2] - Released 2024-12-02
+* Added support for `skypeForConsumer` as conferencing provider
 
 ### [2.5.1] - Released 2024-11-12
 * Fixed response type for returning list of scheduled messages
