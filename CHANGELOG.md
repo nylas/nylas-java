@@ -1,5 +1,8 @@
 # Nylas Java SDK Changelog
 
+# Unreleased
+* Made `NylasClient` and its methods open to enable mocking in tests
+
 ### [2.5.2] - Released 2024-12-02
 * Added support for `skypeForConsumer` as conferencing provider
 

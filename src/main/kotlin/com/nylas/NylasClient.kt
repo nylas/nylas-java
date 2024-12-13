@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
  * @param httpClientBuilder The builder to use for creating the http client.
  * @param apiUri The URL to use for communicating with the Nylas API.
  */
-class NylasClient(
+open class NylasClient(
   val apiKey: String,
   httpClientBuilder: OkHttpClient.Builder = defaultHttpClient(),
   apiUri: String = DEFAULT_BASE_URL,
@@ -77,79 +77,79 @@ class NylasClient(
    * Access the Applications API
    * @return The Applications API
    */
-  fun applications(): Applications = Applications(this)
+  open fun applications(): Applications = Applications(this)
 
   /**
    * Access the Attachments API
    * @return The Attachments API
    */
-  fun attachments(): Attachments = Attachments(this)
+  open fun attachments(): Attachments = Attachments(this)
 
   /**
    * Access the Auth API
    * @return The Auth API
    */
-  fun auth(): Auth = Auth(this)
+  open fun auth(): Auth = Auth(this)
 
   /**
    * Access the Calendars API
    * @return The Calendars API
    */
-  fun calendars(): Calendars = Calendars(this)
+  open fun calendars(): Calendars = Calendars(this)
 
   /**
    * Access the Connectors API
    * @return The Connectors API
    */
-  fun connectors(): Connectors = Connectors(this)
+  open fun connectors(): Connectors = Connectors(this)
 
   /**
    * Access the Drafts API
    * @return The Drafts API
    */
-  fun drafts(): Drafts = Drafts(this)
+  open fun drafts(): Drafts = Drafts(this)
 
   /**
    * Access the Events API
    * @return The Events API
    */
-  fun events(): Events = Events(this)
+  open fun events(): Events = Events(this)
 
   /**
    * Access the Folders API
    * @return The Folders API
    */
-  fun folders(): Folders = Folders(this)
+  open fun folders(): Folders = Folders(this)
 
   /**
    * Access the Grants API
    * @return The Grants API
    */
-  fun grants(): Grants = Grants(this)
+  open fun grants(): Grants = Grants(this)
 
   /**
    * Access the Messages API
    * @return The Messages API
    */
-  fun messages(): Messages = Messages(this)
+  open fun messages(): Messages = Messages(this)
 
   /**
    * Access the Threads API
    * @return The Threads API
    */
-  fun threads(): Threads = Threads(this)
+  open fun threads(): Threads = Threads(this)
 
   /**
    * Access the Webhooks API
    * @return The Webhooks API
    */
-  fun webhooks(): Webhooks = Webhooks(this)
+  open fun webhooks(): Webhooks = Webhooks(this)
 
   /**
    * Access the Contacts API
    * @return The Contacts API
    */
-  fun contacts(): Contacts = Contacts(this)
+  open fun contacts(): Contacts = Contacts(this)
 
   /**
    * Access the Scheduler API
@@ -160,7 +160,7 @@ class NylasClient(
   /**
    * Get a URL builder instance for the Nylas API.
    */
-  fun newUrlBuilder(): HttpUrl.Builder = apiUri.newBuilder()
+  open fun newUrlBuilder(): HttpUrl.Builder = apiUri.newBuilder()
 
   /**
    * Execute a GET request to the Nylas API.
@@ -171,7 +171,7 @@ class NylasClient(
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun <T> executeGet(
+  open fun <T> executeGet(
     path: String,
     resultType: Type,
     queryParams: IQueryParams? = null,
@@ -191,7 +191,7 @@ class NylasClient(
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun <T> executePut(
+  open fun <T> executePut(
     path: String,
     resultType: Type,
     requestBody: String? = null,
@@ -213,7 +213,7 @@ class NylasClient(
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun <T> executePatch(
+  open fun <T> executePatch(
     path: String,
     resultType: Type,
     requestBody: String? = null,
@@ -235,7 +235,7 @@ class NylasClient(
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun <T> executePost(
+  open fun <T> executePost(
     path: String,
     resultType: Type,
     requestBody: String? = null,
@@ -259,7 +259,7 @@ class NylasClient(
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun <T> executeDelete(
+  open fun <T> executeDelete(
     path: String,
     resultType: Type,
     queryParams: IQueryParams? = null,
@@ -280,7 +280,7 @@ class NylasClient(
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun <T> executeFormRequest(
+  open fun <T> executeFormRequest(
     path: String,
     method: HttpMethod,
     requestBody: RequestBody,
@@ -324,7 +324,7 @@ class NylasClient(
    * @suppress Not for public use.
    */
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun <T> executeRequest(
+  open fun <T> executeRequest(
     url: HttpUrl.Builder,
     method: HttpMethod,
     body: RequestBody?,
@@ -339,7 +339,7 @@ class NylasClient(
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
-  fun downloadResponse(
+  open fun downloadResponse(
     path: String,
     queryParams: IQueryParams? = null,
     overrides: RequestOverrides? = null,
