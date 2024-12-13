@@ -152,6 +152,12 @@ open class NylasClient(
   open fun contacts(): Contacts = Contacts(this)
 
   /**
+   * Access the Scheduler API
+   * @return The Scheduler API
+   */
+  fun scheduler(): Scheduler = Scheduler(this)
+
+  /**
    * Get a URL builder instance for the Nylas API.
    */
   open fun newUrlBuilder(): HttpUrl.Builder = apiUri.newBuilder()

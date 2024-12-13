@@ -11,4 +11,7 @@ enum class AvailabilityMethod {
 
   @Json(name = "max-availability")
   MAX_AVAILABILITY,
+
+  @Json(name = "collective")
+  COLLECTIVE,
 }
