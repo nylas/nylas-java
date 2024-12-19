@@ -92,7 +92,13 @@ class FoldersTests {
 
     @Test
     fun `listing folders calls requests with the correct params`() {
-      folders.list(grantId)
+      val queryParams =
+        ListFoldersQueryParams(
+          limit = 10,
+          pageToken = "abc-123",
+        )
+
+      folders.list(grantId, queryParams)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
