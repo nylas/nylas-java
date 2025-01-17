@@ -8,14 +8,15 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
   /**
    * Return all Folders
    * @param identifier Grant ID or email account to query.
+   * @param queryParams The query parameters to include in the request
    * @param overrides Optional request overrides to apply
    * @return The list of Folders
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
-  fun list(identifier: String, overrides: RequestOverrides? = null): ListResponse<Folder> {
+  fun list(identifier: String, queryParams: ListFoldersQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Folder> {
     val path = String.format("v3/grants/%s/folders", identifier)
-    return listResource(path, overrides = overrides)
+    return listResource(path, queryParams, overrides)
   }
 
   /**
