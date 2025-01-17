@@ -96,6 +96,7 @@ class FoldersTests {
         ListFoldersQueryParams(
           limit = 10,
           pageToken = "abc-123",
+          select = "id,updated_at",
         )
 
       folders.list(grantId, queryParams)
@@ -113,7 +114,7 @@ class FoldersTests {
 
       assertEquals("v3/grants/$grantId/folders", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Folder::class.java), typeCaptor.firstValue)
-      assertNull(queryParamCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
     @Test

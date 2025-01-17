@@ -1,5 +1,8 @@
 # Nylas Java SDK Changelog
 
+### Unreleased
+* Added pagination support for folders
+
 ### [2.5.2] - Released 2024-12-02
 * Added support for `skypeForConsumer` as conferencing provider
 
