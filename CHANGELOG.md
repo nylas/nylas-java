@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Added pagination support for folders
+* Fixed issue where reminders were not being updated correctly when updating an event
 
 ### [2.5.2] - Released 2024-12-02
 * Added support for `skypeForConsumer` as conferencing provider
