@@ -1,7 +1,8 @@
 # Nylas Java SDK Changelog
 
-# Unreleased
+### Unreleased
 * Made `NylasClient` and its methods open to enable mocking in tests
+* Added pagination support for folders
 
 ### [2.5.2] - Released 2024-12-02
 * Added support for `skypeForConsumer` as conferencing provider

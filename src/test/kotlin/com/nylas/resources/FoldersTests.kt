@@ -92,7 +92,14 @@ class FoldersTests {
 
     @Test
     fun `listing folders calls requests with the correct params`() {
-      folders.list(grantId)
+      val queryParams =
+        ListFoldersQueryParams(
+          limit = 10,
+          pageToken = "abc-123",
+          select = "id,updated_at",
+        )
+
+      folders.list(grantId, queryParams)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -107,7 +114,7 @@ class FoldersTests {
 
       assertEquals("v3/grants/$grantId/folders", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Folder::class.java), typeCaptor.firstValue)
-      assertNull(queryParamCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
     @Test
