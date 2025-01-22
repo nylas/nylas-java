@@ -346,6 +346,76 @@ class EventsTests {
     }
 
     @Test
+    fun `updating event reminders calls requests with the correct params`() {
+      val eventId = "event-123"
+      val updateEventRequest =
+        UpdateEventRequest(
+          reminders = Reminders(
+            useDefault = false,
+            overrides = listOf(
+              ReminderOverride(
+                reminderMinutes = 15,
+                reminderMethod = ReminderMethod.EMAIL,
+              ),
+              ReminderOverride(
+                reminderMinutes = 30,
+                reminderMethod = ReminderMethod.POPUP,
+              ),
+            ),
+          ),
+        )
+      val updateEventQueryParams =
+        UpdateEventQueryParams(
+          calendarId = "calendar-id",
+          notifyParticipants = true,
+        )
+
+      events.update(grantId, eventId, updateEventRequest, updateEventQueryParams)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<UpdateEventQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePut<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
+
+      // Parse both expected and actual JSON into Maps to compare structure while preserving field names
+      val jsonAdapter = JsonHelper.moshi().adapter(Map::class.java)
+      val actualJson = jsonAdapter.fromJson(requestBodyCaptor.firstValue)!!
+
+      val expectedJson = mapOf(
+        "reminders" to mapOf(
+          "use_default" to false,
+          "overrides" to listOf(
+            mapOf(
+              "reminder_minutes" to 15.0,
+              "reminder_method" to "email",
+            ),
+            mapOf(
+              "reminder_minutes" to 30.0,
+              "reminder_method" to "popup",
+            ),
+          ),
+        ),
+      )
+
+      assertEquals(expectedJson, actualJson)
+
+      // Also verify that the request can be correctly deserialized
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val actualRequest = adapter.fromJson(requestBodyCaptor.firstValue)
+      assertEquals(updateEventRequest, actualRequest)
+    }
+
+    @Test
     fun `destroying a event calls requests with the correct params`() {
       val eventId = "event-123"
       val destroyEventQueryParams =
