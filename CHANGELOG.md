@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-### Unreleased
+### [2.6.0] - Released 2025-01-24
 * Made `NylasClient` and its methods open to enable mocking in tests
 * Added pagination support for folders
 * Fixed issue where reminders were not being updated correctly when updating an event
