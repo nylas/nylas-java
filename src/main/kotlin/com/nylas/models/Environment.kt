@@ -11,4 +11,7 @@ enum class Environment {
 
   @Json(name = "staging")
   STAGING,
+
+  @Json(name = "sandbox")
+  SANDBOX,
 }
