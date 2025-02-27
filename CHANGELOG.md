@@ -1,5 +1,8 @@
 # Nylas Java SDK Changelog
 
+### [Unreleased]
+* Added support for listing import events via `events.listImportEvents()`
+
 ### [2.6.0] - Released 2025-01-24
 * Made `NylasClient` and its methods open to enable mocking in tests
 * Added pagination support for folders
