@@ -249,7 +249,7 @@ class EventsTests {
     fun `listing import events calls requests with the correct params`() {
       val listImportEventQueryParams =
         ListImportEventQueryParams.Builder("calendar-id")
-          .maxResults(50)
+          .limit(50)
           .pageToken("next-page-token")
           .start(1620000000)
           .end(1620100000)

@@ -17,8 +17,8 @@ data class ListImportEventQueryParams(
    * The maximum number of objects to return.
    * This field defaults to 50. The maximum allowed value is 500.
    */
-  @Json(name = "max_results")
-  val maxResults: Int? = null,
+  @Json(name = "limit")
+  val limit: Int? = null,
   /**
    * An identifier that specifies which page of data to return.
    * This value should be taken from the [ListResponse.nextCursor] response field.
@@ -55,7 +55,7 @@ data class ListImportEventQueryParams(
      */
     private val calendarId: String,
   ) {
-    private var maxResults: Int? = null
+    private var limit: Int? = null
     private var pageToken: String? = null
     private var start: Int? = null
     private var end: Int? = null
@@ -64,10 +64,10 @@ data class ListImportEventQueryParams(
     /**
      * Sets the maximum number of objects to return.
      * This field defaults to 50. The maximum allowed value is 500.
-     * @param maxResults The maximum number of objects to return.
+     * @param limit The maximum number of objects to return.
      * @return The builder.
      */
-    fun maxResults(maxResults: Int?) = apply { this.maxResults = maxResults }
+    fun limit(limit: Int?) = apply { this.limit = limit }
 
     /**
      * Sets the identifier that specifies which page of data to return.
@@ -107,7 +107,7 @@ data class ListImportEventQueryParams(
      */
     fun build() = ListImportEventQueryParams(
       calendarId,
-      maxResults,
+      limit,
       pageToken,
       start,
       end,
