@@ -27,9 +27,9 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   }
 
   /**
-   * Returns a list of recurring events, recurring event exceptions, 
-   * and single events from the specified calendar within a given time frame. 
-   * This is useful when you want to import, store, and synchronize events 
+   * Returns a list of recurring events, recurring event exceptions,
+   * and single events from the specified calendar within a given time frame.
+   * This is useful when you want to import, store, and synchronize events
    * from the time frame to your application
    * @param identifier Grant ID or email account to query
    * @param queryParams The query parameters to include in the request (must include calendar_id)
