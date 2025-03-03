@@ -1,7 +1,8 @@
 # Nylas Java SDK Changelog
 
-### [Unreleased]
+### [2.7.0] - Release 2025-03-03
 * Added support for listing import events via `events.listImportEvents()`
+* Added sandbox to the Environment Enum
 
 ### [2.6.0] - Released 2025-01-24
 * Made `NylasClient` and its methods open to enable mocking in tests
