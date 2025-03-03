@@ -246,6 +246,35 @@ class EventsTests {
     }
 
     @Test
+    fun `listing import events calls requests with the correct params`() {
+      val listImportEventQueryParams =
+        ListImportEventQueryParams.Builder("calendar-id")
+          .limit(50)
+          .pageToken("next-page-token")
+          .start(1620000000)
+          .end(1620100000)
+          .select("id,title,when")
+          .build()
+
+      events.listImportEvents(grantId, listImportEventQueryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<ListImportEventQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/import", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Event::class.java), typeCaptor.firstValue)
+      assertEquals(listImportEventQueryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
     fun `finding a event calls requests with the correct params`() {
       val eventId = "event-123"
       val findEventQueryParams =
