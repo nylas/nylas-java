@@ -74,6 +74,11 @@ data class Calendar(
    */
   @Json(name = "metadata")
   val metadata: Map<String, String>? = null,
+  /**
+   * Notetaker meeting bot settings for this calendar.
+   */
+  @Json(name = "notetaker")
+  val notetaker: CalendarNotetaker? = null,
 ) {
   /**
    * Get the type of object.

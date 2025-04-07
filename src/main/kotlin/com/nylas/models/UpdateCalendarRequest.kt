@@ -44,6 +44,11 @@ data class UpdateCalendarRequest(
    */
   @Json(name = "hex_foreground_color")
   val hexForegroundColor: String? = null,
+  /**
+   * Notetaker meeting bot settings for this calendar.
+   */
+  @Json(name = "notetaker")
+  val notetaker: CalendarNotetaker? = null,
 ) {
   class Builder {
     private var name: String? = null
@@ -53,6 +58,7 @@ data class UpdateCalendarRequest(
     private var metadata: Map<String, String>? = null
     private var hexColor: String? = null
     private var hexForegroundColor: String? = null
+    private var notetaker: CalendarNotetaker? = null
 
     /**
      * Set the name of the Calendar.
@@ -100,8 +106,14 @@ data class UpdateCalendarRequest(
     fun hexForegroundColor(hexForegroundColor: String) = apply { this.hexForegroundColor = hexForegroundColor }
 
     /**
+     * Set Notetaker meeting bot settings for this calendar.
+     * @param notetaker Notetaker meeting bot settings.
+     */
+    fun notetaker(notetaker: CalendarNotetaker) = apply { this.notetaker = notetaker }
+
+    /**
      * Build the UpdateCalendarRequest object.
      */
-    fun build() = UpdateCalendarRequest(name, description, location, timezone, metadata, hexColor, hexForegroundColor)
+    fun build() = UpdateCalendarRequest(name, description, location, timezone, metadata, hexColor, hexForegroundColor, notetaker)
   }
 }

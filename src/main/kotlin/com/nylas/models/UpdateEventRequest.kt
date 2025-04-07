@@ -89,6 +89,11 @@ data class UpdateEventRequest(
    */
   @Json(name = "hide_participant")
   val hideParticipant: Boolean? = null,
+  /**
+   * Notetaker meeting bot settings for this event.
+   */
+  @Json(name = "notetaker")
+  val notetaker: EventNotetaker? = null,
 ) {
   /**
    * This sealed class represents the different types of event time configurations.
@@ -514,6 +519,7 @@ data class UpdateEventRequest(
     private var visibility: EventVisibility? = null
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
+    private var notetaker: EventNotetaker? = null
 
     /**
      * Set the when object.
@@ -630,6 +636,13 @@ data class UpdateEventRequest(
     fun hideParticipant(hideParticipant: Boolean) = apply { this.hideParticipant = hideParticipant }
 
     /**
+     * Update the notetaker meeting bot settings for the event.
+     * @param notetaker Notetaker meeting bot settings for this event.
+     * @return The builder.
+     */
+    fun notetaker(notetaker: EventNotetaker) = apply { this.notetaker = notetaker }
+
+    /**
      * Builds the [UpdateEventRequest] object.
      * @return [UpdateEventRequest] object.
      */
@@ -650,6 +663,7 @@ data class UpdateEventRequest(
         visibility,
         capacity,
         hideParticipant,
+        notetaker,
       )
   }
 }

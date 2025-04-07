@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Added support for Notetaker APIs
+* Added support for Notetaker via the calendar and event APIs
 
 ### [2.7.0] - Release 2025-03-03
 * Added support for listing import events via `events.listImportEvents()`
