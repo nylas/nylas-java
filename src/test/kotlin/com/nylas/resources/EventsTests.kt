@@ -102,6 +102,15 @@ class EventsTests {
               "start_timezone": "America/New_York",
               "end_timezone": "America/New_York",
               "object": "timespan"
+            },
+            "notetaker": {
+              "id": "notetaker-123",
+              "name": "Event Notetaker",
+              "meeting_settings": {
+                "video_recording": false,
+                "audio_recording": true,
+                "transcription": true
+              }
             }
           }
           """.trimIndent(),
@@ -155,6 +164,13 @@ class EventsTests {
       assertEquals(1661877792, whenTimespan.endTime)
       assertEquals("America/New_York", whenTimespan.startTimezone)
       assertEquals("America/New_York", whenTimespan.endTimezone)
+
+      // Verify notetaker field
+      assertEquals("notetaker-123", event.notetaker?.id)
+      assertEquals("Event Notetaker", event.notetaker?.name)
+      assertEquals(false, event.notetaker?.meetingSettings?.videoRecording)
+      assertEquals(true, event.notetaker?.meetingSettings?.audioRecording)
+      assertEquals(true, event.notetaker?.meetingSettings?.transcription)
     }
 
     @Test
@@ -314,6 +330,14 @@ class EventsTests {
           description = "Description of my new event",
           location = "Los Angeles, CA",
           metadata = mapOf("your-key" to "value"),
+          notetaker = EventNotetakerRequest(
+            name = "Event Creation Notetaker",
+            meetingSettings = EventNotetakerRequest.MeetingSettings(
+              videoRecording = true,
+              audioRecording = true,
+              transcription = true,
+            ),
+          ),
         )
       val createEventQueryParams =
         CreateEventQueryParams(
@@ -348,6 +372,14 @@ class EventsTests {
         UpdateEventRequest(
           description = "Description of my new event",
           location = "Los Angeles, CA",
+          notetaker = EventNotetakerRequest(
+            name = "Updated Event Notetaker",
+            meetingSettings = EventNotetakerRequest.MeetingSettings(
+              videoRecording = false,
+              audioRecording = true,
+              transcription = true,
+            ),
+          ),
         )
       val updateEventQueryParams =
         UpdateEventQueryParams(

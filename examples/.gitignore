@@ -1,0 +1,33 @@
+# Compiled class files
+*.class
+
+# Build output
+/build/
+
+# Gradle files
+.gradle/
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse files
+.classpath
+.project
+.settings/
+bin/
+
+# VS Code files
+.vscode/
+
+# Environment variables
+.env
+
+# Mac files
+.DS_Store
+
+# Logs
+*.log 

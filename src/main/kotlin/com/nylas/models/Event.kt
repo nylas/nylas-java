@@ -145,6 +145,11 @@ data class Event(
    */
   @Json(name = "updated_at")
   val updatedAt: Long? = null,
+  /**
+   * Notetaker meeting bot settings for this event.
+   */
+  @Json(name = "notetaker")
+  val notetaker: EventNotetaker? = null,
 ) {
   /**
    * Get the type of object.

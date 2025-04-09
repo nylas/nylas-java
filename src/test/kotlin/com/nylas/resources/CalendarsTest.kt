@@ -57,7 +57,22 @@ class CalendarsTest {
             "name": "My New Calendar",
             "object": "calendar",
             "read_only": false,
-            "timezone": "America/Los_Angeles"
+            "timezone": "America/Los_Angeles",
+            "notetaker": {
+              "name": "Custom Calendar Notetaker",
+              "meeting_settings": {
+                "video_recording": true,
+                "audio_recording": true,
+                "transcription": false
+              },
+              "rules": {
+                "event_selection": ["internal", "all"],
+                "participant_filter": {
+                  "participants_gte": 2,
+                  "participants_lte": 10
+                }
+              }
+            }
           }
         """.trimIndent(),
       )
@@ -75,6 +90,15 @@ class CalendarsTest {
       assertEquals("My New Calendar", cal.name)
       assertEquals(false, cal.readOnly)
       assertEquals("America/Los_Angeles", cal.timezone)
+      assertEquals("Custom Calendar Notetaker", cal.notetaker?.name)
+      assertEquals(true, cal.notetaker?.meetingSettings?.videoRecording)
+      assertEquals(true, cal.notetaker?.meetingSettings?.audioRecording)
+      assertEquals(false, cal.notetaker?.meetingSettings?.transcription)
+      assertEquals(2, cal.notetaker?.rules?.eventSelection?.size)
+      assertEquals(CalendarNotetaker.EventSelectionType.INTERNAL, cal.notetaker?.rules?.eventSelection?.get(0))
+      assertEquals(CalendarNotetaker.EventSelectionType.ALL, cal.notetaker?.rules?.eventSelection?.get(1))
+      assertEquals(2, cal.notetaker?.rules?.participantFilter?.participantsGte)
+      assertEquals(10, cal.notetaker?.rules?.participantFilter?.participantsLte)
     }
   }
 
@@ -138,6 +162,21 @@ class CalendarsTest {
         metadata = mapOf("your-key" to "value"),
         name = "My New Calendar",
         timezone = "America/Los_Angeles",
+        notetaker = CalendarNotetaker(
+          name = "Test Notetaker",
+          meetingSettings = CalendarNotetaker.MeetingSettings(
+            videoRecording = true,
+            audioRecording = true,
+            transcription = false,
+          ),
+          rules = CalendarNotetaker.Rules(
+            eventSelection = listOf(CalendarNotetaker.EventSelectionType.INTERNAL),
+            participantFilter = CalendarNotetaker.ParticipantFilter(
+              participantsGte = 2,
+              participantsLte = null,
+            ),
+          ),
+        ),
       )
 
       calendars.create(grantId, createCalendarRequest)
@@ -171,6 +210,21 @@ class CalendarsTest {
         timezone = "America/Los_Angeles",
         hexColor = "#039BE5",
         hexForegroundColor = "#039BE5",
+        notetaker = CalendarNotetaker(
+          name = "Updated Notetaker",
+          meetingSettings = CalendarNotetaker.MeetingSettings(
+            videoRecording = false,
+            audioRecording = true,
+            transcription = true,
+          ),
+          rules = CalendarNotetaker.Rules(
+            eventSelection = listOf(CalendarNotetaker.EventSelectionType.EXTERNAL, CalendarNotetaker.EventSelectionType.ALL),
+            participantFilter = CalendarNotetaker.ParticipantFilter(
+              participantsGte = null,
+              participantsLte = 15,
+            ),
+          ),
+        ),
       )
 
       calendars.update(grantId, calendarId, updateCalendarRequest)

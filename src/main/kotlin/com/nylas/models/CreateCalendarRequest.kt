@@ -32,6 +32,11 @@ data class CreateCalendarRequest(
    */
   @Json(name = "metadata")
   val metadata: Map<String, String>? = null,
+  /**
+   * Notetaker meeting bot settings for this calendar.
+   */
+  @Json(name = "notetaker")
+  val notetaker: CalendarNotetaker? = null,
 ) {
   /**
    * A builder for creating a [CreateCalendarRequest].
@@ -45,6 +50,7 @@ data class CreateCalendarRequest(
     private var location: String? = null
     private var timezone: String? = null
     private var metadata: Map<String, String>? = null
+    private var notetaker: CalendarNotetaker? = null
 
     /**
      * Set the description of the calendar.
@@ -76,9 +82,16 @@ data class CreateCalendarRequest(
     fun metadata(metadata: Map<String, String>) = apply { this.metadata = metadata }
 
     /**
+     * Set Notetaker meeting bot settings for this calendar.
+     * @param notetaker Notetaker meeting bot settings.
+     * @return The builder.
+     */
+    fun notetaker(notetaker: CalendarNotetaker) = apply { this.notetaker = notetaker }
+
+    /**
      * Build the [CreateCalendarRequest].
      * @return A [CreateCalendarRequest] with the provided values.
      */
-    fun build() = CreateCalendarRequest(name, description, location, timezone, metadata)
+    fun build() = CreateCalendarRequest(name, description, location, timezone, metadata, notetaker)
   }
 }

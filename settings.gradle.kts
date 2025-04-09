@@ -8,3 +8,6 @@
  */
 
 rootProject.name = "nylas"
+
+// Include the examples subproject
+include("examples")
