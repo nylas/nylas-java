@@ -330,10 +330,9 @@ class EventsTests {
           description = "Description of my new event",
           location = "Los Angeles, CA",
           metadata = mapOf("your-key" to "value"),
-          notetaker = EventNotetaker(
-            id = "notetaker-123",
+          notetaker = EventNotetakerRequest(
             name = "Event Creation Notetaker",
-            meetingSettings = EventNotetaker.MeetingSettings(
+            meetingSettings = EventNotetakerRequest.MeetingSettings(
               videoRecording = true,
               audioRecording = true,
               transcription = true,
@@ -373,10 +372,9 @@ class EventsTests {
         UpdateEventRequest(
           description = "Description of my new event",
           location = "Los Angeles, CA",
-          notetaker = EventNotetaker(
-            id = "notetaker-123",
+          notetaker = EventNotetakerRequest(
             name = "Updated Event Notetaker",
-            meetingSettings = EventNotetaker.MeetingSettings(
+            meetingSettings = EventNotetakerRequest.MeetingSettings(
               videoRecording = false,
               audioRecording = true,
               transcription = true,

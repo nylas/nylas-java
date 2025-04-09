@@ -99,7 +99,8 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
     overrides: RequestOverrides? = null,
   ): Response<LeaveNotetakerResponse> {
     val path = identifier?.let { String.format("v3/grants/%s/notetakers/%s/leave", it, notetakerId) } ?: String.format("v3/notetakers/%s/leave", notetakerId)
-    return client.executePost(path, LeaveNotetakerResponse::class.java, null, null, overrides)
+    val responseType = Types.newParameterizedType(Response::class.java, LeaveNotetakerResponse::class.java)
+    return client.executePost(path, responseType, null, null, overrides)
   }
 
   /**

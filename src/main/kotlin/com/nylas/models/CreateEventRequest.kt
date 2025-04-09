@@ -93,7 +93,7 @@ data class CreateEventRequest(
    * Notetaker meeting bot settings for this event.
    */
   @Json(name = "notetaker")
-  val notetaker: EventNotetaker? = null,
+  val notetaker: EventNotetakerRequest? = null,
 ) {
   /**
    * This sealed class represents the different types of event time configurations.
@@ -436,7 +436,7 @@ data class CreateEventRequest(
     private var visibility: EventVisibility? = null
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
-    private var notetaker: EventNotetaker? = null
+    private var notetaker: EventNotetakerRequest? = null
 
     /**
      * Set the event title.
@@ -549,7 +549,7 @@ data class CreateEventRequest(
      * @param notetaker The notetaker meeting bot settings for the event.
      * @return The builder.
      */
-    fun notetaker(notetaker: EventNotetaker) = apply { this.notetaker = notetaker }
+    fun notetaker(notetaker: EventNotetakerRequest) = apply { this.notetaker = notetaker }
 
     /**
      * Builds the [CreateEventRequest] object.

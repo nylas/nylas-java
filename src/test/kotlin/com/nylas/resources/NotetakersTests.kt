@@ -234,7 +234,7 @@ class NotetakersTests {
       )
 
       assertEquals("v3/grants/$grantId/notetakers/$notetakerId/leave", pathCaptor.firstValue)
-      assertEquals(LeaveNotetakerResponse::class.java, typeCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, LeaveNotetakerResponse::class.java), typeCaptor.firstValue)
     }
 
     @Test

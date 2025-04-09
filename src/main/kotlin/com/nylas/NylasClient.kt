@@ -155,7 +155,13 @@ open class NylasClient(
    * Access the Scheduler API
    * @return The Scheduler API
    */
-  fun scheduler(): Scheduler = Scheduler(this)
+  open fun scheduler(): Scheduler = Scheduler(this)
+
+  /**
+   * Access the Notetakers API
+   * @return The Notetakers API
+   */
+  open fun notetakers(): Notetakers = Notetakers(this)
 
   /**
    * Get a URL builder instance for the Nylas API.
