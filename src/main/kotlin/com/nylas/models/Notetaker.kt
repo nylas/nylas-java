@@ -174,10 +174,40 @@ data class NotetakerMediaResponse(
     val url: String,
 
     /**
-     * The size of the file, in MB
+     * The size of the file, in bytes
      */
     @Json(name = "size")
     val size: Int,
+
+    /**
+     * The file name
+     */
+    @Json(name = "name")
+    val name: String,
+
+    /**
+     * The file type/MIME type
+     */
+    @Json(name = "type")
+    val type: String,
+
+    /**
+     * When the file was created (Unix timestamp)
+     */
+    @Json(name = "created_at")
+    val createdAt: Long,
+
+    /**
+     * When the file will expire (Unix timestamp)
+     */
+    @Json(name = "expires_at")
+    val expiresAt: Long,
+
+    /**
+     * Time-to-live in seconds until the file will be deleted off Nylas' storage server
+     */
+    @Json(name = "ttl")
+    val ttl: Int,
   )
 
   /**
@@ -191,9 +221,39 @@ data class NotetakerMediaResponse(
     val url: String,
 
     /**
-     * The size of the file, in MB
+     * The size of the file, in bytes
      */
     @Json(name = "size")
     val size: Int,
+
+    /**
+     * The file name
+     */
+    @Json(name = "name")
+    val name: String,
+
+    /**
+     * The file type/MIME type
+     */
+    @Json(name = "type")
+    val type: String,
+
+    /**
+     * When the file was created (Unix timestamp)
+     */
+    @Json(name = "created_at")
+    val createdAt: Long,
+
+    /**
+     * When the file will expire (Unix timestamp)
+     */
+    @Json(name = "expires_at")
+    val expiresAt: Long,
+
+    /**
+     * Time-to-live in seconds until the file will be deleted off Nylas' storage server
+     */
+    @Json(name = "ttl")
+    val ttl: Int,
   )
 }
