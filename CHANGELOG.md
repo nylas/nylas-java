@@ -3,6 +3,7 @@
 ### Unreleased
 * Added support for Notetaker APIs
 * Added support for Notetaker via the calendar and event APIs
+* Added `original_start_time` property to the Event model
 
 ### [2.7.0] - Release 2025-03-03
 * Added support for listing import events via `events.listImportEvents()`

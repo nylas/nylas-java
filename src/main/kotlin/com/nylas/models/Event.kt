@@ -150,6 +150,11 @@ data class Event(
    */
   @Json(name = "notetaker")
   val notetaker: EventNotetaker? = null,
+  /**
+   * The original start time of the event, in Unix timestamp format. This field is present only if the event is an instance of a recurring event.
+   */
+  @Json(name = "original_start_time")
+  val originalStartTime: Long? = null,
 ) {
   /**
    * Get the type of object.
