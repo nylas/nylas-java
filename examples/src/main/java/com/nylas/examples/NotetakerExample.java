@@ -217,13 +217,23 @@ public class NotetakerExample {
         if (media.getData().getRecording() != null) {
             System.out.println("Recording:");
             System.out.println("  • URL: " + media.getData().getRecording().getUrl());
-            System.out.println("  • Size: " + media.getData().getRecording().getSize() + " MB");
+            System.out.println("  • Size: " + (media.getData().getRecording().getSize() / (1024.0 * 1024.0)) + " MB");
+            System.out.println("  • Name: " + media.getData().getRecording().getName());
+            System.out.println("  • Type: " + media.getData().getRecording().getType());
+            System.out.println("  • Created At: " + media.getData().getRecording().getCreatedAt());
+            System.out.println("  • Expires At: " + media.getData().getRecording().getExpiresAt());
+            System.out.println("  • TTL: " + media.getData().getRecording().getTtl() + " seconds");
         }
         
         if (media.getData().getTranscript() != null) {
             System.out.println("Transcript:");
             System.out.println("  • URL: " + media.getData().getTranscript().getUrl());
-            System.out.println("  • Size: " + media.getData().getTranscript().getSize() + " MB");
+            System.out.println("  • Size: " + (media.getData().getTranscript().getSize() / (1024.0 * 1024.0)) + " MB");
+            System.out.println("  • Name: " + media.getData().getTranscript().getName());
+            System.out.println("  • Type: " + media.getData().getTranscript().getType());
+            System.out.println("  • Created At: " + media.getData().getTranscript().getCreatedAt());
+            System.out.println("  • Expires At: " + media.getData().getTranscript().getExpiresAt());
+            System.out.println("  • TTL: " + media.getData().getTranscript().getTtl() + " seconds");
         }
     }
     

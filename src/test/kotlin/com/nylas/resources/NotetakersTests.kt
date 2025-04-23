@@ -75,6 +75,56 @@ class NotetakersTests {
     }
 
     @Test
+    fun `NotetakerMediaResponse serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(NotetakerMediaResponse::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "recording": {
+              "size": 21550491,
+              "name": "meeting_recording.mp4",
+              "type": "video/mp4",
+              "created_at": 1744222418,
+              "expires_at": 1744481618,
+              "url": "url_for_recording",
+              "ttl": 259106
+            },
+            "transcript": {
+              "size": 862,
+              "name": "raw_transcript.json",
+              "type": "application/json",
+              "created_at": 1744222418,
+              "expires_at": 1744481618,
+              "url": "url_for_transcript",
+              "ttl": 259106
+            }
+          }
+        """.trimIndent(),
+      )
+
+      val mediaResponse = adapter.fromJson(jsonBuffer)!!
+      assertIs<NotetakerMediaResponse>(mediaResponse)
+
+      // Check recording
+      assertEquals(21550491, mediaResponse.recording?.size)
+      assertEquals("meeting_recording.mp4", mediaResponse.recording?.name)
+      assertEquals("video/mp4", mediaResponse.recording?.type)
+      assertEquals(1744222418, mediaResponse.recording?.createdAt)
+      assertEquals(1744481618, mediaResponse.recording?.expiresAt)
+      assertEquals("url_for_recording", mediaResponse.recording?.url)
+      assertEquals(259106, mediaResponse.recording?.ttl)
+
+      // Check transcript
+      assertEquals(862, mediaResponse.transcript?.size)
+      assertEquals("raw_transcript.json", mediaResponse.transcript?.name)
+      assertEquals("application/json", mediaResponse.transcript?.type)
+      assertEquals(1744222418, mediaResponse.transcript?.createdAt)
+      assertEquals(1744481618, mediaResponse.transcript?.expiresAt)
+      assertEquals("url_for_transcript", mediaResponse.transcript?.url)
+      assertEquals(259106, mediaResponse.transcript?.ttl)
+    }
+
+    @Test
     fun `DeleteResponse serializes properly`() {
       val adapter = JsonHelper.moshi().adapter(DeleteResponse::class.java)
       val jsonBuffer = Buffer().writeUtf8(
