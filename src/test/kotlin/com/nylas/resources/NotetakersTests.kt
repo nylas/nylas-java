@@ -157,9 +157,14 @@ class NotetakersTests {
     @Test
     fun `listing notetakers calls requests with the correct params`() {
       val queryParams = ListNotetakersQueryParams(
+        state = Notetaker.NotetakerState.SCHEDULED,
+        joinTimeStart = 1234567890,
+        joinTimeEnd = 1234567899,
         limit = 10,
         pageToken = "abc-123",
         select = "id,updated_at",
+        orderDirection = Notetaker.OrderDirection.ASC,
+        orderField = Notetaker.OrderField.NAME,
       )
 
       notetakers.list(queryParams, grantId)
