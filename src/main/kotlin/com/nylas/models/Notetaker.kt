@@ -101,6 +101,31 @@ data class Notetaker(
   }
 
   /**
+   * Enum for list order direction options
+   */
+  enum class OrderDirection {
+    @Json(name = "asc")
+    ASC,
+
+    @Json(name = "desc")
+    DESC,
+  }
+
+  /**
+   * Enum for list order field options
+   */
+  enum class OrderField {
+    @Json(name = "created_at")
+    CREATED_AT,
+
+    @Json(name = "name")
+    NAME,
+
+    @Json(name = "join_time")
+    JOIN_TIME,
+  }
+
+  /**
    * Data class for Notetaker Meeting Settings
    */
   data class MeetingSettings(
