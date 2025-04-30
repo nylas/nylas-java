@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-### Unreleased
+### [2.8.0] - Release 2025-04-30
 * Added support for Notetaker APIs
 * Added support for Notetaker via the calendar and event APIs
 * Added `original_start_time` property to the Event model
