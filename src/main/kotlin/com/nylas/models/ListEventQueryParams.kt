@@ -78,9 +78,9 @@ data class ListEventQueryParams(
   val busy: Boolean? = null,
   /**
    * Order results by the specified field.
-   * Currently only start is supported.
+   * Currently only "start" is supported.
    */
-  @Json(name = "participants")
+  @Json(name = "order_by")
   val orderBy: String? = null,
   /**
    * Filter for events with the specified ical_uid.
