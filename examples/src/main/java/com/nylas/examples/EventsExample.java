@@ -9,7 +9,6 @@ import com.nylas.models.ListEventQueryParams;
 import com.nylas.models.Response;
 import com.nylas.models.ListResponse;
 import com.nylas.models.EventQueryOrderBy;
-import com.nylas.models.EventQueryOrderBy;
 import okhttp3.OkHttpClient;
 
 import java.io.File;

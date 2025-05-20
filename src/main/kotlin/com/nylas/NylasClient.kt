@@ -184,7 +184,6 @@ open class NylasClient(
     overrides: RequestOverrides? = null,
   ): T {
     val url = buildUrl(path, queryParams, overrides)
-    println("Executing GET request to ${url.build()}")
     return executeRequest(url, HttpMethod.GET, null, resultType, overrides)
   }
 
