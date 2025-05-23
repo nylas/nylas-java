@@ -22,6 +22,11 @@ data class CreateConfigurationRequest(
   @Json(name = "event_booking")
   val eventBooking: ConfigurationEventBooking,
   /**
+   * The name of the Scheduling Page. If not set, it defaults to the organizer's name.
+   */
+  @Json(name = "name")
+  val name: String? = null,
+  /**
    * Unique identifier for the Configuration object.
    */
   @Json(name = "slug")
@@ -54,9 +59,18 @@ data class CreateConfigurationRequest(
     private val eventBooking: ConfigurationEventBooking,
   ) {
     private var requiresSessionAuth: Boolean? = null
+    private var name: String? = null
     private var slug: String? = null
     private var scheduler: ConfigurationSchedulerSettings? = null
     private var appearance: Map<String, String>? = null
+
+    /**
+     * Set the name of the Scheduling Page.
+     *
+     * @param name The name of the Scheduling Page. If not set, it defaults to the organizer's name.
+     * @return The builder
+     */
+    fun name(name: String) = apply { this.name = name }
 
     /**
      * Set the unique identifier for the configuration.
@@ -99,6 +113,7 @@ data class CreateConfigurationRequest(
       participants,
       availability,
       eventBooking,
+      name,
       slug,
       requiresSessionAuth,
       scheduler,

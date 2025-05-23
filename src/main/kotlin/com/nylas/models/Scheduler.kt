@@ -27,6 +27,11 @@ data class Configuration(
   @Json(name = "event_booking")
   val eventBooking: ConfigurationEventBooking,
   /**
+   * The name of the Scheduling Page. If not set, it defaults to the organizer's name.
+   */
+  @Json(name = "name")
+  val name: String? = null,
+  /**
    * Unique identifier for the Configuration object.
    */
   @Json(name = "slug")
