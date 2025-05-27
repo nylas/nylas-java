@@ -1,7 +1,7 @@
 # Nylas Java SDK Changelog
 
 
-## [Unreleased]
+## [2.9.0] - Release 2025-05-27
 
 ### Added
 * Support for `name` attribute in Scheduler Configuration class to allow custom naming of Scheduling Pages
