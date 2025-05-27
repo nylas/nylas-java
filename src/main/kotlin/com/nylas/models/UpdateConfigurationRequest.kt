@@ -22,6 +22,11 @@ data class UpdateConfigurationRequest(
   @Json(name = "event_booking")
   val eventBooking: ConfigurationEventBooking? = null,
   /**
+   * The name of the Scheduling Page. If not set, it defaults to the organizer's name.
+   */
+  @Json(name = "name")
+  val name: String? = null,
+  /**
    * Unique identifier for the Configuration object.
    */
   @Json(name = "slug")
@@ -49,6 +54,7 @@ data class UpdateConfigurationRequest(
     private var participants: List<ConfigurationParticipant>? = null
     private var availability: ConfigurationAvailability? = null
     private var eventBooking: ConfigurationEventBooking? = null
+    private var name: String? = null
     private var requiresSessionAuth: Boolean? = null
     private var slug: String? = null
     private var scheduler: ConfigurationSchedulerSettings? = null
@@ -76,12 +82,12 @@ data class UpdateConfigurationRequest(
     fun eventBooking(eventBooking: ConfigurationEventBooking) = apply { this.eventBooking = eventBooking }
 
     /**
-     * Set the unique identifier for the configuration.
+     * Set the name of the Scheduling Page.
      *
-     * @param slug Unique identifier for the Configuration object.
+     * @param name The name of the Scheduling Page. If not set, it defaults to the organizer's name.
      * @return The builder
      */
-    fun slug(slug: String) = apply { this.slug = slug }
+    fun name(name: String) = apply { this.name = name }
 
     /**
      * Set if scheduling Availability and Bookings endpoints require a valid session ID.
@@ -108,6 +114,14 @@ data class UpdateConfigurationRequest(
     fun appearance(appearance: Map<String, String>) = apply { this.appearance = appearance }
 
     /**
+     * Set the unique identifier for the configuration.
+     *
+     * @param slug Unique identifier for the Configuration object.
+     * @return The builder
+     */
+    fun slug(slug: String) = apply { this.slug = slug }
+
+    /**
      * Build the [UpdateConfigurationRequest].
      *
      * @return The [UpdateConfigurationRequest]
@@ -116,6 +130,7 @@ data class UpdateConfigurationRequest(
       participants,
       availability,
       eventBooking,
+      name,
       slug,
       requiresSessionAuth,
       scheduler,
