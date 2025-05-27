@@ -1,9 +1,13 @@
 # Nylas Java SDK Changelog
 
+
 ## [Unreleased]
 
 ### Added
-* Added support for `name` attribute in Scheduler Configuration class to allow custom naming of Scheduling Pages
+* Support for `name` attribute in Scheduler Configuration class to allow custom naming of Scheduling Pages
+
+### Fixed
+* ListEventQueryParams to use a more specific type for orderBy parameter and correct JSON name.
 
 ### [2.8.0] - Release 2025-04-30
 * Added support for Notetaker APIs

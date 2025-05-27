@@ -80,8 +80,8 @@ data class ListEventQueryParams(
    * Order results by the specified field.
    * Currently only start is supported.
    */
-  @Json(name = "participants")
-  val orderBy: String? = null,
+  @Json(name = "order_by")
+  val orderBy: EventQueryOrderBy? = null,
   /**
    * Filter for events with the specified ical_uid.
    * You cannot apply other filters if you use this parameter.
@@ -145,7 +145,7 @@ data class ListEventQueryParams(
     private var metadataPair: Map<String, String>? = null
     private var expandRecurring: Boolean? = null
     private var busy: Boolean? = null
-    private var orderBy: String? = null
+    private var orderBy: EventQueryOrderBy? = null
     private var icalUid: String? = null
     private var masterEventId: String? = null
     private var updatedBefore: Long? = null
@@ -243,7 +243,7 @@ data class ListEventQueryParams(
      * @param orderBy The field to order results by.
      * @return The builder.
      */
-    fun orderBy(orderBy: String?) = apply { this.orderBy = orderBy }
+    fun orderBy(orderBy: EventQueryOrderBy?) = apply { this.orderBy = orderBy }
 
     /**
      * Sets the ical_uid to filter for events with.
