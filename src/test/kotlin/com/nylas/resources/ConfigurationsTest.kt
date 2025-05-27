@@ -45,6 +45,7 @@ class ConfigurationsTest {
         """
         {
           "id": "abc-123-configuration-id",
+          "name": "My Scheduling Page",
           "slug": null,
           "participants": [
               {
@@ -148,6 +149,7 @@ class ConfigurationsTest {
       val config = adapter.fromJson(jsonBuffer)!!
       assertIs<Configuration>(config)
       assertEquals("abc-123-configuration-id", config.id)
+      assertEquals("My Scheduling Page", config.name)
       assertEquals(false, config.requiresSessionAuth)
       assertEquals(7, config.scheduler?.availableDaysInFuture)
       assertEquals(60, config.scheduler?.minCancellationNotice)
@@ -263,11 +265,87 @@ class ConfigurationsTest {
     }
 
     @Test
+    fun `creating a configuration with name calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateConfigurationRequest::class.java)
+      val participantCalendarIds = ArrayList<String>()
+      participantCalendarIds.add("primary")
+
+      val configurationAvailabilityParticipant = ConfigurationAvailabilityParticipant.Builder().calendarIds(participantCalendarIds).build()
+
+      val configurationBookingParticipant = ConfigurationBookingParticipant.Builder().calendarId("primary").build()
+
+      val configurationParticipant = ConfigurationParticipant.Builder("test@nylas.com")
+        .availability(configurationAvailabilityParticipant)
+        .booking(configurationBookingParticipant)
+        .name("Test Participant")
+        .isOrganizer(true)
+        .build()
+
+      val configurationAvailability = ConfigurationAvailability.Builder().intervalMinutes(30).build()
+
+      val configurationEventBooking = ConfigurationEventBooking.Builder().title("Test Event Booking").build()
+
+      val participants = ArrayList<ConfigurationParticipant>()
+      participants.add(configurationParticipant)
+
+      val createConfigurationRequest = CreateConfigurationRequest.Builder(
+        participants,
+        configurationAvailability,
+        configurationEventBooking,
+      ).name("My Custom Scheduling Page").build()
+
+      configurations.create(grantId, createConfigurationRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Configuration>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+      assertEquals("v3/grants/$grantId/scheduling/configurations", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Configuration::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(createConfigurationRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
     fun `updating a configuration calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(UpdateConfigurationRequest::class.java)
       val configId = "abc-123-configuration-id"
       val config = ConfigurationSchedulerSettings.Builder().minBookingNotice(120).build()
       val updateConfigurationRequest = UpdateConfigurationRequest.Builder().scheduler(config).build()
+
+      configurations.update(grantId, configId, updateConfigurationRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePut<Response<Configuration>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+      assertEquals("v3/grants/$grantId/scheduling/configurations/$configId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Configuration::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(updateConfigurationRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating a configuration with name calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateConfigurationRequest::class.java)
+      val configId = "abc-123-configuration-id"
+      val updateConfigurationRequest = UpdateConfigurationRequest.Builder()
+        .name("Updated Scheduling Page Name")
+        .build()
 
       configurations.update(grantId, configId, updateConfigurationRequest)
 
