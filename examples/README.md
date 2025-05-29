@@ -4,6 +4,24 @@ Simple examples demonstrating how to use the Nylas Java/Kotlin SDK.
 
 ## Available Examples
 
+### Messages Example
+
+The `MessagesExample` and `KotlinMessagesExample` demonstrate how to use the new message features in the Nylas Java/Kotlin SDK:
+
+- Use the new `MessageFields.INCLUDE_TRACKING_OPTIONS` and `MessageFields.RAW_MIME` enum values
+- Access tracking options (opens, thread_replies, links, label) from messages  
+- Retrieve raw MIME content for messages
+- Use the new `FindMessageQueryParams` to specify fields when finding specific messages
+- Compare different field options and their effects on returned data
+
+### Events Example
+
+The `EventsExample` demonstrates how to use the Nylas Java/Kotlin SDK to interact with the Events API:
+
+- List events from a calendar
+- Filter events by date range
+- Show event details
+
 ### Notetaker Example
 
 The `NotetakerExample` demonstrates how to use the Nylas Java/Kotlin SDK to interact with the Notetakers API:
@@ -28,7 +46,10 @@ Edit the `.env` file with your details:
 # Get your API key from the Nylas Dashboard
 NYLAS_API_KEY=your_api_key_here
 
-# Add your meeting link (Zoom, Google Meet, or Microsoft Teams)
+# Your grant ID (required for message examples)
+NYLAS_GRANT_ID=your_grant_id_here
+
+# Add your meeting link (Zoom, Google Meet, or Microsoft Teams) - for Notetaker example
 MEETING_LINK=your_meeting_link_here
 ```
 
@@ -36,12 +57,27 @@ MEETING_LINK=your_meeting_link_here
 
 #### Option 1: Using Gradle
 
-Run Java example:
+Run Java Messages example:
+```bash
+./gradlew :examples:run -PmainClass=com.nylas.examples.MessagesExample
+```
+
+Run Kotlin Messages example:
+```bash
+./gradlew :examples:run -PmainClass=com.nylas.examples.KotlinMessagesExampleKt
+```
+
+Run Java Events example:
+```bash
+./gradlew :examples:run -PmainClass=com.nylas.examples.EventsExample
+```
+
+Run Java Notetaker example:
 ```bash
 ./gradlew :examples:run -PmainClass=com.nylas.examples.NotetakerExample
 ```
 
-Run Kotlin example:
+Run Kotlin Notetaker example:
 ```bash
 ./gradlew :examples:run -PmainClass=com.nylas.examples.KotlinNotetakerExampleKt
 ```
@@ -53,12 +89,12 @@ List available examples:
 make list
 ```
 
-Run the Java example:
+Run the Java Notetaker example:
 ```bash
 make java
 ```
 
-Run the Kotlin example:
+Run the Kotlin Notetaker example:
 ```bash
 make kotlin-way
 ```
@@ -67,9 +103,12 @@ make kotlin-way
 
 1. Open the project in your IDE (IntelliJ IDEA, Eclipse, etc.)
 2. Set the required environment variables in your run configuration
-3. Run the main method in either:
-   - `NotetakerExample.java` (Java)
-   - `KotlinNotetakerExample.kt` (Kotlin)
+3. Run the main method in any of the example files:
+   - `MessagesExample.java` (Java - demonstrates new message features)
+   - `KotlinMessagesExample.kt` (Kotlin - demonstrates new message features)  
+   - `EventsExample.java` (Java - demonstrates events)
+   - `NotetakerExample.java` (Java - demonstrates notetakers)
+   - `KotlinNotetakerExample.kt` (Kotlin - demonstrates notetakers)
 
 ## Project Structure
 
@@ -83,11 +122,30 @@ examples/
     └── main/
         ├── java/      # Java examples
         │   └── com/nylas/examples/
-        │       └── NotetakerExample.java
+        │       ├── MessagesExample.java     # NEW: Message features demo
+        │       ├── EventsExample.java       # Events API demo
+        │       └── NotetakerExample.java    # Notetaker API demo
         └── kotlin/    # Kotlin examples
             └── com/nylas/examples/
-                └── KotlinNotetakerExample.kt
+                ├── KotlinMessagesExample.kt     # NEW: Message features demo
+                └── KotlinNotetakerExample.kt    # Notetaker API demo
 ```
+
+## Message Features Demonstrated
+
+The Messages examples showcase the following new features added to the Nylas SDK:
+
+1. **New MessageFields enum values:**
+   - `MessageFields.INCLUDE_TRACKING_OPTIONS` - Returns tracking options data
+   - `MessageFields.RAW_MIME` - Returns raw MIME message content
+
+2. **New Message model properties:**
+   - `trackingOptions` - Contains opens, thread_replies, links, and label tracking data
+   - `rawMime` - Contains Base64url-encoded raw message data
+
+3. **Enhanced Messages API methods:**
+   - `Messages.find()` now accepts `FindMessageQueryParams` to specify which fields to include
+   - Both list and find operations support the new field options
 
 ## Additional Information
 
