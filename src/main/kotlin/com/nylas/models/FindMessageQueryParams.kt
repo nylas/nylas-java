@@ -11,4 +11,26 @@ data class FindMessageQueryParams(
    */
   @Json(name = "fields")
   val fields: MessageFields? = null,
-)
+) : IQueryParams {
+  /**
+   * Builder for [FindMessageQueryParams].
+   */
+  class Builder {
+    private var fields: MessageFields? = null
+
+    /**
+     * Set the fields to include in the response.
+     * @param fields The fields to include in the response.
+     * @return The builder.
+     */
+    fun fields(fields: MessageFields?) = apply { this.fields = fields }
+
+    /**
+     * Builds the [FindMessageQueryParams] object.
+     * @return The [FindMessageQueryParams] object.
+     */
+    fun build() = FindMessageQueryParams(
+      fields = fields,
+    )
+  }
+}

@@ -33,14 +33,15 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
    * Return a Message
    * @param identifier The identifier of the grant to act upon
    * @param messageId The id of the Message to retrieve.
+   * @param queryParams The query parameters to include in the request
    * @param overrides Optional request overrides to apply
    * @return The Message
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
-  fun find(identifier: String, messageId: String, overrides: RequestOverrides? = null): Response<Message> {
+  fun find(identifier: String, messageId: String, queryParams: FindMessageQueryParams? = null, overrides: RequestOverrides? = null): Response<Message> {
     val path = String.format("v3/grants/%s/messages/%s", identifier, messageId)
-    return findResource(path, overrides = overrides)
+    return findResource(path, queryParams, overrides = overrides)
   }
 
   /**

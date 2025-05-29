@@ -1,6 +1,15 @@
 # Nylas Java SDK Changelog
 
 
+## [Unreleased]
+
+### Added
+* Support for `include_tracking_options` and `raw_mime` values in `MessageFields` enum
+* Support for `tracking_options` field in `Message` model to access message tracking settings
+* Support for `raw_mime` field in `Message` model to access Base64url-encoded message data
+* Support for query parameters in `Messages.find()` method to specify fields like `include_tracking_options` and `raw_mime`
+* Added `Builder` pattern to `FindMessageQueryParams` for consistency with other query parameter classes
+
 ## [2.9.0] - Release 2025-05-27
 
 ### Added

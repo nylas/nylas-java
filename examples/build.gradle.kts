@@ -53,7 +53,9 @@ tasks.register("listExamples") {
         println("Available examples:")
         println("- Java-Notetaker: com.nylas.examples.NotetakerExample")
         println("- Java-Events: com.nylas.examples.EventsExample")
+        println("- Java-Messages: com.nylas.examples.MessagesExample")
         println("- Kotlin-Notetaker: com.nylas.examples.KotlinNotetakerExampleKt")
+        println("- Kotlin-Messages: com.nylas.examples.KotlinMessagesExampleKt")
         println("\nRun an example with: ./gradlew :examples:run -PmainClass=<example class name>")
     }
 }

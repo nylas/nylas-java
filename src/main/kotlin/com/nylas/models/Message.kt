@@ -124,6 +124,18 @@ data class Message(
    */
   @Json(name = "send_at")
   val sendAt: Long? = null,
+  /**
+   * Options for tracking opens, links, and thread replies.
+   * Only present if the 'fields' query parameter is set to include_tracking_options.
+   */
+  @Json(name = "tracking_options")
+  val trackingOptions: TrackingOptions? = null,
+  /**
+   * A Base64url-encoded string containing the message data (including the body content).
+   * Only present if the 'fields' query parameter is set to raw_mime.
+   */
+  @Json(name = "raw_mime")
+  val rawMime: String? = null,
 ) : IMessage {
   /**
    * Get the type of object.

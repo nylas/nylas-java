@@ -127,6 +127,60 @@ class MessagesTests {
       assertEquals("j.snow@example.com", message.to?.get(0)?.email)
       assertEquals(true, message.unread)
     }
+
+    @Test
+    fun `Message with tracking_options serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(Message::class.java)
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
+          {
+            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+            "id": "5d3qmne77v32r8l4phyuksl2x",
+            "object": "message",
+            "subject": "Hello from Nylas!",
+            "tracking_options": {
+              "opens": true,
+              "thread_replies": false,
+              "links": true,
+              "label": "test-campaign"
+            }
+          }
+          """.trimIndent(),
+        )
+
+      val message = adapter.fromJson(jsonBuffer)!!
+      assertIs<Message>(message)
+      assertEquals("41009df5-bf11-4c97-aa18-b285b5f2e386", message.grantId)
+      assertEquals("5d3qmne77v32r8l4phyuksl2x", message.id)
+      assertEquals("Hello from Nylas!", message.subject)
+      assertEquals(true, message.trackingOptions?.opens)
+      assertEquals(false, message.trackingOptions?.threadReplies)
+      assertEquals(true, message.trackingOptions?.links)
+      assertEquals("test-campaign", message.trackingOptions?.label)
+    }
+
+    @Test
+    fun `Message with raw_mime serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(Message::class.java)
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
+          {
+            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+            "id": "5d3qmne77v32r8l4phyuksl2x",
+            "object": "message",
+            "raw_mime": "UmVjZWl2ZWQ6IGJ5IDEwLjEwLjEwLjEwOyBXZWQsIDEwIEp1bCAyMDI0IDE1OjM2OjEwICswMDAwDQpGcm9tOiB0ZXN0QG55bGFzLmNvbQ0KVG86IHJlY2VpdmVyQGV4YW1wbGUuY29tDQpTdWJqZWN0OiBUZXN0IEVtYWlsDQpEYXRlOiBXZWQsIDEwIEp1bCAyMDI0IDE1OjM2OjEwICswMDAwDQoNCkhlbGxvLCB0aGlzIGlzIGEgdGVzdCBlbWFpbC4="
+          }
+          """.trimIndent(),
+        )
+
+      val message = adapter.fromJson(jsonBuffer)!!
+      assertIs<Message>(message)
+      assertEquals("41009df5-bf11-4c97-aa18-b285b5f2e386", message.grantId)
+      assertEquals("5d3qmne77v32r8l4phyuksl2x", message.id)
+      assertEquals("UmVjZWl2ZWQ6IGJ5IDEwLjEwLjEwLjEwOyBXZWQsIDEwIEp1bCAyMDI0IDE1OjM2OjEwICswMDAwDQpGcm9tOiB0ZXN0QG55bGFzLmNvbQ0KVG86IHJlY2VpdmVyQGV4YW1wbGUuY29tDQpTdWJqZWN0OiBUZXN0IEVtYWlsDQpEYXRlOiBXZWQsIDEwIEp1bCAyMDI0IDE1OjM2OjEwICswMDAwDQoNCkhlbGxvLCB0aGlzIGlzIGEgdGVzdCBlbWFpbC4=", message.rawMime)
+    }
   }
 
   @Nested
@@ -162,6 +216,56 @@ class MessagesTests {
           receivedBefore = 1634832749,
           receivedAfter = 1634832749,
           fields = MessageFields.INCLUDE_HEADERS,
+        )
+
+      messages.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing messages with include_tracking_options field calls requests with the correct params`() {
+      val queryParams =
+        ListMessagesQueryParams(
+          fields = MessageFields.INCLUDE_TRACKING_OPTIONS,
+        )
+
+      messages.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing messages with raw_mime field calls requests with the correct params`() {
+      val queryParams =
+        ListMessagesQueryParams(
+          fields = MessageFields.RAW_MIME,
         )
 
       messages.list(grantId, queryParams)
@@ -222,6 +326,52 @@ class MessagesTests {
       assertEquals("v3/grants/$grantId/messages/$messageId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a message with query params calls requests with the correct params`() {
+      val messageId = "message-123"
+      val queryParams = FindMessageQueryParams(fields = MessageFields.INCLUDE_TRACKING_OPTIONS)
+
+      messages.find(grantId, messageId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/$messageId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a message with raw_mime field calls requests with the correct params`() {
+      val messageId = "message-123"
+      val queryParams = FindMessageQueryParams(fields = MessageFields.RAW_MIME)
+
+      messages.find(grantId, messageId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/$messageId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
     @Test
