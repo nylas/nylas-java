@@ -46,7 +46,14 @@ data class ListThreadsQueryParams(
   @Json(name = "bcc")
   val bcc: List<String>? = null,
   /**
-   * Return emails that are in these folder IDs.
+   * Filter for threads in a specific folder or label.
+   * Note: The Nylas API only supports filtering by a single folder ID.
+   * If a list is provided, only the first folder ID will be used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to String in a future major version.
+   * Please use the Builder methods inFolder(String) for new code.
+   *
+   * Google does not support filtering using folder names. You must use the folder ID.
    */
   @Json(name = "in")
   val inFolder: List<String>? = null,
@@ -82,6 +89,25 @@ data class ListThreadsQueryParams(
   @Json(name = "search_query_native")
   val searchQueryNative: String? = null,
 ) : IQueryParams {
+
+  /**
+   * Override convertToMap to handle the inFolder parameter correctly.
+   * The API expects a single folder ID, so we use only the first item if a list is provided.
+   */
+  override fun convertToMap(): Map<String, Any> {
+    val map = super.convertToMap().toMutableMap()
+
+    // Handle inFolder parameter to use only the first item if it's a list
+    if (inFolder?.isNotEmpty() == true) {
+      map["in"] = inFolder.first()
+    } else if (inFolder?.isEmpty() == true) {
+      // Remove the "in" key if the list is empty
+      map.remove("in")
+    }
+
+    return map
+  }
+
   /**
    * Builder for [ListThreadsQueryParams].
    */
@@ -163,10 +189,28 @@ data class ListThreadsQueryParams(
     fun bcc(bcc: List<String>?) = apply { this.bcc = bcc }
 
     /**
+     * Set the folder ID to match.
+     * This is the recommended method to use for filtering by folder.
+     * Google does not support filtering using folder names. You must use the folder ID.
+     * @param inFolder The folder ID to match.
+     * @return The builder
+     */
+    fun inFolder(inFolder: String?) = apply {
+      this.inFolder = if (inFolder != null) listOf(inFolder) else null
+    }
+
+    /**
      * Set the list of folder IDs to match.
      * @param inFolder The list of folder IDs to match.
      * @return The builder
+     * @deprecated This method is deprecated. The Nylas API only supports filtering by a single folder ID.
+     * Use inFolder(String) instead. In a future major version, this parameter will be changed to accept only a String.
      */
+    @Deprecated(
+      message = "The Nylas API only supports filtering by a single folder ID. Use inFolder(String) instead. " +
+        "In a future major version, this parameter will be changed to accept only a String.",
+      level = DeprecationLevel.WARNING,
+    )
     fun inFolder(inFolder: List<String>?) = apply { this.inFolder = inFolder }
 
     /**
