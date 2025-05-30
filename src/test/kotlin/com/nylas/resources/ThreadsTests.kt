@@ -15,6 +15,7 @@ import org.mockito.kotlin.*
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 
@@ -316,6 +317,130 @@ class ThreadsTests {
       assertEquals("v3/grants/$grantId/threads/$threadId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `builder inFolder with string parameter works correctly`() {
+      val queryParams = ListThreadsQueryParams.Builder()
+        .inFolder("test-folder-id")
+        .build()
+
+      assertEquals(listOf("test-folder-id"), queryParams.inFolder)
+      assertEquals("test-folder-id", queryParams.convertToMap()["in"])
+    }
+
+    @Test
+    fun `builder inFolder with null string parameter works correctly`() {
+      val queryParams = ListThreadsQueryParams.Builder()
+        .inFolder(null as String?)
+        .build()
+
+      assertNull(queryParams.inFolder)
+      assertFalse(queryParams.convertToMap().containsKey("in"))
+    }
+
+    @Test
+    fun `builder inFolder with list parameter works correctly but shows deprecation warning`() {
+      val queryParams = ListThreadsQueryParams.Builder()
+        .inFolder(listOf("folder1", "folder2", "folder3"))
+        .build()
+
+      assertEquals(listOf("folder1", "folder2", "folder3"), queryParams.inFolder)
+      // Only the first item should be used according to our implementation
+      assertEquals("folder1", queryParams.convertToMap()["in"])
+    }
+
+    @Test
+    fun `builder inFolder with empty list parameter works correctly`() {
+      val queryParams = ListThreadsQueryParams.Builder()
+        .inFolder(emptyList<String>())
+        .build()
+
+      assertEquals(emptyList<String>(), queryParams.inFolder)
+      assertFalse(queryParams.convertToMap().containsKey("in"))
+    }
+
+    @Test
+    fun `builder inFolder with null list parameter works correctly`() {
+      val queryParams = ListThreadsQueryParams.Builder()
+        .inFolder(null as List<String>?)
+        .build()
+
+      assertNull(queryParams.inFolder)
+      assertFalse(queryParams.convertToMap().containsKey("in"))
+    }
+
+    @Test
+    fun `convertToMap handles inFolder parameter correctly with multiple items`() {
+      val queryParams = ListThreadsQueryParams(
+        inFolder = listOf("folder1", "folder2", "folder3"),
+      )
+
+      val map = queryParams.convertToMap()
+
+      // Should use only the first folder ID
+      assertEquals("folder1", map["in"])
+    }
+
+    @Test
+    fun `convertToMap handles inFolder parameter correctly with single item`() {
+      val queryParams = ListThreadsQueryParams(
+        inFolder = listOf("single-folder"),
+      )
+
+      val map = queryParams.convertToMap()
+
+      assertEquals("single-folder", map["in"])
+    }
+
+    @Test
+    fun `convertToMap handles inFolder parameter correctly with empty list`() {
+      val queryParams = ListThreadsQueryParams(
+        inFolder = emptyList(),
+      )
+
+      val map = queryParams.convertToMap()
+
+      assertFalse(map.containsKey("in"))
+    }
+
+    @Test
+    fun `convertToMap handles inFolder parameter correctly with null`() {
+      val queryParams = ListThreadsQueryParams(
+        inFolder = null,
+      )
+
+      val map = queryParams.convertToMap()
+
+      assertFalse(map.containsKey("in"))
+    }
+
+    @Test
+    fun `listing threads with new string inFolder parameter works correctly`() {
+      val queryParams = ListThreadsQueryParams.Builder()
+        .inFolder("test-folder-id")
+        .limit(10)
+        .build()
+
+      threads.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Thread>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/threads", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Thread::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+
+      // Verify that the converted map has the correct value
+      assertEquals("test-folder-id", queryParams.convertToMap()["in"])
     }
   }
 }
