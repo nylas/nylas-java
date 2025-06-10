@@ -9,6 +9,8 @@
 * Support for `raw_mime` field in `Message` model to access Base64url-encoded message data
 * Support for query parameters in `Messages.find()` method to specify fields like `include_tracking_options` and `raw_mime`
 * Added `Builder` pattern to `FindMessageQueryParams` for consistency with other query parameter classes
+* Support for `single_level` query parameter in `ListFoldersQueryParams` for Microsoft accounts to control folder hierarchy traversal
+* Added folder examples demonstrating the new `single_level` parameter usage in both Java and Kotlin
 
 ### Fixed
 * Fixed `ListThreadsQueryParams.inFolder` parameter to properly handle single folder ID filtering as expected by the Nylas API. The API only supports filtering by a single folder ID, but the SDK was incorrectly accepting a list and only using the last item. Now the SDK uses the first item from a list if provided and includes overloaded `inFolder(String)` method in the Builder for new code. The list-based method is deprecated and will be changed to String in the next major version for backwards compatibility.

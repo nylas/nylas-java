@@ -31,6 +31,15 @@ The `NotetakerExample` demonstrates how to use the Nylas Java/Kotlin SDK to inte
 - Get media from a Notetaker (if available)
 - Leave a Notetaker session
 
+### Folders Example
+
+The `FoldersExample` and `KotlinFoldersExample` demonstrate how to use the Nylas Java/Kotlin SDK to interact with the Folders API:
+
+- List all folders with default multi-level hierarchy
+- Use the new `single_level` parameter (Microsoft only) to retrieve folders from a single-level hierarchy
+- Demonstrate the builder pattern with various query parameters
+- Show folder details including parent relationships and unread counts
+
 ## Setup
 
 ### 1. Environment Setup
@@ -82,6 +91,16 @@ Run Kotlin Notetaker example:
 ./gradlew :examples:run -PmainClass=com.nylas.examples.KotlinNotetakerExampleKt
 ```
 
+Run Java Folders example:
+```bash
+./gradlew :examples:run -PmainClass=com.nylas.examples.FoldersExample
+```
+
+Run Kotlin Folders example:
+```bash
+./gradlew :examples:run -PmainClass=com.nylas.examples.KotlinFoldersExampleKt
+```
+
 #### Option 2: Using the Makefile
 
 List available examples:
@@ -107,8 +126,10 @@ make kotlin-way
    - `MessagesExample.java` (Java - demonstrates new message features)
    - `KotlinMessagesExample.kt` (Kotlin - demonstrates new message features)  
    - `EventsExample.java` (Java - demonstrates events)
+   - `FoldersExample.java` (Java - demonstrates folders and single_level parameter)
    - `NotetakerExample.java` (Java - demonstrates notetakers)
    - `KotlinNotetakerExample.kt` (Kotlin - demonstrates notetakers)
+   - `KotlinFoldersExample.kt` (Kotlin - demonstrates folders and single_level parameter)
 
 ## Project Structure
 
@@ -124,10 +145,12 @@ examples/
         │   └── com/nylas/examples/
         │       ├── MessagesExample.java     # NEW: Message features demo
         │       ├── EventsExample.java       # Events API demo
+        │       ├── FoldersExample.java      # NEW: Folders API demo with single_level parameter
         │       └── NotetakerExample.java    # Notetaker API demo
         └── kotlin/    # Kotlin examples
             └── com/nylas/examples/
                 ├── KotlinMessagesExample.kt     # NEW: Message features demo
+                ├── KotlinFoldersExample.kt      # NEW: Folders API demo with single_level parameter
                 └── KotlinNotetakerExample.kt    # Notetaker API demo
 ```
 
