@@ -3,7 +3,7 @@ package com.nylas.models
 import com.squareup.moshi.Json
 
 /**
- * Class representing the query parameters for listing messages.
+ * Class representing the query parameters for listing folders.
  */
 data class ListFoldersQueryParams(
   /**
@@ -31,7 +31,7 @@ data class ListFoldersQueryParams(
   @Json(name = "select")
   var select: String? = null,
   /**
-   * (Microsoft only) If true, retrieves folders from a single-level hierarchy only. 
+   * (Microsoft only) If true, retrieves folders from a single-level hierarchy only.
    * If false, retrieves folders across a multi-level hierarchy.
    * Defaults to false.
    */
@@ -77,7 +77,7 @@ data class ListFoldersQueryParams(
 
     /**
      * Sets whether to retrieve folders from a single-level hierarchy only. (Microsoft only)
-     * @param singleLevel If true, retrieves folders from a single-level hierarchy only. 
+     * @param singleLevel If true, retrieves folders from a single-level hierarchy only.
      *                   If false, retrieves folders across a multi-level hierarchy.
      * @return The builder.
      */
