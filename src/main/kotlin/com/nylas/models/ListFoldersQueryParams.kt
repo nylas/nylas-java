@@ -3,7 +3,7 @@ package com.nylas.models
 import com.squareup.moshi.Json
 
 /**
- * Class representing the query parameters for listing messages.
+ * Class representing the query parameters for listing folders.
  */
 data class ListFoldersQueryParams(
   /**
@@ -30,12 +30,20 @@ data class ListFoldersQueryParams(
    */
   @Json(name = "select")
   var select: String? = null,
+  /**
+   * (Microsoft only) If true, retrieves folders from a single-level hierarchy only.
+   * If false, retrieves folders across a multi-level hierarchy.
+   * Defaults to false.
+   */
+  @Json(name = "single_level")
+  val singleLevel: Boolean? = null,
 ) : IQueryParams {
   class Builder {
     private var limit: Int? = null
     private var pageToken: String? = null
     private var parentId: String? = null
     private var select: String? = null
+    private var singleLevel: Boolean? = null
 
     /**
      * Sets the maximum number of objects to return.
@@ -68,6 +76,14 @@ data class ListFoldersQueryParams(
     fun select(select: String?) = apply { this.select = select }
 
     /**
+     * Sets whether to retrieve folders from a single-level hierarchy only. (Microsoft only)
+     * @param singleLevel If true, retrieves folders from a single-level hierarchy only.
+     *                   If false, retrieves folders across a multi-level hierarchy.
+     * @return The builder.
+     */
+    fun singleLevel(singleLevel: Boolean?) = apply { this.singleLevel = singleLevel }
+
+    /**
      * Builds the [ListFoldersQueryParams] object.
      * @return The [ListFoldersQueryParams] object.
      */
@@ -76,6 +92,7 @@ data class ListFoldersQueryParams(
       pageToken = pageToken,
       parentId = parentId,
       select = select,
+      singleLevel = singleLevel,
     )
   }
 }

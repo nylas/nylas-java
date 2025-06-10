@@ -118,6 +118,89 @@ class FoldersTests {
     }
 
     @Test
+    fun `listing folders with single_level parameter calls requests with the correct params`() {
+      val queryParams =
+        ListFoldersQueryParams(
+          limit = 10,
+          pageToken = "abc-123",
+          select = "id,updated_at",
+          singleLevel = true,
+        )
+
+      folders.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/folders", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Folder::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing folders with single_level false calls requests with the correct params`() {
+      val queryParams =
+        ListFoldersQueryParams(
+          limit = 10,
+          singleLevel = false,
+        )
+
+      folders.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/folders", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Folder::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `builder singleLevel parameter works correctly`() {
+      val queryParams = ListFoldersQueryParams.Builder()
+        .limit(10)
+        .singleLevel(true)
+        .build()
+
+      assertEquals(true, queryParams.singleLevel)
+    }
+
+    @Test
+    fun `builder singleLevel false parameter works correctly`() {
+      val queryParams = ListFoldersQueryParams.Builder()
+        .limit(10)
+        .singleLevel(false)
+        .build()
+
+      assertEquals(false, queryParams.singleLevel)
+    }
+
+    @Test
+    fun `builder singleLevel null parameter works correctly`() {
+      val queryParams = ListFoldersQueryParams.Builder()
+        .limit(10)
+        .build()
+
+      assertEquals(null, queryParams.singleLevel)
+    }
+
+    @Test
     fun `finding a folder calls requests with the correct params`() {
       val folderId = "folder-123"
 
