@@ -1,7 +1,7 @@
 # Nylas Java SDK Changelog
 
 
-## [Unreleased]
+## [2.10.0] - Release 2025-06-12
 
 ### Added
 * Support for `include_tracking_options` and `raw_mime` values in `MessageFields` enum

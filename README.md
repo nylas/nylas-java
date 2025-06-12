@@ -30,7 +30,7 @@ If you have a question about the Nylas Communications Platform, [contact Nylas S
 If you're using Gradle, add the following to the dependencies section of `build.gradle`:
 
 ```groovy
-implementation("com.nylas.sdk:nylas:2.8.0")
+implementation("com.nylas.sdk:nylas:2.10.0")
 ```
 
 ### Build from source
