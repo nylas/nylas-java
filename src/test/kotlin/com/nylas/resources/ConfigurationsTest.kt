@@ -450,5 +450,85 @@ class ConfigurationsTest {
       assertEquals("v3/grants/$grantId/scheduling/configurations/$configId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
+
+    @Test
+    fun `creating a configuration with custom email template calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateConfigurationRequest::class.java)
+      val participantCalendarIds = ArrayList<String>()
+      participantCalendarIds.add("primary")
+
+      val configurationAvailabilityParticipant = ConfigurationAvailabilityParticipant.Builder().calendarIds(participantCalendarIds).build()
+
+      val configurationBookingParticipant = ConfigurationBookingParticipant.Builder().calendarId("primary").build()
+
+      val configurationParticipant = ConfigurationParticipant.Builder("test@nylas.com")
+        .availability(configurationAvailabilityParticipant)
+        .booking(configurationBookingParticipant)
+        .name("Test Participant")
+        .isOrganizer(true)
+        .build()
+
+      val configurationAvailability = ConfigurationAvailability.Builder().intervalMinutes(30).build()
+
+      val configurationEventBooking = ConfigurationEventBooking.Builder().title("Test Event Booking").build()
+
+      // Create EmailTemplate with new logo and showNylasBranding fields
+      val emailTemplate = EmailTemplate.Builder()
+        .logo("https://company.com/custom-logo.png")
+        .showNylasBranding(false)
+        .bookingConfirmed(
+          BookingConfirmedTemplate(
+            title = "Your Meeting is Confirmed",
+            body = "Thank you for booking! We look forward to meeting with you.",
+          ),
+        )
+        .build()
+
+      // Create scheduler settings with the email template
+      val schedulerSettings = ConfigurationSchedulerSettings.Builder()
+        .emailTemplate(emailTemplate)
+        .availableDaysInFuture(14)
+        .minBookingNotice(120)
+        .build()
+
+      val participants = ArrayList<ConfigurationParticipant>()
+      participants.add(configurationParticipant)
+
+      val createConfigurationRequest = CreateConfigurationRequest.Builder(
+        participants,
+        configurationAvailability,
+        configurationEventBooking,
+      )
+        .name("Configuration with Custom Email Template")
+        .scheduler(schedulerSettings)
+        .build()
+
+      configurations.create(grantId, createConfigurationRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Configuration>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/scheduling/configurations", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Configuration::class.java), typeCaptor.firstValue)
+
+      val serializedRequest = adapter.toJson(createConfigurationRequest)
+      assertEquals(serializedRequest, requestBodyCaptor.firstValue)
+
+      // Verify that the JSON contains the new EmailTemplate fields
+      assert(serializedRequest.contains("\"logo\":\"https://company.com/custom-logo.png\""))
+      assert(serializedRequest.contains("\"show_nylas_branding\":false"))
+      assert(serializedRequest.contains("\"booking_confirmed\""))
+      assert(serializedRequest.contains("Your Meeting is Confirmed"))
+    }
   }
 }
