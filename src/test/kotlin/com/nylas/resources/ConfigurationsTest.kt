@@ -230,6 +230,33 @@ class ConfigurationsTest {
       assertEquals("Custom Title", emailTemplate.bookingConfirmed?.title)
       assertEquals("Custom Body", emailTemplate.bookingConfirmed?.body)
     }
+
+    @Test
+    fun `AdditionalFieldType METADATA serializes correctly`() {
+      val adapter = JsonHelper.moshi().adapter(AdditionalField::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "label": "Additional Information",
+          "type": "metadata",
+          "required": true,
+          "order": 1
+        }
+        """.trimIndent(),
+      )
+
+      val additionalField = adapter.fromJson(jsonBuffer)!!
+      assertIs<AdditionalField>(additionalField)
+      assertEquals("Additional Information", additionalField.label)
+      assertEquals(AdditionalFieldType.METADATA, additionalField.type)
+      assertEquals(true, additionalField.required)
+      assertEquals(1, additionalField.order)
+
+      // Test serialization back to JSON
+      val serializedJson = adapter.toJson(additionalField)
+      assert(serializedJson.contains("\"type\":\"metadata\""))
+      assert(serializedJson.contains("\"label\":\"Additional Information\""))
+    }
   }
 
   @Nested
@@ -529,6 +556,96 @@ class ConfigurationsTest {
       assert(serializedRequest.contains("\"show_nylas_branding\":false"))
       assert(serializedRequest.contains("\"booking_confirmed\""))
       assert(serializedRequest.contains("Your Meeting is Confirmed"))
+    }
+
+    @Test
+    fun `creating a configuration with metadata additional fields calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateConfigurationRequest::class.java)
+      val participantCalendarIds = ArrayList<String>()
+      participantCalendarIds.add("primary")
+
+      val configurationAvailabilityParticipant = ConfigurationAvailabilityParticipant.Builder().calendarIds(participantCalendarIds).build()
+
+      val configurationBookingParticipant = ConfigurationBookingParticipant.Builder().calendarId("primary").build()
+
+      val configurationParticipant = ConfigurationParticipant.Builder("test@nylas.com")
+        .availability(configurationAvailabilityParticipant)
+        .booking(configurationBookingParticipant)
+        .name("Test Participant")
+        .isOrganizer(true)
+        .build()
+
+      val configurationAvailability = ConfigurationAvailability.Builder().intervalMinutes(30).build()
+
+      val configurationEventBooking = ConfigurationEventBooking.Builder().title("Test Event Booking").build()
+
+      // Create additional fields including the new METADATA field type
+      val additionalFields = mapOf(
+        "department" to AdditionalField(
+          label = "Department",
+          type = AdditionalFieldType.TEXT,
+          required = true,
+          order = 1,
+        ),
+        "project_info" to AdditionalField(
+          label = "Project Information",
+          type = AdditionalFieldType.METADATA,
+          required = false,
+          order = 2,
+        ),
+        "contact_preference" to AdditionalField(
+          label = "Contact Preference",
+          type = AdditionalFieldType.DROPDOWN,
+          required = true,
+          order = 3,
+        ),
+      )
+
+      // Create scheduler settings with additional fields
+      val schedulerSettings = ConfigurationSchedulerSettings.Builder()
+        .additionalFields(additionalFields)
+        .availableDaysInFuture(14)
+        .minBookingNotice(120)
+        .build()
+
+      val participants = ArrayList<ConfigurationParticipant>()
+      participants.add(configurationParticipant)
+
+      val createConfigurationRequest = CreateConfigurationRequest.Builder(
+        participants,
+        configurationAvailability,
+        configurationEventBooking,
+      )
+        .name("Configuration with Metadata Additional Fields")
+        .scheduler(schedulerSettings)
+        .build()
+
+      configurations.create(grantId, createConfigurationRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListConfigurationsQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Configuration>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/scheduling/configurations", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Configuration::class.java), typeCaptor.firstValue)
+
+      val serializedRequest = adapter.toJson(createConfigurationRequest)
+      assertEquals(serializedRequest, requestBodyCaptor.firstValue)
+
+      // Verify that the JSON contains the new METADATA field type
+      assert(serializedRequest.contains("\"type\":\"metadata\""))
+      assert(serializedRequest.contains("\"project_info\""))
+      assert(serializedRequest.contains("\"Project Information\""))
+      assert(serializedRequest.contains("\"additional_fields\""))
     }
   }
 }
