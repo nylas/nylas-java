@@ -182,6 +182,54 @@ class ConfigurationsTest {
       assertEquals("Test", config.participants.first().name)
       assertEquals("", config.participants.first().timezone)
     }
+
+    @Test
+    fun `EmailTemplate with new fields serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(EmailTemplate::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "booking_confirmed": {
+            "title": "Custom Booking Title",
+            "body": "Thank you for booking with us!"
+          },
+          "logo": "https://example.com/logo.png",
+          "show_nylas_branding": false
+        }
+        """.trimIndent(),
+      )
+
+      val emailTemplate = adapter.fromJson(jsonBuffer)!!
+      assertIs<EmailTemplate>(emailTemplate)
+      assertEquals("https://example.com/logo.png", emailTemplate.logo)
+      assertEquals(false, emailTemplate.showNylasBranding)
+      assertEquals("Custom Booking Title", emailTemplate.bookingConfirmed?.title)
+      assertEquals("Thank you for booking with us!", emailTemplate.bookingConfirmed?.body)
+
+      // Test serialization back to JSON
+      val serializedJson = adapter.toJson(emailTemplate)
+      assert(serializedJson.contains("\"logo\":\"https://example.com/logo.png\""))
+      assert(serializedJson.contains("\"show_nylas_branding\":false"))
+    }
+
+    @Test
+    fun `EmailTemplate Builder works correctly`() {
+      val bookingConfirmed = BookingConfirmedTemplate(
+        title = "Custom Title",
+        body = "Custom Body"
+      )
+      
+      val emailTemplate = EmailTemplate.Builder()
+        .bookingConfirmed(bookingConfirmed)
+        .logo("https://company.com/logo.svg")
+        .showNylasBranding(true)
+        .build()
+
+      assertEquals("https://company.com/logo.svg", emailTemplate.logo)
+      assertEquals(true, emailTemplate.showNylasBranding)
+      assertEquals("Custom Title", emailTemplate.bookingConfirmed?.title)
+      assertEquals("Custom Body", emailTemplate.bookingConfirmed?.body)
+    }
   }
 
   @Nested

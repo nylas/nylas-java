@@ -262,7 +262,61 @@ data class EmailTemplate(
    */
   @Json(name = "booking_confirmed")
   val bookingConfirmed: BookingConfirmedTemplate? = null,
-)
+  /**
+   * URL of a custom logo to appear in booking emails.
+   */
+  @Json(name = "logo")
+  val logo: String? = null,
+  /**
+   * Boolean flag to toggle Nylas branding visibility.
+   */
+  @Json(name = "show_nylas_branding")
+  val showNylasBranding: Boolean? = null,
+) {
+  /**
+   * Builder for [EmailTemplate].
+   */
+  class Builder {
+    private var bookingConfirmed: BookingConfirmedTemplate? = null
+    private var logo: String? = null
+    private var showNylasBranding: Boolean? = null
+
+    /**
+     * Set the configurable settings specifically for booking confirmed emails.
+     *
+     * @param bookingConfirmed Configurable settings specifically for booking confirmed emails.
+     * @return The builder.
+     */
+    fun bookingConfirmed(bookingConfirmed: BookingConfirmedTemplate) = apply { this.bookingConfirmed = bookingConfirmed }
+
+    /**
+     * Set the URL of a custom logo to appear in booking emails.
+     *
+     * @param logo URL of a custom logo to appear in booking emails.
+     * @return The builder.
+     */
+    fun logo(logo: String) = apply { this.logo = logo }
+
+    /**
+     * Set the boolean flag to toggle Nylas branding visibility.
+     *
+     * @param showNylasBranding Boolean flag to toggle Nylas branding visibility.
+     * @return The builder.
+     */
+    fun showNylasBranding(showNylasBranding: Boolean) = apply { this.showNylasBranding = showNylasBranding }
+
+    /**
+     * Build the [EmailTemplate].
+     *
+     * @return The [EmailTemplate]
+     */
+    fun build() = EmailTemplate(
+      bookingConfirmed,
+      logo,
+      showNylasBranding,
+    )
+  }
+}
 
 /**
  * Class representation of booking confirmed template settings.
