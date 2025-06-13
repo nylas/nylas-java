@@ -216,9 +216,9 @@ class ConfigurationsTest {
     fun `EmailTemplate Builder works correctly`() {
       val bookingConfirmed = BookingConfirmedTemplate(
         title = "Custom Title",
-        body = "Custom Body"
+        body = "Custom Body",
       )
-      
+
       val emailTemplate = EmailTemplate.Builder()
         .bookingConfirmed(bookingConfirmed)
         .logo("https://company.com/logo.svg")
