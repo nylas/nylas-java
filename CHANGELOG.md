@@ -8,9 +8,6 @@
 * Support for `show_nylas_branding` field in `EmailTemplate` class to control Nylas branding visibility in booking emails
 * Support for `metadata` field type in `AdditionalFieldType` enum for scheduler additional fields
 
-### Fixed
-* Missing `metadata` field type in `AdditionalFieldType` enum that was supported by the API but not available in the SDK
-
 ## [2.10.0] - Release 2025-06-12
 
 ### Added
