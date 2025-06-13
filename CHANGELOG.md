@@ -6,6 +6,7 @@
 ### Added
 * Support for `logo` field in `EmailTemplate` class to specify a custom logo URL for booking emails
 * Support for `show_nylas_branding` field in `EmailTemplate` class to control Nylas branding visibility in booking emails
+* Support for `metadata` field type in `AdditionalFieldType` enum for scheduler additional fields
 
 ## [2.10.0] - Release 2025-06-12
 

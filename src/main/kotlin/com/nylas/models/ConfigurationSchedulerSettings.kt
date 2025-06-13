@@ -225,7 +225,7 @@ data class AdditionalField(
   val label: String,
   /**
    * The field type.
-   * Supported values are text, multi_line_text, email, phone_number, dropdown, date, checkbox, and radio_button.
+   * Supported values are text, multi_line_text, email, phone_number, dropdown, date, checkbox, radio_button, and metadata.
    */
   @Json(name = "type")
   val type: AdditionalFieldType,
@@ -361,6 +361,9 @@ enum class AdditionalFieldType {
 
   @Json(name = "radio_button")
   RADIO_BUTTON,
+
+  @Json(name = "metadata")
+  METADATA,
 }
 
 /**
