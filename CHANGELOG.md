@@ -1,7 +1,7 @@
 # Nylas Java SDK Changelog
 
 
-## [2.11.0] - Release 2025-06-13
+## [Unreleased]
 
 ### Added
 * Support for `logo` field in `EmailTemplate` class to specify a custom logo URL for booking emails
