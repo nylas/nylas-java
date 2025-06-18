@@ -201,6 +201,89 @@ class FoldersTests {
     }
 
     @Test
+    fun `listing folders with include_hidden_folders parameter calls requests with the correct params`() {
+      val queryParams =
+        ListFoldersQueryParams(
+          limit = 10,
+          pageToken = "abc-123",
+          select = "id,updated_at",
+          includeHiddenFolders = true,
+        )
+
+      folders.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/folders", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Folder::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing folders with include_hidden_folders false calls requests with the correct params`() {
+      val queryParams =
+        ListFoldersQueryParams(
+          limit = 10,
+          includeHiddenFolders = false,
+        )
+
+      folders.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/folders", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Folder::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `builder includeHiddenFolders parameter works correctly`() {
+      val queryParams = ListFoldersQueryParams.Builder()
+        .limit(10)
+        .includeHiddenFolders(true)
+        .build()
+
+      assertEquals(true, queryParams.includeHiddenFolders)
+    }
+
+    @Test
+    fun `builder includeHiddenFolders false parameter works correctly`() {
+      val queryParams = ListFoldersQueryParams.Builder()
+        .limit(10)
+        .includeHiddenFolders(false)
+        .build()
+
+      assertEquals(false, queryParams.includeHiddenFolders)
+    }
+
+    @Test
+    fun `builder includeHiddenFolders null parameter works correctly`() {
+      val queryParams = ListFoldersQueryParams.Builder()
+        .limit(10)
+        .build()
+
+      assertEquals(null, queryParams.includeHiddenFolders)
+    }
+
+    @Test
     fun `finding a folder calls requests with the correct params`() {
       val folderId = "folder-123"
 
