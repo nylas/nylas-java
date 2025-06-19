@@ -37,6 +37,12 @@ data class ListFoldersQueryParams(
    */
   @Json(name = "single_level")
   val singleLevel: Boolean? = null,
+  /**
+   * (Microsoft only) When true, Nylas includes hidden folders in its response.
+   * Defaults to false.
+   */
+  @Json(name = "include_hidden_folders")
+  val includeHiddenFolders: Boolean? = null,
 ) : IQueryParams {
   class Builder {
     private var limit: Int? = null
@@ -44,6 +50,7 @@ data class ListFoldersQueryParams(
     private var parentId: String? = null
     private var select: String? = null
     private var singleLevel: Boolean? = null
+    private var includeHiddenFolders: Boolean? = null
 
     /**
      * Sets the maximum number of objects to return.
@@ -84,6 +91,13 @@ data class ListFoldersQueryParams(
     fun singleLevel(singleLevel: Boolean?) = apply { this.singleLevel = singleLevel }
 
     /**
+     * Sets whether to include hidden folders in the response. (Microsoft only)
+     * @param includeHiddenFolders If true, includes hidden folders in the response.
+     * @return The builder.
+     */
+    fun includeHiddenFolders(includeHiddenFolders: Boolean?) = apply { this.includeHiddenFolders = includeHiddenFolders }
+
+    /**
      * Builds the [ListFoldersQueryParams] object.
      * @return The [ListFoldersQueryParams] object.
      */
@@ -93,6 +107,7 @@ data class ListFoldersQueryParams(
       parentId = parentId,
       select = select,
       singleLevel = singleLevel,
+      includeHiddenFolders = includeHiddenFolders,
     )
   }
 }

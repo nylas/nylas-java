@@ -62,6 +62,42 @@ public class FoldersExample {
                 System.out.println();
             }
 
+            System.out.println("\n📁 Listing folders including hidden ones (Microsoft only)...");
+            
+            // List folders including hidden folders (Microsoft only)
+            ListFoldersQueryParams hiddenFoldersParams = new ListFoldersQueryParams.Builder()
+                .includeHiddenFolders(true)  // This is the new parameter - Microsoft only
+                .limit(50)
+                .build();
+
+            ListResponse<Folder> hiddenFolders = nylasClient.folders().list(grantId, hiddenFoldersParams);
+            System.out.println("Found " + hiddenFolders.getData().size() + " folders including hidden ones:");
+            for (Folder folder : hiddenFolders.getData()) {
+                System.out.println("  - " + folder.getName() + " (ID: " + folder.getId() + ")");
+            }
+
+            System.out.println("\n📁 Demonstrating all parameters together...");
+            
+            // Example with all parameters including both new ones
+            ListFoldersQueryParams comprehensiveParams = new ListFoldersQueryParams.Builder()
+                .singleLevel(false)  // Multi-level hierarchy
+                .includeHiddenFolders(true)  // Include hidden folders
+                .limit(10)
+                .select("id,name,parent_id,unread_count")
+                .build();
+
+            ListResponse<Folder> comprehensiveFolders = nylasClient.folders().list(grantId, comprehensiveParams);
+            System.out.println("Found " + comprehensiveFolders.getData().size() + " folders with comprehensive options:");
+            for (Folder folder : comprehensiveFolders.getData()) {
+                System.out.println("  - " + folder.getName());
+                System.out.println("    ID: " + folder.getId());
+                System.out.println("    Unread Count: " + (folder.getUnreadCount() != null ? folder.getUnreadCount() : 0));
+                if (folder.getParentId() != null) {
+                    System.out.println("    Parent ID: " + folder.getParentId());
+                }
+                System.out.println();
+            }
+
         } catch (Exception exception) {
             System.out.println("❌ Error listing folders: " + exception.getMessage());
             System.out.println("Note: The single_level parameter is Microsoft-specific and may not work with other providers.");
