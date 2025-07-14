@@ -1,5 +1,9 @@
 # Nylas Java SDK Changelog
 
+## [2.11.1] - Release 2025-07-11
+
+### Added
+* Support for `unknown` as a conferencing provider.
 
 ## [2.11.0] - Release 2025-06-20
 
