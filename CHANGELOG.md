@@ -1,5 +1,8 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+* Fixed `email` in `Participant` not being a nullable field
+
 ## [2.11.1] - Release 2025-07-11
 
 ### Added

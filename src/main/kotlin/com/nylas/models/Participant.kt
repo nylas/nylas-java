@@ -10,7 +10,7 @@ data class Participant(
    * Participant's email address.
    */
   @Json(name = "email")
-  val email: String = "",
+  val email: String? = null,
   /**
    * Participant's status.
    */
