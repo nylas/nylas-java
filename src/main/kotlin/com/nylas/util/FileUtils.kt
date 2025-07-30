@@ -3,6 +3,7 @@ package com.nylas.util
 import com.nylas.models.CreateAttachmentRequest
 import com.nylas.models.IMessageAttachmentRequest
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okio.BufferedSink
@@ -85,7 +86,7 @@ class FileUtils {
 
       // Add a separate form field for each attachment
       requestBody.attachments?.forEachIndexed { index, attachment ->
-        val contentType = MediaType.parse(attachment.contentType)
+        val contentType = attachment.contentType.toMediaType()
         val contentBody = attachment.content.toStreamingRequestBody(contentType)
         multipartBuilder.addFormDataPart("file$index", attachment.filename, contentBody)
       }

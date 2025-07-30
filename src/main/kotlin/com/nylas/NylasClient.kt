@@ -8,6 +8,7 @@ import com.nylas.resources.*
 import com.nylas.util.JsonHelper
 import com.squareup.moshi.JsonDataException
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
 import java.io.IOException
 import java.lang.Exception
@@ -66,7 +67,7 @@ open class NylasClient(
   }
 
   init {
-    this.apiUri = HttpUrl.get(apiUri)
+    this.apiUri = apiUri.toHttpUrl()
     httpClient = httpClientBuilder
       .addInterceptor(AddVersionHeadersInterceptor()) // enforce user agent and build data
       .addInterceptor(ContentHeadersInterceptor()) // enforce Content-Type headers.
@@ -375,9 +376,9 @@ open class NylasClient(
 
       val response = httpClient.newCall(request).execute()
       throwAndCloseOnFailedRequest(finalUrl, response)
-      return response.body() ?: throw Exception("Unexpected null response body")
+      return response.body ?: throw Exception("Unexpected null response body")
     } catch (e: SocketTimeoutException) {
-      throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis())
+      throw NylasSdkTimeoutError(finalUrl.toString(), httpClient.callTimeoutMillis)
     } catch (e: SocketException) {
       throw NylasSdkRemoteClosedError(finalUrl.toString(), e.message ?: "Unknown error")
     } catch (e: AbstractNylasApiError) {
@@ -397,11 +398,11 @@ open class NylasClient(
       return
     }
 
-    val responseBody = response.body()!!.string()
+    val responseBody = response.body!!.string()
     val parsedError: AbstractNylasApiError?
     response.close()
 
-    if (url.encodedPath().equals("/v3/connect/token") || url.encodedPath().equals("/v3/connect/revoke")) {
+    if (url.encodedPath.equals("/v3/connect/token") || url.encodedPath.equals("/v3/connect/revoke")) {
       try {
         parsedError = JsonHelper.moshi().adapter(NylasOAuthError::class.java)
           .fromJson(responseBody)
@@ -413,8 +414,8 @@ open class NylasClient(
               errorDescription = "Unknown error received from the API: $responseBody",
               errorUri = "unknown",
               errorCode = "0",
-              statusCode = response.code(),
-              headers = response.headers().toMultimap(),
+              statusCode = response.code,
+              headers = response.headers.toMultimap(),
             )
           }
 
@@ -435,8 +436,8 @@ open class NylasClient(
             throw NylasApiError(
               type = "unknown",
               message = "Unknown error received from the API: $responseBody",
-              statusCode = response.code(),
-              headers = response.headers().toMultimap(),
+              statusCode = response.code,
+              headers = response.headers.toMultimap(),
             )
           }
           else -> throw ex
@@ -445,23 +446,23 @@ open class NylasClient(
     }
 
     if (parsedError != null) {
-      parsedError.statusCode = response.code()
-      parsedError.headers = response.headers().toMultimap()
+      parsedError.statusCode = response.code
+      parsedError.headers = response.headers.toMultimap()
       throw parsedError
     }
 
     throw NylasApiError(
       type = "unknown",
       message = "Unknown error received from the API: $responseBody",
-      statusCode = response.code(),
-      headers = response.headers().toMultimap(),
+      statusCode = response.code,
+      headers = response.headers.toMultimap(),
     )
   }
 
   private fun buildUrl(path: String, queryParams: IQueryParams?, overrides: RequestOverrides?): HttpUrl.Builder {
     // Sets the API URI if it is provided in the overrides.
     var url = if (overrides?.apiUri != null) {
-      HttpUrl.get(overrides.apiUri).newBuilder().addPathSegments(path)
+      overrides.apiUri.toHttpUrl().newBuilder().addPathSegments(path)
     } else {
       newUrlBuilder().addPathSegments(path)
     }

@@ -27,12 +27,12 @@ class CalendarsTest {
   @BeforeEach
   fun setup() {
     MockitoAnnotations.openMocks(this)
-    whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
+    whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
     whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
     whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
     whenever(mockCall.execute()).thenReturn(mockResponse)
     whenever(mockResponse.isSuccessful).thenReturn(true)
-    whenever(mockResponse.body()).thenReturn(mockResponseBody)
+    whenever(mockResponse.body).thenReturn(mockResponseBody)
   }
 
   @Nested

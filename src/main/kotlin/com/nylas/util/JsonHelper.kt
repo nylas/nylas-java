@@ -12,6 +12,7 @@ import com.squareup.moshi.Types
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
 import java.io.IOException
 import java.lang.reflect.Type
@@ -200,7 +201,7 @@ class JsonHelper {
       return json
     }
 
-    private val jsonType = MediaType.parse("application/json")
+    private val jsonType = "application/json".toMediaType()
 
     /**
      * Get the JSON media type.

@@ -29,8 +29,8 @@ dependencies {
   // ////////////////////////////////
   // Public dependencies
 
-  // OkHttp 3 - Http client (without Kotlin dependency of version 4)
-  api("com.squareup.okhttp3:okhttp:3.14.5")
+  // OkHttp 4 - Http client
+  api("com.squareup.okhttp3:okhttp:4.12.0")
 
   // Moshi JSON library
   implementation("com.squareup.moshi:moshi:1.15.0")

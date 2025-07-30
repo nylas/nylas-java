@@ -12,16 +12,16 @@ class ContentHeadersInterceptor : Interceptor {
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     val request = chain.request()
-    val path = request.url().encodedPath()
+    val path = request.url.encodedPath
     val contentHeader = request.header(NylasClient.HttpHeaders.CONTENT_TYPE.headerName)
     if (contentHeader == null && !isDownloadablePath(path)) {
       val enhancedRequest = request.newBuilder()
-      if (request.body() != null && request.body()!!.contentType() != null) {
+      if (request.body != null && request.body!!.contentType() != null) {
         enhancedRequest.header(
           NylasClient.HttpHeaders.CONTENT_TYPE.headerName,
-          request.body()!!.contentType()!!.toString(),
+          request.body!!.contentType()!!.toString(),
         )
-      } else if (request.body() != null) {
+      } else if (request.body != null) {
         enhancedRequest.header(
           NylasClient.HttpHeaders.CONTENT_TYPE.headerName,
           NylasClient.MediaType.APPLICATION_JSON.mediaType,
