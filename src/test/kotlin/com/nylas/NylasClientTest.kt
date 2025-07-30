@@ -173,6 +173,30 @@ class NylasClientTest {
       val result = nylasClient.webhooks()
       assertNotNull(result)
     }
+
+    @Test
+    fun `grants returns a valid Grants instance`() {
+      val result = nylasClient.grants()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `contacts returns a valid Contacts instance`() {
+      val result = nylasClient.contacts()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `scheduler returns a valid Scheduler instance`() {
+      val result = nylasClient.scheduler()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `notetakers returns a valid Notetakers instance`() {
+      val result = nylasClient.notetakers()
+      assertNotNull(result)
+    }
   }
 
   @Nested
@@ -404,6 +428,30 @@ class NylasClientTest {
       val capturedRequest = requestCaptor.firstValue
 
       assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path?foo=bar&list=a&list=b&list=c&map=key1%3Avalue1&map=key2%3Avalue2")
+      assertEquals(capturedRequest.method, "GET")
+    }
+
+    @Test
+    fun `executeGet should handle Double query parameters correctly`() {
+      val mockQueryParams: IQueryParams = mock()
+      whenever(mockQueryParams.convertToMap()).thenReturn(
+        mapOf(
+          "doubleValue" to 3.14,
+          "anotherDouble" to 2.5,
+        ),
+      )
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executeGet<Map<String, String>>(
+        "test/path",
+        JsonHelper.mapTypeOf(String::class.java, String::class.java),
+        mockQueryParams,
+      )
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path?doubleValue=3&anotherDouble=2")
       assertEquals(capturedRequest.method, "GET")
     }
 

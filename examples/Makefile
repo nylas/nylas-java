@@ -21,6 +21,9 @@ list:
 java-notetaker:
 	@cd .. && ./gradlew :examples:run -PmainClass=com.nylas.examples.NotetakerExample
 
+java-messages:
+	@cd .. && ./gradlew :examples:run -PmainClass=com.nylas.examples.MessagesExample
+
 java-events:
 	@cd .. && ./gradlew :examples:run -PmainClass=com.nylas.examples.EventsExample
 
