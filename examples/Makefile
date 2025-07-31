@@ -10,6 +10,7 @@ help:
 	@echo "  java-notetaker      - Run the Java Notetaker example"
 	@echo "  java-events      - Run the Java Events example"
 	@echo "  java-folders     - Run the Java Folders example"
+	@echo "  java-large-attachments     - Run the Java Large Attachments example"
 	@echo "  kotlin-notetaker    - Run the Kotlin Notetaker example"
 	@echo "  kotlin-folders   - Run the Kotlin Folders example"
 
@@ -23,6 +24,9 @@ java-notetaker:
 
 java-messages:
 	@cd .. && ./gradlew :examples:run -PmainClass=com.nylas.examples.MessagesExample
+
+java-large-attachments:
+	@cd .. && ./gradlew :examples:run -PmainClass=com.nylas.examples.LargeAttachmentsExample	
 
 java-events:
 	@cd .. && ./gradlew :examples:run -PmainClass=com.nylas.examples.EventsExample

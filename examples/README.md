@@ -40,6 +40,17 @@ The `FoldersExample` and `KotlinFoldersExample` demonstrate how to use the Nylas
 - Demonstrate the builder pattern with various query parameters
 - Show folder details including parent relationships and unread counts
 
+### Large Attachments Example
+
+The `LargeAttachmentsExample` demonstrates how to send emails with large file attachments using the Nylas Java SDK:
+
+- Create and send emails with 3MB and 10MB test files
+- Demonstrate the SDK's automatic handling of large attachments (switches to multipart form data for files ≥ 3MB)
+- Send multiple large attachments in a single email
+- Compare small vs large attachment handling mechanisms
+- Use the `FileUtils.attachFileRequestBuilder()` helper method for easy file attachment
+- Automatic cleanup of temporary test files
+
 ## Setup
 
 ### 1. Environment Setup
@@ -57,6 +68,9 @@ NYLAS_API_KEY=your_api_key_here
 
 # Your grant ID (required for message examples)
 NYLAS_GRANT_ID=your_grant_id_here
+
+# Test email address (required for large attachments example)
+NYLAS_TEST_EMAIL=test@example.com
 
 # Add your meeting link (Zoom, Google Meet, or Microsoft Teams) - for Notetaker example
 MEETING_LINK=your_meeting_link_here
@@ -101,6 +115,11 @@ Run Kotlin Folders example:
 ./gradlew :examples:run -PmainClass=com.nylas.examples.KotlinFoldersExampleKt
 ```
 
+Run Java Large Attachments example:
+```bash
+./gradlew :examples:run -PmainClass=com.nylas.examples.LargeAttachmentsExample
+```
+
 #### Option 2: Using the Makefile
 
 List available examples:
@@ -127,6 +146,7 @@ make kotlin-way
    - `KotlinMessagesExample.kt` (Kotlin - demonstrates new message features)  
    - `EventsExample.java` (Java - demonstrates events)
    - `FoldersExample.java` (Java - demonstrates folders and single_level parameter)
+   - `LargeAttachmentsExample.java` (Java - demonstrates large file attachments)
    - `NotetakerExample.java` (Java - demonstrates notetakers)
    - `KotlinNotetakerExample.kt` (Kotlin - demonstrates notetakers)
    - `KotlinFoldersExample.kt` (Kotlin - demonstrates folders and single_level parameter)
@@ -143,10 +163,11 @@ examples/
     └── main/
         ├── java/      # Java examples
         │   └── com/nylas/examples/
-        │       ├── MessagesExample.java     # NEW: Message features demo
-        │       ├── EventsExample.java       # Events API demo
-        │       ├── FoldersExample.java      # NEW: Folders API demo with single_level parameter
-        │       └── NotetakerExample.java    # Notetaker API demo
+        │       ├── MessagesExample.java         # NEW: Message features demo
+        │       ├── EventsExample.java           # Events API demo
+        │       ├── FoldersExample.java          # NEW: Folders API demo with single_level parameter
+        │       ├── LargeAttachmentsExample.java # NEW: Large file attachments demo
+        │       └── NotetakerExample.java        # Notetaker API demo
         └── kotlin/    # Kotlin examples
             └── com/nylas/examples/
                 ├── KotlinMessagesExample.kt     # NEW: Message features demo
