@@ -9,12 +9,11 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.Captor
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.whenever
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -61,7 +60,7 @@ class NylasClientTest {
     fun `builder sets correct httpClient`() {
       val mockOkHttpClientBuilder: OkHttpClient.Builder = mock()
       val mockOkHttpClient: OkHttpClient = mock()
-      whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
+      whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
       whenever(mockOkHttpClientBuilder.build()).thenReturn(mockOkHttpClient)
 
       val client = NylasClient.Builder("testApiKey")
@@ -90,7 +89,7 @@ class NylasClientTest {
     fun `initializing the NylasClient with values sets them correctly`() {
       val mockOkHttpClientBuilder: OkHttpClient.Builder = mock()
       val mockOkHttpClient: OkHttpClient = mock()
-      whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
+      whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
       whenever(mockOkHttpClientBuilder.build()).thenReturn(mockOkHttpClient)
 
       val client = NylasClient(apiKey = "testApiKey", httpClientBuilder = mockOkHttpClientBuilder, apiUri = "https://custom-api.nylas.com/")
@@ -174,6 +173,30 @@ class NylasClientTest {
       val result = nylasClient.webhooks()
       assertNotNull(result)
     }
+
+    @Test
+    fun `grants returns a valid Grants instance`() {
+      val result = nylasClient.grants()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `contacts returns a valid Contacts instance`() {
+      val result = nylasClient.contacts()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `scheduler returns a valid Scheduler instance`() {
+      val result = nylasClient.scheduler()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `notetakers returns a valid Notetakers instance`() {
+      val result = nylasClient.notetakers()
+      assertNotNull(result)
+    }
   }
 
   @Nested
@@ -185,20 +208,17 @@ class NylasClientTest {
     private val mockHeaderResponse: Headers = mock(Headers::class.java)
     private val headersMultiMap = mapOf("header1" to listOf("value1"), "header2" to listOf("value2"))
 
-    @Captor
-    private lateinit var requestCaptor: ArgumentCaptor<Request>
-
     @BeforeEach
     fun setup() {
       MockitoAnnotations.openMocks(this)
       val mockOkHttpClientBuilder: OkHttpClient.Builder = mock()
-      whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
+      whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
       whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
       whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
       whenever(mockCall.execute()).thenReturn(mockResponse)
       whenever(mockResponse.isSuccessful).thenReturn(true)
-      whenever(mockResponse.body()).thenReturn(mockResponseBody)
-      whenever(mockResponse.headers()).thenReturn(mockHeaderResponse)
+      whenever(mockResponse.body).thenReturn(mockResponseBody)
+      whenever(mockResponse.headers).thenReturn(mockHeaderResponse)
       whenever(mockHeaderResponse.toMultimap()).thenReturn(headersMultiMap)
       nylasClient = NylasClient("testApiKey", mockOkHttpClientBuilder)
     }
@@ -209,12 +229,14 @@ class NylasClientTest {
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
 
       val result = nylasClient.executeRequest<Map<String, String>>(urlBuilder, NylasClient.HttpMethod.GET, null, JsonHelper.mapTypeOf(String::class.java, String::class.java))
+
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
+      val capturedRequest = requestCaptor.firstValue
 
       assertEquals("bar", result["foo"])
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/")
-      assertEquals(capturedRequest.method(), "GET")
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/")
+      assertEquals(capturedRequest.method, "GET")
     }
 
     @Test
@@ -223,7 +245,7 @@ class NylasClientTest {
       val revokeUrlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/connect/revoke")
       val oauthUrls = listOf(tokenUrlBuilder, revokeUrlBuilder)
       whenever(mockResponse.isSuccessful).thenReturn(false)
-      whenever(mockResponse.code()).thenReturn(401)
+      whenever(mockResponse.code).thenReturn(401)
       whenever(mockResponseBody.string()).thenReturn("{ \"error\": \"internal_error\", \"error_code\": 500, \"error_description\": \"Internal error, contact administrator\", \"error_uri\": \"https://accounts.nylas.io/#tag/Event-Codes\", \"request_id\": \"eccc9c3f-7150-48e1-965e-4f89714ab51a\" }")
 
       for (urlBuilder in oauthUrls) {
@@ -247,7 +269,7 @@ class NylasClientTest {
       val revokeUrlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/connect/revoke")
       val oauthUrls = listOf(tokenUrlBuilder, revokeUrlBuilder)
       whenever(mockResponse.isSuccessful).thenReturn(false)
-      whenever(mockResponse.code()).thenReturn(500)
+      whenever(mockResponse.code).thenReturn(500)
       whenever(mockResponseBody.string()).thenReturn("not a json")
 
       for (urlBuilder in oauthUrls) {
@@ -268,7 +290,7 @@ class NylasClientTest {
     fun `should throw NylasApiError on error from non-oauth endpoints`() {
       val urlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/some/other/path")
       whenever(mockResponse.isSuccessful).thenReturn(false)
-      whenever(mockResponse.code()).thenReturn(400)
+      whenever(mockResponse.code).thenReturn(400)
       whenever(mockResponseBody.string()).thenReturn("{ \"request_id\": \"4c2740b4-52a4-412e-bdee-49a6c6671b22\", \"error\": { \"type\": \"provider_error\", \"message\": \"Unauthorized\", \"provider_error\": { \"error\": \"Request had invalid authentication credentials.\" } } }")
 
       val exception = assertFailsWith<NylasApiError> {
@@ -287,7 +309,7 @@ class NylasClientTest {
     fun `should throw NylasApiError on error from non-oauth endpoints even if unexpected response from API`() {
       val urlBuilder = nylasClient.newUrlBuilder().addPathSegments("v3/some/other/path")
       whenever(mockResponse.isSuccessful).thenReturn(false)
-      whenever(mockResponse.code()).thenReturn(400)
+      whenever(mockResponse.code).thenReturn(400)
       whenever(mockResponseBody.string()).thenReturn("not a json")
 
       val exception = assertFailsWith<NylasApiError> {
@@ -327,7 +349,7 @@ class NylasClientTest {
     @Test
     fun `should handle unexpected null response body`() {
       val urlBuilder = nylasClient.newUrlBuilder()
-      whenever(mockResponse.body()).thenReturn(null)
+      whenever(mockResponse.body).thenReturn(null)
 
       val exception = assertFailsWith<NylasApiError> {
         nylasClient.executeRequest(urlBuilder, NylasClient.HttpMethod.GET, null, String::class.java)
@@ -353,12 +375,14 @@ class NylasClientTest {
     @Test
     fun `should handle download request`() {
       val result = nylasClient.downloadResponse("test/path")
+
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
+      val capturedRequest = requestCaptor.firstValue
 
       assertEquals(mockResponseBody, result)
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
-      assertEquals(capturedRequest.method(), "GET")
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method, "GET")
     }
 
     @Test
@@ -375,10 +399,11 @@ class NylasClientTest {
         JsonHelper.mapTypeOf(String::class.java, String::class.java),
       )
 
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
-      assertEquals(capturedRequest.method(), "POST")
+      val capturedRequest = requestCaptor.firstValue
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method, "POST")
     }
 
     @Test
@@ -398,11 +423,36 @@ class NylasClientTest {
         mockQueryParams,
       )
 
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
+      val capturedRequest = requestCaptor.firstValue
 
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path?foo=bar&list=a&list=b&list=c&map=key1%3Avalue1&map=key2%3Avalue2")
-      assertEquals(capturedRequest.method(), "GET")
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path?foo=bar&list=a&list=b&list=c&map=key1%3Avalue1&map=key2%3Avalue2")
+      assertEquals(capturedRequest.method, "GET")
+    }
+
+    @Test
+    fun `executeGet should handle Double query parameters correctly`() {
+      val mockQueryParams: IQueryParams = mock()
+      whenever(mockQueryParams.convertToMap()).thenReturn(
+        mapOf(
+          "doubleValue" to 3.14,
+          "anotherDouble" to 2.5,
+        ),
+      )
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executeGet<Map<String, String>>(
+        "test/path",
+        JsonHelper.mapTypeOf(String::class.java, String::class.java),
+        mockQueryParams,
+      )
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path?doubleValue=3&anotherDouble=2")
+      assertEquals(capturedRequest.method, "GET")
     }
 
     @Test
@@ -412,12 +462,13 @@ class NylasClientTest {
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
       nylasClient.executePut<Map<String, String>>("test/path", type, putBody)
 
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
-      val requestBodyBuffer = capturedRequest.body().asString()
+      val capturedRequest = requestCaptor.firstValue
+      val requestBodyBuffer = capturedRequest.body.asString()
 
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
-      assertEquals(capturedRequest.method(), "PUT")
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method, "PUT")
       assertEquals(requestBodyBuffer, putBody)
     }
 
@@ -428,12 +479,13 @@ class NylasClientTest {
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
       nylasClient.executePatch<Map<String, String>>("test/path", type, patchBody)
 
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
-      val requestBodyBuffer = capturedRequest.body().asString()
+      val capturedRequest = requestCaptor.firstValue
+      val requestBodyBuffer = capturedRequest.body.asString()
 
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
-      assertEquals(capturedRequest.method(), "PATCH")
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method, "PATCH")
       assertEquals(requestBodyBuffer, patchBody)
     }
 
@@ -444,12 +496,13 @@ class NylasClientTest {
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
       nylasClient.executePost<Map<String, String>>("test/path", type, postBody)
 
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
-      val requestBodyBuffer = capturedRequest.body().asString()
+      val capturedRequest = requestCaptor.firstValue
+      val requestBodyBuffer = capturedRequest.body.asString()
 
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
-      assertEquals(capturedRequest.method(), "POST")
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method, "POST")
       assertEquals(requestBodyBuffer, postBody)
     }
 
@@ -459,11 +512,12 @@ class NylasClientTest {
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
       nylasClient.executeDelete<Map<String, String>>("test/path", type)
 
+      val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())
-      val capturedRequest = requestCaptor.value
+      val capturedRequest = requestCaptor.firstValue
 
-      assertEquals(capturedRequest.url().toString(), "https://api.us.nylas.com/test/path")
-      assertEquals(capturedRequest.method(), "DELETE")
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method, "DELETE")
     }
 
     /**

@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Changed
+* Upgraded OkHttp dependency from 3.14.5 to 4.12.0
+
 ## [2.11.1] - Release 2025-07-11
 
 ### Added

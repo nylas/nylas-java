@@ -42,18 +42,18 @@ class HttpLoggingInterceptor : Interceptor {
 
   @Throws(IOException::class)
   private fun logRequest(request: Request) {
-    val requestBody = request.body()
+    val requestBody = request.body
     val hasBody = requestBody != null
 
     // Summary
     if (requestLogs.isDebugEnabled) {
       requestLogs.debug(
-        "=> " + request.method() +
-          " " + request.url() +
+        "=> " + request.method +
+          " " + request.url +
           " reqBodySize=" + if (hasBody) requestBody!!.contentLength() else 0,
       )
     }
-    logHeaders("=>", request.headers())
+    logHeaders("=>", request.headers)
     if (bodyLogs.isDebugEnabled) {
       val message = if (!hasBody) {
         " No request body"
@@ -77,27 +77,27 @@ class HttpLoggingInterceptor : Interceptor {
     // Summary
     if (requestLogs.isDebugEnabled) {
       requestLogs.debug(
-        "<= " + response!!.code() +
-          " " + response.message() +
+        "<= " + response!!.code +
+          " " + response.message +
           " resBodySize=" + contentLength +
           " durationMs=" + durationMillis,
       )
     }
-    logHeaders("<=", response!!.headers())
+    logHeaders("<=", response!!.headers)
     if (bodyLogs.isDebugEnabled) {
       val message: String
       if (contentLength == -1L) {
         message = " No response body"
       } else {
-        val contentType = response.body()!!.contentType()
+        val contentType = response.body!!.contentType()
         if (!isPrintableMediaType(contentType)) {
           message = " Skipped logging response body of type that may not be printable: $contentType"
         } else {
-          val source = response.body()!!.source()
+          val source = response.body!!.source()
           source.request(Long.MAX_VALUE) // if zipped, may need to buffer all of it
           var buf = source.buffer.clone()
           var gzippedMessage = ""
-          if ("gzip".equals(response.headers()["Content-Encoding"], ignoreCase = true)) {
+          if ("gzip".equals(response.headers["Content-Encoding"], ignoreCase = true)) {
             val gzippedSize = buf.size
             GzipSource(buf).use { gzippedResponseBody ->
               buf = Buffer()
@@ -115,7 +115,7 @@ class HttpLoggingInterceptor : Interceptor {
   private fun logHeaders(direction: String, headers: Headers) {
     if (headersLogs.isDebugEnabled) {
       val headersLog = StringBuilder().append(direction).append("\n")
-      for (i in 0 until headers.size()) {
+      for (i in 0 until headers.size) {
         val name = headers.name(i)
         var value = headers.value(i)
         if (!isLogAuthHeader && "Authorization" == name) {
@@ -131,7 +131,7 @@ class HttpLoggingInterceptor : Interceptor {
   private fun isPrintableMediaType(type: MediaType?): Boolean {
     return (
       type != null &&
-        ("text" == type.type() || type.toString().startsWith("application/json"))
+        ("text" == type.type || type.toString().startsWith("application/json"))
       )
   }
 
@@ -155,10 +155,10 @@ class HttpLoggingInterceptor : Interceptor {
   }
 
   private fun getContentLength(response: Response?): Long {
-    return if (response!!.body() == null) {
+    return if (response!!.body == null) {
       -1
     } else {
-      response.body()!!.contentLength()
+      response.body!!.contentLength()
     }
   }
 

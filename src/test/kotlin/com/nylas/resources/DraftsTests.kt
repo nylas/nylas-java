@@ -32,12 +32,12 @@ class DraftsTests {
   @BeforeEach
   fun setup() {
     MockitoAnnotations.openMocks(this)
-    whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
+    whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
     whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
     whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
     whenever(mockCall.execute()).thenReturn(mockResponse)
     whenever(mockResponse.isSuccessful).thenReturn(true)
-    whenever(mockResponse.body()).thenReturn(mockResponseBody)
+    whenever(mockResponse.body).thenReturn(mockResponseBody)
   }
 
   @Nested
@@ -359,11 +359,11 @@ class DraftsTests {
       assertEquals(NylasClient.HttpMethod.POST, methodCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
       val multipart = requestBodyCaptor.firstValue as MultipartBody
-      assertEquals(2, multipart.size())
+      assertEquals(2, multipart.size)
       val buffer = Buffer()
       val fileBuffer = Buffer()
-      multipart.part(0).body().writeTo(buffer)
-      multipart.part(1).body().writeTo(fileBuffer)
+      multipart.part(0).body.writeTo(buffer)
+      multipart.part(1).body.writeTo(fileBuffer)
       assertEquals(adapter.toJson(attachmentLessRequest), buffer.readUtf8())
       assertEquals("test data", fileBuffer.readUtf8())
     }
@@ -498,11 +498,11 @@ class DraftsTests {
       assertEquals(NylasClient.HttpMethod.PUT, methodCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
       val multipart = requestBodyCaptor.firstValue as MultipartBody
-      assertEquals(2, multipart.size())
+      assertEquals(2, multipart.size)
       val buffer = Buffer()
       val fileBuffer = Buffer()
-      multipart.part(0).body().writeTo(buffer)
-      multipart.part(1).body().writeTo(fileBuffer)
+      multipart.part(0).body.writeTo(buffer)
+      multipart.part(1).body.writeTo(fileBuffer)
       assertEquals(adapter.toJson(attachmentLessRequest), buffer.readUtf8())
       assertEquals("test data", fileBuffer.readUtf8())
     }

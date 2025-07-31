@@ -5,7 +5,8 @@ import com.nylas.models.*
 import com.nylas.util.JsonHelper
 import com.squareup.moshi.Types
 import okhttp3.Call
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import org.junit.jupiter.api.BeforeEach
@@ -36,15 +37,15 @@ class AuthTests {
   @BeforeEach
   fun setup() {
     MockitoAnnotations.openMocks(this)
-    whenever(mockOkHttpClientBuilder.addInterceptor(any())).thenReturn(mockOkHttpClientBuilder)
+    whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
     whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
     whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
     whenever(mockCall.execute()).thenReturn(mockResponse)
     whenever(mockResponse.isSuccessful).thenReturn(true)
-    whenever(mockResponse.body()).thenReturn(mockResponseBody)
+    whenever(mockResponse.body).thenReturn(mockResponseBody)
     grantId = "abc-123-grant-id"
     mockNylasClient = Mockito.mock(NylasClient::class.java)
-    whenever(mockNylasClient.newUrlBuilder()).thenReturn(HttpUrl.get(baseUrl).newBuilder())
+    whenever(mockNylasClient.newUrlBuilder()).thenReturn(baseUrl.toHttpUrl().newBuilder())
     whenever(mockNylasClient.apiKey).thenReturn("test-api-key")
     auth = Auth(mockNylasClient)
   }
