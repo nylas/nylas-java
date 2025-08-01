@@ -1,6 +1,9 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [2.12.0]
+
+### Added
+* `unknown` as a conferencing provider
 
 ### Changed
 * Upgraded OkHttp dependency from 3.14.5 to 4.12.0
