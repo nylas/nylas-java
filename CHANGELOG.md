@@ -1,5 +1,23 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Added
+* `CreateEventAutoConferencingProvider` enum for autocreate conferencing providers in event creation
+* `CreateEventManualConferencingProvider` enum for manual conferencing providers in event creation
+* `UpdateEventAutoConferencingProvider` enum for autocreate conferencing providers in event updates  
+* `UpdateEventManualConferencingProvider` enum for manual conferencing providers in event updates
+
+### Changed
+* Enhanced `CreateEventRequest.Conferencing` to use dedicated provider enums while maintaining backward compatibility
+* Enhanced `UpdateEventRequest.Conferencing` to use dedicated provider enums while maintaining backward compatibility
+
+### Deprecated
+* `CreateEventRequest.Conferencing.Autocreate.fromConferencingProvider()` - Use `CreateEventAutoConferencingProvider` instead
+* `CreateEventRequest.Conferencing.Details.fromConferencingProvider()` - Use `CreateEventManualConferencingProvider` instead
+* `UpdateEventRequest.Conferencing.Autocreate.fromConferencingProvider()` - Use `UpdateEventAutoConferencingProvider` instead
+* `UpdateEventRequest.Conferencing.Details.fromConferencingProvider()` - Use `UpdateEventManualConferencingProvider` instead
+
 ## [2.12.0]
 
 ### Added

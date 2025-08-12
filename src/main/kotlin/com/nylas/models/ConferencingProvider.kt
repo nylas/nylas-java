@@ -6,11 +6,11 @@ import com.squareup.moshi.Json
  * Enum for the different conferencing providers.
  */
 enum class ConferencingProvider {
-  @Json(name = "Zoom Meeting")
-  ZOOM_MEETING,
-
   @Json(name = "Google Meet")
   GOOGLE_MEET,
+
+  @Json(name = "GoToMeeting")
+  GOTOMEETING,
 
   @Json(name = "Microsoft Teams")
   MICROSOFT_TEAMS,
@@ -18,11 +18,8 @@ enum class ConferencingProvider {
   @Json(name = "WebEx")
   WEBEX,
 
-  @Json(name = "GoToMeeting")
-  GOTOMEETING,
-
-  @Json(name = "skypeForConsumer")
-  SKYPE_FOR_CONSUMER,
+  @Json(name = "Zoom Meeting")
+  ZOOM_MEETING,
 
   @Json(name = "unknown")
   UNKNOWN,

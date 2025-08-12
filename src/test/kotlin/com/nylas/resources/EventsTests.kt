@@ -222,6 +222,278 @@ class EventsTests {
       val whenDate = event.getWhen() as When.Date
       assertEquals("2024-06-18", whenDate.date)
     }
+
+    @Test
+    fun `CreateEventAutoConferencingProvider serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventAutoConferencingProvider::class.java)
+
+      assertEquals("\"Google Meet\"", adapter.toJson(CreateEventAutoConferencingProvider.GOOGLE_MEET))
+      assertEquals("\"Zoom Meeting\"", adapter.toJson(CreateEventAutoConferencingProvider.ZOOM_MEETING))
+      assertEquals("\"Microsoft Teams\"", adapter.toJson(CreateEventAutoConferencingProvider.MICROSOFT_TEAMS))
+    }
+
+    @Test
+    fun `CreateEventAutoConferencingProvider deserializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventAutoConferencingProvider::class.java)
+
+      assertEquals(CreateEventAutoConferencingProvider.GOOGLE_MEET, adapter.fromJson("\"Google Meet\""))
+      assertEquals(CreateEventAutoConferencingProvider.ZOOM_MEETING, adapter.fromJson("\"Zoom Meeting\""))
+      assertEquals(CreateEventAutoConferencingProvider.MICROSOFT_TEAMS, adapter.fromJson("\"Microsoft Teams\""))
+    }
+
+    @Test
+    fun `CreateEventManualConferencingProvider serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventManualConferencingProvider::class.java)
+
+      assertEquals("\"Google Meet\"", adapter.toJson(CreateEventManualConferencingProvider.GOOGLE_MEET))
+      assertEquals("\"Zoom Meeting\"", adapter.toJson(CreateEventManualConferencingProvider.ZOOM_MEETING))
+      assertEquals("\"Microsoft Teams\"", adapter.toJson(CreateEventManualConferencingProvider.MICROSOFT_TEAMS))
+      assertEquals("\"Teams for Business\"", adapter.toJson(CreateEventManualConferencingProvider.TEAMS_FOR_BUSINESS))
+      assertEquals("\"Skype for Business\"", adapter.toJson(CreateEventManualConferencingProvider.SKYPE_FOR_BUSINESS))
+      assertEquals("\"Skype for Consumer\"", adapter.toJson(CreateEventManualConferencingProvider.SKYPE_FOR_CONSUMER))
+    }
+
+    @Test
+    fun `CreateEventManualConferencingProvider deserializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventManualConferencingProvider::class.java)
+
+      assertEquals(CreateEventManualConferencingProvider.GOOGLE_MEET, adapter.fromJson("\"Google Meet\""))
+      assertEquals(CreateEventManualConferencingProvider.ZOOM_MEETING, adapter.fromJson("\"Zoom Meeting\""))
+      assertEquals(CreateEventManualConferencingProvider.MICROSOFT_TEAMS, adapter.fromJson("\"Microsoft Teams\""))
+      assertEquals(CreateEventManualConferencingProvider.TEAMS_FOR_BUSINESS, adapter.fromJson("\"Teams for Business\""))
+      assertEquals(CreateEventManualConferencingProvider.SKYPE_FOR_BUSINESS, adapter.fromJson("\"Skype for Business\""))
+      assertEquals(CreateEventManualConferencingProvider.SKYPE_FOR_CONSUMER, adapter.fromJson("\"Skype for Consumer\""))
+    }
+
+    @Test
+    fun `CreateEventRequest with Autocreate conferencing serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
+      val createEventRequest = CreateEventRequest(
+        whenObj = CreateEventRequest.When.Time(1620000000),
+        title = "Test Event",
+        conferencing = CreateEventRequest.Conferencing.Autocreate(
+          provider = CreateEventAutoConferencingProvider.GOOGLE_MEET,
+          autocreate = mapOf("setting1" to "value1"),
+        ),
+      )
+
+      val json = adapter.toJson(createEventRequest)
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(json)!!
+
+      val conferencing = jsonMap["conferencing"] as Map<*, *>
+      assertEquals("Google Meet", conferencing["provider"])
+      assertEquals(mapOf("setting1" to "value1"), conferencing["autocreate"])
+    }
+
+    @Test
+    fun `CreateEventRequest with Details conferencing serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
+      val createEventRequest = CreateEventRequest(
+        whenObj = CreateEventRequest.When.Time(1620000000),
+        title = "Test Event",
+        conferencing = CreateEventRequest.Conferencing.Details(
+          provider = CreateEventManualConferencingProvider.ZOOM_MEETING,
+          details = CreateEventRequest.Conferencing.Details.Config(
+            url = "https://zoom.us/j/123456789",
+            meetingCode = "123456789",
+            password = "secret",
+          ),
+        ),
+      )
+
+      val json = adapter.toJson(createEventRequest)
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(json)!!
+
+      val conferencing = jsonMap["conferencing"] as Map<*, *>
+      assertEquals("Zoom Meeting", conferencing["provider"])
+      val details = conferencing["details"] as Map<*, *>
+      assertEquals("https://zoom.us/j/123456789", details["url"])
+      assertEquals("123456789", details["meeting_code"])
+      assertEquals("secret", details["password"])
+    }
+
+    @Test
+    fun `UpdateEventRequest with Autocreate conferencing serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val updateEventRequest = UpdateEventRequest(
+        title = "Updated Event",
+        conferencing = UpdateEventRequest.Conferencing.Autocreate(
+          provider = UpdateEventAutoConferencingProvider.MICROSOFT_TEAMS,
+          autocreate = emptyMap(),
+        ),
+      )
+
+      val json = adapter.toJson(updateEventRequest)
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(json)!!
+
+      val conferencing = jsonMap["conferencing"] as Map<*, *>
+      assertEquals("Microsoft Teams", conferencing["provider"])
+      assertEquals(emptyMap<String, Any>(), conferencing["autocreate"])
+    }
+
+    @Test
+    fun `UpdateEventRequest with Details conferencing serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val updateEventRequest = UpdateEventRequest(
+        title = "Updated Event",
+        conferencing = UpdateEventRequest.Conferencing.Details(
+          provider = UpdateEventManualConferencingProvider.TEAMS_FOR_BUSINESS,
+          details = UpdateEventRequest.Conferencing.Details.Config(
+            url = "https://teams.microsoft.com/join/123",
+            pin = "123456",
+          ),
+        ),
+      )
+
+      val json = adapter.toJson(updateEventRequest)
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(json)!!
+
+      val conferencing = jsonMap["conferencing"] as Map<*, *>
+      assertEquals("Teams for Business", conferencing["provider"])
+      val details = conferencing["details"] as Map<*, *>
+      assertEquals("https://teams.microsoft.com/join/123", details["url"])
+      assertEquals("123456", details["pin"])
+    }
+
+    @Test
+    fun `Event with existing ConferencingProvider still works properly`() {
+      // This test verifies that the original Event model continues to work with the original ConferencingProvider enum
+      // The Event model uses the original Conferencing sealed class, not the new CreateEvent/UpdateEvent ones
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "event-123",
+          "grant_id": "grant-456", 
+          "calendar_id": "calendar-789",
+          "when": {
+            "time": 1620000000,
+            "object": "time"
+          },
+          "title": "Test Event with Original Conferencing",
+          "object": "event",
+          "conferencing": {
+            "provider": "Zoom Meeting",
+            "details": {
+              "url": "https://zoom.us/j/123456789",
+              "meeting_code": "123456789"
+            }
+          }
+        }
+        """.trimIndent(),
+      )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+      assertIs<Conferencing.Details>(event.conferencing)
+      val details = event.conferencing as Conferencing.Details
+      assertEquals(ConferencingProvider.ZOOM_MEETING, details.provider)
+      assertEquals("https://zoom.us/j/123456789", details.details.url)
+      assertEquals("123456789", details.details.meetingCode)
+    }
+
+    @Test
+    fun `CreateEventRequest Autocreate with deprecated ConferencingProvider works properly`() {
+      // Test backward compatibility using deprecated fromConferencingProvider method
+      @Suppress("DEPRECATION")
+      val autocreate = CreateEventRequest.Conferencing.Autocreate.fromConferencingProvider(
+        ConferencingProvider.GOOGLE_MEET,
+        mapOf("setting1" to "value1"),
+      )
+
+      assertEquals(CreateEventAutoConferencingProvider.GOOGLE_MEET, autocreate.provider)
+      assertEquals(mapOf("setting1" to "value1"), autocreate.autocreate)
+    }
+
+    @Test
+    fun `CreateEventRequest Details with deprecated ConferencingProvider works properly`() {
+      // Test backward compatibility using deprecated fromConferencingProvider method
+      val config = CreateEventRequest.Conferencing.Details.Config(
+        url = "https://zoom.us/j/123456789",
+        meetingCode = "123456789",
+      )
+
+      @Suppress("DEPRECATION")
+      val details = CreateEventRequest.Conferencing.Details.fromConferencingProvider(
+        ConferencingProvider.ZOOM_MEETING,
+        config,
+      )
+
+      assertEquals(CreateEventManualConferencingProvider.ZOOM_MEETING, details.provider)
+      assertEquals(config, details.details)
+    }
+
+    @Test
+    fun `UpdateEventRequest Autocreate with deprecated ConferencingProvider works properly`() {
+      // Test backward compatibility using deprecated fromConferencingProvider method
+      @Suppress("DEPRECATION")
+      val autocreate = UpdateEventRequest.Conferencing.Autocreate.fromConferencingProvider(
+        ConferencingProvider.MICROSOFT_TEAMS,
+        mapOf("teams_setting" to true),
+      )
+
+      assertEquals(UpdateEventAutoConferencingProvider.MICROSOFT_TEAMS, autocreate.provider)
+      assertEquals(mapOf("teams_setting" to true), autocreate.autocreate)
+    }
+
+    @Test
+    fun `UpdateEventRequest Details with deprecated ConferencingProvider works properly`() {
+      // Test backward compatibility using deprecated fromConferencingProvider method
+      val config = UpdateEventRequest.Conferencing.Details.Config(
+        url = "https://teams.microsoft.com/join/123",
+        pin = "654321",
+      )
+
+      @Suppress("DEPRECATION")
+      val details = UpdateEventRequest.Conferencing.Details.fromConferencingProvider(
+        ConferencingProvider.MICROSOFT_TEAMS,
+        config,
+      )
+
+      assertEquals(UpdateEventManualConferencingProvider.MICROSOFT_TEAMS, details.provider)
+      assertEquals(config, details.details)
+    }
+
+    @Test
+    fun `UpdateEventAutoConferencingProvider serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventAutoConferencingProvider::class.java)
+
+      assertEquals("\"Google Meet\"", adapter.toJson(UpdateEventAutoConferencingProvider.GOOGLE_MEET))
+      assertEquals("\"Zoom Meeting\"", adapter.toJson(UpdateEventAutoConferencingProvider.ZOOM_MEETING))
+      assertEquals("\"Microsoft Teams\"", adapter.toJson(UpdateEventAutoConferencingProvider.MICROSOFT_TEAMS))
+    }
+
+    @Test
+    fun `UpdateEventAutoConferencingProvider deserializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventAutoConferencingProvider::class.java)
+
+      assertEquals(UpdateEventAutoConferencingProvider.GOOGLE_MEET, adapter.fromJson("\"Google Meet\""))
+      assertEquals(UpdateEventAutoConferencingProvider.ZOOM_MEETING, adapter.fromJson("\"Zoom Meeting\""))
+      assertEquals(UpdateEventAutoConferencingProvider.MICROSOFT_TEAMS, adapter.fromJson("\"Microsoft Teams\""))
+    }
+
+    @Test
+    fun `UpdateEventManualConferencingProvider serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventManualConferencingProvider::class.java)
+
+      assertEquals("\"Google Meet\"", adapter.toJson(UpdateEventManualConferencingProvider.GOOGLE_MEET))
+      assertEquals("\"Zoom Meeting\"", adapter.toJson(UpdateEventManualConferencingProvider.ZOOM_MEETING))
+      assertEquals("\"Microsoft Teams\"", adapter.toJson(UpdateEventManualConferencingProvider.MICROSOFT_TEAMS))
+      assertEquals("\"Teams for Business\"", adapter.toJson(UpdateEventManualConferencingProvider.TEAMS_FOR_BUSINESS))
+      assertEquals("\"Skype for Business\"", adapter.toJson(UpdateEventManualConferencingProvider.SKYPE_FOR_BUSINESS))
+      assertEquals("\"Skype for Consumer\"", adapter.toJson(UpdateEventManualConferencingProvider.SKYPE_FOR_CONSUMER))
+    }
+
+    @Test
+    fun `UpdateEventManualConferencingProvider deserializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventManualConferencingProvider::class.java)
+
+      assertEquals(UpdateEventManualConferencingProvider.GOOGLE_MEET, adapter.fromJson("\"Google Meet\""))
+      assertEquals(UpdateEventManualConferencingProvider.ZOOM_MEETING, adapter.fromJson("\"Zoom Meeting\""))
+      assertEquals(UpdateEventManualConferencingProvider.MICROSOFT_TEAMS, adapter.fromJson("\"Microsoft Teams\""))
+      assertEquals(UpdateEventManualConferencingProvider.TEAMS_FOR_BUSINESS, adapter.fromJson("\"Teams for Business\""))
+      assertEquals(UpdateEventManualConferencingProvider.SKYPE_FOR_BUSINESS, adapter.fromJson("\"Skype for Business\""))
+      assertEquals(UpdateEventManualConferencingProvider.SKYPE_FOR_CONSUMER, adapter.fromJson("\"Skype for Consumer\""))
+    }
   }
 
   @Nested
@@ -404,6 +676,101 @@ class EventsTests {
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(updateEventRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating an event with autocreate conferencing calls requests with the correct params`() {
+      val eventId = "event-123"
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val updateEventRequest =
+        UpdateEventRequest(
+          title = "Updated Meeting with Autocreate",
+          conferencing = UpdateEventRequest.Conferencing.Autocreate(
+            provider = UpdateEventAutoConferencingProvider.ZOOM_MEETING,
+            autocreate = mapOf("waiting_room" to true, "join_before_host" to false),
+          ),
+        )
+      val updateEventQueryParams =
+        UpdateEventQueryParams(
+          calendarId = "calendar-id",
+          notifyParticipants = true,
+        )
+
+      events.update(grantId, eventId, updateEventRequest, updateEventQueryParams)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<UpdateEventQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePut<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(updateEventRequest), requestBodyCaptor.firstValue)
+
+      // Verify the JSON contains the correct conferencing data
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(requestBodyCaptor.firstValue)!!
+      val conferencing = jsonMap["conferencing"] as Map<*, *>
+      assertEquals("Zoom Meeting", conferencing["provider"])
+      val autocreate = conferencing["autocreate"] as Map<*, *>
+      assertEquals(true, autocreate["waiting_room"])
+      assertEquals(false, autocreate["join_before_host"])
+    }
+
+    @Test
+    fun `updating an event with manual conferencing details calls requests with the correct params`() {
+      val eventId = "event-123"
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val updateEventRequest =
+        UpdateEventRequest(
+          title = "Updated Meeting with Manual Conferencing",
+          conferencing = UpdateEventRequest.Conferencing.Details(
+            provider = UpdateEventManualConferencingProvider.SKYPE_FOR_BUSINESS,
+            details = UpdateEventRequest.Conferencing.Details.Config(
+              url = "https://meet.lync.com/example/123",
+              password = "secret123",
+              phone = listOf("+1-555-123-4567", "+1-555-987-6543"),
+            ),
+          ),
+        )
+      val updateEventQueryParams =
+        UpdateEventQueryParams(
+          calendarId = "calendar-id",
+          notifyParticipants = true,
+        )
+
+      events.update(grantId, eventId, updateEventRequest, updateEventQueryParams)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<UpdateEventQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePut<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(updateEventRequest), requestBodyCaptor.firstValue)
+
+      // Verify the JSON contains the correct conferencing data
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(requestBodyCaptor.firstValue)!!
+      val conferencing = jsonMap["conferencing"] as Map<*, *>
+      assertEquals("Skype for Business", conferencing["provider"])
+      val details = conferencing["details"] as Map<*, *>
+      assertEquals("https://meet.lync.com/example/123", details["url"])
+      assertEquals("secret123", details["password"])
+      assertEquals(listOf("+1-555-123-4567", "+1-555-987-6543"), details["phone"])
     }
 
     @Test
