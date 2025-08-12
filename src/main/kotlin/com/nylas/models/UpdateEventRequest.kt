@@ -354,7 +354,7 @@ data class UpdateEventRequest(
        * The conferencing provider.
        */
       @Json(name = "provider")
-      val provider: ConferencingProvider? = null,
+      val provider: UpdateEventAutoConferencingProvider? = null,
       /**
        * Empty dict to indicate an intention to autocreate a video link.
        * Additional provider settings may be included in autocreate.settings, but Nylas does not validate these.
@@ -362,11 +362,38 @@ data class UpdateEventRequest(
       @Json(name = "autocreate")
       val autocreate: Map<String, Any>? = null,
     ) : Conferencing() {
+      companion object {
+        /**
+         * Create an Autocreate conferencing object using the original ConferencingProvider enum.
+         * @param provider The conferencing provider from the original enum
+         * @param autocreate Empty dict to indicate an intention to autocreate a video link
+         * @return Autocreate object with converted provider
+         * @deprecated Use UpdateEventAutoConferencingProvider instead. This method will be removed in a future version.
+         */
+        @Deprecated(
+          message = "Use UpdateEventAutoConferencingProvider instead of ConferencingProvider",
+          replaceWith = ReplaceWith("Autocreate(UpdateEventAutoConferencingProvider.fromConferencingProvider(provider), autocreate)"),
+        )
+        @JvmStatic
+        fun fromConferencingProvider(
+          provider: ConferencingProvider,
+          autocreate: Map<String, Any>? = null,
+        ): Autocreate {
+          val newProvider = when (provider) {
+            ConferencingProvider.GOOGLE_MEET -> UpdateEventAutoConferencingProvider.GOOGLE_MEET
+            ConferencingProvider.ZOOM_MEETING -> UpdateEventAutoConferencingProvider.ZOOM_MEETING
+            ConferencingProvider.MICROSOFT_TEAMS -> UpdateEventAutoConferencingProvider.MICROSOFT_TEAMS
+            else -> throw IllegalArgumentException("Provider $provider is not supported for autocreate conferencing. Use UpdateEventAutoConferencingProvider instead.")
+          }
+          return Autocreate(newProvider, autocreate)
+        }
+      }
+
       /**
        * Builder for [Autocreate].
        */
       class Builder {
-        private var provider: ConferencingProvider? = null
+        private var provider: UpdateEventAutoConferencingProvider? = null
         private var autocreate: Map<String, Any>? = null
 
         /**
@@ -374,7 +401,7 @@ data class UpdateEventRequest(
          * @param provider The conferencing provider.
          * @return The builder.
          */
-        fun provider(provider: ConferencingProvider) = apply { this.provider = provider }
+        fun provider(provider: UpdateEventAutoConferencingProvider) = apply { this.provider = provider }
 
         /**
          * Set the autocreate settings.
@@ -400,13 +427,42 @@ data class UpdateEventRequest(
        * The conferencing provider.
        */
       @Json(name = "provider")
-      val provider: ConferencingProvider? = null,
+      val provider: UpdateEventManualConferencingProvider? = null,
       /**
        * The conferencing details
        */
       @Json(name = "details")
       val details: Config? = null,
     ) : Conferencing() {
+      companion object {
+        /**
+         * Create a Details conferencing object using the original ConferencingProvider enum.
+         * @param provider The conferencing provider from the original enum
+         * @param details The conferencing details config
+         * @return Details object with converted provider
+         * @deprecated Use UpdateEventManualConferencingProvider instead. This method will be removed in a future version.
+         */
+        @Deprecated(
+          message = "Use UpdateEventManualConferencingProvider instead of ConferencingProvider",
+          replaceWith = ReplaceWith("Details(UpdateEventManualConferencingProvider.fromConferencingProvider(provider), details)"),
+        )
+        @JvmStatic
+        fun fromConferencingProvider(
+          provider: ConferencingProvider,
+          details: Config? = null,
+        ): Details {
+          val newProvider = when (provider) {
+            ConferencingProvider.GOOGLE_MEET -> UpdateEventManualConferencingProvider.GOOGLE_MEET
+            ConferencingProvider.ZOOM_MEETING -> UpdateEventManualConferencingProvider.ZOOM_MEETING
+            ConferencingProvider.MICROSOFT_TEAMS -> UpdateEventManualConferencingProvider.MICROSOFT_TEAMS
+            ConferencingProvider.GOTOMEETING -> throw IllegalArgumentException("GoToMeeting is not supported in UpdateEventManualConferencingProvider. Use the new enum directly.")
+            ConferencingProvider.WEBEX -> throw IllegalArgumentException("WebEx is not supported in UpdateEventManualConferencingProvider. Use the new enum directly.")
+            ConferencingProvider.UNKNOWN -> throw IllegalArgumentException("Unknown provider is not supported for event updates. Use UpdateEventManualConferencingProvider instead.")
+          }
+          return Details(newProvider, details)
+        }
+      }
+
       /**
        * Class representation of a conferencing details config object
        * @property meetingCode The conferencing meeting code. Used for Zoom.
@@ -474,7 +530,7 @@ data class UpdateEventRequest(
        * Builder for [Details].
        */
       class Builder {
-        private var provider: ConferencingProvider? = null
+        private var provider: UpdateEventManualConferencingProvider? = null
         private var details: Config? = null
 
         /**
@@ -482,7 +538,7 @@ data class UpdateEventRequest(
          * @param provider The conferencing provider.
          * @return The builder.
          */
-        fun provider(provider: ConferencingProvider) = apply { this.provider = provider }
+        fun provider(provider: UpdateEventManualConferencingProvider) = apply { this.provider = provider }
 
         /**
          * Set the conferencing details.

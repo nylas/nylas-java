@@ -321,14 +321,41 @@ data class CreateEventRequest(
        * The conferencing provider.
        */
       @Json(name = "provider")
-      val provider: ConferencingProvider,
+      val provider: CreateEventAutoConferencingProvider,
       /**
        * Empty dict to indicate an intention to autocreate a video link.
        * Additional provider settings may be included in autocreate.settings, but Nylas does not validate these.
        */
       @Json(name = "autocreate")
       val autocreate: Map<String, Any> = emptyMap(),
-    ) : Conferencing()
+    ) : Conferencing() {
+      companion object {
+        /**
+         * Create an Autocreate conferencing object using the original ConferencingProvider enum.
+         * @param provider The conferencing provider from the original enum
+         * @param autocreate Empty dict to indicate an intention to autocreate a video link
+         * @return Autocreate object with converted provider
+         * @deprecated Use CreateEventAutoConferencingProvider instead. This method will be removed in a future version.
+         */
+        @Deprecated(
+          message = "Use CreateEventAutoConferencingProvider instead of ConferencingProvider",
+          replaceWith = ReplaceWith("Autocreate(CreateEventAutoConferencingProvider.fromConferencingProvider(provider), autocreate)"),
+        )
+        @JvmStatic
+        fun fromConferencingProvider(
+          provider: ConferencingProvider,
+          autocreate: Map<String, Any> = emptyMap(),
+        ): Autocreate {
+          val newProvider = when (provider) {
+            ConferencingProvider.GOOGLE_MEET -> CreateEventAutoConferencingProvider.GOOGLE_MEET
+            ConferencingProvider.ZOOM_MEETING -> CreateEventAutoConferencingProvider.ZOOM_MEETING
+            ConferencingProvider.MICROSOFT_TEAMS -> CreateEventAutoConferencingProvider.MICROSOFT_TEAMS
+            else -> throw IllegalArgumentException("Provider $provider is not supported for autocreate conferencing. Use CreateEventAutoConferencingProvider instead.")
+          }
+          return Autocreate(newProvider, autocreate)
+        }
+      }
+    }
 
     /**
      * Class representation of a conferencing details object
@@ -338,13 +365,42 @@ data class CreateEventRequest(
        * The conferencing provider.
        */
       @Json(name = "provider")
-      val provider: ConferencingProvider,
+      val provider: CreateEventManualConferencingProvider,
       /**
        * The conferencing details
        */
       @Json(name = "details")
       val details: Config,
     ) : Conferencing() {
+      companion object {
+        /**
+         * Create a Details conferencing object using the original ConferencingProvider enum.
+         * @param provider The conferencing provider from the original enum
+         * @param details The conferencing details config
+         * @return Details object with converted provider
+         * @deprecated Use CreateEventManualConferencingProvider instead. This method will be removed in a future version.
+         */
+        @Deprecated(
+          message = "Use CreateEventManualConferencingProvider instead of ConferencingProvider",
+          replaceWith = ReplaceWith("Details(CreateEventManualConferencingProvider.fromConferencingProvider(provider), details)"),
+        )
+        @JvmStatic
+        fun fromConferencingProvider(
+          provider: ConferencingProvider,
+          details: Config,
+        ): Details {
+          val newProvider = when (provider) {
+            ConferencingProvider.GOOGLE_MEET -> CreateEventManualConferencingProvider.GOOGLE_MEET
+            ConferencingProvider.ZOOM_MEETING -> CreateEventManualConferencingProvider.ZOOM_MEETING
+            ConferencingProvider.MICROSOFT_TEAMS -> CreateEventManualConferencingProvider.MICROSOFT_TEAMS
+            ConferencingProvider.GOTOMEETING -> throw IllegalArgumentException("GoToMeeting is not supported in CreateEventManualConferencingProvider. Use the new enum directly.")
+            ConferencingProvider.WEBEX -> throw IllegalArgumentException("WebEx is not supported in CreateEventManualConferencingProvider. Use the new enum directly.")
+            ConferencingProvider.UNKNOWN -> throw IllegalArgumentException("Unknown provider is not supported for event creation. Use CreateEventManualConferencingProvider instead.")
+          }
+          return Details(newProvider, details)
+        }
+      }
+
       /**
        * Class representation of a conferencing details config object
        * @property meetingCode The conferencing meeting code. Used for Zoom.
