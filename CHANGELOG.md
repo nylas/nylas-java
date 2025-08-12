@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [2.13.0]
 
 ### Added
 * `CreateEventAutoConferencingProvider` enum for autocreate conferencing providers in event creation
