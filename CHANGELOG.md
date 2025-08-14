@@ -1,10 +1,10 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [2.13.1]
 
-### Added
-* `Skype for Consumer` as a conferencing provider to ConferencingProvider
-* `Skype for Business` as a conferencing provider to ConferencingProvider
+### Fixed
+* Added missing `Skype for Consumer` as a conferencing provider to ConferencingProvider
+* Added missing `Skype for Business` as a conferencing provider to ConferencingProvider
 
 ## [2.13.0]
 
