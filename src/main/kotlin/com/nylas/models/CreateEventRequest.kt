@@ -395,6 +395,8 @@ data class CreateEventRequest(
             ConferencingProvider.MICROSOFT_TEAMS -> CreateEventManualConferencingProvider.MICROSOFT_TEAMS
             ConferencingProvider.GOTOMEETING -> throw IllegalArgumentException("GoToMeeting is not supported in CreateEventManualConferencingProvider. Use the new enum directly.")
             ConferencingProvider.WEBEX -> throw IllegalArgumentException("WebEx is not supported in CreateEventManualConferencingProvider. Use the new enum directly.")
+            ConferencingProvider.SKYPE_FOR_CONSUMER -> throw IllegalArgumentException("Skype for Consumer is not supported in CreateEventManualConferencingProvider. Use the new enum directly.")
+            ConferencingProvider.SKYPE_FOR_BUSINESS -> throw IllegalArgumentException("Skype for Business is not supported in CreateEventManualConferencingProvider. Use the new enum directly.")
             ConferencingProvider.UNKNOWN -> throw IllegalArgumentException("Unknown provider is not supported for event creation. Use CreateEventManualConferencingProvider instead.")
           }
           return Details(newProvider, details)
