@@ -21,6 +21,12 @@ enum class ConferencingProvider {
   @Json(name = "Zoom Meeting")
   ZOOM_MEETING,
 
+  @Json(name = "Skype for Consumer")
+  SKYPE_FOR_CONSUMER,
+
+  @Json(name = "Skype for Business")
+  SKYPE_FOR_BUSINESS,
+
   @Json(name = "unknown")
   UNKNOWN,
 }
