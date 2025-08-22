@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Changed
+* `SendMessageRequest.sendAt` field changed from `Int?` to `Long?` to support Unix timestamps beyond 2038. Maintains backward compatibility through method overloading - existing `Int` parameters are automatically converted to `Long`. **Note:** Kotlin users passing integer literals may need to specify type explicitly (e.g., `1620000000L` or `1620000000 as Int`).
+
 ## [2.13.1]
 
 ### Fixed

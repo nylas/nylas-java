@@ -617,6 +617,75 @@ class MessagesTests {
     }
 
     @Test
+    fun `sending a message with Int sendAt value calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
+      val sendMessageRequest =
+        SendMessageRequest.Builder(to = listOf(EmailName(email = "test@gmail.com", name = "Test")))
+          .body("Hello, I just sent a message using Nylas!")
+          .subject("Hello from Nylas!")
+          .sendAt(1620000000 as Int) // Explicitly test Int overload conversion to Long
+          .build()
+
+      messages.send(grantId, sendMessageRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+
+      // Verify the sendAt field is properly set as Long
+      assertEquals(1620000000L, sendMessageRequest.sendAt)
+    }
+
+    @Test
+    fun `sending a message with Long sendAt value calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
+      val longTimestamp = 1893456000L // Year 2030 timestamp that exceeds Int.MAX_VALUE in the future
+      val sendMessageRequest =
+        SendMessageRequest.Builder(to = listOf(EmailName(email = "test@gmail.com", name = "Test")))
+          .body("Hello, I just sent a message using Nylas!")
+          .subject("Hello from Nylas!")
+          .sendAt(longTimestamp) // Long value
+          .build()
+
+      messages.send(grantId, sendMessageRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+
+      // Verify the sendAt field is properly set as Long
+      assertEquals(longTimestamp, sendMessageRequest.sendAt)
+    }
+
+    @Test
     fun `sending a message with a large attachment calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
       val testInputStream = ByteArrayInputStream("test data".toByteArray())
