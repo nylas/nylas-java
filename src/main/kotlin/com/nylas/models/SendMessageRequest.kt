@@ -56,7 +56,7 @@ data class SendMessageRequest(
    * Unix timestamp to send the message at.
    */
   @Json(name = "send_at")
-  val sendAt: Int? = null,
+  val sendAt: Long? = null,
   /**
    * The ID of the message that you are replying to.
    */
@@ -94,7 +94,7 @@ data class SendMessageRequest(
     internal var subject: String? = null
     private var body: String? = null
     private var starred: Boolean? = null
-    private var sendAt: Int? = null
+    private var sendAt: Long? = null
     private var replyToMessageId: String? = null
     private var trackingOptions: TrackingOptions? = null
     private var useDraft: Boolean? = null
@@ -162,7 +162,14 @@ data class SendMessageRequest(
      * @param sendAt The unix timestamp to send the message at.
      * @return The builder.
      */
-    fun sendAt(sendAt: Int?) = apply { this.sendAt = sendAt }
+    fun sendAt(sendAt: Long?) = apply { this.sendAt = sendAt }
+
+    /**
+     * Sets the unix timestamp to send the message at.
+     * @param sendAt The unix timestamp to send the message at (automatically converted to Long).
+     * @return The builder.
+     */
+    fun sendAt(sendAt: Int?) = apply { this.sendAt = sendAt?.toLong() }
 
     /**
      * Sets the ID of the message that you are replying to.
