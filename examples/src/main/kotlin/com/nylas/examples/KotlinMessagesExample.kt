@@ -117,6 +117,9 @@ private fun runMessagesExample(nylas: NylasClient, config: Map<String, String>) 
     
     // 5. Find a specific message with different field options
     demonstrateMessageFinding(nylas, grantId)
+    
+    // 6. Demonstrate is_plaintext feature for sending messages
+    demonstratePlaintextFeature(nylas, grantId, config)
 }
 
 private fun demonstrateStandardMessageListing(nylas: NylasClient, grantId: String) {
@@ -277,4 +280,60 @@ private fun printMessageDetails(message: Message, requestType: String) {
     message.rawMime?.let { rawMime ->
         println("     Raw MIME length: ${rawMime.length} characters")
     }
+}
+
+private fun demonstratePlaintextFeature(nylas: NylasClient, grantId: String, config: Map<String, String>) {
+    println("📝 6. Demonstrating is_plaintext feature for sending messages (NEW FEATURE):")
+    
+    val recipientEmail = config["NYLAS_RECIPIENT_EMAIL"]
+    if (recipientEmail == null) {
+        println("   ⚠️  Skipping send examples - NYLAS_RECIPIENT_EMAIL not configured")
+        println("   To enable this demo, set NYLAS_RECIPIENT_EMAIL in your .env file")
+        return
+    }
+    
+    println("   Sending test messages to: $recipientEmail")
+    
+    // 1. Send HTML message (default behavior)
+    println("\n   📧 Sending HTML message (is_plaintext = false or not specified):")
+    
+    val htmlRequest = SendMessageRequest.Builder(
+        listOf(EmailName(recipientEmail, "Test Recipient"))
+    )
+        .subject("HTML Message Test - Nylas SDK")
+        .body("<html><body><h1>Hello from Nylas!</h1><p>This is an <b>HTML</b> message with <i>formatting</i>.</p></body></html>")
+        .isPlaintext(false) // Explicitly set to false (this is also the default)
+        .build()
+    
+    try {
+        val htmlResponse = nylas.messages().send(grantId, htmlRequest)
+        println("     ✅ HTML message sent successfully")
+        println("     Message ID: ${htmlResponse.data.id}")
+    } catch (e: Exception) {
+        println("     ❌ Failed to send HTML message: ${e.message}")
+    }
+    
+    // 2. Send plain text message using is_plaintext feature
+    println("\n   📄 Sending plain text message (is_plaintext = true):")
+    
+    val plaintextRequest = SendMessageRequest.Builder(
+        listOf(EmailName(recipientEmail, "Test Recipient"))
+    )
+        .subject("Plain Text Message Test - Nylas SDK")
+        .body("Hello from Nylas!\n\nThis is a PLAIN TEXT message.\nNo HTML formatting will be applied.\n\nBest regards,\nNylas SDK")
+        .isPlaintext(true) // NEW FEATURE: Force plain text mode
+        .build()
+    
+    try {
+        val plaintextResponse = nylas.messages().send(grantId, plaintextRequest)
+        println("     ✅ Plain text message sent successfully")
+        println("     Message ID: ${plaintextResponse.data.id}")
+    } catch (e: Exception) {
+        println("     ❌ Failed to send plain text message: ${e.message}")
+    }
+    
+    println("\n   💡 Key differences:")
+    println("     - HTML message (is_plaintext=false): Message body is sent as HTML with MIME formatting")
+    println("     - Plain text message (is_plaintext=true): Message body is sent as plain text, no HTML in MIME data")
+    println("     - Default behavior: is_plaintext=false (HTML formatting)")
 } 

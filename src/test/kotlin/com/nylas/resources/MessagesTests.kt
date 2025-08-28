@@ -16,8 +16,10 @@ import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class MessagesTests {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -556,6 +558,70 @@ class MessagesTests {
       assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `sending a message with is_plaintext true serializes correctly`() {
+      val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
+      val sendMessageRequest =
+        SendMessageRequest(
+          to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          body = "Hello, I just sent a message using Nylas!",
+          subject = "Hello from Nylas!",
+          isPlaintext = true,
+        )
+
+      val serializedRequest = adapter.toJson(sendMessageRequest)
+      assertTrue(serializedRequest.contains("\"is_plaintext\":true"))
+
+      messages.send(grantId, sendMessageRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/send", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(sendMessageRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `sending a message with is_plaintext false or not specified defaults correctly`() {
+      val adapter = JsonHelper.moshi().adapter(SendMessageRequest::class.java)
+
+      // Test with explicit false
+      val sendMessageRequestFalse =
+        SendMessageRequest(
+          to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          body = "Hello, I just sent a message using Nylas!",
+          subject = "Hello from Nylas!",
+          isPlaintext = false,
+        )
+
+      val serializedRequestFalse = adapter.toJson(sendMessageRequestFalse)
+      assertTrue(serializedRequestFalse.contains("\"is_plaintext\":false"))
+
+      // Test with not specified (should default to false)
+      val sendMessageRequestDefault =
+        SendMessageRequest(
+          to = listOf(EmailName(email = "test@gmail.com", name = "Test")),
+          body = "Hello, I just sent a message using Nylas!",
+          subject = "Hello from Nylas!",
+        )
+
+      val serializedRequestDefault = adapter.toJson(sendMessageRequestDefault)
+      // When null/not specified, the field should not be included in JSON or be false
+      assertFalse(serializedRequestDefault.contains("\"is_plaintext\":true"))
     }
 
     @Test
