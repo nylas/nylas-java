@@ -1,6 +1,7 @@
 package com.nylas.examples;
 
 import com.nylas.NylasClient;
+import com.nylas.models.EmailName;
 import com.nylas.models.FindMessageQueryParams;
 import com.nylas.models.ListMessagesQueryParams;
 import com.nylas.models.ListResponse;
@@ -9,6 +10,7 @@ import com.nylas.models.MessageFields;
 import com.nylas.models.NylasApiError;
 import com.nylas.models.NylasSdkTimeoutError;
 import com.nylas.models.Response;
+import com.nylas.models.SendMessageRequest;
 import com.nylas.models.TrackingOptions;
 import okhttp3.OkHttpClient;
 
@@ -134,6 +136,9 @@ public class MessagesExample {
         
         // 5. Find a specific message with different field options
         demonstrateMessageFinding(nylas, grantId);
+        
+        // 6. Demonstrate is_plaintext feature for sending messages
+        demonstratePlaintextFeature(nylas, grantId, config);
     }
     
     private static void demonstrateStandardMessageListing(NylasClient nylas, String grantId) throws NylasApiError, NylasSdkTimeoutError {
@@ -300,5 +305,61 @@ public class MessagesExample {
         if (message.getRawMime() != null) {
             System.out.println("     Raw MIME length: " + message.getRawMime().length() + " characters");
         }
+    }
+    
+    private static void demonstratePlaintextFeature(NylasClient nylas, String grantId, Map<String, String> config) throws NylasApiError, NylasSdkTimeoutError {
+        System.out.println("📝 6. Demonstrating is_plaintext feature for sending messages (NEW FEATURE):");
+        
+        String recipientEmail = config.get("NYLAS_RECIPIENT_EMAIL");
+        if (recipientEmail == null) {
+            System.out.println("   ⚠️  Skipping send examples - NYLAS_RECIPIENT_EMAIL not configured");
+            System.out.println("   To enable this demo, set NYLAS_RECIPIENT_EMAIL in your .env file");
+            return;
+        }
+        
+        System.out.println("   Sending test messages to: " + recipientEmail);
+        
+        // 1. Send HTML message (default behavior)
+        System.out.println("\n   📧 Sending HTML message (is_plaintext = false or not specified):");
+        
+        SendMessageRequest htmlRequest = new SendMessageRequest.Builder(
+            Arrays.asList(new EmailName(recipientEmail, "Test Recipient"))
+        )
+            .subject("HTML Message Test - Nylas SDK")
+            .body("<html><body><h1>Hello from Nylas!</h1><p>This is an <b>HTML</b> message with <i>formatting</i>.</p></body></html>")
+            .isPlaintext(false) // Explicitly set to false (this is also the default)
+            .build();
+        
+        try {
+            Response<Message> htmlResponse = nylas.messages().send(grantId, htmlRequest);
+            System.out.println("     ✅ HTML message sent successfully");
+            System.out.println("     Message ID: " + htmlResponse.getData().getId());
+        } catch (Exception e) {
+            System.out.println("     ❌ Failed to send HTML message: " + e.getMessage());
+        }
+        
+        // 2. Send plain text message using is_plaintext feature
+        System.out.println("\n   📄 Sending plain text message (is_plaintext = true):");
+        
+        SendMessageRequest plaintextRequest = new SendMessageRequest.Builder(
+            Arrays.asList(new EmailName(recipientEmail, "Test Recipient"))
+        )
+            .subject("Plain Text Message Test - Nylas SDK")
+            .body("Hello from Nylas!\n\nThis is a PLAIN TEXT message.\nNo HTML formatting will be applied.\n\nBest regards,\nNylas SDK")
+            .isPlaintext(true) // NEW FEATURE: Force plain text mode
+            .build();
+        
+        try {
+            Response<Message> plaintextResponse = nylas.messages().send(grantId, plaintextRequest);
+            System.out.println("     ✅ Plain text message sent successfully");
+            System.out.println("     Message ID: " + plaintextResponse.getData().getId());
+        } catch (Exception e) {
+            System.out.println("     ❌ Failed to send plain text message: " + e.getMessage());
+        }
+        
+        System.out.println("\n   💡 Key differences:");
+        System.out.println("     - HTML message (is_plaintext=false): Message body is sent as HTML with MIME formatting");
+        System.out.println("     - Plain text message (is_plaintext=true): Message body is sent as plain text, no HTML in MIME data");
+        System.out.println("     - Default behavior: is_plaintext=false (HTML formatting)");
     }
 } 

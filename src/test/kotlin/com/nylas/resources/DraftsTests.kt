@@ -19,8 +19,10 @@ import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class DraftsTests {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -252,6 +254,67 @@ class DraftsTests {
       assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(createDraftRequest), requestBodyCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `creating a draft with is_plaintext true serializes correctly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
+      val createDraftRequest =
+        CreateDraftRequest(
+          body = "Hello, I just created a draft using Nylas!",
+          subject = "Hello from Nylas!",
+          isPlaintext = true,
+        )
+
+      val serializedRequest = adapter.toJson(createDraftRequest)
+      assertTrue(serializedRequest.contains("\"is_plaintext\":true"))
+
+      drafts.create(grantId, createDraftRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/drafts", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Draft::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(createDraftRequest), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `creating a draft with is_plaintext false or not specified defaults correctly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
+
+      // Test with explicit false
+      val createDraftRequestFalse =
+        CreateDraftRequest(
+          body = "Hello, I just created a draft using Nylas!",
+          subject = "Hello from Nylas!",
+          isPlaintext = false,
+        )
+
+      val serializedRequestFalse = adapter.toJson(createDraftRequestFalse)
+      assertTrue(serializedRequestFalse.contains("\"is_plaintext\":false"))
+
+      // Test with not specified (should default to false)
+      val createDraftRequestDefault =
+        CreateDraftRequest(
+          body = "Hello, I just created a draft using Nylas!",
+          subject = "Hello from Nylas!",
+        )
+
+      val serializedRequestDefault = adapter.toJson(createDraftRequestDefault)
+      // When null/not specified, the field should not be included in JSON or be false
+      assertFalse(serializedRequestDefault.contains("\"is_plaintext\":true"))
     }
 
     @Test

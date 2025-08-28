@@ -78,6 +78,12 @@ data class SendMessageRequest(
    */
   @Json(name = "custom_headers")
   val customHeaders: List<CustomHeader>? = null,
+  /**
+   * When true, the message body is sent as plain text and the MIME data doesn't include the HTML version of the message.
+   * When false, the message body is sent as HTML.
+   */
+  @Json(name = "is_plaintext")
+  val isPlaintext: Boolean? = null,
 ) : IMessageAttachmentRequest {
   /**
    * Builder for [SendMessageRequest].
@@ -99,6 +105,7 @@ data class SendMessageRequest(
     private var trackingOptions: TrackingOptions? = null
     private var useDraft: Boolean? = null
     private var customHeaders: List<CustomHeader>? = null
+    private var isPlaintext: Boolean? = null
 
     /**
      * Sets the bcc recipients.
@@ -201,6 +208,15 @@ data class SendMessageRequest(
     fun customHeaders(customHeaders: List<CustomHeader>?) = apply { this.customHeaders = customHeaders }
 
     /**
+     * Sets whether the message body is sent as plain text.
+     * When true, the message body is sent as plain text and the MIME data doesn't include the HTML version of the message.
+     * When false, the message body is sent as HTML.
+     * @param isPlaintext Whether the message body is sent as plain text.
+     * @return The builder.
+     */
+    fun isPlaintext(isPlaintext: Boolean?) = apply { this.isPlaintext = isPlaintext }
+
+    /**
      * Builds a [SendMessageRequest] instance.
      * @return The [SendMessageRequest] instance.
      */
@@ -220,6 +236,7 @@ data class SendMessageRequest(
         trackingOptions,
         useDraft,
         customHeaders,
+        isPlaintext,
       )
   }
 }
