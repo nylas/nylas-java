@@ -44,6 +44,13 @@ data class ListContactsQueryParams(
    */
   @Json(name = "recurse")
   val recurse: Boolean? = null,
+  /**
+   * Specify fields that you want Nylas to return, as a comma-separated list (for example, select=id,updated_at).
+   * This allows you to receive only the portion of object data that you're interested in.
+   * You can use select to optimize response size and reduce latency by limiting queries to only the information that you need
+   */
+  @Json(name = "select")
+  var select: String? = null,
 ) : IQueryParams {
   class Builder {
     private var limit: Int? = null
@@ -53,6 +60,7 @@ data class ListContactsQueryParams(
     private var source: SourceType? = null
     private var group: String? = null
     private var recurse: Boolean? = null
+    private var select: String? = null
 
     /**
      * Sets the maximum number of objects to return.
@@ -107,6 +115,13 @@ data class ListContactsQueryParams(
     fun recurse(recurse: Boolean?) = apply { this.recurse = recurse }
 
     /**
+     * Set the fields to return in the response.
+     * @param select List of field names to return (e.g. "id,grant_id,display_name")
+     * @return The builder.
+     */
+    fun select(select: String?) = apply { this.select = select }
+
+    /**
      * Builds a [ListContactsQueryParams] instance.
      * @return The [ListContactsQueryParams] instance.
      */
@@ -118,6 +133,7 @@ data class ListContactsQueryParams(
       source = source,
       group = group,
       recurse = recurse,
+      select = select,
     )
   }
 }

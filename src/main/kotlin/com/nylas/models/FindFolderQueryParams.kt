@@ -2,9 +2,10 @@ package com.nylas.models
 
 import com.squareup.moshi.Json
 
-data class FindContactQueryParams(
-  @Json(name = "profile_picture")
-  val profilePicture: Boolean? = null,
+/**
+ * Class representing the query parameters for finding a folder.
+ */
+data class FindFolderQueryParams(
   /**
    * Specify fields that you want Nylas to return, as a comma-separated list (for example, select=id,updated_at).
    * This allows you to receive only the portion of object data that you're interested in.
@@ -14,18 +15,10 @@ data class FindContactQueryParams(
   var select: String? = null,
 ) : IQueryParams {
   /**
-   * Builder for [FindContactQueryParams].
+   * Builder for [FindFolderQueryParams].
    */
   class Builder {
-    private var profilePicture: Boolean? = null
     private var select: String? = null
-
-    /**
-     * Sets whether to include profile picture.
-     * @param profilePicture Whether to include profile picture.
-     * @return The builder.
-     */
-    fun profilePicture(profilePicture: Boolean?) = apply { this.profilePicture = profilePicture }
 
     /**
      * Sets the fields to select.
@@ -35,11 +28,10 @@ data class FindContactQueryParams(
     fun select(select: String?) = apply { this.select = select }
 
     /**
-     * Builds the [FindContactQueryParams] object.
-     * @return The [FindContactQueryParams] object.
+     * Builds the [FindFolderQueryParams] object.
+     * @return The [FindFolderQueryParams] object.
      */
-    fun build() = FindContactQueryParams(
-      profilePicture = profilePicture,
+    fun build() = FindFolderQueryParams(
       select = select,
     )
   }

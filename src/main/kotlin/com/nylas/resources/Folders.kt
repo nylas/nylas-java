@@ -23,14 +23,15 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
    * Return a Folder
    * @param identifier Grant ID or email account to query.
    * @param folderId The id of the folder to retrieve.
+   * @param queryParams The query parameters to include in the request
    * @param overrides Optional request overrides to apply
    * @return The folder
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
-  fun find(identifier: String, folderId: String, overrides: RequestOverrides? = null): Response<Folder> {
+  fun find(identifier: String, folderId: String, queryParams: FindFolderQueryParams? = null, overrides: RequestOverrides? = null): Response<Folder> {
     val path = String.format("v3/grants/%s/folders/%s", identifier, folderId)
-    return findResource(path, overrides = overrides)
+    return findResource(path, queryParams, overrides = overrides)
   }
 
   /**

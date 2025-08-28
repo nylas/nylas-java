@@ -2,8 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+* `select` query parameter support for list and find operations on contacts, messages, events, threads, folders, calendars, and attachments
+* `FindFolderQueryParams`, `FindThreadQueryParams`, and `FindCalendarQueryParams` classes for find operations with select support
+
 ### Changed
 * `SendMessageRequest.sendAt` field changed from `Int?` to `Long?` to support Unix timestamps beyond 2038. Maintains backward compatibility through method overloading - existing `Int` parameters are automatically converted to `Long`. **Note:** Kotlin users passing integer literals may need to specify type explicitly (e.g., `1620000000L` or `1620000000 as Int`).
+* Model properties (`grantId`, `id`, and other required fields) are now optional in `Message`, `Contact`, `Event`, `Thread`, `Folder`, and `Calendar` to support select query parameter functionality
 
 ## [2.13.1]
 
