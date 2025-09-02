@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [2.14.0]
 
 ### Added
 * `is_plaintext` support in `SendMessageRequest` and `CreateDraftRequest` to control plain text vs HTML message formatting
