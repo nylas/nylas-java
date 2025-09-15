@@ -10,7 +10,7 @@ data class Message(
    * Grant ID of the Nylas account.
    */
   @Json(name = "grant_id")
-  val grantId: String,
+  val grantId: String? = null,
   /**
    * The type of object.
    */

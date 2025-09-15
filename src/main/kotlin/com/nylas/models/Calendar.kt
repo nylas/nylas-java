@@ -10,17 +10,17 @@ data class Calendar(
    * Globally unique object identifier.
    */
   @Json(name = "id")
-  val id: String = "",
+  val id: String? = null,
   /**
    * Grant ID of the Nylas account.
    */
   @Json(name = "grant_id")
-  val grantId: String = "",
+  val grantId: String? = null,
   /**
    * Name of the Calendar.
    */
   @Json(name = "name")
-  val name: String = "",
+  val name: String? = null,
   /**
    * The type of object.
    */
@@ -31,22 +31,22 @@ data class Calendar(
    * @see <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of tz database time zones</a>
    */
   @Json(name = "timezone")
-  val timezone: String = "",
+  val timezone: String? = null,
   /**
    * If the event participants are able to edit the event.
    */
   @Json(name = "read_only")
-  val readOnly: Boolean = false,
+  val readOnly: Boolean? = null,
   /**
    * If the calendar is owned by the user account.
    */
   @Json(name = "is_owned_by_user")
-  val isOwnedByUser: Boolean = false,
+  val isOwnedByUser: Boolean? = null,
   /**
    * If the calendar is the primary calendar.
    */
   @Json(name = "is_primary")
-  val isPrimary: Boolean = false,
+  val isPrimary: Boolean? = null,
   /**
    * Description of the calendar.
    */

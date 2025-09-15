@@ -7,12 +7,12 @@ data class Thread(
    * The unique identifier for the thread.
    */
   @Json(name = "id")
-  val id: String,
+  val id: String? = null,
   /**
    * Grant ID of the Nylas account.
    */
   @Json(name = "grant_id")
-  val grantId: String,
+  val grantId: String? = null,
   /**
    * The type of object.
    */

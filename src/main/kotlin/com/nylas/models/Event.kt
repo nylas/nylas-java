@@ -10,12 +10,12 @@ data class Event(
    * Globally unique object identifier.
    */
   @Json(name = "id")
-  val id: String = "",
+  val id: String? = null,
   /**
    * Grant ID of the Nylas account.
    */
   @Json(name = "grant_id")
-  val grantId: String = "",
+  val grantId: String? = null,
   /**
    * Representation of time and duration for events. When object can be in one of four formats (sub-objects):
    * - [When.Date]
@@ -24,22 +24,22 @@ data class Event(
    * - [When.Timespan]
    */
   @Json(name = "when")
-  private val whenObj: When = When.Time(0),
+  private val whenObj: When? = null,
   /**
    * This value determines whether to show this event's time block as available on shared or public calendars.
    */
   @Json(name = "busy")
-  val busy: Boolean = false,
+  val busy: Boolean? = null,
   /**
    * Calendar ID of the event.
    */
   @Json(name = "calendar_id")
-  val calendarId: String = "",
+  val calendarId: String? = null,
   /**
    * Whether participants of the event should be hidden.
    */
   @Json(name = "hide_participants")
-  val hideParticipants: Boolean = false,
+  val hideParticipants: Boolean? = null,
   /**
    * The type of object.
    */
@@ -49,17 +49,17 @@ data class Event(
    * List of participants invited to the event. Participants may also be rooms or resources.
    */
   @Json(name = "participants")
-  val participants: List<Participant> = emptyList(),
+  val participants: List<Participant>? = null,
   /**
    * If the event participants are able to edit the event.
    */
   @Json(name = "read_only")
-  val readOnly: Boolean = false,
+  val readOnly: Boolean? = null,
   /**
    * Visibility of the event, if the event is private or public.
    */
   @Json(name = "visibility")
-  val visibility: EventVisibility = EventVisibility.DEFAULT,
+  val visibility: EventVisibility? = null,
   /**
    * Representation of conferencing details for events. Conferencing object can be in one of two formats (sub-objects):
    * - [Conferencing.Autocreate]
@@ -164,7 +164,7 @@ data class Event(
 
   /**
    * Get the representation of time and duration for events.
-   * @return The representation of time and duration for events.
+   * @return The representation of time and duration for events, or null if not set.
    */
-  fun getWhen(): When = whenObj
+  fun getWhen(): When? = whenObj
 }
