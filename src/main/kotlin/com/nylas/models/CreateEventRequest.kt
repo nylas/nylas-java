@@ -235,8 +235,17 @@ data class CreateEventRequest(
         /**
          * Builds the [Timespan] object.
          * @return [Timespan] object.
+         * @throws IllegalArgumentException if endTime is not after startTime.
          */
-        fun build() = Timespan(startTime, endTime, startTimezone, endTimezone)
+        fun build(): Timespan {
+          // Validate that endTime must be after startTime
+          require(endTime > startTime) {
+            "Invalid Timespan: endTime ($endTime) must be after startTime ($startTime). " +
+              "Timespan events require a positive duration. " +
+              "For point-in-time events, use CreateEventRequest.When.Time instead."
+          }
+          return Timespan(startTime, endTime, startTimezone, endTimezone)
+        }
       }
     }
   }

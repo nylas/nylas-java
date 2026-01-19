@@ -497,6 +497,199 @@ class EventsTests {
   }
 
   @Nested
+  inner class ValidationTests {
+    @Test
+    fun `UpdateEventRequest Timespan with valid duration succeeds`() {
+      val timespan = UpdateEventRequest.When.Timespan.Builder()
+        .startTime(1620000000)
+        .endTime(1620003600)
+        .build()
+
+      assertEquals(1620000000, timespan.startTime)
+      assertEquals(1620003600, timespan.endTime)
+    }
+
+    @Test
+    fun `UpdateEventRequest Timespan with zero duration throws exception`() {
+      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+        UpdateEventRequest.When.Timespan.Builder()
+          .startTime(1620000000)
+          .endTime(1620000000)
+          .build()
+      }
+
+      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620000000)"))
+      assert(exception.message!!.contains("For point-in-time events, use UpdateEventRequest.When.Time instead"))
+    }
+
+    @Test
+    fun `UpdateEventRequest Timespan with negative duration throws exception`() {
+      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+        UpdateEventRequest.When.Timespan.Builder()
+          .startTime(1620003600)
+          .endTime(1620000000)
+          .build()
+      }
+
+      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620003600)"))
+      assert(exception.message!!.contains("Timespan events require a positive duration"))
+    }
+
+    @Test
+    fun `UpdateEventRequest Timespan with null endTime allows creation`() {
+      val timespan = UpdateEventRequest.When.Timespan.Builder()
+        .startTime(1620000000)
+        .build()
+
+      assertEquals(1620000000, timespan.startTime)
+      assertEquals(null, timespan.endTime)
+    }
+
+    @Test
+    fun `UpdateEventRequest Timespan with null startTime allows creation`() {
+      val timespan = UpdateEventRequest.When.Timespan.Builder()
+        .endTime(1620003600)
+        .build()
+
+      assertEquals(null, timespan.startTime)
+      assertEquals(1620003600, timespan.endTime)
+    }
+
+    @Test
+    fun `UpdateEventRequest Timespan with both null times allows creation`() {
+      val timespan = UpdateEventRequest.When.Timespan.Builder()
+        .build()
+
+      assertEquals(null, timespan.startTime)
+      assertEquals(null, timespan.endTime)
+    }
+
+    @Test
+    fun `UpdateEventRequest Timespan with one second duration succeeds`() {
+      val timespan = UpdateEventRequest.When.Timespan.Builder()
+        .startTime(1620000000)
+        .endTime(1620000001)
+        .build()
+
+      assertEquals(1620000000, timespan.startTime)
+      assertEquals(1620000001, timespan.endTime)
+    }
+
+    @Test
+    fun `CreateEventRequest Timespan with valid duration succeeds`() {
+      val timespan = CreateEventRequest.When.Timespan.Builder(1620000000, 1620003600)
+        .build()
+
+      assertEquals(1620000000, timespan.startTime)
+      assertEquals(1620003600, timespan.endTime)
+    }
+
+    @Test
+    fun `CreateEventRequest Timespan with zero duration throws exception`() {
+      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+        CreateEventRequest.When.Timespan.Builder(1620000000, 1620000000)
+          .build()
+      }
+
+      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620000000)"))
+      assert(exception.message!!.contains("For point-in-time events, use CreateEventRequest.When.Time instead"))
+    }
+
+    @Test
+    fun `CreateEventRequest Timespan with negative duration throws exception`() {
+      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+        CreateEventRequest.When.Timespan.Builder(1620003600, 1620000000)
+          .build()
+      }
+
+      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620003600)"))
+      assert(exception.message!!.contains("Timespan events require a positive duration"))
+    }
+
+    @Test
+    fun `CreateEventRequest Timespan with one second duration succeeds`() {
+      val timespan = CreateEventRequest.When.Timespan.Builder(1620000000, 1620000001)
+        .build()
+
+      assertEquals(1620000000, timespan.startTime)
+      assertEquals(1620000001, timespan.endTime)
+    }
+
+    @Test
+    fun `UpdateEventRequest Timespan validation does not affect direct constructor`() {
+      // Direct constructor should still work for backward compatibility
+      val timespan = UpdateEventRequest.When.Timespan(1620000000, 1620000000)
+
+      assertEquals(1620000000, timespan.startTime)
+      assertEquals(1620000000, timespan.endTime)
+    }
+
+    @Test
+    fun `CreateEventRequest Timespan validation does not affect direct constructor`() {
+      // Direct constructor should still work for backward compatibility
+      val timespan = CreateEventRequest.When.Timespan(1620000000, 1620000000)
+
+      assertEquals(1620000000, timespan.startTime)
+      assertEquals(1620000000, timespan.endTime)
+    }
+
+    @Test
+    fun `NylasApiError with validation errors formats toString correctly`() {
+      val error = NylasApiError(
+        type = "invalid_request",
+        message = "Event validation failed",
+        validationErrors = mapOf(
+          "when.end_time" to "must be after start_time",
+          "title" to "is required",
+        ),
+        statusCode = 400,
+        requestId = "req_12345",
+      )
+
+      val errorString = error.toString()
+      assert(errorString.contains("Event validation failed"))
+      assert(errorString.contains("HTTP 400"))
+      assert(errorString.contains("Validation errors:"))
+      assert(errorString.contains("when.end_time: must be after start_time"))
+      assert(errorString.contains("title: is required"))
+      assert(errorString.contains("Request ID: req_12345"))
+    }
+
+    @Test
+    fun `NylasApiError without validation errors formats toString correctly`() {
+      val error = NylasApiError(
+        type = "invalid_request",
+        message = "Bad request",
+        statusCode = 400,
+      )
+
+      val errorString = error.toString()
+      assert(errorString.contains("Bad request"))
+      assert(errorString.contains("HTTP 400"))
+      assert(!errorString.contains("Validation errors:"))
+    }
+
+    @Test
+    fun `NylasApiError serializes and deserializes with validation errors`() {
+      val adapter = JsonHelper.moshi().adapter(NylasApiError::class.java)
+      val json = """
+        {
+          "type": "invalid_request",
+          "message": "Validation failed",
+          "validation_errors": {
+            "when.end_time": "must be after start_time"
+          }
+        }
+      """.trimIndent()
+
+      val error = adapter.fromJson(json)!!
+      assertEquals("invalid_request", error.type)
+      assertEquals("Validation failed", error.message)
+      assertEquals(mapOf("when.end_time" to "must be after start_time"), error.validationErrors)
+    }
+  }
+
+  @Nested
   inner class CrudTests {
     private lateinit var grantId: String
     private lateinit var mockNylasClient: NylasClient

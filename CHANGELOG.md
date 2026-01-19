@@ -1,5 +1,15 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Added
+* Client-side validation for `CreateEventRequest.When.Timespan` and `UpdateEventRequest.When.Timespan` to ensure `endTime` is after `startTime`, preventing confusing API errors
+* `validationErrors` field to `NylasApiError` to capture field-level validation errors from the API
+* Enhanced error messages in `NylasApiError.toString()` to display validation errors, provider errors, and request IDs for easier debugging
+
+### Fixed
+* Improved error handling in `NylasClient` to provide more descriptive error messages when API responses cannot be parsed, including response body preview and status codes
+
 ## [2.14.0]
 
 ### Added

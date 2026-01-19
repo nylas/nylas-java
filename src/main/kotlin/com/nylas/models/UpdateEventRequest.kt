@@ -277,8 +277,21 @@ data class UpdateEventRequest(
         /**
          * Builds the [Timespan] object.
          * @return [Timespan] object.
+         * @throws IllegalArgumentException if both startTime and endTime are provided and endTime is not after startTime.
          */
-        fun build() = Timespan(startTime, endTime, startTimezone, endTimezone)
+        fun build(): Timespan {
+          // Validate that if both times are set, endTime must be after startTime
+          val start = startTime
+          val end = endTime
+          if (start != null && end != null) {
+            require(end > start) {
+              "Invalid Timespan: endTime ($end) must be after startTime ($start). " +
+                "Timespan events require a positive duration. " +
+                "For point-in-time events, use UpdateEventRequest.When.Time instead."
+            }
+          }
+          return Timespan(startTime, endTime, startTimezone, endTimezone)
+        }
       }
     }
   }

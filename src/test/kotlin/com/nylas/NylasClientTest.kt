@@ -317,7 +317,8 @@ class NylasClientTest {
       }
 
       assertEquals("unknown", exception.type)
-      assertEquals("Unknown error received from the API: not a json", exception.message)
+      assert(exception.message.contains("API request failed with status 400"))
+      assert(exception.message.contains("not a json"))
       assertEquals(400, exception.statusCode)
       assertEquals(headersMultiMap, exception.headers)
     }
@@ -557,6 +558,181 @@ class NylasClientTest {
       assertEquals("Accept", NylasClient.HttpHeaders.ACCEPT.headerName)
       assertEquals("Authorization", NylasClient.HttpHeaders.AUTHORIZATION.headerName)
       assertEquals("Content-Type", NylasClient.HttpHeaders.CONTENT_TYPE.headerName)
+    }
+  }
+
+  @Nested
+  inner class ErrorParsingTests {
+    private val mockHttpClient: OkHttpClient = mock(OkHttpClient::class.java)
+    private val mockCall: Call = mock(Call::class.java)
+    private val mockResponseBody: ResponseBody = mock(ResponseBody::class.java)
+    private val mockOkHttpClientBuilder: OkHttpClient.Builder = mock()
+
+    @BeforeEach
+    fun setup() {
+      MockitoAnnotations.openMocks(this)
+      whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
+      whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
+      whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
+    }
+
+    @Test
+    fun `API 400 error with validation details is parsed correctly`() {
+      val errorJson = """
+        {
+          "error": {
+            "type": "invalid_request",
+            "message": "Event validation failed",
+            "validation_errors": {
+              "when.end_time": "must be after start_time"
+            }
+          },
+          "request_id": "req_abc123"
+        }
+      """.trimIndent()
+
+      val mockResponse = mock(okhttp3.Response::class.java)
+      val mockBody = mock(ResponseBody::class.java)
+
+      whenever(mockResponse.isSuccessful).thenReturn(false)
+      whenever(mockResponse.code).thenReturn(400)
+      whenever(mockResponse.body).thenReturn(mockBody)
+      whenever(mockBody.string()).thenReturn(errorJson)
+      whenever(mockResponse.headers).thenReturn(Headers.headersOf())
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+
+      val client = NylasClient("test-api-key", mockOkHttpClientBuilder)
+
+      val exception = assertFailsWith<NylasApiError> {
+        client.grants().list()
+      }
+
+      assertEquals("invalid_request", exception.type)
+      assertEquals("Event validation failed", exception.message)
+      assertEquals(mapOf("when.end_time" to "must be after start_time"), exception.validationErrors)
+      assertEquals("req_abc123", exception.requestId)
+      assertEquals(400, exception.statusCode)
+    }
+
+    @Test
+    fun `API 400 error without validation details is parsed correctly`() {
+      val errorJson = """
+        {
+          "error": {
+            "type": "invalid_request",
+            "message": "Bad request"
+          },
+          "request_id": "req_xyz789"
+        }
+      """.trimIndent()
+
+      val mockResponse = mock(okhttp3.Response::class.java)
+      val mockBody = mock(ResponseBody::class.java)
+
+      whenever(mockResponse.isSuccessful).thenReturn(false)
+      whenever(mockResponse.code).thenReturn(400)
+      whenever(mockResponse.body).thenReturn(mockBody)
+      whenever(mockBody.string()).thenReturn(errorJson)
+      whenever(mockResponse.headers).thenReturn(Headers.headersOf())
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+
+      val client = NylasClient("test-api-key", mockOkHttpClientBuilder)
+
+      val exception = assertFailsWith<NylasApiError> {
+        client.grants().list()
+      }
+
+      assertEquals("invalid_request", exception.type)
+      assertEquals("Bad request", exception.message)
+      assertEquals(null, exception.validationErrors)
+      assertEquals("req_xyz789", exception.requestId)
+    }
+
+    @Test
+    fun `Malformed API error response returns helpful fallback message`() {
+      val malformedJson = """{"invalid": "json structure"""
+
+      val mockResponse = mock(okhttp3.Response::class.java)
+      val mockBody = mock(ResponseBody::class.java)
+
+      whenever(mockResponse.isSuccessful).thenReturn(false)
+      whenever(mockResponse.code).thenReturn(400)
+      whenever(mockResponse.body).thenReturn(mockBody)
+      whenever(mockBody.string()).thenReturn(malformedJson)
+      whenever(mockResponse.headers).thenReturn(Headers.headersOf())
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+
+      val client = NylasClient("test-api-key", mockOkHttpClientBuilder)
+
+      val exception = assertFailsWith<NylasApiError> {
+        client.grants().list()
+      }
+
+      assertEquals("unknown", exception.type)
+      assert(exception.message.contains("API request failed with status 400"))
+      assert(exception.message.contains("Response body:"))
+      assertEquals(400, exception.statusCode)
+    }
+
+    @Test
+    fun `Empty response body returns helpful fallback message`() {
+      val mockResponse = mock(okhttp3.Response::class.java)
+      val mockBody = mock(ResponseBody::class.java)
+
+      whenever(mockResponse.isSuccessful).thenReturn(false)
+      whenever(mockResponse.code).thenReturn(500)
+      whenever(mockResponse.body).thenReturn(mockBody)
+      whenever(mockBody.string()).thenReturn("")
+      whenever(mockResponse.headers).thenReturn(Headers.headersOf())
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+
+      val client = NylasClient("test-api-key", mockOkHttpClientBuilder)
+
+      val exception = assertFailsWith<NylasApiError> {
+        client.grants().list()
+      }
+
+      assertEquals("unknown", exception.type)
+      assert(exception.message.contains("API request failed with status 500 and empty response body"))
+      assertEquals(500, exception.statusCode)
+    }
+
+    @Test
+    fun `API error with provider error is parsed correctly`() {
+      val errorJson = """
+        {
+          "error": {
+            "type": "provider_error",
+            "message": "Provider returned an error",
+            "provider_error": {
+              "error": "invalid_grant",
+              "error_description": "Token has been revoked"
+            }
+          },
+          "request_id": "req_provider123"
+        }
+      """.trimIndent()
+
+      val mockResponse = mock(okhttp3.Response::class.java)
+      val mockBody = mock(ResponseBody::class.java)
+
+      whenever(mockResponse.isSuccessful).thenReturn(false)
+      whenever(mockResponse.code).thenReturn(400)
+      whenever(mockResponse.body).thenReturn(mockBody)
+      whenever(mockBody.string()).thenReturn(errorJson)
+      whenever(mockResponse.headers).thenReturn(Headers.headersOf())
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+
+      val client = NylasClient("test-api-key", mockOkHttpClientBuilder)
+
+      val exception = assertFailsWith<NylasApiError> {
+        client.grants().list()
+      }
+
+      assertEquals("provider_error", exception.type)
+      assertEquals("Provider returned an error", exception.message)
+      assertNotNull(exception.providerError)
+      assertEquals("invalid_grant", exception.providerError!!["error"])
     }
   }
 }
