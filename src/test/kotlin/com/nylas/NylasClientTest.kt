@@ -734,5 +734,32 @@ class NylasClientTest {
       assertNotNull(exception.providerError)
       assertEquals("invalid_grant", exception.providerError!!["error"])
     }
+
+    @Test
+    fun `API error with valid JSON but null error object returns helpful fallback message`() {
+      // This tests the final fallback path when JSON parsing succeeds but returns null
+      val validJsonButNullError = """{"some_field": "some_value"}"""
+
+      val mockResponse = mock(okhttp3.Response::class.java)
+      val mockBody = mock(ResponseBody::class.java)
+
+      whenever(mockResponse.isSuccessful).thenReturn(false)
+      whenever(mockResponse.code).thenReturn(503)
+      whenever(mockResponse.body).thenReturn(mockBody)
+      whenever(mockBody.string()).thenReturn(validJsonButNullError)
+      whenever(mockResponse.headers).thenReturn(Headers.headersOf())
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+
+      val client = NylasClient("test-api-key", mockOkHttpClientBuilder)
+
+      val exception = assertFailsWith<NylasApiError> {
+        client.grants().list()
+      }
+
+      assertEquals("unknown", exception.type)
+      assert(exception.message.contains("API request failed with status 503"))
+      assert(exception.message.contains("Response body:"))
+      assertEquals(503, exception.statusCode)
+    }
   }
 }
