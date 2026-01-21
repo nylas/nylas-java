@@ -15,6 +15,7 @@ repositories {
 }
 
 java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
   withJavadocJar()
   withSourcesJar()
 }
@@ -46,7 +47,6 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
   testImplementation("org.mockito:mockito-inline:4.11.0")
   testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-  implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.jacocoTestReport {
