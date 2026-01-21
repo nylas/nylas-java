@@ -281,6 +281,7 @@ data class UpdateEventRequest(
          */
         fun build(): Timespan {
           // Validate that if both times are set, endTime must be after startTime
+          // Local variables for smart-cast null safety
           val start = startTime
           val end = endTime
           if (start != null && end != null) {

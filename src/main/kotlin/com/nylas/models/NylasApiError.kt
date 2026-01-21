@@ -41,6 +41,17 @@ data class NylasApiError(
   override var headers: Map<String, List<String>>? = null,
 ) : AbstractNylasApiError(message, statusCode, requestId, headers) {
 
+  /**
+   * Formats the error as a human-readable string.
+   *
+   * Example output:
+   * ```
+   * NylasApiError: Bad Request (HTTP 400)
+   * Validation errors:
+   *   - when.end_time: must be after start_time
+   * Request ID: abc-123
+   * ```
+   */
   override fun toString(): String {
     val sb = StringBuilder()
     sb.append("NylasApiError: $message")
