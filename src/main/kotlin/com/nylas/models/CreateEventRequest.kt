@@ -247,8 +247,8 @@ data class CreateEventRequest(
               requestId = null,
               providerError = null,
               validationErrors = mapOf(
-                "when.end_time" to "End time ($endTime) must be after start time ($startTime). For point-in-time events, use CreateEventRequest.When.Time instead."
-              )
+                "when.end_time" to "End time ($endTime) must be after start time ($startTime). For point-in-time events, use CreateEventRequest.When.Time instead.",
+              ),
             )
           }
           return Timespan(startTime, endTime, startTimezone, endTimezone)
