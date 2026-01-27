@@ -511,28 +511,34 @@ class EventsTests {
 
     @Test
     fun `UpdateEventRequest Timespan with zero duration throws exception`() {
-      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+      val exception = org.junit.jupiter.api.assertThrows<NylasApiError> {
         UpdateEventRequest.When.Timespan.Builder()
           .startTime(1620000000)
           .endTime(1620000000)
           .build()
       }
 
-      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620000000)"))
-      assert(exception.message!!.contains("For point-in-time events, use UpdateEventRequest.When.Time instead"))
+      assertEquals(400, exception.statusCode)
+      assert(exception.message.contains("endTime to be after startTime"))
+      assert(exception.validationErrors != null)
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("End time (1620000000) must be after start time (1620000000)"))
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("For point-in-time events, use UpdateEventRequest.When.Time instead"))
     }
 
     @Test
     fun `UpdateEventRequest Timespan with negative duration throws exception`() {
-      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+      val exception = org.junit.jupiter.api.assertThrows<NylasApiError> {
         UpdateEventRequest.When.Timespan.Builder()
           .startTime(1620003600)
           .endTime(1620000000)
           .build()
       }
 
-      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620003600)"))
-      assert(exception.message!!.contains("Timespan events require a positive duration"))
+      assertEquals(400, exception.statusCode)
+      assert(exception.message.contains("endTime to be after startTime"))
+      assert(exception.validationErrors != null)
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("End time (1620000000) must be after start time (1620003600)"))
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("For point-in-time events, use UpdateEventRequest.When.Time instead"))
     }
 
     @Test
@@ -586,24 +592,30 @@ class EventsTests {
 
     @Test
     fun `CreateEventRequest Timespan with zero duration throws exception`() {
-      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+      val exception = org.junit.jupiter.api.assertThrows<NylasApiError> {
         CreateEventRequest.When.Timespan.Builder(1620000000, 1620000000)
           .build()
       }
 
-      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620000000)"))
-      assert(exception.message!!.contains("For point-in-time events, use CreateEventRequest.When.Time instead"))
+      assertEquals(400, exception.statusCode)
+      assert(exception.message.contains("endTime to be after startTime"))
+      assert(exception.validationErrors != null)
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("End time (1620000000) must be after start time (1620000000)"))
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("For point-in-time events, use CreateEventRequest.When.Time instead"))
     }
 
     @Test
     fun `CreateEventRequest Timespan with negative duration throws exception`() {
-      val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
+      val exception = org.junit.jupiter.api.assertThrows<NylasApiError> {
         CreateEventRequest.When.Timespan.Builder(1620003600, 1620000000)
           .build()
       }
 
-      assert(exception.message!!.contains("endTime (1620000000) must be after startTime (1620003600)"))
-      assert(exception.message!!.contains("Timespan events require a positive duration"))
+      assertEquals(400, exception.statusCode)
+      assert(exception.message.contains("endTime to be after startTime"))
+      assert(exception.validationErrors != null)
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("End time (1620000000) must be after start time (1620003600)"))
+      assert(exception.validationErrors!!["when.end_time"]!!.contains("For point-in-time events, use CreateEventRequest.When.Time instead"))
     }
 
     @Test
