@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(export JAVA_HOME=/Users/gordan.o@nylas.com/Library/Java/JavaVirtualMachines/corretto-11.0.29/Contents/Home:*)",
+      "Bash(./gradlew test:*)",
+      "Bash(export JAVA_HOME:*)",
+      "Bash(./gradlew jacocoTestReport:*)",
+      "Bash(open build/reports/jacoco/test/html/index.html)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(./gradlew clean build:*)",
+      "Bash(java -version:*)",
+      "Bash(/usr/libexec/java_home:*)"
+    ]
+  }
+}

@@ -433,9 +433,15 @@ open class NylasClient(
       } catch (ex: Exception) {
         when (ex) {
           is IOException, is JsonDataException -> {
+            // Attempt to extract useful error information even from malformed responses
+            val errorMessage = if (responseBody.isNotBlank()) {
+              "API request failed with status ${response.code}. Response body: ${responseBody.take(500)}"
+            } else {
+              "API request failed with status ${response.code} and empty response body"
+            }
             throw NylasApiError(
               type = "unknown",
-              message = "Unknown error received from the API: $responseBody",
+              message = errorMessage,
               statusCode = response.code,
               headers = response.headers.toMultimap(),
             )
@@ -451,9 +457,15 @@ open class NylasClient(
       throw parsedError
     }
 
+    // Final fallback if parsing succeeded but returned null
+    val errorMessage = if (responseBody.isNotBlank()) {
+      "API request failed with status ${response.code}. Response body: ${responseBody.take(500)}"
+    } else {
+      "API request failed with status ${response.code} and empty response body"
+    }
     throw NylasApiError(
       type = "unknown",
-      message = "Unknown error received from the API: $responseBody",
+      message = errorMessage,
       statusCode = response.code,
       headers = response.headers.toMultimap(),
     )

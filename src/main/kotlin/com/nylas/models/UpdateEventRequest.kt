@@ -277,8 +277,27 @@ data class UpdateEventRequest(
         /**
          * Builds the [Timespan] object.
          * @return [Timespan] object.
+         * @throws NylasApiError if both startTime and endTime are provided and endTime is not after startTime.
          */
-        fun build() = Timespan(startTime, endTime, startTimezone, endTimezone)
+        fun build(): Timespan {
+          // Validate that if both times are set, endTime must be after startTime
+          // Local variables for smart-cast null safety
+          val start = startTime
+          val end = endTime
+          if (start != null && end != null && end <= start) {
+            throw NylasApiError(
+              type = "invalid_request_error",
+              message = "Invalid request: Timespan events require endTime to be after startTime",
+              statusCode = 400,
+              requestId = null,
+              providerError = null,
+              validationErrors = mapOf(
+                "when.end_time" to "End time ($end) must be after start time ($start). For point-in-time events, use UpdateEventRequest.When.Time instead.",
+              ),
+            )
+          }
+          return Timespan(startTime, endTime, startTimezone, endTimezone)
+        }
       }
     }
   }
