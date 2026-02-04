@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [2.14.1]
 
 ### Added
 * Client-side validation for `CreateEventRequest.When.Timespan` and `UpdateEventRequest.When.Timespan` to ensure `endTime` is after `startTime`, preventing confusing API errors
