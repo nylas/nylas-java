@@ -10,7 +10,9 @@
       "Bash(find:*)",
       "Bash(./gradlew clean build:*)",
       "Bash(java -version:*)",
-      "Bash(/usr/libexec/java_home:*)"
+      "Bash(/usr/libexec/java_home:*)",
+      "Bash(JAVA_HOME=/Users/gordan.o@nylas.com/Library/Java/JavaVirtualMachines/corretto-19.0.2/Contents/Home ./gradlew test:*)",
+      "Bash(JAVA_HOME=/Users/gordan.o@nylas.com/Library/Java/JavaVirtualMachines/corretto-19.0.2/Contents/Home ./gradlew:*)"
     ]
   }
 }

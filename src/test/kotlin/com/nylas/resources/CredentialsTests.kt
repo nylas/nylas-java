@@ -62,6 +62,117 @@ class CredentialsTests {
       assertEquals(1617817109L, credential.createdAt)
       assertEquals(1617817109L, credential.updatedAt)
     }
+
+    @Test
+    fun `Credential with connector type serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(Credential::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "id": "e19f8e1a-eb1c-41c0-b6a6-d2e59daf7f47",
+            "name": "My GCP credential",
+            "credential_type": "connector",
+            "created_at": 1617817109,
+            "updated_at": 1617817109
+          }
+        """.trimIndent(),
+      )
+
+      val credential = adapter.fromJson(jsonBuffer)!!
+      assertEquals("e19f8e1a-eb1c-41c0-b6a6-d2e59daf7f47", credential.id)
+      assertEquals("My GCP credential", credential.name)
+      assertEquals(CredentialType.CONNECTOR, credential.credentialType)
+      assertEquals(1617817109L, credential.createdAt)
+      assertEquals(1617817109L, credential.updatedAt)
+    }
+
+    @Test
+    fun `CreateCredentialRequest Connector with OAuth credentials serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateCredentialRequest::class.java)
+      val request = CreateCredentialRequest.Connector(
+        name = "my GCP credential Google connector",
+        credentialData = CredentialData.ConnectorOverride(
+          clientId = "906653528181-hiu1u4q78kk1ag529robsq2s4un3kndo.apps.googleusercontent.com",
+          clientSecret = "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",
+        ),
+      )
+
+      val json = adapter.toJson(request)
+      val jsonMap = JsonHelper.jsonToMap(json)
+
+      assertEquals("my GCP credential Google connector", jsonMap["name"])
+      assertEquals("connector", jsonMap["credential_type"])
+      @Suppress("UNCHECKED_CAST")
+      val credentialData = jsonMap["credential_data"] as Map<String, Any>
+      assertEquals("906653528181-hiu1u4q78kk1ag529robsq2s4un3kndo.apps.googleusercontent.com", credentialData["client_id"])
+      assertEquals("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", credentialData["client_secret"])
+    }
+
+    @Test
+    fun `CredentialData ConnectorOverride with OAuth credentials serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CredentialData.ConnectorOverride::class.java)
+      val credentialData = CredentialData.ConnectorOverride(
+        clientId = "test-client-id",
+        clientSecret = "test-client-secret",
+      )
+
+      val json = adapter.toJson(credentialData)
+      val jsonMap = JsonHelper.jsonToMap(json)
+
+      assertEquals("test-client-id", jsonMap["client_id"])
+      assertEquals("test-client-secret", jsonMap["client_secret"])
+    }
+
+    @Test
+    fun `CredentialData ConnectorOverride with extraProperties serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CredentialData.ConnectorOverride::class.java)
+      val credentialData = CredentialData.ConnectorOverride(
+        clientId = "test-client-id",
+        clientSecret = "test-client-secret",
+        extraProperties = mapOf("tenant" to "my-tenant-id"),
+      )
+
+      val json = adapter.toJson(credentialData)
+      val jsonMap = JsonHelper.jsonToMap(json)
+
+      assertEquals("test-client-id", jsonMap["client_id"])
+      assertEquals("test-client-secret", jsonMap["client_secret"])
+      assertEquals("my-tenant-id", jsonMap["tenant"])
+    }
+
+    @Test
+    fun `CredentialData ConnectorOverride deserializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CredentialData.ConnectorOverride::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "client_id": "test-client-id",
+            "client_secret": "test-client-secret",
+            "tenant": "my-tenant-id"
+          }
+        """.trimIndent(),
+      )
+
+      val credentialData = adapter.fromJson(jsonBuffer)!!
+      assertEquals("test-client-id", credentialData.clientId)
+      assertEquals("test-client-secret", credentialData.clientSecret)
+      assertEquals("my-tenant-id", credentialData.extraProperties?.get("tenant"))
+    }
+
+    @Test
+    fun `CredentialData ConnectorOverride with only extraProperties serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(CredentialData.ConnectorOverride::class.java)
+      val credentialData = CredentialData.ConnectorOverride(
+        extraProperties = mapOf("custom_key" to "custom_value"),
+      )
+
+      val json = adapter.toJson(credentialData)
+      val jsonMap = JsonHelper.jsonToMap(json)
+
+      assertNull(jsonMap["client_id"])
+      assertNull(jsonMap["client_secret"])
+      assertEquals("custom_value", jsonMap["custom_key"])
+    }
   }
 
   @Nested
@@ -174,6 +285,37 @@ class CredentialsTests {
     }
 
     @Test
+    fun `creating a connector credential with OAuth credentials calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateCredentialRequest::class.java)
+      val createCredentialRequest = CreateCredentialRequest.Connector(
+        name = "my GCP credential Google connector",
+        credentialData = CredentialData.ConnectorOverride(
+          clientId = "906653528181-hiu1u4q78kk1ag529robsq2s4un3kndo.apps.googleusercontent.com",
+          clientSecret = "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",
+        ),
+      )
+
+      credentials.create(AuthProvider.GOOGLE, createCredentialRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Credential>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connectors/google/creds", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Credential::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(createCredentialRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
     fun `updating a credential calls requests with the correct params`() {
       val credentialId = "abc-123"
       val adapter = JsonHelper.moshi().adapter(UpdateCredentialRequest::class.java)
@@ -224,6 +366,45 @@ class CredentialsTests {
 
       assertEquals("v3/connectors/imap/creds/abc-123", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating a credential with ConnectorOverride data calls requests with the correct params`() {
+      val credentialId = "abc-123"
+      val updateCredentialRequest = UpdateCredentialRequest(
+        name = "Updated connector credential",
+        credentialData = CredentialData.ConnectorOverride(
+          clientId = "new-client-id",
+          clientSecret = "new-client-secret",
+          extraProperties = mapOf("tenant" to "my-tenant"),
+        ),
+      )
+
+      credentials.update(AuthProvider.GOOGLE, credentialId, updateCredentialRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePatch<Response<Credential>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connectors/google/creds/abc-123", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Credential::class.java), typeCaptor.firstValue)
+      val json = requestBodyCaptor.firstValue
+      val jsonMap = JsonHelper.jsonToMap(json)
+      assertEquals("Updated connector credential", jsonMap["name"])
+      @Suppress("UNCHECKED_CAST")
+      val credentialData = jsonMap["credential_data"] as Map<String, Any>
+      assertEquals("new-client-id", credentialData["client_id"])
+      assertEquals("new-client-secret", credentialData["client_secret"])
+      assertEquals("my-tenant", credentialData["tenant"])
     }
   }
 }

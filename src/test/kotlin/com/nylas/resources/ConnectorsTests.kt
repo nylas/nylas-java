@@ -21,6 +21,7 @@ import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 class ConnectorsTests {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -71,6 +72,76 @@ class ConnectorsTests {
         ),
         connector.scope,
       )
+    }
+
+    @Test
+    fun `Connector with activeCredentialId serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(Connector::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "provider": "google",
+            "settings": {
+              "topic_name": "abc123"
+            },
+            "scope": [
+              "https://www.googleapis.com/auth/userinfo.email"
+            ],
+            "active_credential_id": "5d6ac8b4-ba68-438a-b578-9b5104602bdc"
+          }
+        """.trimIndent(),
+      )
+
+      val connector = adapter.fromJson(jsonBuffer)!!
+      assertIs<Connector.Google>(connector)
+      assertEquals(AuthProvider.GOOGLE, connector.provider)
+      assertEquals("5d6ac8b4-ba68-438a-b578-9b5104602bdc", connector.activeCredentialId)
+    }
+
+    @Test
+    fun `Microsoft Connector with activeCredentialId serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(Connector::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "provider": "microsoft",
+            "settings": {
+              "tenant": "common"
+            },
+            "scope": [
+              "Mail.Read"
+            ],
+            "active_credential_id": "a6db72c9-5362-4401-8547-b9b6713ce48f"
+          }
+        """.trimIndent(),
+      )
+
+      val connector = adapter.fromJson(jsonBuffer)!!
+      assertIs<Connector.Microsoft>(connector)
+      assertEquals(AuthProvider.MICROSOFT, connector.provider)
+      assertEquals("a6db72c9-5362-4401-8547-b9b6713ce48f", connector.activeCredentialId)
+    }
+
+    @Test
+    fun `Connector without activeCredentialId has null activeCredentialId`() {
+      val adapter = JsonHelper.moshi().adapter(Connector::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "provider": "google",
+            "settings": {
+              "topic_name": "abc123"
+            },
+            "scope": [
+              "https://www.googleapis.com/auth/userinfo.email"
+            ]
+          }
+        """.trimIndent(),
+      )
+
+      val connector = adapter.fromJson(jsonBuffer)!!
+      assertIs<Connector.Google>(connector)
+      assertNull(connector.activeCredentialId)
     }
   }
 
@@ -185,6 +256,52 @@ class ConnectorsTests {
       assertEquals("v3/connectors/google", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Connector::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(updateConnectorRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating a connector with activeCredentialId calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateConnectorRequest::class.java)
+      val updateConnectorRequest = UpdateConnectorRequest.Google(
+        activeCredentialId = "5d6ac8b4-ba68-438a-b578-9b5104602bdc",
+      )
+
+      connectors.update(AuthProvider.GOOGLE, updateConnectorRequest)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePatch<Response<Connector>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connectors/google", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Connector::class.java), typeCaptor.firstValue)
+      val json = adapter.toJson(updateConnectorRequest)
+      assertEquals(json, requestBodyCaptor.firstValue)
+      assert(json.contains("\"active_credential_id\":\"5d6ac8b4-ba68-438a-b578-9b5104602bdc\""))
+    }
+
+    @Test
+    fun `UpdateConnectorRequest Google Builder with activeCredentialId works correctly`() {
+      val request = UpdateConnectorRequest.Google.Builder()
+        .activeCredentialId("cred-123")
+        .build()
+
+      assertEquals("cred-123", request.activeCredentialId)
+    }
+
+    @Test
+    fun `UpdateConnectorRequest Microsoft Builder with activeCredentialId works correctly`() {
+      val request = UpdateConnectorRequest.Microsoft.Builder()
+        .activeCredentialId("cred-456")
+        .build()
+
+      assertEquals("cred-456", request.activeCredentialId)
     }
 
     @Test

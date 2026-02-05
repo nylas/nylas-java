@@ -56,8 +56,28 @@ sealed class CreateCredentialRequest(
   ) : CreateCredentialRequest(name, credentialData, CredentialType.SERVICEACCOUNT)
 
   /**
-   * Class representing a request to create an override credential
+   * Class representing a request to create a connector credential.
+   * For multi-credential OAuth flows, provide clientId and clientSecret in credentialData.
+   * For other overrides, use extraProperties in credentialData.
    */
+  data class Connector(
+    /**
+     * Unique name of this credential
+     */
+    @Json(name = "name")
+    override val name: String,
+    /**
+     * Data that specifies the credential details (client_id/client_secret for OAuth, or extraProperties for overrides)
+     */
+    @Json(name = "credential_data")
+    override val credentialData: CredentialData.ConnectorOverride,
+  ) : CreateCredentialRequest(name, credentialData, CredentialType.CONNECTOR)
+
+  /**
+   * Alias for [Connector] to maintain backward compatibility.
+   * @deprecated Use [Connector] instead.
+   */
+  @Deprecated("Use Connector instead", ReplaceWith("Connector"))
   data class Override(
     /**
      * Unique name of this credential
@@ -77,6 +97,6 @@ sealed class CreateCredentialRequest(
       PolymorphicJsonAdapterFactory.of(CreateCredentialRequest::class.java, "credential_type")
         .withSubtype(Microsoft::class.java, CredentialType.ADMINCONSENT.value)
         .withSubtype(Google::class.java, CredentialType.SERVICEACCOUNT.value)
-        .withSubtype(Override::class.java, CredentialType.CONNECTOR.value)
+        .withSubtype(Connector::class.java, CredentialType.CONNECTOR.value)
   }
 }

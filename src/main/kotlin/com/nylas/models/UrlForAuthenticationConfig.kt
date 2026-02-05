@@ -54,6 +54,12 @@ data class UrlForAuthenticationConfig(
    */
   @Json(name = "login_hint")
   val loginHint: String? = null,
+  /**
+   * The credential ID to use for authentication (for multi-credential setups).
+   * Allowed when response_type is "code".
+   */
+  @Json(name = "credential_id")
+  val credentialId: String? = null,
 ) {
   /**
    * Builder for [UrlForAuthenticationConfig].
@@ -71,6 +77,7 @@ data class UrlForAuthenticationConfig(
     private var includeGrantScopes: Boolean? = null
     private var state: String? = null
     private var loginHint: String? = null
+    private var credentialId: String? = null
 
     /**
      * Set the integration provider type that you already had set up with Nylas for this application.
@@ -125,6 +132,13 @@ data class UrlForAuthenticationConfig(
     fun loginHint(loginHint: String) = apply { this.loginHint = loginHint }
 
     /**
+     * Set the credential ID to use for authentication (for multi-credential setups).
+     * @param credentialId The credential ID.
+     * @return This builder.
+     */
+    fun credentialId(credentialId: String) = apply { this.credentialId = credentialId }
+
+    /**
      * Build the [UrlForAuthenticationConfig].
      * @return The [UrlForAuthenticationConfig].
      */
@@ -138,6 +152,7 @@ data class UrlForAuthenticationConfig(
       includeGrantScopes,
       state,
       loginHint,
+      credentialId,
     )
   }
 }

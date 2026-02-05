@@ -122,22 +122,28 @@ class GoogleServiceAccountCredentialDataAdapter {
 class ConnectorOverrideCredentialDataAdapter {
   @FromJson
   fun fromJson(reader: JsonReader): CredentialData.ConnectorOverride {
+    var clientId: String? = null
+    var clientSecret: String? = null
     val extraProperties = mutableMapOf<String, String>()
 
     reader.beginObject()
     while (reader.hasNext()) {
-      val key = reader.nextName()
-      val value = reader.nextString()
-      extraProperties[key] = value
+      when (val key = reader.nextName()) {
+        "client_id" -> clientId = reader.nextString()
+        "client_secret" -> clientSecret = reader.nextString()
+        else -> extraProperties[key] = reader.nextString()
+      }
     }
     reader.endObject()
 
-    return CredentialData.ConnectorOverride(extraProperties)
+    return CredentialData.ConnectorOverride(clientId, clientSecret, extraProperties)
   }
 
   @ToJson
   fun toJson(writer: JsonWriter, value: CredentialData.ConnectorOverride?) {
     writer.beginObject()
+    value?.clientId?.let { writer.name("client_id").value(it) }
+    value?.clientSecret?.let { writer.name("client_secret").value(it) }
     value?.extraProperties?.forEach { (k, v) ->
       writer.name(k).value(v)
     }

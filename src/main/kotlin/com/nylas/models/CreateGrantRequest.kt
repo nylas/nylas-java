@@ -26,6 +26,11 @@ data class CreateGrantRequest(
    */
   @Json(name = "scope")
   val scope: List<String>? = null,
+  /**
+   * The credential ID to use for authentication (for multi-credential setups).
+   */
+  @Json(name = "credential_id")
+  val credentialId: String? = null,
 ) {
   /**
    * Builder for [CreateGrantRequest].
@@ -38,6 +43,7 @@ data class CreateGrantRequest(
   ) {
     private var state: String? = null
     private var scopes: List<String>? = null
+    private var credentialId: String? = null
 
     /**
      * Set the state value to return to developer's website after authentication flow is completed.
@@ -54,9 +60,16 @@ data class CreateGrantRequest(
     fun scopes(scopes: List<String>) = apply { this.scopes = scopes }
 
     /**
+     * Set the credential ID to use for authentication (for multi-credential setups).
+     * @param credentialId The credential ID
+     * @return This builder
+     */
+    fun credentialId(credentialId: String) = apply { this.credentialId = credentialId }
+
+    /**
      * Build the [CreateGrantRequest].
      * @return The built [CreateGrantRequest]
      */
-    fun build() = CreateGrantRequest(provider, settings, state, scopes)
+    fun build() = CreateGrantRequest(provider, settings, state, scopes, credentialId)
   }
 }
