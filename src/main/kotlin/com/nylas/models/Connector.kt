@@ -12,6 +12,11 @@ sealed class Connector(
    */
   @Json(name = "provider")
   val provider: AuthProvider,
+  /**
+   * The ID of the active credential for this connector (for multi-credential setups).
+   */
+  @Json(name = "active_credential_id")
+  open val activeCredentialId: String? = null,
 ) {
   /**
    * Class representing a Google connector creation request.
@@ -27,7 +32,12 @@ sealed class Connector(
      */
     @Json(name = "scope")
     val scope: List<String>? = null,
-  ) : Connector(AuthProvider.GOOGLE)
+    /**
+     * The ID of the active credential for this connector
+     */
+    @Json(name = "active_credential_id")
+    override val activeCredentialId: String? = null,
+  ) : Connector(AuthProvider.GOOGLE, activeCredentialId)
 
   /**
    * Class representing a Microsoft connector creation request.
@@ -43,7 +53,12 @@ sealed class Connector(
      */
     @Json(name = "scope")
     val scope: List<String>? = null,
-  ) : Connector(AuthProvider.MICROSOFT)
+    /**
+     * The ID of the active credential for this connector
+     */
+    @Json(name = "active_credential_id")
+    override val activeCredentialId: String? = null,
+  ) : Connector(AuthProvider.MICROSOFT, activeCredentialId)
 
   /**
    * Class representing an IMAP connector creation request.

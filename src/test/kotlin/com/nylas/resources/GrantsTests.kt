@@ -80,6 +80,52 @@ class GrantsTests {
       assertEquals(1617817109, grant.createdAt)
       assertEquals(1617817109, grant.updatedAt)
     }
+
+    @Test
+    fun `Grant with credentialId serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(Grant::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "id": "e19f8e1a-eb1c-41c0-b6a6-d2e59daf7f47",
+            "provider": "google",
+            "grant_status": "valid",
+            "email": "email@example.com",
+            "scope": [
+              "Mail.Read",
+              "User.Read"
+            ],
+            "created_at": 1617817109,
+            "updated_at": 1617817109,
+            "credential_id": "5d6ac8b4-ba68-438a-b578-9b5104602bdc"
+          }
+        """.trimIndent(),
+      )
+
+      val grant = adapter.fromJson(jsonBuffer)!!
+      assertIs<Grant>(grant)
+      assertEquals("e19f8e1a-eb1c-41c0-b6a6-d2e59daf7f47", grant.id)
+      assertEquals(AuthProvider.GOOGLE, grant.provider)
+      assertEquals("5d6ac8b4-ba68-438a-b578-9b5104602bdc", grant.credentialId)
+    }
+
+    @Test
+    fun `Grant without credentialId has null credentialId`() {
+      val adapter = JsonHelper.moshi().adapter(Grant::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "id": "e19f8e1a-eb1c-41c0-b6a6-d2e59daf7f47",
+            "provider": "google",
+            "created_at": 1617817109
+          }
+        """.trimIndent(),
+      )
+
+      val grant = adapter.fromJson(jsonBuffer)!!
+      assertIs<Grant>(grant)
+      assertNull(grant.credentialId)
+    }
   }
 
   @Nested

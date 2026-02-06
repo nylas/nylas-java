@@ -98,6 +98,54 @@ class AuthTests {
 
       assert(url == "https://api.test.nylas.com/v3/connect/auth?client_id=abc-123&redirect_uri=https%3A%2F%2Fexample.com%2Foauth%2Fcallback&access_type=online&provider=google&prompt=select_provider%2Cdetect&scope=email.read_only%20calendar%20contacts&state=abc-123-state&login_hint=test%40gmail.com&response_type=adminconsent&credential_id=abc-123-credential-id")
     }
+
+    @Test
+    fun `urlForOAuth2 with credentialId should return the correct URL`() {
+      val configWithCredentialId = UrlForAuthenticationConfig(
+        clientId = "abc-123",
+        redirectUri = "https://example.com/oauth/callback",
+        scope = listOf("email.read_only", "calendar"),
+        provider = AuthProvider.GOOGLE,
+        state = "abc-123-state",
+        credentialId = "5d6ac8b4-ba68-438a-b578-9b5104602bdc",
+      )
+
+      val url = auth.urlForOAuth2(configWithCredentialId)
+
+      assert(url.contains("credential_id=5d6ac8b4-ba68-438a-b578-9b5104602bdc"))
+      assert(url.contains("response_type=code"))
+    }
+
+    @Test
+    fun `urlForOAuth2PKCE with credentialId should return the correct URL`() {
+      val configWithCredentialId = UrlForAuthenticationConfig(
+        clientId = "abc-123",
+        redirectUri = "https://example.com/oauth/callback",
+        scope = listOf("email.read_only", "calendar"),
+        provider = AuthProvider.GOOGLE,
+        state = "abc-123-state",
+        credentialId = "5d6ac8b4-ba68-438a-b578-9b5104602bdc",
+      )
+
+      val pkceAuthURL = auth.urlForOAuth2PKCE(configWithCredentialId)
+
+      assert(pkceAuthURL.url.contains("credential_id=5d6ac8b4-ba68-438a-b578-9b5104602bdc"))
+      assert(pkceAuthURL.url.contains("response_type=code"))
+      assert(pkceAuthURL.url.contains("code_challenge_method=s256"))
+    }
+
+    @Test
+    fun `UrlForAuthenticationConfig Builder with credentialId works correctly`() {
+      val config = UrlForAuthenticationConfig.Builder("client-123", "https://example.com/callback")
+        .provider(AuthProvider.GOOGLE)
+        .credentialId("cred-456")
+        .build()
+
+      assertEquals("client-123", config.clientId)
+      assertEquals("https://example.com/callback", config.redirectUri)
+      assertEquals(AuthProvider.GOOGLE, config.provider)
+      assertEquals("cred-456", config.credentialId)
+    }
   }
 
   @Nested
@@ -280,6 +328,56 @@ class AuthTests {
       assertEquals("v3/connect/custom", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Grant::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(request), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `customAuthentication with credentialId calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateGrantRequest::class.java)
+      val request = CreateGrantRequest(
+        provider = AuthProvider.GOOGLE,
+        settings = mapOf("refresh_token" to "test-refresh-token"),
+        state = "abc-123-state",
+        scope = listOf("email.read_only", "calendar"),
+        credentialId = "5d6ac8b4-ba68-438a-b578-9b5104602bdc",
+      )
+
+      auth.customAuthentication(request)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<CodeExchangeResponse>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connect/custom", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Grant::class.java), typeCaptor.firstValue)
+      val json = adapter.toJson(request)
+      assertEquals(json, requestBodyCaptor.firstValue)
+      assert(json.contains("\"credential_id\":\"5d6ac8b4-ba68-438a-b578-9b5104602bdc\""))
+    }
+
+    @Test
+    fun `CreateGrantRequest Builder with credentialId works correctly`() {
+      val request = CreateGrantRequest.Builder(
+        AuthProvider.GOOGLE,
+        mapOf("refresh_token" to "test-token"),
+      )
+        .state("test-state")
+        .scopes(listOf("email.read_only"))
+        .credentialId("cred-123")
+        .build()
+
+      assertEquals(AuthProvider.GOOGLE, request.provider)
+      assertEquals("test-state", request.state)
+      assertEquals(listOf("email.read_only"), request.scope)
+      assertEquals("cred-123", request.credentialId)
     }
 
     @Test

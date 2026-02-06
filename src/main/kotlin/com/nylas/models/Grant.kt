@@ -67,4 +67,9 @@ data class Grant(
    */
   @Json(name = "settings")
   val settings: Map<String, Any>? = null,
+  /**
+   * The credential ID associated with this grant (for multi-credential setups).
+   */
+  @Json(name = "credential_id")
+  val credentialId: String? = null,
 )

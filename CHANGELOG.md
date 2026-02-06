@@ -1,5 +1,20 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Added
+* Multi-credential authentication support allowing multiple provider credentials per Connector
+  - `CreateCredentialRequest.Connector` class for creating connector credentials with `client_id`, `client_secret`, and optional extra properties like `tenant`
+  - `credentialId` field in `UrlForAuthenticationConfig` for hosted auth URL generation via `urlForOAuth2` and `urlForOAuth2PKCE`
+  - `credentialId` field in `CreateGrantRequest` for custom authentication
+  - `credentialId` field in `Grant` response model
+  - `activeCredentialId` field in `Connector` response model
+  - `activeCredentialId` field in `UpdateConnectorRequest` for setting the active credential on a Connector
+* Enhanced `CredentialData.ConnectorOverride` to support optional `clientId` and `clientSecret` fields
+
+### Deprecated
+* `CreateCredentialRequest.Override` - Use `CreateCredentialRequest.Connector` instead
+
 ## [2.14.1]
 
 ### Added
