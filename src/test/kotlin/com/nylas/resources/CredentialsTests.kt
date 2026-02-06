@@ -2,7 +2,10 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
+import com.nylas.util.ConnectorOverrideCredentialDataAdapter
 import com.nylas.util.JsonHelper
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Types
 import okhttp3.Call
 import okhttp3.Interceptor
@@ -172,6 +175,39 @@ class CredentialsTests {
       assertNull(jsonMap["client_id"])
       assertNull(jsonMap["client_secret"])
       assertEquals("custom_value", jsonMap["custom_key"])
+    }
+
+    @Test
+    fun `ConnectorOverrideCredentialDataAdapter fromJson parses client credentials`() {
+      val adapter = ConnectorOverrideCredentialDataAdapter()
+      val json = """{"client_id":"test-client-id","client_secret":"test-client-secret","tenant":"my-tenant"}"""
+      val reader = JsonReader.of(Buffer().writeUtf8(json))
+
+      val result = adapter.fromJson(reader)
+
+      assertEquals("test-client-id", result.clientId)
+      assertEquals("test-client-secret", result.clientSecret)
+      assertEquals("my-tenant", result.extraProperties?.get("tenant"))
+    }
+
+    @Test
+    fun `ConnectorOverrideCredentialDataAdapter toJson writes client credentials`() {
+      val adapter = ConnectorOverrideCredentialDataAdapter()
+      val buffer = Buffer()
+      val writer = JsonWriter.of(buffer)
+      val credentialData = CredentialData.ConnectorOverride(
+        clientId = "test-client-id",
+        clientSecret = "test-client-secret",
+        extraProperties = mapOf("tenant" to "my-tenant"),
+      )
+
+      adapter.toJson(writer, credentialData)
+
+      val json = buffer.readUtf8()
+      val jsonMap = JsonHelper.jsonToMap(json)
+      assertEquals("test-client-id", jsonMap["client_id"])
+      assertEquals("test-client-secret", jsonMap["client_secret"])
+      assertEquals("my-tenant", jsonMap["tenant"])
     }
   }
 
