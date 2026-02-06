@@ -92,8 +92,8 @@ class CredentialsTests {
       val request = CreateCredentialRequest.Connector(
         name = "my GCP credential Google connector",
         credentialData = CredentialData.ConnectorOverride(
-          clientId = "906653528181-hiu1u4q78kk1ag529robsq2s4un3kndo.apps.googleusercontent.com",
-          clientSecret = "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",
+          clientId = "fake-client-id.apps.googleusercontent.com",
+          clientSecret = "fake-client-secret",
         ),
       )
 
@@ -104,8 +104,8 @@ class CredentialsTests {
       assertEquals("connector", jsonMap["credential_type"])
       @Suppress("UNCHECKED_CAST")
       val credentialData = jsonMap["credential_data"] as Map<String, Any>
-      assertEquals("906653528181-hiu1u4q78kk1ag529robsq2s4un3kndo.apps.googleusercontent.com", credentialData["client_id"])
-      assertEquals("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", credentialData["client_secret"])
+      assertEquals("fake-client-id.apps.googleusercontent.com", credentialData["client_id"])
+      assertEquals("fake-client-secret", credentialData["client_secret"])
     }
 
     @Test
@@ -290,8 +290,8 @@ class CredentialsTests {
       val createCredentialRequest = CreateCredentialRequest.Connector(
         name = "my GCP credential Google connector",
         credentialData = CredentialData.ConnectorOverride(
-          clientId = "906653528181-hiu1u4q78kk1ag529robsq2s4un3kndo.apps.googleusercontent.com",
-          clientSecret = "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",
+          clientId = "fake-client-id.apps.googleusercontent.com",
+          clientSecret = "fake-client-secret",
         ),
       )
 
