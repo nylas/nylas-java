@@ -33,9 +33,15 @@ sealed class CredentialData(
   ) : CredentialData(extraProperties)
 
   /**
-   * Class representing additional data needed to create a credential for a Connector Override
+   * Class representing additional data needed to create a credential for a Connector Override.
+   * For multi-credential OAuth flows, provide clientId and clientSecret.
+   * For other overrides, use extraProperties.
    */
   data class ConnectorOverride(
-    override val extraProperties: Map<String, String>,
+    @Json(name = "client_id")
+    val clientId: String? = null,
+    @Json(name = "client_secret")
+    val clientSecret: String? = null,
+    override val extraProperties: Map<String, String>? = emptyMap(),
   ) : CredentialData(extraProperties)
 }

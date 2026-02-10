@@ -20,10 +20,16 @@ sealed class UpdateConnectorRequest {
      */
     @Json(name = "scope")
     val scope: List<String>? = null,
+    /**
+     * The ID of the active credential for this connector (for multi-credential setups)
+     */
+    @Json(name = "active_credential_id")
+    val activeCredentialId: String? = null,
   ) : UpdateConnectorRequest() {
     class Builder {
       private var settings: GoogleConnectorSettings? = null
       private var scope: List<String>? = null
+      private var activeCredentialId: String? = null
 
       /**
        * Set the Google OAuth provider credentials and settings
@@ -40,10 +46,17 @@ sealed class UpdateConnectorRequest {
       fun scope(scope: List<String>) = apply { this.scope = scope }
 
       /**
+       * Set the active credential ID for this connector
+       * @param activeCredentialId The active credential ID
+       * @return The builder
+       */
+      fun activeCredentialId(activeCredentialId: String) = apply { this.activeCredentialId = activeCredentialId }
+
+      /**
        * Build the Google connector creation request
        * @return The Google connector creation request
        */
-      fun build() = Google(settings, scope)
+      fun build() = Google(settings, scope, activeCredentialId)
     }
   }
 
@@ -61,10 +74,16 @@ sealed class UpdateConnectorRequest {
      */
     @Json(name = "scope")
     val scope: List<String>? = null,
+    /**
+     * The ID of the active credential for this connector (for multi-credential setups)
+     */
+    @Json(name = "active_credential_id")
+    val activeCredentialId: String? = null,
   ) : UpdateConnectorRequest() {
     class Builder {
       private var settings: MicrosoftConnectorSettings? = null
       private var scope: List<String>? = null
+      private var activeCredentialId: String? = null
 
       /**
        * Set the Microsoft OAuth provider credentials and settings
@@ -81,10 +100,17 @@ sealed class UpdateConnectorRequest {
       fun scope(scope: List<String>) = apply { this.scope = scope }
 
       /**
+       * Set the active credential ID for this connector
+       * @param activeCredentialId The active credential ID
+       * @return The builder
+       */
+      fun activeCredentialId(activeCredentialId: String) = apply { this.activeCredentialId = activeCredentialId }
+
+      /**
        * Build the Microsoft connector creation request
        * @return The Microsoft connector creation request
        */
-      fun build() = Microsoft(settings, scope)
+      fun build() = Microsoft(settings, scope, activeCredentialId)
     }
   }
 }
