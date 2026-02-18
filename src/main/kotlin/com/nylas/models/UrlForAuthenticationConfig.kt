@@ -60,6 +60,12 @@ data class UrlForAuthenticationConfig(
    */
   @Json(name = "credential_id")
   val credentialId: String? = null,
+  /**
+   * If set to true, the user will be required to enter their SMTP settings during authentication.
+   * This is useful for IMAP-based providers to ensure SMTP credentials are collected for sending email.
+   */
+  @Json(name = "smtp_required")
+  val smtpRequired: Boolean? = null,
 ) {
   /**
    * Builder for [UrlForAuthenticationConfig].
@@ -78,6 +84,7 @@ data class UrlForAuthenticationConfig(
     private var state: String? = null
     private var loginHint: String? = null
     private var credentialId: String? = null
+    private var smtpRequired: Boolean? = null
 
     /**
      * Set the integration provider type that you already had set up with Nylas for this application.
@@ -139,6 +146,14 @@ data class UrlForAuthenticationConfig(
     fun credentialId(credentialId: String) = apply { this.credentialId = credentialId }
 
     /**
+     * Set whether the user is required to enter their SMTP settings during authentication.
+     * This is useful for IMAP-based providers to ensure SMTP credentials are collected for sending email.
+     * @param smtpRequired Whether SMTP settings are required.
+     * @return This builder.
+     */
+    fun smtpRequired(smtpRequired: Boolean) = apply { this.smtpRequired = smtpRequired }
+
+    /**
      * Build the [UrlForAuthenticationConfig].
      * @return The [UrlForAuthenticationConfig].
      */
@@ -153,6 +168,7 @@ data class UrlForAuthenticationConfig(
       state,
       loginHint,
       credentialId,
+      smtpRequired,
     )
   }
 }

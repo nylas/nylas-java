@@ -146,6 +146,102 @@ class AuthTests {
       assertEquals(AuthProvider.GOOGLE, config.provider)
       assertEquals("cred-456", config.credentialId)
     }
+
+    @Test
+    fun `urlForOAuth2 with smtpRequired true should include smtp_required=true in URL`() {
+      val configWithSmtp = UrlForAuthenticationConfig(
+        clientId = "abc-123",
+        redirectUri = "https://example.com/oauth/callback",
+        provider = AuthProvider.IMAP,
+        smtpRequired = true,
+      )
+
+      val url = auth.urlForOAuth2(configWithSmtp)
+
+      assert(url.contains("smtp_required=true"))
+      assert(url.contains("response_type=code"))
+    }
+
+    @Test
+    fun `urlForOAuth2 with smtpRequired false should include smtp_required=false in URL`() {
+      val configWithSmtp = UrlForAuthenticationConfig(
+        clientId = "abc-123",
+        redirectUri = "https://example.com/oauth/callback",
+        provider = AuthProvider.IMAP,
+        smtpRequired = false,
+      )
+
+      val url = auth.urlForOAuth2(configWithSmtp)
+
+      assert(url.contains("smtp_required=false"))
+      assert(url.contains("response_type=code"))
+    }
+
+    @Test
+    fun `urlForOAuth2 without smtpRequired should not include smtp_required in URL`() {
+      val configWithoutSmtp = UrlForAuthenticationConfig(
+        clientId = "abc-123",
+        redirectUri = "https://example.com/oauth/callback",
+        provider = AuthProvider.IMAP,
+      )
+
+      val url = auth.urlForOAuth2(configWithoutSmtp)
+
+      assert(!url.contains("smtp_required"))
+    }
+
+    @Test
+    fun `urlForOAuth2PKCE with smtpRequired true should include smtp_required=true in URL`() {
+      val configWithSmtp = UrlForAuthenticationConfig(
+        clientId = "abc-123",
+        redirectUri = "https://example.com/oauth/callback",
+        provider = AuthProvider.IMAP,
+        smtpRequired = true,
+      )
+
+      val pkceAuthURL = auth.urlForOAuth2PKCE(configWithSmtp)
+
+      assert(pkceAuthURL.url.contains("smtp_required=true"))
+      assert(pkceAuthURL.url.contains("response_type=code"))
+      assert(pkceAuthURL.url.contains("code_challenge_method=s256"))
+    }
+
+    @Test
+    fun `urlForAdminConsent with smtpRequired true should include smtp_required=true in URL`() {
+      val configWithSmtp = UrlForAuthenticationConfig(
+        clientId = "abc-123",
+        redirectUri = "https://example.com/oauth/callback",
+        provider = AuthProvider.MICROSOFT,
+        smtpRequired = true,
+      )
+
+      val url = auth.urlForAdminConsent(configWithSmtp, "cred-789")
+
+      assert(url.contains("smtp_required=true"))
+      assert(url.contains("response_type=adminconsent"))
+    }
+
+    @Test
+    fun `UrlForAuthenticationConfig Builder with smtpRequired works correctly`() {
+      val config = UrlForAuthenticationConfig.Builder("client-123", "https://example.com/callback")
+        .provider(AuthProvider.IMAP)
+        .smtpRequired(true)
+        .build()
+
+      assertEquals("client-123", config.clientId)
+      assertEquals("https://example.com/callback", config.redirectUri)
+      assertEquals(AuthProvider.IMAP, config.provider)
+      assertEquals(true, config.smtpRequired)
+    }
+
+    @Test
+    fun `UrlForAuthenticationConfig Builder without smtpRequired defaults to null`() {
+      val config = UrlForAuthenticationConfig.Builder("client-123", "https://example.com/callback")
+        .provider(AuthProvider.IMAP)
+        .build()
+
+      assertNull(config.smtpRequired)
+    }
   }
 
   @Nested

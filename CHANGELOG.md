@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+* `smtpRequired` field in `UrlForAuthenticationConfig` to ensure users enter their SMTP settings during hosted authentication
 * Multi-credential authentication support allowing multiple provider credentials per Connector
   - `CreateCredentialRequest.Connector` class for creating connector credentials with `client_id`, `client_secret`, and optional extra properties like `tenant`
   - `credentialId` field in `UrlForAuthenticationConfig` for hosted auth URL generation via `urlForOAuth2` and `urlForOAuth2PKCE`
