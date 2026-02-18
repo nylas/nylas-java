@@ -103,6 +103,188 @@ class CalendarsTest {
   }
 
   @Nested
+  inner class SpecificTimeAvailabilityTests {
+    @Test
+    fun `SpecificTimeAvailability serializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(SpecificTimeAvailability::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "date": "2026-03-18",
+            "start": "09:00",
+            "end": "17:00"
+          }
+        """.trimIndent(),
+      )
+
+      val specificTimeAvailability = adapter.fromJson(jsonBuffer)!!
+      assertIs<SpecificTimeAvailability>(specificTimeAvailability)
+      assertEquals("2026-03-18", specificTimeAvailability.date)
+      assertEquals("09:00", specificTimeAvailability.start)
+      assertEquals("17:00", specificTimeAvailability.end)
+    }
+
+    @Test
+    fun `SpecificTimeAvailability serializes to JSON correctly`() {
+      val adapter = JsonHelper.moshi().adapter(SpecificTimeAvailability::class.java)
+      val specificTimeAvailability = SpecificTimeAvailability(
+        date = "2026-03-18",
+        start = "09:00",
+        end = "17:00",
+      )
+
+      val json = adapter.toJson(specificTimeAvailability)
+      assertEquals("""{"date":"2026-03-18","start":"09:00","end":"17:00"}""", json)
+    }
+
+    @Test
+    fun `SpecificTimeAvailability round-trip serialization`() {
+      val adapter = JsonHelper.moshi().adapter(SpecificTimeAvailability::class.java)
+      val original = SpecificTimeAvailability(
+        date = "2026-03-18",
+        start = "09:00",
+        end = "17:00",
+      )
+
+      val json = adapter.toJson(original)
+      val deserialized = adapter.fromJson(json)!!
+      assertEquals(original.date, deserialized.date)
+      assertEquals(original.start, deserialized.start)
+      assertEquals(original.end, deserialized.end)
+    }
+
+    @Test
+    fun `SpecificTimeAvailability Builder works correctly`() {
+      val specificTimeAvailability = SpecificTimeAvailability.Builder(
+        date = "2026-03-18",
+        start = "09:00",
+        end = "17:00",
+      ).build()
+
+      assertEquals("2026-03-18", specificTimeAvailability.date)
+      assertEquals("09:00", specificTimeAvailability.start)
+      assertEquals("17:00", specificTimeAvailability.end)
+    }
+
+    @Test
+    fun `AvailabilityParticipant serializes with specificTimeAvailability`() {
+      val adapter = JsonHelper.moshi().adapter(AvailabilityParticipant::class.java)
+      val participant = AvailabilityParticipant(
+        email = "test@nylas.com",
+        calendarIds = listOf("primary"),
+        specificTimeAvailability = listOf(
+          SpecificTimeAvailability(
+            date = "2026-03-18",
+            start = "09:00",
+            end = "17:00",
+          ),
+        ),
+      )
+
+      val json = adapter.toJson(participant)
+      val deserialized = adapter.fromJson(json)!!
+      assertEquals("test@nylas.com", deserialized.email)
+      assertEquals(1, deserialized.specificTimeAvailability?.size)
+      assertEquals("2026-03-18", deserialized.specificTimeAvailability?.get(0)?.date)
+      assertEquals("09:00", deserialized.specificTimeAvailability?.get(0)?.start)
+      assertEquals("17:00", deserialized.specificTimeAvailability?.get(0)?.end)
+    }
+
+    @Test
+    fun `AvailabilityParticipant serializes without specificTimeAvailability for backward compatibility`() {
+      val adapter = JsonHelper.moshi().adapter(AvailabilityParticipant::class.java)
+      val participant = AvailabilityParticipant(
+        email = "test@nylas.com",
+        calendarIds = listOf("calendar-123"),
+      )
+
+      val json = adapter.toJson(participant)
+      val deserialized = adapter.fromJson(json)!!
+      assertEquals("test@nylas.com", deserialized.email)
+      assertEquals(null, deserialized.specificTimeAvailability)
+      assertEquals(null, deserialized.openHours)
+    }
+
+    @Test
+    fun `AvailabilityParticipant deserializes JSON with specific_time_availability`() {
+      val adapter = JsonHelper.moshi().adapter(AvailabilityParticipant::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "email": "test@nylas.com",
+            "calendar_ids": ["primary"],
+            "specific_time_availability": [
+              {
+                "date": "2026-03-18",
+                "start": "09:00",
+                "end": "17:00"
+              }
+            ]
+          }
+        """.trimIndent(),
+      )
+
+      val participant = adapter.fromJson(jsonBuffer)!!
+      assertEquals("test@nylas.com", participant.email)
+      assertEquals(listOf("primary"), participant.calendarIds)
+      assertEquals(1, participant.specificTimeAvailability?.size)
+      assertEquals("2026-03-18", participant.specificTimeAvailability?.get(0)?.date)
+      assertEquals("09:00", participant.specificTimeAvailability?.get(0)?.start)
+      assertEquals("17:00", participant.specificTimeAvailability?.get(0)?.end)
+    }
+
+    @Test
+    fun `AvailabilityParticipant deserializes JSON without specific_time_availability for backward compatibility`() {
+      val adapter = JsonHelper.moshi().adapter(AvailabilityParticipant::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "email": "test@nylas.com",
+            "calendar_ids": ["calendar-123"]
+          }
+        """.trimIndent(),
+      )
+
+      val participant = adapter.fromJson(jsonBuffer)!!
+      assertEquals("test@nylas.com", participant.email)
+      assertEquals(null, participant.specificTimeAvailability)
+    }
+
+    @Test
+    fun `AvailabilityParticipant Builder works with specificTimeAvailability`() {
+      val participant = AvailabilityParticipant.Builder("test@nylas.com")
+        .calendarIds(listOf("primary"))
+        .specificTimeAvailability(
+          listOf(
+            SpecificTimeAvailability(
+              date = "2026-03-18",
+              start = "09:00",
+              end = "17:00",
+            ),
+          ),
+        )
+        .build()
+
+      assertEquals("test@nylas.com", participant.email)
+      assertEquals(listOf("primary"), participant.calendarIds)
+      assertEquals(1, participant.specificTimeAvailability?.size)
+      assertEquals("2026-03-18", participant.specificTimeAvailability?.get(0)?.date)
+      assertEquals("09:00", participant.specificTimeAvailability?.get(0)?.start)
+      assertEquals("17:00", participant.specificTimeAvailability?.get(0)?.end)
+    }
+
+    @Test
+    fun `AvailabilityParticipant Builder works without specificTimeAvailability for backward compatibility`() {
+      val participant = AvailabilityParticipant.Builder("test@nylas.com")
+        .calendarIds(listOf("calendar-123"))
+        .build()
+
+      assertEquals("test@nylas.com", participant.email)
+      assertEquals(null, participant.specificTimeAvailability)
+    }
+  }
+
+  @Nested
   inner class CrudTests {
     private lateinit var grantId: String
     private lateinit var mockNylasClient: NylasClient
@@ -320,6 +502,47 @@ class CalendarsTest {
           ),
           roundRobinGroupId = "event-123",
         ),
+      )
+
+      calendars.getAvailability(getAvailabilityRequest)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/calendars/availability", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, GetAvailabilityResponse::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(getAvailabilityRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `getting availability with specificTimeAvailability calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(GetAvailabilityRequest::class.java)
+      val getAvailabilityRequest = GetAvailabilityRequest(
+        startTime = 1737540000,
+        endTime = 1737712800,
+        participants = listOf(
+          AvailabilityParticipant(
+            email = "nylastest8@gmail.com",
+            calendarIds = listOf("primary"),
+            specificTimeAvailability = listOf(
+              SpecificTimeAvailability(
+                date = "2026-03-18",
+                start = "09:00",
+                end = "17:00",
+              ),
+            ),
+          ),
+        ),
+        durationMinutes = 30,
       )
 
       calendars.getAvailability(getAvailabilityRequest)
