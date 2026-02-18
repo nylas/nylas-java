@@ -11,6 +11,7 @@
   - `activeCredentialId` field in `Connector` response model
   - `activeCredentialId` field in `UpdateConnectorRequest` for setting the active credential on a Connector
 * Enhanced `CredentialData.ConnectorOverride` to support optional `clientId` and `clientSecret` fields
+* Support for `specific_time_availability` field in `AvailabilityParticipant` to override open hours configurations for specific dates and time ranges
 
 ### Deprecated
 * `CreateCredentialRequest.Override` - Use `CreateCredentialRequest.Connector` instead

@@ -22,6 +22,12 @@ data class AvailabilityParticipant(
    */
   @Json(name = "open_hours")
   val openHours: List<OpenHours>? = null,
+  /**
+   * An array of date and time ranges when the participant is available.
+   * This can override the open_hours configurations for a specific date and time range.
+   */
+  @Json(name = "specific_time_availability")
+  val specificTimeAvailability: List<SpecificTimeAvailability>? = null,
 ) {
   /**
    * A builder for creating an [AvailabilityParticipant].
@@ -32,6 +38,7 @@ data class AvailabilityParticipant(
   ) {
     private var calendarIds: List<String>? = null
     private var openHours: List<OpenHours>? = null
+    private var specificTimeAvailability: List<SpecificTimeAvailability>? = null
 
     /**
      * Set the calendar IDs associated with each participant's email address.
@@ -48,6 +55,13 @@ data class AvailabilityParticipant(
     fun openHours(openHours: List<OpenHours>) = apply { this.openHours = openHours }
 
     /**
+     * Set the specific time availability to override the open hours for specific dates and time ranges.
+     * @param specificTimeAvailability An array of date and time ranges when the participant is available.
+     * @return The builder.
+     */
+    fun specificTimeAvailability(specificTimeAvailability: List<SpecificTimeAvailability>) = apply { this.specificTimeAvailability = specificTimeAvailability }
+
+    /**
      * Build the [AvailabilityParticipant].
      * @return The [AvailabilityParticipant].
      */
@@ -55,6 +69,7 @@ data class AvailabilityParticipant(
       email,
       calendarIds,
       openHours,
+      specificTimeAvailability,
     )
   }
 }
