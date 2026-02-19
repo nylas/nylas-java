@@ -28,6 +28,12 @@ data class AvailabilityParticipant(
    */
   @Json(name = "specific_time_availability")
   val specificTimeAvailability: List<SpecificTimeAvailability>? = null,
+  /**
+   * When set to true, only the times specified in [specificTimeAvailability] are considered available,
+   * ignoring the [openHours] configuration.
+   */
+  @Json(name = "only_specific_time_availability")
+  val onlySpecificTimeAvailability: Boolean? = null,
 ) {
   /**
    * A builder for creating an [AvailabilityParticipant].
@@ -39,6 +45,7 @@ data class AvailabilityParticipant(
     private var calendarIds: List<String>? = null
     private var openHours: List<OpenHours>? = null
     private var specificTimeAvailability: List<SpecificTimeAvailability>? = null
+    private var onlySpecificTimeAvailability: Boolean? = null
 
     /**
      * Set the calendar IDs associated with each participant's email address.
@@ -62,6 +69,14 @@ data class AvailabilityParticipant(
     fun specificTimeAvailability(specificTimeAvailability: List<SpecificTimeAvailability>) = apply { this.specificTimeAvailability = specificTimeAvailability }
 
     /**
+     * Set whether only the times specified in [SpecificTimeAvailability] are considered available.
+     * When set to true, the [OpenHours] configuration is ignored.
+     * @param onlySpecificTimeAvailability Whether to only use specific time availability.
+     * @return The builder.
+     */
+    fun onlySpecificTimeAvailability(onlySpecificTimeAvailability: Boolean) = apply { this.onlySpecificTimeAvailability = onlySpecificTimeAvailability }
+
+    /**
      * Build the [AvailabilityParticipant].
      * @return The [AvailabilityParticipant].
      */
@@ -70,6 +85,7 @@ data class AvailabilityParticipant(
       calendarIds,
       openHours,
       specificTimeAvailability,
+      onlySpecificTimeAvailability,
     )
   }
 }
