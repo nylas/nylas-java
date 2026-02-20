@@ -11,7 +11,8 @@
   - `activeCredentialId` field in `Connector` response model
   - `activeCredentialId` field in `UpdateConnectorRequest` for setting the active credential on a Connector
 * Enhanced `CredentialData.ConnectorOverride` to support optional `clientId` and `clientSecret` fields
-* Support for `specific_time_availability` field in `AvailabilityParticipant` to override open hours configurations for specific dates and time ranges
+* Support for `specific_time_availability` and `only_specific_time_availability` fields in `AvailabilityParticipant` to override open hours configurations for specific dates and time ranges
+* `smtpRequired` field in `UrlForAuthenticationConfig` to ensure users enter their SMTP settings during hosted authentication
 
 ### Deprecated
 * `CreateCredentialRequest.Override` - Use `CreateCredentialRequest.Connector` instead
