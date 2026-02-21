@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [v2.15.0] - Release 2026-02-21
 
 ### Added
 * Multi-credential authentication support allowing multiple provider credentials per Connector
