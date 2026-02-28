@@ -75,6 +75,49 @@ class FoldersTests {
       assertEquals(0, folder.totalCount)
       assertEquals(listOf("\\SENT"), folder.attributes)
     }
+
+    @Test
+    fun `Folder with select parameter serializes properly with only selected fields`() {
+      val adapter = JsonHelper.moshi().adapter(Folder::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "id": "SENT",
+            "name": "SENT"
+          }
+        """.trimIndent(),
+      )
+
+      val folder = adapter.fromJson(jsonBuffer)!!
+      assertIs<Folder>(folder)
+      assertEquals("SENT", folder.id)
+      assertEquals("SENT", folder.name)
+      // When select is used, grantId and other fields may not be present
+      assertNull(folder.grantId)
+      assertEquals("folder", folder.getObject()) // default value
+    }
+
+    @Test
+    fun `Folder backwards compatibility - full object still works`() {
+      val adapter = JsonHelper.moshi().adapter(Folder::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "id": "SENT",
+            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+            "name": "SENT",
+            "object": "folder"
+          }
+        """.trimIndent(),
+      )
+
+      val folder = adapter.fromJson(jsonBuffer)!!
+      assertIs<Folder>(folder)
+      assertEquals("SENT", folder.id)
+      assertEquals("41009df5-bf11-4c97-aa18-b285b5f2e386", folder.grantId)
+      assertEquals("SENT", folder.name)
+      assertEquals("folder", folder.getObject())
+    }
   }
 
   @Nested
@@ -303,6 +346,29 @@ class FoldersTests {
       assertEquals("v3/grants/$grantId/folders/$folderId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Folder::class.java), typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a folder with select parameter calls requests with the correct params`() {
+      val folderId = "folder-123"
+      val queryParams = FindFolderQueryParams(select = "id,name")
+
+      folders.find(grantId, folderId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/folders/$folderId", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Folder::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
     @Test

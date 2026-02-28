@@ -86,12 +86,14 @@ fun main() {
         val comprehensiveFolders = nylasClient.folders().list(grantId, comprehensiveParams)
         println("Found ${comprehensiveFolders.data.size} folders with comprehensive options:")
         comprehensiveFolders.data.forEach { folder ->
-            println("  - ${folder.name}")
-            println("    ID: ${folder.id}")
+            println("  - ${folder.name ?: "N/A"}")
+            println("    ID: ${folder.id ?: "N/A"}")
             println("    Unread Count: ${folder.unreadCount ?: 0}")
             if (folder.parentId != null) {
                 println("    Parent ID: ${folder.parentId}")
             }
+            // Note: When using select parameter, only selected fields are returned
+            // grantId and other fields may be null if not included in select
             println()
         }
 

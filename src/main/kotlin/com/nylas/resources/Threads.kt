@@ -23,14 +23,15 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
    * Return a Thread
    * @param identifier The identifier of the grant to act upon
    * @param threadId The id of the Thread to retrieve.
+   * @param queryParams The query parameters to include in the request
    * @param overrides Optional request overrides to apply
    * @return The Thread
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
-  fun find(identifier: String, threadId: String, overrides: RequestOverrides? = null): Response<Thread> {
+  fun find(identifier: String, threadId: String, queryParams: FindThreadQueryParams? = null, overrides: RequestOverrides? = null): Response<Thread> {
     val path = String.format("v3/grants/%s/threads/%s", identifier, threadId)
-    return findResource(path, overrides = overrides)
+    return findResource(path, queryParams, overrides = overrides)
   }
 
   /**

@@ -10,12 +10,12 @@ data class Folder(
    * A globally unique object identifier.
    */
   @Json(name = "id")
-  val id: String,
+  val id: String? = null,
   /**
    * A Grant ID of the Nylas account.
    */
   @Json(name = "grant_id")
-  val grantId: String,
+  val grantId: String? = null,
   /**
    * Folder name
    */

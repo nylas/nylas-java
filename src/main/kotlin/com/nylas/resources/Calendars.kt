@@ -33,14 +33,15 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    * Return a Calendar
    * @param identifier Grant ID or email account to query.
    * @param calendarId The id of the Calendar to retrieve. Use "primary" to refer to the primary calendar associated with grant.
+   * @param queryParams The query parameters to include in the request
    * @param overrides Optional request overrides to apply
    * @return The calendar
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
-  fun find(identifier: String, calendarId: String, overrides: RequestOverrides? = null): Response<Calendar> {
+  fun find(identifier: String, calendarId: String, queryParams: FindCalendarQueryParams? = null, overrides: RequestOverrides? = null): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
-    return findResource(path, overrides = overrides)
+    return findResource(path, queryParams, overrides = overrides)
   }
 
   /**

@@ -7,9 +7,9 @@ import com.squareup.moshi.Json
  */
 data class Contact(
   @Json(name = "id")
-  val id: String = "",
+  val id: String? = null,
   @Json(name = "grant_id")
-  val grantId: String = "",
+  val grantId: String? = null,
   @Json(name = "object")
   private val obj: String = "contact",
   @Json(name = "birthday")
@@ -17,7 +17,7 @@ data class Contact(
   @Json(name = "company_name")
   val companyName: String? = null,
   @Json(name = "display_name")
-  val displayName: String = "",
+  val displayName: String? = null,
   @Json(name = "emails")
   val emails: List<ContactEmail>? = null,
   @Json(name = "im_addresses")
