@@ -224,6 +224,56 @@ class EventsTests {
     }
 
     @Test
+    fun `Event deserializes maybe status properly`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
+          {
+            "id": "5d3qmne77v32r8l4phyuksl2x",
+            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+            "calendar_id": "7d93zl2palhxqdy6e5qinsakt",
+            "object": "event",
+            "status": "maybe",
+            "when": {
+              "date": "2024-06-18",
+              "object": "date"
+            }
+          }
+          """.trimIndent(),
+        )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+
+      assertEquals(EventStatus.MAYBE, event.status)
+    }
+
+    @Test
+    fun `Event deserializes unknown status as null`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
+          {
+            "id": "5d3qmne77v32r8l4phyuksl2x",
+            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+            "calendar_id": "7d93zl2palhxqdy6e5qinsakt",
+            "object": "event",
+            "status": "unexpected_status",
+            "when": {
+              "date": "2024-06-18",
+              "object": "date"
+            }
+          }
+          """.trimIndent(),
+        )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+
+      assertEquals(null, event.status)
+    }
+
+    @Test
     fun `CreateEventAutoConferencingProvider serializes properly`() {
       val adapter = JsonHelper.moshi().adapter(CreateEventAutoConferencingProvider::class.java)
 

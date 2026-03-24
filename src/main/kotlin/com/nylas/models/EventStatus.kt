@@ -9,6 +9,9 @@ enum class EventStatus {
   @Json(name = "confirmed")
   CONFIRMED,
 
+  @Json(name = "maybe")
+  MAYBE,
+
   @Json(name = "tentative")
   TENTATIVE,
 
