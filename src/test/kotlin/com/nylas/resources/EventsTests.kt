@@ -249,6 +249,31 @@ class EventsTests {
     }
 
     @Test
+    fun `Event deserializes tentative status as maybe`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer =
+        Buffer().writeUtf8(
+          """
+          {
+            "id": "5d3qmne77v32r8l4phyuksl2x",
+            "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+            "calendar_id": "7d93zl2palhxqdy6e5qinsakt",
+            "object": "event",
+            "status": "tentative",
+            "when": {
+              "date": "2024-06-18",
+              "object": "date"
+            }
+          }
+          """.trimIndent(),
+        )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+
+      assertEquals(EventStatus.MAYBE, event.status)
+    }
+
+    @Test
     fun `Event deserializes unknown status as null`() {
       val adapter = JsonHelper.moshi().adapter(Event::class.java)
       val jsonBuffer =
@@ -271,6 +296,15 @@ class EventsTests {
       val event = adapter.fromJson(jsonBuffer)!!
 
       assertEquals(null, event.status)
+    }
+
+    @Suppress("DEPRECATION")
+    @Test
+    fun `Event status serializes tentative as maybe`() {
+      val adapter = JsonHelper.moshi().adapter(EventStatus::class.java)
+
+      assertEquals("\"maybe\"", adapter.toJson(EventStatus.MAYBE))
+      assertEquals("\"maybe\"", adapter.toJson(EventStatus.TENTATIVE))
     }
 
     @Test

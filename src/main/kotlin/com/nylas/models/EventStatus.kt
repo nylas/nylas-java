@@ -12,6 +12,10 @@ enum class EventStatus {
   @Json(name = "maybe")
   MAYBE,
 
+  @Deprecated(
+    message = "Use MAYBE instead. TENTATIVE is a legacy alias and will be removed in a future release.",
+    replaceWith = ReplaceWith("MAYBE"),
+  )
   @Json(name = "tentative")
   TENTATIVE,
 
