@@ -36,6 +36,7 @@ class JsonHelper {
       .add(IMessageAdapter())
       .add(UpdateConnectorAdapter())
       .add(CredentialDataAdapter())
+      .add(EventStatusJsonAdapter())
       .add(CreateAttachmentRequestAdapter())
       .add(MicrosoftAdminConsentCredentialDataAdapter())
       .add(GoogleServiceAccountCredentialDataAdapter())

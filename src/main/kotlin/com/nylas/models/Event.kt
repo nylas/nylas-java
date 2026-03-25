@@ -110,7 +110,7 @@ data class Event(
   @Json(name = "reminders")
   val reminders: Reminders? = null,
   /**
-   * Status of the event.
+   * Status of the event. Possible values: "confirmed", "tentative", "cancelled", "maybe".
    */
   @Json(name = "status")
   val status: EventStatus? = null,
