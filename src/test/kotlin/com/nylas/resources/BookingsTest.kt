@@ -185,5 +185,35 @@ class BookingsTest {
       assertEquals("v3/scheduling/bookings/$bookingId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
+
+    @Test
+    fun `destroying a booking with a request body calls request with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(DestroyBookingRequest::class.java)
+      val bookingId = "booking-id"
+      val requestBody = DestroyBookingRequest("No longer available")
+      val queryParams = DestroyBookingQueryParams.Builder()
+        .configurationId("config-id")
+        .build()
+
+      bookings.destroy(bookingId, requestBody, queryParams, null)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<DestroyBookingQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<DeleteResponse>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/scheduling/bookings/$bookingId", pathCaptor.firstValue)
+      assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
+      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
   }
 }

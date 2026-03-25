@@ -521,6 +521,23 @@ class NylasClientTest {
       assertEquals(capturedRequest.method, "DELETE")
     }
 
+    @Test
+    fun `executeDelete with a request body should set up the request with the correct params`() {
+      val deleteBody = "{ \"cancellation_reason\": \"No longer available\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executeDelete<Map<String, String>>("test/path", type, deleteBody)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+      val requestBodyBuffer = capturedRequest.body.asString()
+
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
+      assertEquals(capturedRequest.method, "DELETE")
+      assertEquals(requestBodyBuffer, deleteBody)
+    }
+
     /**
      * Helper function to get the string value of a RequestBody
      * @return String value of the RequestBody
