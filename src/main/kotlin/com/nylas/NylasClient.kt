@@ -277,6 +277,28 @@ open class NylasClient(
   }
 
   /**
+   * Execute a DELETE request to the Nylas API with a JSON request body.
+   * @param path The path to request.
+   * @param resultType The type of the response body.
+   * @param requestBody The request body.
+   * @param queryParams The query parameters.
+   * @param overrides The request overrides.
+   * @suppress Not for public use.
+   */
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  open fun <T> executeDelete(
+    path: String,
+    resultType: Type,
+    requestBody: String,
+    queryParams: IQueryParams? = null,
+    overrides: RequestOverrides? = null,
+  ): T {
+    val url = buildUrl(path, queryParams, overrides)
+    val jsonBody = JsonHelper.jsonRequestBody(requestBody)
+    return executeRequest(url, HttpMethod.DELETE, jsonBody, resultType, overrides)
+  }
+
+  /**
    * Execute a request with a form-body payload to the Nylas API.
    * @param path The path to request.
    * @param method The HTTP method to use.

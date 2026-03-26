@@ -94,7 +94,57 @@ class Bookings(client: NylasClient) : Resource<Booking>(client, Booking::class.j
   }
 
   /**
-   * Destroy a booking
+   * Destroy a booking with a request body.
+   *
+   * This is a convenience overload for callers who need to send a
+   * [DestroyBookingRequest] but do not need query params or request overrides.
+   * It delegates to the full request-body overload below.
+   *
+   * @param bookingId The ID of the booking to destroy.
+   * @param requestBody The data to destroy the booking with.
+   * @return The DeleteResponse object
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun destroy(
+    bookingId: String,
+    requestBody: DestroyBookingRequest,
+  ): DeleteResponse {
+    return destroy(bookingId, requestBody, null, null)
+  }
+
+  /**
+   * Destroy a booking with a request body.
+   *
+   * This is the full request-body overload used for cancellation flows that
+   * need to send fields such as `cancellation_reason` while still supporting
+   * optional query params and request overrides.
+   *
+   * @param bookingId The ID of the booking to destroy.
+   * @param requestBody The data to destroy the booking with.
+   * @param queryParams Optional query parameters to apply
+   * @param overrides Optional request overrides to apply
+   * @return The DeleteResponse object
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  fun destroy(
+    bookingId: String,
+    requestBody: DestroyBookingRequest,
+    queryParams: DestroyBookingQueryParams?,
+    overrides: RequestOverrides?,
+  ): DeleteResponse {
+    val path = String.format("v3/scheduling/bookings/%s", bookingId)
+    val adapter = JsonHelper.moshi().adapter(DestroyBookingRequest::class.java)
+    val serializedRequestBody = adapter.toJson(requestBody)
+    return client.executeDelete(path, DeleteResponse::class.java, serializedRequestBody, queryParams, overrides)
+  }
+
+  /**
+   * Destroy a booking using the legacy no-body behavior.
+   *
+   * This overload is kept for backward compatibility with existing SDK users.
+   * It preserves the previous method shape and sends the DELETE request without
+   * a request body.
+   *
    * @param bookingId The ID of the booking to destroy.
    * @param queryParams Optional query parameters to apply
    * @param overrides Optional request overrides to apply

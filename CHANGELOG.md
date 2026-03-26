@@ -1,5 +1,17 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Changed
+* Standardized event status handling on `maybe`
+  - Added `EventStatus.MAYBE` as the primary SDK value for this status
+  - Deprecated `EventStatus.TENTATIVE` as a legacy alias and serialize it as `maybe`
+  - Normalize both API values `maybe` and `tentative` to `EventStatus.MAYBE`
+  - Fall back to `null` for unknown event status values instead of failing deserialization
+
+### Fixed
+* Added request-body support to booking cancellation via `Bookings.destroy()` and `NylasClient.executeDelete()`, allowing `cancellation_reason` to be sent while keeping the legacy no-body booking destroy overload unchanged
+
 ## [v2.15.0] - Release 2026-02-22
 
 ### Added
@@ -607,7 +619,7 @@ This second release aims toward API stability so that we can get to v1.0.0.
 
 Initial preview release
 
-[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.5.0...HEAD
+[Unreleased]: https://github.com/nylas/nylas-java/compare/v2.15.0...HEAD
 [2.5.0]: https://github.com/nylas/nylas-java/releases/tag/v2.5.0
 [2.4.1]: https://github.com/nylas/nylas-java/releases/tag/v2.4.1
 [2.4.0]: https://github.com/nylas/nylas-java/releases/tag/v2.4.0
