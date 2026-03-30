@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [v2.15.1] - Release 2026-03-30
 
 ### Changed
 * Standardized event status handling on `maybe`
