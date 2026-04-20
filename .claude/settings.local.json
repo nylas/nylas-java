@@ -12,7 +12,8 @@
       "Bash(/usr/libexec/java_home:*)",
       "Bash(./gradlew clean test:*)",
       "Bash(./gradlew:*)",
-      "Bash(./gradlew build:*)"
+      "Bash(./gradlew build:*)",
+      "Bash(git checkout *)"
     ]
   }
 }

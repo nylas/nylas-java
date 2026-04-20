@@ -111,6 +111,12 @@ open class NylasClient(
   open fun drafts(): Drafts = Drafts(this)
 
   /**
+   * Access the Domains API
+   * @return The Domains API
+   */
+  open fun domains(): Domains = Domains(this)
+
+  /**
    * Access the Events API
    * @return The Events API
    */
