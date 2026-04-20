@@ -10,7 +10,6 @@ import okio.Buffer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.*
 import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
@@ -20,22 +19,6 @@ import kotlin.test.assertIs
 import kotlin.test.assertNull
 
 class DomainsTests {
-  private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
-  private val mockCall: Call = Mockito.mock(Call::class.java)
-  private val mockResponse: okhttp3.Response = Mockito.mock(okhttp3.Response::class.java)
-  private val mockResponseBody: ResponseBody = Mockito.mock(ResponseBody::class.java)
-  private val mockOkHttpClientBuilder: OkHttpClient.Builder = Mockito.mock()
-
-  @BeforeEach
-  fun setup() {
-    MockitoAnnotations.openMocks(this)
-    whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
-    whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
-    whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
-    whenever(mockCall.execute()).thenReturn(mockResponse)
-    whenever(mockResponse.isSuccessful).thenReturn(true)
-    whenever(mockResponse.body).thenReturn(mockResponseBody)
-  }
 
   @Nested
   inner class SerializationTests {
@@ -252,6 +235,40 @@ class DomainsTests {
       multipart.part(1).body.writeTo(fileBuffer)
       assertEquals(adapter.toJson(attachmentLessRequest), buffer.readUtf8())
       assertEquals("test data", fileBuffer.readUtf8())
+    }
+
+    @Test
+    fun `sending a transactional email with a large attachment and overrides passes them through`() {
+      val testInputStream = ByteArrayInputStream("test data".toByteArray())
+      val request = SendTransactionalEmailRequest.Builder(
+        to = listOf(EmailName(email = "jane.doe@example.com", name = "Jane Doe")),
+        from = EmailName(email = "support@acme.com", name = "ACME Support"),
+      )
+        .attachments(
+          listOf(
+            CreateAttachmentRequest(
+              content = testInputStream,
+              contentType = "text/plain",
+              filename = "attachment.txt",
+              size = 3 * 1024 * 1024,
+            ),
+          ),
+        )
+        .build()
+      val overrides = RequestOverrides(apiKey = "override-key")
+
+      domains.sendTransactionalEmail(domainName, request, overrides)
+
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeFormRequest<Response<Message>>(
+        any(),
+        any(),
+        any(),
+        any(),
+        anyOrNull(),
+        overrideParamCaptor.capture(),
+      )
+      assertEquals("override-key", overrideParamCaptor.firstValue.apiKey)
     }
   }
 }
