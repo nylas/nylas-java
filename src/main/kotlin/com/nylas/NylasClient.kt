@@ -165,6 +165,24 @@ open class NylasClient(
   open fun notetakers(): Notetakers = Notetakers(this)
 
   /**
+   * Access the Policies API
+   * @return The Policies API
+   */
+  open fun policies(): Policies = Policies(this)
+
+  /**
+   * Access the Rules API
+   * @return The Rules API
+   */
+  open fun rules(): Rules = Rules(this)
+
+  /**
+   * Access the Lists API
+   * @return The Lists API
+   */
+  open fun lists(): NylasLists = NylasLists(this)
+
+  /**
    * Get a URL builder instance for the Nylas API.
    */
   open fun newUrlBuilder(): HttpUrl.Builder = apiUri.newBuilder()
