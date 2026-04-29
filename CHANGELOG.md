@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Fixed
+* `Folder.id` and `Folder.grantId` now default to empty strings so deserialization no longer fails when either field is absent from the API response due to the `select` query parameter
+
 ## [v2.15.1] - Release 2026-03-30
 
 ### Changed
