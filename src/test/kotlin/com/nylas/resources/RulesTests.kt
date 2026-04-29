@@ -225,6 +225,26 @@ class RulesTests {
     }
 
     @Test
+    fun `listing rules with query params passes them correctly`() {
+      val queryParams = ListRulesQueryParams(limit = 5, pageToken = "cursor123")
+      rules.list(queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Rule>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/rules", pathCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
     fun `finding a rule calls requests with the correct params`() {
       val ruleId = "rule-abc123"
       rules.find(ruleId)

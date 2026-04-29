@@ -162,6 +162,26 @@ class NylasListsTests {
     }
 
     @Test
+    fun `listing lists with query params passes them correctly`() {
+      val queryParams = ListNylasListsQueryParams(limit = 5, pageToken = "cursor123")
+      nylaslists.list(queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<NylasList>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/lists", pathCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
     fun `finding a list calls requests with the correct params`() {
       val listId = "list-abc123"
       nylaslists.find(listId)

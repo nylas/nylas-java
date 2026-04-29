@@ -24,9 +24,24 @@ data class ListPoliciesQueryParams(
     private var limit: Int? = null
     private var pageToken: String? = null
 
+    /**
+     * Set the maximum number of objects to return.
+     * @param limit The maximum number of objects to return.
+     * @return The builder.
+     */
     fun limit(limit: Int) = apply { this.limit = limit }
+
+    /**
+     * Set the pagination cursor.
+     * @param pageToken Cursor for pagination. Pass the value of [ListResponse.nextCursor].
+     * @return The builder.
+     */
     fun pageToken(pageToken: String) = apply { this.pageToken = pageToken }
 
+    /**
+     * Build the [ListPoliciesQueryParams].
+     * @return A [ListPoliciesQueryParams] with the provided values.
+     */
     fun build() = ListPoliciesQueryParams(limit, pageToken)
   }
 }
