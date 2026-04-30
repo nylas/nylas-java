@@ -14,8 +14,8 @@ import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.*
 import java.lang.reflect.Type
 import kotlin.test.Test
-import kotlin.test.assertFalse
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
