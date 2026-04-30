@@ -12,7 +12,13 @@
       "Bash(/usr/libexec/java_home:*)",
       "Bash(./gradlew clean test:*)",
       "Bash(./gradlew:*)",
-      "Bash(./gradlew build:*)"
+      "Bash(./gradlew build:*)",
+      "mcp__claude_ai_Atlassian__getJiraIssue",
+      "WebFetch(domain:developer.nylas.com)",
+      "Bash(wezterm cli *)",
+      "Skill(update-config)",
+      "WebFetch(domain:www.postman.com)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }
