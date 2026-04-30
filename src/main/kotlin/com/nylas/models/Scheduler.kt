@@ -12,10 +12,13 @@ data class Configuration(
   @Json(name = "id")
   val id: String,
   /**
-   * List of participants included in the scheduled event.
+   * List of participants included in the scheduled event. The Nylas API
+   * omits this field for group-event configurations, so default to an
+   * empty list to avoid a JsonDataException on deserialization while
+   * keeping the property's runtime type unchanged for existing callers.
    */
   @Json(name = "participants")
-  val participants: List<ConfigurationParticipant>,
+  val participants: List<ConfigurationParticipant> = emptyList(),
   /**
    * Rules that determine available time slots for the event.
    */
