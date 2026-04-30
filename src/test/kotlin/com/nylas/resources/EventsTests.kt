@@ -483,15 +483,6 @@ class EventsTests {
     }
 
     @Test
-    fun `UpdateEventRequest builder colorId can be cleared with null`() {
-      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
-      val request = UpdateEventRequest.Builder().colorId(null).build()
-
-      val json = adapter.toJson(request)
-      assertFalse(json.contains("color_id"))
-    }
-
-    @Test
     fun `Event with existing ConferencingProvider still works properly`() {
       // This test verifies that the original Event model continues to work with the original ConferencingProvider enum
       // The Event model uses the original Conferencing sealed class, not the new CreateEvent/UpdateEvent ones

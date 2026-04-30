@@ -729,12 +729,12 @@ data class UpdateEventRequest(
 
     /**
      * Update the Google color ID for the event. Only supported by Google Calendar providers; ignored by other providers.
-     * Pass null to clear an existing color. Valid values are strings "1" through "11".
-     * @param colorId The Google color ID, or null to clear the color.
+     * Valid values are strings "1" through "11".
+     * @param colorId The Google color ID.
      * @return The builder.
      * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
      */
-    fun colorId(colorId: String?) = apply { this.colorId = colorId }
+    fun colorId(colorId: String) = apply { this.colorId = colorId }
 
     /**
      * Builds the [UpdateEventRequest] object.
