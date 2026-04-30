@@ -111,7 +111,8 @@ class EventsTests {
                 "audio_recording": true,
                 "transcription": true
               }
-            }
+            },
+            "color_id": "7"
           }
           """.trimIndent(),
         )
@@ -171,6 +172,7 @@ class EventsTests {
       assertEquals(false, event.notetaker?.meetingSettings?.videoRecording)
       assertEquals(true, event.notetaker?.meetingSettings?.audioRecording)
       assertEquals(true, event.notetaker?.meetingSettings?.transcription)
+      assertEquals("7", event.colorId)
     }
 
     @Test
@@ -882,12 +884,12 @@ class EventsTests {
       val createEventRequest =
         CreateEventRequest(
           whenObj =
-          CreateEventRequest.When.Timespan(
-            startTime = 1620000000,
-            endTime = 1620000000,
-            startTimezone = "America/Los_Angeles",
-            endTimezone = "America/Los_Angeles",
-          ),
+            CreateEventRequest.When.Timespan(
+              startTime = 1620000000,
+              endTime = 1620000000,
+              startTimezone = "America/Los_Angeles",
+              endTimezone = "America/Los_Angeles",
+            ),
           description = "Description of my new event",
           location = "Los Angeles, CA",
           metadata = mapOf("your-key" to "value"),
@@ -899,6 +901,7 @@ class EventsTests {
               transcription = true,
             ),
           ),
+          colorId = "7",
         )
       val createEventQueryParams =
         CreateEventQueryParams(
@@ -941,6 +944,7 @@ class EventsTests {
               transcription = true,
             ),
           ),
+          colorId = "11",
         )
       val updateEventQueryParams =
         UpdateEventQueryParams(

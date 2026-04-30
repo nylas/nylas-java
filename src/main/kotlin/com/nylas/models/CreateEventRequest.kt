@@ -94,6 +94,12 @@ data class CreateEventRequest(
    */
   @Json(name = "notetaker")
   val notetaker: EventNotetakerRequest? = null,
+  /**
+   * The Google color ID for the event. (Currently) Only applies to Google Calendar events.
+   * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
+   */
+  @Json(name = "color_id")
+  val colorId: String? = null,
 ) {
   /**
    * This sealed class represents the different types of event time configurations.
@@ -511,6 +517,7 @@ data class CreateEventRequest(
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
     private var notetaker: EventNotetakerRequest? = null
+    private var colorId: String? = null
 
     /**
      * Set the event title.
@@ -626,6 +633,14 @@ data class CreateEventRequest(
     fun notetaker(notetaker: EventNotetakerRequest) = apply { this.notetaker = notetaker }
 
     /**
+     * Set the Google color ID for the event. Only applies to Google Calendar events.
+     * @param colorId The Google color ID.
+     * @return The builder.
+     * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
+     */
+    fun colorId(colorId: String) = apply { this.colorId = colorId }
+
+    /**
      * Builds the [CreateEventRequest] object.
      * @return [CreateEventRequest] object.
      */
@@ -647,6 +662,7 @@ data class CreateEventRequest(
         capacity,
         hideParticipant,
         notetaker,
+        colorId,
       )
   }
 }
