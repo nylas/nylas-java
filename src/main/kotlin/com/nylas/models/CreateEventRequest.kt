@@ -95,7 +95,8 @@ data class CreateEventRequest(
   @Json(name = "notetaker")
   val notetaker: EventNotetakerRequest? = null,
   /**
-   * The Google color ID for the event. (Currently) Only applies to Google Calendar events.
+   * The Google color ID for the event. Only supported by Google Calendar providers; ignored by other providers.
+   * Valid values are strings "1" through "11".
    * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
    */
   @Json(name = "color_id")
@@ -633,7 +634,8 @@ data class CreateEventRequest(
     fun notetaker(notetaker: EventNotetakerRequest) = apply { this.notetaker = notetaker }
 
     /**
-     * Set the Google color ID for the event. Only applies to Google Calendar events.
+     * Set the Google color ID for the event. Only supported by Google Calendar providers; ignored by other providers.
+     * Valid values are strings "1" through "11".
      * @param colorId The Google color ID.
      * @return The builder.
      * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>

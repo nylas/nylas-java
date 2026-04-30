@@ -95,7 +95,8 @@ data class UpdateEventRequest(
   @Json(name = "notetaker")
   val notetaker: EventNotetakerRequest? = null,
   /**
-   * The Google color ID for the event. (Currently) Only applies to Google Calendar events.
+   * The Google color ID for the event. Only supported by Google Calendar providers; ignored by other providers.
+   * Valid values are strings "1" through "11".
    * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
    */
   @Json(name = "color_id")
@@ -727,12 +728,13 @@ data class UpdateEventRequest(
     fun notetaker(notetaker: EventNotetakerRequest) = apply { this.notetaker = notetaker }
 
     /**
-     * Update the Google color ID for the event. Only applies to Google Calendar events.
-     * @param colorId The Google color ID.
+     * Update the Google color ID for the event. Only supported by Google Calendar providers; ignored by other providers.
+     * Pass null to clear an existing color. Valid values are strings "1" through "11".
+     * @param colorId The Google color ID, or null to clear the color.
      * @return The builder.
      * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
      */
-    fun colorId(colorId: String) = apply { this.colorId = colorId }
+    fun colorId(colorId: String?) = apply { this.colorId = colorId }
 
     /**
      * Builds the [UpdateEventRequest] object.

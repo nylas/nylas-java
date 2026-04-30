@@ -1,5 +1,12 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Added
+* `colorId` field on `Event`, `CreateEventRequest`, and `UpdateEventRequest` for Google Calendar event colors, mapped to the `color_id` JSON property.
+  Valid values are strings `"1"` through `"11"`.
+  See [Google Calendar Colors](https://developers.google.com/calendar/api/v3/reference/colors).
+
 ## [v2.15.1] - Release 2026-03-30
 
 ### Changed
