@@ -1270,7 +1270,7 @@ class EventsTests {
         any(),
         any(),
         queryParamCaptor.capture(),
-        any(),
+        anyOrNull(),
       )
 
       assertEquals(true, queryParamCaptor.firstValue.skipNylasEmail)
