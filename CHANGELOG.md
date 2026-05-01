@@ -7,6 +7,9 @@
   Valid values are strings `"1"` through `"11"`.
   See [Google Calendar Colors](https://developers.google.com/calendar/api/v3/reference/colors).
 
+### Fixed
+* `Configuration.participants` now defaults to an empty list when the field is absent from the API response (e.g. group-event configurations), preventing a `JsonDataException` from being thrown during deserialization.
+
 ## [v2.15.1] - Release 2026-03-30
 
 ### Changed
