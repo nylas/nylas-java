@@ -232,6 +232,28 @@ class ConfigurationsTest {
     }
 
     @Test
+    fun `Configuration without participants field deserializes to empty list`() {
+      val adapter = JsonHelper.moshi().adapter(Configuration::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "group-config-id",
+          "availability": {
+              "duration_minutes": 30
+          },
+          "event_booking": {
+              "title": "Group Event"
+          }
+        }
+        """.trimIndent(),
+      )
+      val config = adapter.fromJson(jsonBuffer)!!
+      assertIs<Configuration>(config)
+      assertEquals("group-config-id", config.id)
+      assertEquals(emptyList(), config.participants)
+    }
+
+    @Test
     fun `AdditionalFieldType METADATA serializes correctly`() {
       val adapter = JsonHelper.moshi().adapter(AdditionalField::class.java)
       val jsonBuffer = Buffer().writeUtf8(
