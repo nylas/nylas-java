@@ -101,6 +101,11 @@ data class UpdateEventRequest(
    */
   @Json(name = "color_id")
   val colorId: String? = null,
+  /**
+   * List of resources (e.g. rooms) to associate with the event.
+   */
+  @Json(name = "resources")
+  val resources: List<EventResource>? = null,
 ) {
   /**
    * This sealed class represents the different types of event time configurations.
@@ -605,6 +610,7 @@ data class UpdateEventRequest(
     private var hideParticipant: Boolean? = null
     private var notetaker: EventNotetakerRequest? = null
     private var colorId: String? = null
+    private var resources: List<EventResource>? = null
 
     /**
      * Set the when object.
@@ -737,6 +743,13 @@ data class UpdateEventRequest(
     fun colorId(colorId: String) = apply { this.colorId = colorId }
 
     /**
+     * Update the list of resources (e.g. rooms) to associate with the event.
+     * @param resources The list of resources.
+     * @return The builder.
+     */
+    fun resources(resources: List<EventResource>) = apply { this.resources = resources }
+
+    /**
      * Builds the [UpdateEventRequest] object.
      * @return [UpdateEventRequest] object.
      */
@@ -759,6 +772,7 @@ data class UpdateEventRequest(
         hideParticipant,
         notetaker,
         colorId,
+        resources,
       )
   }
 }
