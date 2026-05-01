@@ -15,7 +15,9 @@ import org.mockito.kotlin.*
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class EventsTests {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -111,7 +113,8 @@ class EventsTests {
                 "audio_recording": true,
                 "transcription": true
               }
-            }
+            },
+            "color_id": "7"
           }
           """.trimIndent(),
         )
@@ -171,6 +174,7 @@ class EventsTests {
       assertEquals(false, event.notetaker?.meetingSettings?.videoRecording)
       assertEquals(true, event.notetaker?.meetingSettings?.audioRecording)
       assertEquals(true, event.notetaker?.meetingSettings?.transcription)
+      assertEquals("7", event.colorId)
     }
 
     @Test
@@ -437,6 +441,45 @@ class EventsTests {
       val details = conferencing["details"] as Map<*, *>
       assertEquals("https://teams.microsoft.com/join/123", details["url"])
       assertEquals("123456", details["pin"])
+    }
+
+    @Test
+    fun `CreateEventRequest with colorId serializes color_id field`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
+      val request = CreateEventRequest(
+        whenObj = CreateEventRequest.When.Time(1620000000),
+        colorId = "7",
+      )
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      assertEquals("7", jsonMap["color_id"])
+    }
+
+    @Test
+    fun `CreateEventRequest without colorId omits color_id from serialized JSON`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
+      val request = CreateEventRequest(whenObj = CreateEventRequest.When.Time(1620000000))
+
+      val json = adapter.toJson(request)
+      assertFalse(json.contains("color_id"))
+    }
+
+    @Test
+    fun `UpdateEventRequest with colorId serializes color_id field`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest(colorId = "11")
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      assertEquals("11", jsonMap["color_id"])
+    }
+
+    @Test
+    fun `UpdateEventRequest without colorId omits color_id from serialized JSON`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest(title = "Test")
+
+      val json = adapter.toJson(request)
+      assertFalse(json.contains("color_id"))
     }
 
     @Test
@@ -899,6 +942,7 @@ class EventsTests {
               transcription = true,
             ),
           ),
+          colorId = "7",
         )
       val createEventQueryParams =
         CreateEventQueryParams(
@@ -923,6 +967,7 @@ class EventsTests {
       assertEquals("v3/grants/$grantId/events", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(createEventRequest), requestBodyCaptor.firstValue)
+      assertTrue(requestBodyCaptor.firstValue.contains("\"color_id\":\"7\""))
     }
 
     @Test
@@ -941,6 +986,7 @@ class EventsTests {
               transcription = true,
             ),
           ),
+          colorId = "11",
         )
       val updateEventQueryParams =
         UpdateEventQueryParams(
@@ -965,6 +1011,7 @@ class EventsTests {
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(updateEventRequest), requestBodyCaptor.firstValue)
+      assertTrue(requestBodyCaptor.firstValue.contains("\"color_id\":\"11\""))
     }
 
     @Test
