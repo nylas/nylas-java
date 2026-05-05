@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import java.net.URLEncoder
 
 class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java) {
   /**
@@ -29,7 +30,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, threadId: String, overrides: RequestOverrides? = null): Response<Thread> {
-    val path = String.format("v3/grants/%s/threads/%s", identifier, threadId)
+    val path = String.format("v3/grants/%s/threads/%s", identifier, encodePathSegment(threadId))
     return findResource(path, overrides = overrides)
   }
 
@@ -44,7 +45,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, threadId: String, requestBody: UpdateThreadRequest, overrides: RequestOverrides? = null): Response<Thread> {
-    val path = String.format("v3/grants/%s/threads/%s", identifier, threadId)
+    val path = String.format("v3/grants/%s/threads/%s", identifier, encodePathSegment(threadId))
     val adapter = JsonHelper.moshi().adapter(UpdateThreadRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
@@ -60,7 +61,10 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, threadId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/threads/%s", identifier, threadId)
+    val path = String.format("v3/grants/%s/threads/%s", identifier, encodePathSegment(threadId))
     return destroyResource(path, overrides = overrides)
   }
+
+  private fun encodePathSegment(value: String): String =
+    URLEncoder.encode(value, "UTF-8").replace("+", "%20")
 }
