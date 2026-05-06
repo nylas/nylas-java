@@ -10,7 +10,8 @@ import com.squareup.moshi.*
 class CreateWhenAdapter {
   @FromJson
   @Throws(UnsupportedOperationException::class)
-  fun fromJson(reader: JsonReader): CreateEventRequest.When? {
+  @Suppress("UNUSED_PARAMETER")
+  fun fromJson(_reader: JsonReader): CreateEventRequest.When? {
     throw UnsupportedOperationException("CreateWhenAdapter is only used for serialization")
   }
 

@@ -354,6 +354,57 @@ class EventsTests {
     }
 
     @Test
+    fun `ConferencingProvider deserializes known values properly`() {
+      val adapter = JsonHelper.moshi().adapter(ConferencingProvider::class.java)
+
+      assertEquals(ConferencingProvider.ZOOM_MEETING, adapter.fromJson("\"Zoom Meeting\""))
+      assertEquals(ConferencingProvider.GOOGLE_MEET, adapter.fromJson("\"Google Meet\""))
+      assertEquals(ConferencingProvider.MICROSOFT_TEAMS, adapter.fromJson("\"Microsoft Teams\""))
+      assertEquals(ConferencingProvider.WEBEX, adapter.fromJson("\"WebEx\""))
+      assertEquals(ConferencingProvider.GOTOMEETING, adapter.fromJson("\"GoToMeeting\""))
+      assertEquals(ConferencingProvider.SKYPE_FOR_CONSUMER, adapter.fromJson("\"Skype for Consumer\""))
+      assertEquals(ConferencingProvider.SKYPE_FOR_BUSINESS, adapter.fromJson("\"Skype for Business\""))
+    }
+
+    @Test
+    fun `ConferencingProvider deserializes unknown value as null`() {
+      val adapter = JsonHelper.moshi().adapter(ConferencingProvider::class.java).nullSafe()
+
+      assertEquals(null, adapter.fromJson("\"Hangouts\""))
+      assertEquals(null, adapter.fromJson("\"some_future_provider\""))
+    }
+
+    @Test
+    fun `Event with unknown conferencing provider deserializes without throwing`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "5d3qmne77v32r8l4phyuksl2x",
+          "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+          "calendar_id": "7d93zl2palhxqdy6e5qinsakt",
+          "object": "event",
+          "conferencing": {
+            "provider": "Hangouts",
+            "details": {
+              "url": "https://hangouts.google.com/call/abc123"
+            }
+          },
+          "when": {
+            "date": "2024-06-18",
+            "object": "date"
+          }
+        }
+        """.trimIndent(),
+      )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+      assertIs<Conferencing.Details>(event.conferencing)
+      val conferencingDetails = event.conferencing as Conferencing.Details
+      assertEquals(null, conferencingDetails.provider)
+    }
+
+    @Test
     fun `CreateEventRequest with Autocreate conferencing serializes properly`() {
       val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
       val createEventRequest = CreateEventRequest(
