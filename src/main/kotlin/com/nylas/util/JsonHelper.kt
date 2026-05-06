@@ -1,19 +1,24 @@
 package com.nylas.util
 
+import com.nylas.models.ConferencingProvider
 import com.nylas.models.Connector.Companion.CONNECTOR_JSON_ADAPTER_FACTORY
 import com.nylas.models.CreateConnectorRequest.Companion.CREATE_CONNECTOR_JSON_ADAPTER_FACTORY
 import com.nylas.models.CreateCredentialRequest.Companion.CREATE_CREDENTIAL_JSON_ADAPTER_FACTORY
+import com.nylas.models.CreateEventAutoConferencingProvider
+import com.nylas.models.CreateEventManualConferencingProvider
 import com.nylas.models.GetFreeBusyResponse.Companion.FREE_BUSY_JSON_FACTORY
 import com.nylas.models.When.Companion.WHEN_JSON_FACTORY
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import com.squareup.moshi.adapters.EnumJsonAdapter
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 import java.lang.reflect.Type
 import java.util.*
@@ -36,6 +41,9 @@ class JsonHelper {
       .add(IMessageAdapter())
       .add(UpdateConnectorAdapter())
       .add(CredentialDataAdapter())
+      .add(ConferencingProvider::class.java, EnumJsonAdapter.create(ConferencingProvider::class.java).withUnknownFallback(null))
+      .add(CreateEventAutoConferencingProvider::class.java, EnumJsonAdapter.create(CreateEventAutoConferencingProvider::class.java).withUnknownFallback(null))
+      .add(CreateEventManualConferencingProvider::class.java, EnumJsonAdapter.create(CreateEventManualConferencingProvider::class.java).withUnknownFallback(null))
       .add(EventStatusJsonAdapter())
       .add(CreateAttachmentRequestAdapter())
       .add(MicrosoftAdminConsentCredentialDataAdapter())
@@ -120,6 +128,7 @@ class JsonHelper {
      * @suppress Not for public use.
      */
     @JvmStatic
+    @Suppress("UNCHECKED_CAST")
     fun <T> adapter(type: Type): JsonAdapter<T> {
       return moshi.adapter<Any>(type).indent("  ") as JsonAdapter<T>
     }
@@ -234,7 +243,7 @@ class JsonHelper {
      */
     @JvmStatic
     fun jsonRequestBody(json: String): RequestBody {
-      return RequestBody.create(jsonType(), json.toByteArray())
+      return json.toByteArray().toRequestBody(jsonType())
     }
   }
 }
