@@ -94,6 +94,11 @@ data class ListMessagesQueryParams(
    */
   @Json(name = "search_query_native")
   val searchQueryNative: String? = null,
+  /**
+   * Pass in your metadata key and value pair to search for metadata.
+   */
+  @Json(name = "metadata_pair")
+  val metadataPair: Map<String, String>? = null,
 ) : IQueryParams {
   class Builder {
     private var limit: Int? = null
@@ -113,6 +118,7 @@ data class ListMessagesQueryParams(
     private var hasAttachment: Boolean? = null
     private var fields: MessageFields? = null
     private var searchQueryNative: String? = null
+    private var metadataPair: Map<String, String>? = null
 
     /**
      * Sets the maximum number of objects to return.
@@ -237,6 +243,13 @@ data class ListMessagesQueryParams(
     fun searchQueryNative(searchQueryNative: String?) = apply { this.searchQueryNative = searchQueryNative }
 
     /**
+     * Set the metadata key and value pair to search for metadata.
+     * @param metadataPair The metadata key and value pair to search for metadata.
+     * @return The builder
+     */
+    fun metadataPair(metadataPair: Map<String, String>?) = apply { this.metadataPair = metadataPair }
+
+    /**
      * Builds the [ListMessagesQueryParams] object.
      * @return The [ListMessagesQueryParams] object.
      */
@@ -258,6 +271,7 @@ data class ListMessagesQueryParams(
       hasAttachment = hasAttachment,
       fields = fields,
       searchQueryNative = searchQueryNative,
+      metadataPair = metadataPair,
     )
   }
 }

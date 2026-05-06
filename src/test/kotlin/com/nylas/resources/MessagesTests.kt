@@ -289,6 +289,31 @@ class MessagesTests {
     }
 
     @Test
+    fun `listing messages with metadata_pair calls requests with the correct params`() {
+      val queryParams =
+        ListMessagesQueryParams(
+          metadataPair = mapOf("campaign" to "welcome-email"),
+        )
+
+      messages.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
     fun `listing messages without query params calls requests with the correct params`() {
       messages.list(grantId)
 
