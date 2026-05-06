@@ -330,6 +330,14 @@ class EventsTests {
     }
 
     @Test
+    fun `CreateEventAutoConferencingProvider deserializes unknown value as null`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventAutoConferencingProvider::class.java).nullSafe()
+
+      assertEquals(null, adapter.fromJson("\"Hangouts\""))
+      assertEquals(null, adapter.fromJson("\"some_future_provider\""))
+    }
+
+    @Test
     fun `CreateEventManualConferencingProvider serializes properly`() {
       val adapter = JsonHelper.moshi().adapter(CreateEventManualConferencingProvider::class.java)
 
@@ -351,6 +359,14 @@ class EventsTests {
       assertEquals(CreateEventManualConferencingProvider.TEAMS_FOR_BUSINESS, adapter.fromJson("\"Teams for Business\""))
       assertEquals(CreateEventManualConferencingProvider.SKYPE_FOR_BUSINESS, adapter.fromJson("\"Skype for Business\""))
       assertEquals(CreateEventManualConferencingProvider.SKYPE_FOR_CONSUMER, adapter.fromJson("\"Skype for Consumer\""))
+    }
+
+    @Test
+    fun `CreateEventManualConferencingProvider deserializes unknown value as null`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventManualConferencingProvider::class.java).nullSafe()
+
+      assertEquals(null, adapter.fromJson("\"Hangouts\""))
+      assertEquals(null, adapter.fromJson("\"some_future_provider\""))
     }
 
     @Test
