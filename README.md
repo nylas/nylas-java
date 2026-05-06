@@ -1,110 +1,193 @@
-<a href="https://www.nylas.com/">
-    <img src="https://brand.nylas.com/assets/downloads/logo_horizontal_png/Nylas-Logo-Horizontal-Blue_.png" alt="Aimeos logo" title="Aimeos" align="right" height="60" />
-</a>
+<div align="center">
+  <a href="https://www.nylas.com/">
+    <img src="/diagrams/nylas-logo.png" alt="Nylas" height="80" />
+  </a>
 
-# Nylas SDK for Kotlin & Java
+  <h1>Nylas Kotlin & Java SDK</h1>
 
-![Maven Central Version](https://img.shields.io/maven-central/v/com.nylas.sdk/nylas)
-[![codecov](https://codecov.io/gh/nylas/nylas-java/graph/badge.svg?token=R94RD91GZ3)](https://codecov.io/gh/nylas/nylas-java)
+  <p>
+    <strong>The official Kotlin & Java SDK for Nylas — the infrastructure that powers communications</strong>
+  </p>
 
-This is the GitHub repository for the Nylas SDK for Kotlin and Java. This repo is primarily for anyone who wants to make contributions to the SDK or install it from source. For documentation on how to use this SDK to access the Nylas Email, Calendar, or Contacts APIs, see the official [Java SDK Quickstart Guide](https://developer.nylas.com/docs/sdks/java/).
+  <p>
+    <a href="https://central.sonatype.com/artifact/com.nylas.sdk/nylas"><img src="https://img.shields.io/maven-central/v/com.nylas.sdk/nylas" alt="version" /></a>
+    <a href="https://codecov.io/gh/nylas/nylas-java"><img src="https://codecov.io/gh/nylas/nylas-java/graph/badge.svg?token=R94RD91GZ3" alt="code coverage" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" /></a>
+  </p>
 
-The Nylas Communications Platform provides REST APIs for [Email](https://developer.nylas.com/docs/email/), [Calendar](https://developer.nylas.com/docs/calendar/), and [Contacts](https://developer.nylas.com/docs/contacts/), and the Nylas SDK is the quickest way to build your integration using Kotlin or Java.
+  <p>
+    <a href="https://developer.nylas.com/docs/v3/sdks/kotlin-java/">📖 SDK Guide</a> ·
+    <a href="https://developer.nylas.com/docs/api/v3/">📚 API Reference</a> ·
+    <a href="https://dashboard-v3.nylas.com/register">🚀 Sign up</a> ·
+    <a href="https://github.com/orgs/nylas-samples/repositories?q=java">💡 Samples</a> ·
+    <a href="https://forums.nylas.com">💬 Forum</a>
+  </p>
+</div>
 
-Here are some resources to help you get started:
+<br />
 
-- [Sign up for your free Nylas account](https://dashboard.nylas.com/register)
-- [Nylas API v3 Quickstart Guide](https://developer.nylas.com/docs/v3-beta/v3-quickstart/)
-- [Nylas SDK Reference](https://nylas-java-sdk-reference.pages.dev/)
-- [Nylas API Reference](https://developer.nylas.com/docs/api/)
-- [Nylas Samples repo for code samples and example applications](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=java)
+The official Kotlin & Java SDK for [Nylas](https://developer.nylas.com/docs/v3/) — the infrastructure that powers communications. Integrate with Gmail, Microsoft, IMAP, Zoom, and 250+ email, calendar, and meeting providers in 5 minutes. Covers [Email](https://developer.nylas.com/docs/v3/email/), [Calendar](https://developer.nylas.com/docs/v3/calendar/), [Contacts](https://developer.nylas.com/docs/v3/email/contacts/), [Scheduler](https://developer.nylas.com/docs/v3/scheduler/), [Notetaker](https://developer.nylas.com/docs/v3/notetaker/), and [Agent Accounts](https://developer.nylas.com/docs/v3/agent-accounts/).
 
-If you have a question about the Nylas Communications Platform, [contact Nylas Support](https://support.nylas.com/) for help.
+This repository is for contributors and anyone installing the SDK from source. If you just want to use the SDK in your app, head straight to the **[Kotlin & Java SDK guide](https://developer.nylas.com/docs/v3/sdks/kotlin-java/)** on developer.nylas.com.
+
+## Get started
+
+1. [Sign up for a free Nylas account](https://dashboard-v3.nylas.com/register).
+2. Follow the [getting started guide](https://developer.nylas.com/docs/v3/getting-started/) to create an application and provision your first API key.
+3. Bootstrap a project with the Nylas CLI:
+
+   ```bash
+   brew install nylas/nylas-cli/nylas
+   nylas init
+   ```
 
 ## ⚙️ Install
 
-**Note:** The Nylas SDK for Kotlin & Java requires JRE 8 or later.
+> **Requirements:** Java 8 or later. Kotlin 1.8 or later.
 
-### Set up using Gradle
+### Gradle
 
-If you're using Gradle, add the following to the dependencies section of `build.gradle`:
+Kotlin DSL (`build.gradle.kts`):
+
+```kotlin
+implementation("com.nylas.sdk:nylas:2.15.1")
+```
+
+Groovy (`build.gradle`):
 
 ```groovy
-implementation("com.nylas.sdk:nylas:2.15.1")
+implementation 'com.nylas.sdk:nylas:2.15.1'
+```
+
+### Maven
+
+```xml
+<dependency>
+  <groupId>com.nylas.sdk</groupId>
+  <artifactId>nylas</artifactId>
+  <version>2.15.1</version>
+</dependency>
 ```
 
 ### Build from source
 
-To build from source, clone this repo and build the project with Gradle.
-
-```shell
-git clone https://github.com/nylas/nylas-java.git && cd nylas-java
+```bash
+git clone https://github.com/nylas/nylas-java.git
+cd nylas-java
 ./gradlew build uberJar
 ```
 
-This creates a new jar file in `build/libs/nylas-java-sdk-2.15.1-uber.jar`.
+This produces `build/libs/nylas-java-sdk-<version>-uber.jar`.
 
-See the Gradle documentation on [Building Libraries](https://guides.gradle.org/building-java-libraries/)
-or the [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html) for more information.
+## ⚡️ Usage
 
-## ⚡️Usage
-
-To use this SDK, you must first [get a free Nylas account](https://dashboard.nylas.com/register).
-
-Then, follow the Quickstart guide to [set up your first app and get your API keys](https://developer.nylas.com/docs/v3-beta/v3-quickstart/).
-
-For code examples that demonstrate how to use this SDK, take a look at our [Java repos in the Nylas Samples collection](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=java).
-
-### 🚀 Making Your First Request
-
-You use the `NylasClient` object to make requests to the Nylas API. The SDK is organized into different resources, each of which has methods to make requests to the API. Each resource is available through the `NylasClient` object configured with your API key.
-
-For example, to get a list of calendars, you can use the following code:
+Initialize the client with your API key:
 
 ```java
-NylasClient nylas = new NylasClient.Builder("API_KEY").build();
-ListResponse<Calendars> calendars = nylas.calendars().list("GRANT_ID");
+import com.nylas.NylasClient;
+import com.nylas.models.Calendar;
+import com.nylas.models.ListResponse;
+
+NylasClient nylas = new NylasClient.Builder("NYLAS_API_KEY").build();
+
+ListResponse<Calendar> calendars = nylas.calendars().list("GRANT_ID");
 ```
 
-## 📚 Documentation
+For step-by-step walkthroughs, see the developer guides:
 
-Nylas maintains a [reference guide for the Kotlin and Java SDK](https://nylas-java-sdk-reference.pages.dev/) to help you get familiar with the available methods and classes.
+- [Send and receive email](https://developer.nylas.com/docs/v3/email/)
+- [Read and manage calendar events](https://developer.nylas.com/docs/v3/calendar/)
+- [Find available meeting times with Scheduler](https://developer.nylas.com/docs/v3/scheduler/)
+- [Capture meeting notes with Notetaker](https://developer.nylas.com/docs/v3/notetaker/)
+- [Manage Agent Accounts](https://developer.nylas.com/docs/v3/agent-accounts/)
+- [Subscribe to webhooks and notifications](https://developer.nylas.com/docs/v3/notifications/)
+- [Choose a data residency region](https://developer.nylas.com/docs/dev-guide/platform/data-residency/)
 
-## ✨ Upgrading from 1.x
+### Error handling
 
-See [UPGRADE.md](UPGRADING.md) for instructions on upgrading from 1.x to 2.x.
+Nylas API errors extend `AbstractNylasApiError` (e.g. `NylasApiError`, `NylasOAuthError`). SDK-side errors extend `AbstractNylasSdkError` (e.g. `NylasSdkTimeoutError`, `NylasSdkRemoteClosedError`).
 
-**Note**: The Kotlin/Java SDK 2.x is not compatible with the Nylas API earlier than v3-beta.
+```java
+import com.nylas.models.AbstractNylasApiError;
+import com.nylas.models.AbstractNylasSdkError;
+import com.nylas.models.NylasApiError;
 
-## 🪵 Logging
+try {
+  nylas.calendars().list("GRANT_ID");
+} catch (NylasApiError e) {
+  System.err.println("API error " + e.getStatusCode() + ": " + e.getMessage());
+  System.err.println("Request ID: " + e.getRequestId());
+} catch (AbstractNylasSdkError e) {
+  System.err.println("SDK error: " + e.getMessage());
+}
+```
 
-The SDK uses [SLF4J](http://www.slf4j.org) for logging. If you are using the SDK you can [choose what logging framework to use with it](http://www.slf4j.org/manual.html#projectDep) for your app.
+### Logging
 
-Common choices are log4j, logback, java.util.logging. If the application doesn't specify any logging framework,
-SLF4J emits one single warning and is then completely silent.
+The SDK uses [SLF4J](http://www.slf4j.org). The HTTP client exposes three DEBUG-level loggers:
 
-By default, the HTTP client is configured with the `com.nylas.HttpLoggingInterceptor`
-which provides three DEBUG level loggers for HTTP requests.
+- `com.nylas.http.Summary` — one line per request/response (method, URI, status, size, duration)
+- `com.nylas.http.Headers` — request/response headers (Authorization redacted by default)
+- `com.nylas.http.Body` — request/response bodies (first 10 kB by default)
 
-- `com.nylas.http.Summary` logs one line for each request, containing the method, URI, and content size,
-and one line for each response containing the status code, message, content size and duration.
-- `com.nylas.http.Headers` logs the request and response HTTP headers (except Authorization value by default).
-- `com.nylas.http.Body` logs request and response bodies (first 10kB by default).
+Enable them with your logging framework, e.g. log4j2:
 
-You can enable or disable these loggers using whatever logging framework you use.
+```xml
+<Logger name="com.nylas" level="DEBUG"/>
+```
 
-For example, if you're using log4j2 and with an xml configuration file, include this line to enable all three:
-`<Logger name="com.nylas" level="DEBUG"/>`
+Customize redaction and body-size limits by passing your own `HttpLoggingInterceptor` to `NylasClient.Builder`.
 
-You can configure how you log HTTP Authorization header values and the body size limit using a
-`NylasClient.Builder` with a customized `HttpLoggingInterceptor`
+## 💡 Examples
+
+Runnable Java and Kotlin examples live in [`examples/`](examples) (folders, events, messages, large attachments, Notetaker). For full apps, browse [Java repos in nylas-samples](https://github.com/orgs/nylas-samples/repositories?q=java).
+
+## 🤖 AI agents
+
+[nylas/skills](https://github.com/nylas/skills) drops Nylas into Claude Code, Cursor, Codex, and other agents that support the skills format:
+
+```bash
+npx skills add nylas/skills
+/plugin marketplace add nylas/skills   # Claude Code
+```
+
+The CLI also installs an MCP server for Claude Desktop, Claude Code, Cursor, Windsurf, or VS Code:
+
+```bash
+brew install nylas/nylas-cli/nylas
+nylas mcp install
+```
+
+Walkthrough: [give AI agents email access via MCP](https://cli.nylas.com/guides/give-ai-agents-email-access-via-mcp).
+
+## 📚 Reference
+
+- [Kotlin & Java SDK guide](https://developer.nylas.com/docs/v3/sdks/kotlin-java/)
+- [API reference](https://developer.nylas.com/docs/api/v3/)
+- [Getting started](https://developer.nylas.com/docs/v3/getting-started/)
+- [Javadoc / Dokka SDK reference](https://nylas-java-sdk-reference.pages.dev/)
+- [Data residency](https://developer.nylas.com/docs/dev-guide/platform/data-residency/)
+- [Nylas CLI](https://cli.nylas.com)
+- [Dashboard](https://dashboard-v3.nylas.com)
+
+## ✨ Upgrading
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes and [UPGRADE.md](UPGRADE.md) for migration instructions between major versions.
 
 ## 💙 Contributing
 
-We value and appreciate contributors' time! We welcome questions, bug reports, and pull requests.
+We welcome questions, bug reports, and pull requests. See [Contributing.md](Contributing.md) for how to get involved, or ask in the [Nylas forum](https://forums.nylas.com).
 
-See the [Contributing](Contributing.md) for information about how to make contributions to this project.
+## 🔒 Security
+
+Found a security issue? Please follow the [Nylas vulnerability disclosure policy](https://www.nylas.com/security/vulnerability-disclosure-policy/) instead of opening a public issue.
+
+## 🔗 Other Nylas SDKs
+
+- [nylas-nodejs](https://github.com/nylas/nylas-nodejs)
+- [nylas-python](https://github.com/nylas/nylas-python)
+- [nylas-ruby](https://github.com/nylas/nylas-ruby)
 
 ## 📝 License
 
-This project is licensed under the terms of the MIT license. See the [LICENSE](LICENSE) for the full terms.
+This project is licensed under the terms of the [MIT license](LICENSE).
