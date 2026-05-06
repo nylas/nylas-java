@@ -46,7 +46,60 @@ data class EventNotetaker(
      */
     @Json(name = "transcription")
     val transcription: Boolean? = true,
-  )
+
+    /**
+     * When true, Notetaker generates action items from the meeting.
+     */
+    @Json(name = "action_items")
+    val actionItems: Boolean? = null,
+
+    /**
+     * Settings for action item generation.
+     */
+    @Json(name = "action_items_settings")
+    val actionItemsSettings: ActionItemsSettings? = null,
+
+    /**
+     * When true, Notetaker generates a summary of the meeting.
+     */
+    @Json(name = "summary")
+    val summary: Boolean? = null,
+
+    /**
+     * Settings for summary generation.
+     */
+    @Json(name = "summary_settings")
+    val summarySettings: SummarySettings? = null,
+
+    /**
+     * Number of seconds of silence after which Notetaker leaves the meeting.
+     */
+    @Json(name = "leave_after_silence_seconds")
+    val leaveAfterSilenceSeconds: Int? = null,
+
+    /**
+     * Settings for transcription.
+     */
+    @Json(name = "transcription_settings")
+    val transcriptionSettings: TranscriptionSettings? = null,
+  ) {
+    data class ActionItemsSettings(
+      @Json(name = "custom_instructions")
+      val customInstructions: String? = null,
+    )
+
+    data class SummarySettings(
+      @Json(name = "custom_instructions")
+      val customInstructions: String? = null,
+    )
+
+    data class TranscriptionSettings(
+      @Json(name = "expected_languages")
+      val expectedLanguages: List<String>? = null,
+      @Json(name = "fallback_language")
+      val fallbackLanguage: String? = null,
+    )
+  }
 }
 
 /**
@@ -87,5 +140,58 @@ data class EventNotetakerRequest(
      */
     @Json(name = "transcription")
     val transcription: Boolean? = true,
-  )
+
+    /**
+     * When true, Notetaker generates action items from the meeting.
+     */
+    @Json(name = "action_items")
+    val actionItems: Boolean? = null,
+
+    /**
+     * Settings for action item generation.
+     */
+    @Json(name = "action_items_settings")
+    val actionItemsSettings: ActionItemsSettings? = null,
+
+    /**
+     * When true, Notetaker generates a summary of the meeting.
+     */
+    @Json(name = "summary")
+    val summary: Boolean? = null,
+
+    /**
+     * Settings for summary generation.
+     */
+    @Json(name = "summary_settings")
+    val summarySettings: SummarySettings? = null,
+
+    /**
+     * Number of seconds of silence after which Notetaker leaves the meeting.
+     */
+    @Json(name = "leave_after_silence_seconds")
+    val leaveAfterSilenceSeconds: Int? = null,
+
+    /**
+     * Settings for transcription.
+     */
+    @Json(name = "transcription_settings")
+    val transcriptionSettings: TranscriptionSettings? = null,
+  ) {
+    data class ActionItemsSettings(
+      @Json(name = "custom_instructions")
+      val customInstructions: String? = null,
+    )
+
+    data class SummarySettings(
+      @Json(name = "custom_instructions")
+      val customInstructions: String? = null,
+    )
+
+    data class TranscriptionSettings(
+      @Json(name = "expected_languages")
+      val expectedLanguages: List<String>? = null,
+      @Json(name = "fallback_language")
+      val fallbackLanguage: String? = null,
+    )
+  }
 }

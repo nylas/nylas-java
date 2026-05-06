@@ -101,6 +101,11 @@ data class CreateEventRequest(
    */
   @Json(name = "color_id")
   val colorId: String? = null,
+  /**
+   * List of resources (e.g. rooms) to associate with the event.
+   */
+  @Json(name = "resources")
+  val resources: List<EventResource>? = null,
 ) {
   /**
    * This sealed class represents the different types of event time configurations.
@@ -519,6 +524,7 @@ data class CreateEventRequest(
     private var hideParticipant: Boolean? = null
     private var notetaker: EventNotetakerRequest? = null
     private var colorId: String? = null
+    private var resources: List<EventResource>? = null
 
     /**
      * Set the event title.
@@ -643,6 +649,13 @@ data class CreateEventRequest(
     fun colorId(colorId: String) = apply { this.colorId = colorId }
 
     /**
+     * Set the list of resources (e.g. rooms) to associate with the event.
+     * @param resources The list of resources.
+     * @return The builder.
+     */
+    fun resources(resources: List<EventResource>) = apply { this.resources = resources }
+
+    /**
      * Builds the [CreateEventRequest] object.
      * @return [CreateEventRequest] object.
      */
@@ -665,6 +678,7 @@ data class CreateEventRequest(
         hideParticipant,
         notetaker,
         colorId,
+        resources,
       )
   }
 }

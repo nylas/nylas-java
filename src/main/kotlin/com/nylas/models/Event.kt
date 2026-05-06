@@ -162,6 +162,16 @@ data class Event(
    */
   @Json(name = "color_id")
   val colorId: String? = null,
+  /**
+   * List of resources (e.g. rooms) associated with the event.
+   */
+  @Json(name = "resources")
+  val resources: List<EventResource>? = null,
+  /**
+   * Plain-text description of the event, if available.
+   */
+  @Json(name = "text_description")
+  val textDescription: String? = null,
 ) {
   /**
    * Get the type of object.
