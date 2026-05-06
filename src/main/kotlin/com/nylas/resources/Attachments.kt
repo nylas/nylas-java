@@ -2,6 +2,7 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
+import com.nylas.util.PathEncoder
 import okhttp3.ResponseBody
 
 /**
@@ -23,7 +24,7 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams, overrides: RequestOverrides? = null): Response<Attachment> {
-    val path = String.format("v3/grants/%s/attachments/%s", identifier, attachmentId)
+    val path = String.format("v3/grants/%s/attachments/%s", identifier, PathEncoder.encode(attachmentId))
     return findResource(path, queryParams, overrides = overrides)
   }
 
@@ -45,7 +46,7 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun download(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams, overrides: RequestOverrides? = null): ResponseBody {
-    val path = String.format("v3/grants/%s/attachments/%s/download", identifier, attachmentId)
+    val path = String.format("v3/grants/%s/attachments/%s/download", identifier, PathEncoder.encode(attachmentId))
 
     return client.downloadResponse(path, queryParams, overrides = overrides)
   }

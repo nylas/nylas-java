@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 
 class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java) {
   /**
@@ -29,7 +30,7 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, folderId: String, overrides: RequestOverrides? = null): Response<Folder> {
-    val path = String.format("v3/grants/%s/folders/%s", identifier, folderId)
+    val path = String.format("v3/grants/%s/folders/%s", identifier, PathEncoder.encode(folderId))
     return findResource(path, overrides = overrides)
   }
 
@@ -60,7 +61,7 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, folderId: String, requestBody: UpdateFolderRequest, overrides: RequestOverrides? = null): Response<Folder> {
-    val path = String.format("v3/grants/%s/folders/%s", identifier, folderId)
+    val path = String.format("v3/grants/%s/folders/%s", identifier, PathEncoder.encode(folderId))
     val adapter = JsonHelper.moshi().adapter(UpdateFolderRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
@@ -76,7 +77,7 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, folderId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/folders/%s", identifier, folderId)
+    val path = String.format("v3/grants/%s/folders/%s", identifier, PathEncoder.encode(folderId))
     return destroyResource(path, overrides = overrides)
   }
 }

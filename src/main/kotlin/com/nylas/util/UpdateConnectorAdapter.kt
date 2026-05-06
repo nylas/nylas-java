@@ -10,7 +10,8 @@ import com.squareup.moshi.*
 class UpdateConnectorAdapter {
   @FromJson
   @Throws(UnsupportedOperationException::class)
-  fun fromJson(reader: JsonReader): UpdateConnectorRequest? {
+  @Suppress("UNUSED_PARAMETER")
+  fun fromJson(_reader: JsonReader): UpdateConnectorRequest? {
     throw UnsupportedOperationException("UpdateConnectorRequest is only used for serialization")
   }
 

@@ -630,5 +630,45 @@ class DraftsTests {
       assertEquals(Types.newParameterizedType(Response::class.java, Message::class.java), typeCaptor.firstValue)
       assertNull(requestBodyCaptor.firstValue)
     }
+
+    @Test
+    fun `finding a draft URL-encodes a draft id containing slashes`() {
+      val draftId = "INBOX/draft-123"
+
+      drafts.find(grantId, draftId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/drafts/INBOX%2Fdraft-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying a draft URL-encodes a draft id containing slashes`() {
+      val draftId = "INBOX/draft-123"
+
+      drafts.destroy(grantId, draftId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<ListResponse<Draft>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/drafts/INBOX%2Fdraft-123", pathCaptor.firstValue)
+    }
   }
 }

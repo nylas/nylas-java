@@ -13,8 +13,13 @@
       "Bash(./gradlew clean test:*)",
       "Bash(./gradlew:*)",
       "Bash(./gradlew build:*)",
+      "Bash(gh pr *)",
+      "Bash(gh issue *)",
+      "Bash(python3 -c ' *)",
       "mcp__claude_ai_Atlassian__getJiraIssue",
-      "WebFetch(domain:developer.nylas.com)"
+      "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
+      "WebFetch(domain:developer.nylas.com)",
+      "Bash(gh run *)"
     ]
   }
 }
