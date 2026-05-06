@@ -4,6 +4,7 @@ import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.FileUtils
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import com.squareup.moshi.Types
 
 class Messages(client: NylasClient) : Resource<Message>(client, Message::class.java) {
@@ -40,7 +41,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, messageId: String, queryParams: FindMessageQueryParams? = null, overrides: RequestOverrides? = null): Response<Message> {
-    val path = String.format("v3/grants/%s/messages/%s", identifier, messageId)
+    val path = String.format("v3/grants/%s/messages/%s", identifier, PathEncoder.encode(messageId))
     return findResource(path, queryParams, overrides = overrides)
   }
 
@@ -55,7 +56,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, messageId: String, requestBody: UpdateMessageRequest, overrides: RequestOverrides? = null): Response<Message> {
-    val path = String.format("v3/grants/%s/messages/%s", identifier, messageId)
+    val path = String.format("v3/grants/%s/messages/%s", identifier, PathEncoder.encode(messageId))
     val adapter = JsonHelper.moshi().adapter(UpdateMessageRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
@@ -71,7 +72,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, messageId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/messages/%s", identifier, messageId)
+    val path = String.format("v3/grants/%s/messages/%s", identifier, PathEncoder.encode(messageId))
     return destroyResource(path, overrides = overrides)
   }
 
@@ -128,7 +129,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun findScheduledMessage(identifier: String, scheduleId: String, overrides: RequestOverrides? = null): Response<ScheduledMessage> {
-    val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, scheduleId)
+    val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, PathEncoder.encode(scheduleId))
     val responseType = Types.newParameterizedType(Response::class.java, ScheduledMessage::class.java)
     return client.executeGet(path, responseType, overrides = overrides)
   }
@@ -142,7 +143,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun stopScheduledMessage(identifier: String, scheduleId: String, overrides: RequestOverrides? = null): Response<StopScheduledMessageResponse> {
-    val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, scheduleId)
+    val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, PathEncoder.encode(scheduleId))
     val responseType = Types.newParameterizedType(Response::class.java, StopScheduledMessageResponse::class.java)
     return client.executeDelete(path, responseType, overrides = overrides)
   }

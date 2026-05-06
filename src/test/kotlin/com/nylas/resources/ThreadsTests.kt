@@ -267,6 +267,62 @@ class ThreadsTests {
     }
 
     @Test
+    fun `finding a thread URL-encodes a thread id containing slashes`() {
+      val threadId = "INBOX/thread-123"
+
+      threads.find(grantId, threadId)
+
+      val pathCaptor = argumentCaptor<String>()
+      verify(mockNylasClient).executeGet<ListResponse<Thread>>(
+        pathCaptor.capture(),
+        any(),
+        anyOrNull(),
+        anyOrNull(),
+      )
+
+      assertEquals("v3/grants/$grantId/threads/INBOX%2Fthread-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating a thread URL-encodes a thread id containing slashes`() {
+      val threadId = "INBOX/thread-123"
+      val updateThreadRequest = UpdateThreadRequest(starred = true)
+
+      threads.update(grantId, threadId, updateThreadRequest)
+
+      val pathCaptor = argumentCaptor<String>()
+      verify(mockNylasClient).executePut<ListResponse<Thread>>(
+        pathCaptor.capture(),
+        any(),
+        any(),
+        anyOrNull(),
+        anyOrNull(),
+      )
+
+      assertEquals("v3/grants/$grantId/threads/INBOX%2Fthread-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying a thread URL-encodes a thread id containing slashes`() {
+      val threadId = "INBOX/thread-123"
+
+      threads.destroy(grantId, threadId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<ListResponse<Thread>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/threads/INBOX%2Fthread-123", pathCaptor.firstValue)
+    }
+
+    @Test
     fun `updating a thread calls requests with the correct params`() {
       val threadId = "thread-123"
       val adapter = JsonHelper.moshi().adapter(UpdateThreadRequest::class.java)

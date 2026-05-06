@@ -140,5 +140,26 @@ class AttachmentsTests {
       assertEquals("v3/grants/$grantId/attachments/$attachmentId/download", pathCaptor.firstValue)
       assertEquals(byteArray, bytes)
     }
+
+    @Test
+    fun `finding an attachment URL-encodes an attachment id containing slashes`() {
+      val slashedAttachmentId = "INBOX/attach-123"
+      val slashedQueryParams = FindAttachmentQueryParams(messageId = "msg-1")
+
+      attachments.find(grantId, slashedAttachmentId, slashedQueryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Attachment>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/attachments/INBOX%2Fattach-123", pathCaptor.firstValue)
+    }
   }
 }

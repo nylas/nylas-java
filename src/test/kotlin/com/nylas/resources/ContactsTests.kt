@@ -515,5 +515,45 @@ class ContactsTests {
       assertEquals(Types.newParameterizedType(ListResponse::class.java, ContactGroup::class.java), typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
+
+    @Test
+    fun `finding a contact URL-encodes a contact id containing slashes`() {
+      val contactId = "prefix/contact-123"
+
+      contacts.find(grantId, contactId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Contact>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/contacts/prefix%2Fcontact-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying a contact URL-encodes a contact id containing slashes`() {
+      val contactId = "prefix/contact-123"
+
+      contacts.destroy(grantId, contactId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<ListResponse<Contact>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/contacts/prefix%2Fcontact-123", pathCaptor.firstValue)
+    }
   }
 }

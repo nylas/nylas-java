@@ -288,5 +288,25 @@ class WebhooksTests {
         assertIs<IllegalArgumentException>(e)
       }
     }
+
+    @Test
+    fun `finding a webhook URL-encodes a webhook id containing slashes`() {
+      val webhookId = "prefix/webhook-123"
+
+      webhooks.find(webhookId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Webhook>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/webhooks/prefix%2Fwebhook-123", pathCaptor.firstValue)
+    }
   }
 }

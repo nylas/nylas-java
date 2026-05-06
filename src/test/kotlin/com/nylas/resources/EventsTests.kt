@@ -1249,5 +1249,47 @@ class EventsTests {
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertEquals(adapter.toJson(sendRsvpRequest), requestBodyCaptor.firstValue)
     }
+
+    @Test
+    fun `finding an event URL-encodes an event id containing slashes`() {
+      val eventId = "prefix/event-123"
+      val queryParams = FindEventQueryParams(calendarId = "cal-1")
+
+      events.find(grantId, eventId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/prefix%2Fevent-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying an event URL-encodes an event id containing slashes`() {
+      val eventId = "prefix/event-123"
+      val queryParams = DestroyEventQueryParams(calendarId = "cal-1")
+
+      events.destroy(grantId, eventId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/prefix%2Fevent-123", pathCaptor.firstValue)
+    }
   }
 }

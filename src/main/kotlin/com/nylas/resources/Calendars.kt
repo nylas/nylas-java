@@ -4,6 +4,7 @@ import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.models.GetFreeBusyResponse.Companion.GET_FREE_BUSY_RESPONSE_ADAPTER
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import com.squareup.moshi.Types
 
 /**
@@ -39,7 +40,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, calendarId: String, overrides: RequestOverrides? = null): Response<Calendar> {
-    val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
+    val path = String.format("v3/grants/%s/calendars/%s", identifier, PathEncoder.encode(calendarId))
     return findResource(path, overrides = overrides)
   }
 
@@ -70,7 +71,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, calendarId: String, requestBody: UpdateCalendarRequest, overrides: RequestOverrides? = null): Response<Calendar> {
-    val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
+    val path = String.format("v3/grants/%s/calendars/%s", identifier, PathEncoder.encode(calendarId))
     val adapter = JsonHelper.moshi().adapter(UpdateCalendarRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
@@ -85,7 +86,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun destroy(identifier: String, calendarId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/calendars/%s", identifier, calendarId)
+    val path = String.format("v3/grants/%s/calendars/%s", identifier, PathEncoder.encode(calendarId))
     return destroyResource(path, overrides = overrides)
   }
 
