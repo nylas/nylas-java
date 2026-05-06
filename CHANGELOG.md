@@ -6,8 +6,12 @@
 * `colorId` field on `Event`, `CreateEventRequest`, and `UpdateEventRequest` for Google Calendar event colors, mapped to the `color_id` JSON property.
   Valid values are strings `"1"` through `"11"`.
   See [Google Calendar Colors](https://developers.google.com/calendar/api/v3/reference/colors).
+* `metadataPair` field on `ListMessagesQueryParams` (and its `Builder`) for filtering messages by metadata key-value pairs via the `metadata_pair` query parameter. (#319)
 
 ### Fixed
+* `ConferencingProvider`, `CreateEventAutoConferencingProvider`, and `CreateEventManualConferencingProvider` now deserialize to `null` instead of throwing a `JsonDataException` when the API returns an unrecognized provider name (e.g. `"Hangouts"`). (#320)
+* `url`, `originalErrorMessage`, and `timeout` are now exposed as readable properties on `NylasSdkRemoteClosedError` and `NylasSdkTimeoutError`. (#320)
+* Thread IDs containing `/` are now URL-encoded before being interpolated into request paths, preventing malformed URLs when using `Threads.find()`, `update()`, or `destroy()`. (#318)
 * `Configuration.participants` now defaults to an empty list when the field is absent from the API response (e.g. group-event configurations), preventing a `JsonDataException` from being thrown during deserialization.
 
 ## [v2.15.1] - Release 2026-03-30

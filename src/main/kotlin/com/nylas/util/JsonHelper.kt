@@ -1,11 +1,11 @@
 package com.nylas.util
 
-import com.nylas.models.Connector.Companion.CONNECTOR_JSON_ADAPTER_FACTORY
 import com.nylas.models.ConferencingProvider
-import com.nylas.models.CreateEventAutoConferencingProvider
-import com.nylas.models.CreateEventManualConferencingProvider
+import com.nylas.models.Connector.Companion.CONNECTOR_JSON_ADAPTER_FACTORY
 import com.nylas.models.CreateConnectorRequest.Companion.CREATE_CONNECTOR_JSON_ADAPTER_FACTORY
 import com.nylas.models.CreateCredentialRequest.Companion.CREATE_CREDENTIAL_JSON_ADAPTER_FACTORY
+import com.nylas.models.CreateEventAutoConferencingProvider
+import com.nylas.models.CreateEventManualConferencingProvider
 import com.nylas.models.GetFreeBusyResponse.Companion.FREE_BUSY_JSON_FACTORY
 import com.nylas.models.When.Companion.WHEN_JSON_FACTORY
 import com.squareup.moshi.JsonAdapter
