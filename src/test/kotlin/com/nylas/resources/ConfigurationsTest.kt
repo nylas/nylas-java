@@ -669,5 +669,25 @@ class ConfigurationsTest {
       assert(serializedRequest.contains("\"Project Information\""))
       assert(serializedRequest.contains("\"additional_fields\""))
     }
+
+    @Test
+    fun `finding a configuration URL-encodes a config id containing slashes`() {
+      val slashedConfigId = "prefix/config-123"
+
+      configurations.find(grantId, slashedConfigId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Configuration>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/scheduling/configurations/prefix%2Fconfig-123", pathCaptor.firstValue)
+    }
   }
 }

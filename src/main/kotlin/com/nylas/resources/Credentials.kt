@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 
 class Credentials(client: NylasClient) : Resource<Credential>(client, Credential::class.java) {
   /**
@@ -29,7 +30,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(provider: AuthProvider, credentialsId: String, overrides: RequestOverrides? = null): Response<Credential> {
-    val path = String.format("v3/connectors/%s/creds/%s", provider.value, credentialsId)
+    val path = String.format("v3/connectors/%s/creds/%s", provider.value, PathEncoder.encode(credentialsId))
     return findResource(path, overrides = overrides)
   }
 
@@ -62,7 +63,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(provider: AuthProvider, credentialsId: String, requestBody: UpdateCredentialRequest, overrides: RequestOverrides? = null): Response<Credential> {
-    val path = String.format("v3/connectors/%s/creds/%s", provider.value, credentialsId)
+    val path = String.format("v3/connectors/%s/creds/%s", provider.value, PathEncoder.encode(credentialsId))
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(UpdateCredentialRequest::class.java)
       .toJson(requestBody)
@@ -80,7 +81,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(provider: AuthProvider, credentialsId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/connectors/%s/creds/%s", provider.value, credentialsId)
+    val path = String.format("v3/connectors/%s/creds/%s", provider.value, PathEncoder.encode(credentialsId))
     return destroyResource(path, overrides = overrides)
   }
 }
