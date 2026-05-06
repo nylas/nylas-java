@@ -10,7 +10,8 @@ import com.squareup.moshi.*
 class UpdateConferencingAdapter {
   @FromJson
   @Throws(UnsupportedOperationException::class)
-  fun fromJson(reader: JsonReader): UpdateEventRequest.Conferencing? {
+  @Suppress("UNUSED_PARAMETER")
+  fun fromJson(_reader: JsonReader): UpdateEventRequest.Conferencing? {
     throw UnsupportedOperationException("UpdateConferencingAdapter is only used for serialization")
   }
 
