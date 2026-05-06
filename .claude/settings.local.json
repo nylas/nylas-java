@@ -18,7 +18,8 @@
       "Bash(python3 -c ' *)",
       "mcp__claude_ai_Atlassian__getJiraIssue",
       "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
-      "WebFetch(domain:developer.nylas.com)"
+      "WebFetch(domain:developer.nylas.com)",
+      "Bash(gh run *)"
     ]
   }
 }

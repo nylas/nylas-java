@@ -6,7 +6,6 @@
 * `colorId` field on `Event`, `CreateEventRequest`, and `UpdateEventRequest` for Google Calendar event colors, mapped to the `color_id` JSON property.
   Valid values are strings `"1"` through `"11"`.
   See [Google Calendar Colors](https://developers.google.com/calendar/api/v3/reference/colors).
-<<<<<<< TT-4349-java-sdk-for-crud-events-inc-rsvp
 * `resources` field (`List<EventResource>`) on `Event`, `CreateEventRequest`, and `UpdateEventRequest` for associating rooms or resources with events
 * `textDescription` field on `Event` for the plain-text description of an event (`text_description`)
 * `EventResource` model with `email` (required) and `name` (optional) fields
@@ -18,9 +17,7 @@
   - `summary` / `summarySettings` (`SummarySettings`) for AI-generated meeting summaries with optional custom instructions
   - `leaveAfterSilenceSeconds` for configuring inactivity timeout
   - `transcriptionSettings` (`TranscriptionSettings`) with `expectedLanguages` and `fallbackLanguage`
-=======
 * `metadataPair` field on `ListMessagesQueryParams` (and its `Builder`) for filtering messages by metadata key-value pairs via the `metadata_pair` query parameter. (#319)
->>>>>>> main
 
 ### Fixed
 * `ConferencingProvider`, `CreateEventAutoConferencingProvider`, and `CreateEventManualConferencingProvider` now deserialize to `null` instead of throwing a `JsonDataException` when the API returns an unrecognized provider name (e.g. `"Hangouts"`). (#320)
