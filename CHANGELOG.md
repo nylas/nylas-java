@@ -25,9 +25,6 @@
 * Thread IDs containing `/` are now URL-encoded before being interpolated into request paths, preventing malformed URLs when using `Threads.find()`, `update()`, or `destroy()`. (#318)
 * `Configuration.participants` now defaults to an empty list when the field is absent from the API response (e.g. group-event configurations), preventing a `JsonDataException` from being thrown during deserialization.
 
-### Documentation
-* Refreshed the README to match the converged Nylas SDK style: centered HTML header with logo, badge row, dot-separated quick links, and canonical emoji-prefixed sections. Cross-links to developer.nylas.com instead of duplicating docs, drops stale `dashboard.nylas.com` and `/docs/v3-beta/` URLs, and adds Get started, AI agents, Reference, Security, and Other Nylas SDKs sections. Retains the SLF4J logging guidance specific to this SDK.
-
 ## [v2.15.1] - Release 2026-03-30
 
 ### Changed
