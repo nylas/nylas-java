@@ -34,7 +34,8 @@ class CreateAttachmentRequestAdapter {
 
   @FromJson
   @Throws(UnsupportedOperationException::class)
-  fun fromJson(reader: com.squareup.moshi.JsonReader): CreateAttachmentRequest? {
+  @Suppress("UNUSED_PARAMETER")
+  fun fromJson(_reader: com.squareup.moshi.JsonReader): CreateAttachmentRequest? {
     throw UnsupportedOperationException("Deserialization not supported")
   }
 }
