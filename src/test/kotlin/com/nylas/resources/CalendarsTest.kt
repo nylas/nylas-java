@@ -16,6 +16,7 @@ import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 class CalendarsTest {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -99,6 +100,205 @@ class CalendarsTest {
       assertEquals(CalendarNotetaker.EventSelectionType.ALL, cal.notetaker?.rules?.eventSelection?.get(1))
       assertEquals(2, cal.notetaker?.rules?.participantFilter?.participantsGte)
       assertEquals(10, cal.notetaker?.rules?.participantFilter?.participantsLte)
+    }
+  }
+
+  @Nested
+  inner class CreateCalendarRequestTests {
+    @Test
+    fun `CreateCalendarRequest serializes all fields to JSON correctly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateCalendarRequest::class.java)
+      val request = CreateCalendarRequest(
+        name = "My New Calendar",
+        description = "Description of my new calendar",
+        location = "Los Angeles, CA",
+        timezone = "America/Los_Angeles",
+        metadata = mapOf("your-key" to "value"),
+        notetaker = CalendarNotetaker(
+          name = "Custom Notetaker",
+          meetingSettings = CalendarNotetaker.MeetingSettings(
+            videoRecording = true,
+            audioRecording = false,
+            transcription = true,
+          ),
+          rules = CalendarNotetaker.Rules(
+            eventSelection = listOf(CalendarNotetaker.EventSelectionType.INTERNAL),
+            participantFilter = CalendarNotetaker.ParticipantFilter(
+              participantsGte = 2,
+              participantsLte = 10,
+            ),
+          ),
+        ),
+      )
+
+      val json = adapter.toJson(request)
+      val deserialized = adapter.fromJson(json)!!
+
+      assertEquals("My New Calendar", deserialized.name)
+      assertEquals("Description of my new calendar", deserialized.description)
+      assertEquals("Los Angeles, CA", deserialized.location)
+      assertEquals("America/Los_Angeles", deserialized.timezone)
+      assertEquals(mapOf("your-key" to "value"), deserialized.metadata)
+      assertEquals("Custom Notetaker", deserialized.notetaker?.name)
+      assertEquals(true, deserialized.notetaker?.meetingSettings?.videoRecording)
+      assertEquals(false, deserialized.notetaker?.meetingSettings?.audioRecording)
+      assertEquals(true, deserialized.notetaker?.meetingSettings?.transcription)
+      assertEquals(1, deserialized.notetaker?.rules?.eventSelection?.size)
+      assertEquals(CalendarNotetaker.EventSelectionType.INTERNAL, deserialized.notetaker?.rules?.eventSelection?.get(0))
+      assertEquals(2, deserialized.notetaker?.rules?.participantFilter?.participantsGte)
+      assertEquals(10, deserialized.notetaker?.rules?.participantFilter?.participantsLte)
+    }
+
+    @Test
+    fun `CreateCalendarRequest serializes with only required name field`() {
+      val adapter = JsonHelper.moshi().adapter(CreateCalendarRequest::class.java)
+      val request = CreateCalendarRequest(name = "Minimal Calendar")
+
+      val json = adapter.toJson(request)
+      val deserialized = adapter.fromJson(json)!!
+
+      assertEquals("Minimal Calendar", deserialized.name)
+      assertNull(deserialized.description)
+      assertNull(deserialized.location)
+      assertNull(deserialized.timezone)
+      assertNull(deserialized.metadata)
+      assertNull(deserialized.notetaker)
+    }
+
+    @Test
+    fun `CreateCalendarRequest Builder sets all fields correctly`() {
+      val request = CreateCalendarRequest.Builder("My New Calendar")
+        .description("Description of my new calendar")
+        .location("Los Angeles, CA")
+        .timezone("America/Los_Angeles")
+        .metadata(mapOf("your-key" to "value"))
+        .notetaker(CalendarNotetaker(name = "Custom Notetaker"))
+        .build()
+
+      assertEquals("My New Calendar", request.name)
+      assertEquals("Description of my new calendar", request.description)
+      assertEquals("Los Angeles, CA", request.location)
+      assertEquals("America/Los_Angeles", request.timezone)
+      assertEquals(mapOf("your-key" to "value"), request.metadata)
+      assertEquals("Custom Notetaker", request.notetaker?.name)
+    }
+
+    @Test
+    fun `CreateCalendarRequest Builder builds with only required name field`() {
+      val request = CreateCalendarRequest.Builder("Minimal Calendar").build()
+
+      assertEquals("Minimal Calendar", request.name)
+      assertNull(request.description)
+      assertNull(request.location)
+      assertNull(request.timezone)
+      assertNull(request.metadata)
+      assertNull(request.notetaker)
+    }
+  }
+
+  @Nested
+  inner class UpdateCalendarRequestTests {
+    @Test
+    fun `UpdateCalendarRequest serializes all fields to JSON correctly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateCalendarRequest::class.java)
+      val request = UpdateCalendarRequest(
+        name = "My Updated Calendar",
+        description = "Updated description",
+        location = "New York, NY",
+        timezone = "America/New_York",
+        metadata = mapOf("key" to "value"),
+        hexColor = "#039BE5",
+        hexForegroundColor = "#FFFFFF",
+        notetaker = CalendarNotetaker(
+          name = "Updated Notetaker",
+          meetingSettings = CalendarNotetaker.MeetingSettings(
+            videoRecording = false,
+            audioRecording = true,
+            transcription = true,
+          ),
+          rules = CalendarNotetaker.Rules(
+            eventSelection = listOf(CalendarNotetaker.EventSelectionType.EXTERNAL),
+            participantFilter = CalendarNotetaker.ParticipantFilter(
+              participantsGte = null,
+              participantsLte = 15,
+            ),
+          ),
+        ),
+      )
+
+      val json = adapter.toJson(request)
+      val deserialized = adapter.fromJson(json)!!
+
+      assertEquals("My Updated Calendar", deserialized.name)
+      assertEquals("Updated description", deserialized.description)
+      assertEquals("New York, NY", deserialized.location)
+      assertEquals("America/New_York", deserialized.timezone)
+      assertEquals(mapOf("key" to "value"), deserialized.metadata)
+      assertEquals("#039BE5", deserialized.hexColor)
+      assertEquals("#FFFFFF", deserialized.hexForegroundColor)
+      assertEquals("Updated Notetaker", deserialized.notetaker?.name)
+      assertEquals(false, deserialized.notetaker?.meetingSettings?.videoRecording)
+      assertEquals(true, deserialized.notetaker?.meetingSettings?.audioRecording)
+      assertEquals(true, deserialized.notetaker?.meetingSettings?.transcription)
+      assertEquals(1, deserialized.notetaker?.rules?.eventSelection?.size)
+      assertEquals(CalendarNotetaker.EventSelectionType.EXTERNAL, deserialized.notetaker?.rules?.eventSelection?.get(0))
+      assertNull(deserialized.notetaker?.rules?.participantFilter?.participantsGte)
+      assertEquals(15, deserialized.notetaker?.rules?.participantFilter?.participantsLte)
+    }
+
+    @Test
+    fun `UpdateCalendarRequest serializes with no fields set`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateCalendarRequest::class.java)
+      val request = UpdateCalendarRequest()
+
+      val json = adapter.toJson(request)
+      val deserialized = adapter.fromJson(json)!!
+
+      assertNull(deserialized.name)
+      assertNull(deserialized.description)
+      assertNull(deserialized.location)
+      assertNull(deserialized.timezone)
+      assertNull(deserialized.metadata)
+      assertNull(deserialized.hexColor)
+      assertNull(deserialized.hexForegroundColor)
+      assertNull(deserialized.notetaker)
+    }
+
+    @Test
+    fun `UpdateCalendarRequest Builder sets all fields correctly`() {
+      val request = UpdateCalendarRequest.Builder()
+        .name("My Updated Calendar")
+        .description("Updated description")
+        .location("New York, NY")
+        .timezone("America/New_York")
+        .metadata(mapOf("key" to "value"))
+        .hexColor("#039BE5")
+        .hexForegroundColor("#FFFFFF")
+        .notetaker(CalendarNotetaker(name = "Updated Notetaker"))
+        .build()
+
+      assertEquals("My Updated Calendar", request.name)
+      assertEquals("Updated description", request.description)
+      assertEquals("New York, NY", request.location)
+      assertEquals("America/New_York", request.timezone)
+      assertEquals(mapOf("key" to "value"), request.metadata)
+      assertEquals("#039BE5", request.hexColor)
+      assertEquals("#FFFFFF", request.hexForegroundColor)
+      assertEquals("Updated Notetaker", request.notetaker?.name)
+    }
+
+    @Test
+    fun `UpdateCalendarRequest Builder builds with no fields set`() {
+      val request = UpdateCalendarRequest.Builder().build()
+
+      assertNull(request.name)
+      assertNull(request.description)
+      assertNull(request.location)
+      assertNull(request.timezone)
+      assertNull(request.metadata)
+      assertNull(request.hexColor)
+      assertNull(request.hexForegroundColor)
+      assertNull(request.notetaker)
     }
   }
 
@@ -307,6 +507,31 @@ class CalendarsTest {
   }
 
   @Nested
+  inner class ListCalendarsQueryParamsTests {
+    @Test
+    fun `ListCalendersQueryParams Builder sets all fields correctly`() {
+      val params = ListCalendersQueryParams.Builder()
+        .limit(25)
+        .pageToken("next-page-token")
+        .metadataPair(mapOf("your-key" to "value"))
+        .build()
+
+      assertEquals(25, params.limit)
+      assertEquals("next-page-token", params.pageToken)
+      assertEquals(mapOf("your-key" to "value"), params.metadataPair)
+    }
+
+    @Test
+    fun `ListCalendersQueryParams Builder builds with all null fields`() {
+      val params = ListCalendersQueryParams.Builder().build()
+
+      assertNull(params.limit)
+      assertNull(params.pageToken)
+      assertNull(params.metadataPair)
+    }
+  }
+
+  @Nested
   inner class CrudTests {
     private lateinit var grantId: String
     private lateinit var mockNylasClient: NylasClient
@@ -335,6 +560,31 @@ class CalendarsTest {
 
       assertEquals("v3/grants/$grantId/calendars", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Calendar::class.java), typeCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing calendars passes query params to the request`() {
+      val queryParams = ListCalendersQueryParams(
+        limit = 25,
+        pageToken = "next-page-token",
+        metadataPair = mapOf("your-key" to "value"),
+      )
+
+      calendars.list(grantId, queryParams)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Calendar>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/calendars", pathCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
     @Test
@@ -355,6 +605,7 @@ class CalendarsTest {
 
       assertEquals("v3/grants/$grantId/calendars/$calendarId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Calendar::class.java), typeCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
     }
 
     @Test
@@ -564,6 +815,42 @@ class CalendarsTest {
           ),
           roundRobinGroupId = "event-123",
         ),
+      )
+
+      calendars.getAvailability(getAvailabilityRequest)
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/calendars/availability", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, GetAvailabilityResponse::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(getAvailabilityRequest), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `getting availability with roundTo calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(GetAvailabilityRequest::class.java)
+      val getAvailabilityRequest = GetAvailabilityRequest(
+        startTime = 1690862400,
+        endTime = 1691208000,
+        participants = listOf(
+          AvailabilityParticipant(
+            email = "test@nylas.com",
+            calendarIds = listOf("primary"),
+          ),
+        ),
+        durationMinutes = 30,
+        intervalMinutes = 30,
+        roundTo = 15,
       )
 
       calendars.getAvailability(getAvailabilityRequest)
