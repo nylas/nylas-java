@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [v2.16.0] - Release 2026-05-07
 
 ### Added
 * `colorId` field on `Event`, `CreateEventRequest`, and `UpdateEventRequest` for Google Calendar event colors, mapped to the `color_id` JSON property.
