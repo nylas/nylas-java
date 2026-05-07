@@ -232,6 +232,28 @@ class ConfigurationsTest {
     }
 
     @Test
+    fun `Configuration without participants field deserializes to empty list`() {
+      val adapter = JsonHelper.moshi().adapter(Configuration::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "group-config-id",
+          "availability": {
+              "duration_minutes": 30
+          },
+          "event_booking": {
+              "title": "Group Event"
+          }
+        }
+        """.trimIndent(),
+      )
+      val config = adapter.fromJson(jsonBuffer)!!
+      assertIs<Configuration>(config)
+      assertEquals("group-config-id", config.id)
+      assertEquals(emptyList(), config.participants)
+    }
+
+    @Test
     fun `AdditionalFieldType METADATA serializes correctly`() {
       val adapter = JsonHelper.moshi().adapter(AdditionalField::class.java)
       val jsonBuffer = Buffer().writeUtf8(
@@ -646,6 +668,26 @@ class ConfigurationsTest {
       assert(serializedRequest.contains("\"project_info\""))
       assert(serializedRequest.contains("\"Project Information\""))
       assert(serializedRequest.contains("\"additional_fields\""))
+    }
+
+    @Test
+    fun `finding a configuration URL-encodes a config id containing slashes`() {
+      val slashedConfigId = "prefix/config-123"
+
+      configurations.find(grantId, slashedConfigId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Configuration>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/scheduling/configurations/prefix%2Fconfig-123", pathCaptor.firstValue)
     }
   }
 }

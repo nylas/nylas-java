@@ -6,6 +6,6 @@ package com.nylas.models
  * @param originalErrorMessage The error message from the library that closed the connection.
  */
 class NylasSdkRemoteClosedError(
-  url: String,
-  originalErrorMessage: String,
+  val url: String,
+  val originalErrorMessage: String,
 ) : AbstractNylasSdkError("Nylas API closed the connection before the Nylas SDK received a response.")

@@ -155,6 +155,23 @@ data class Event(
    */
   @Json(name = "original_start_time")
   val originalStartTime: Long? = null,
+  /**
+   * The Google color ID for the event. Only supported by Google Calendar providers; ignored by other providers.
+   * Valid values are strings "1" through "11".
+   * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
+   */
+  @Json(name = "color_id")
+  val colorId: String? = null,
+  /**
+   * List of resources (e.g. rooms) associated with the event.
+   */
+  @Json(name = "resources")
+  val resources: List<EventResource>? = null,
+  /**
+   * Plain-text description of the event, if available.
+   */
+  @Json(name = "text_description")
+  val textDescription: String? = null,
 ) {
   /**
    * Get the type of object.

@@ -19,6 +19,13 @@
       "Skill(update-config)",
       "WebFetch(domain:www.postman.com)",
       "Bash(python3 -c ' *)"
+      "Bash(gh pr *)",
+      "Bash(gh issue *)",
+      "Bash(python3 -c ' *)",
+      "mcp__claude_ai_Atlassian__getJiraIssue",
+      "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
+      "WebFetch(domain:developer.nylas.com)",
+      "Bash(gh run *)"
     ]
   }
 }

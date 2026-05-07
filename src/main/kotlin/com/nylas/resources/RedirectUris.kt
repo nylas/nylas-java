@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 
 /**
  * A collection of redirect URI related API endpoints.
@@ -33,7 +34,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(redirectUriId: String, overrides: RequestOverrides? = null): Response<RedirectUri> {
-    val path = String.format("v3/applications/redirect-uris/%s", redirectUriId)
+    val path = String.format("v3/applications/redirect-uris/%s", PathEncoder.encode(redirectUriId))
     return findResource(path, overrides = overrides)
   }
 
@@ -64,7 +65,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(redirectUriId: String, requestBody: UpdateRedirectUriRequest, overrides: RequestOverrides? = null): Response<RedirectUri> {
-    val path = String.format("v3/applications/redirect-uris/%s", redirectUriId)
+    val path = String.format("v3/applications/redirect-uris/%s", PathEncoder.encode(redirectUriId))
     val serializedRequestBody = JsonHelper.moshi()
       .adapter(UpdateRedirectUriRequest::class.java)
       .toJson(requestBody)
@@ -81,7 +82,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(redirectUriId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/applications/redirect-uris/%s", redirectUriId)
+    val path = String.format("v3/applications/redirect-uris/%s", PathEncoder.encode(redirectUriId))
     return destroyResource(path, overrides = overrides)
   }
 }

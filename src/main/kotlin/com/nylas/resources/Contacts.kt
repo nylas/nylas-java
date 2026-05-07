@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import com.squareup.moshi.Types
 
 class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.java) {
@@ -31,7 +32,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, contactId: String, queryParams: FindContactQueryParams? = null, overrides: RequestOverrides? = null): Response<Contact> {
-    val path = String.format("v3/grants/%s/contacts/%s", identifier, contactId)
+    val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
     return findResource(path, queryParams, overrides)
   }
 
@@ -62,7 +63,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, contactId: String, requestBody: UpdateContactRequest, overrides: RequestOverrides? = null): Response<Contact> {
-    val path = String.format("v3/grants/%s/contacts/%s", identifier, contactId)
+    val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
     val adapter = JsonHelper.moshi().adapter(UpdateContactRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
@@ -78,7 +79,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, contactId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/contacts/%s", identifier, contactId)
+    val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
     return destroyResource(path, overrides = overrides)
   }
 

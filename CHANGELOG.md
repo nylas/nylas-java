@@ -1,5 +1,30 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Added
+* `colorId` field on `Event`, `CreateEventRequest`, and `UpdateEventRequest` for Google Calendar event colors, mapped to the `color_id` JSON property.
+  Valid values are strings `"1"` through `"11"`.
+  See [Google Calendar Colors](https://developers.google.com/calendar/api/v3/reference/colors).
+* `resources` field (`List<EventResource>`) on `Event`, `CreateEventRequest`, and `UpdateEventRequest` for associating rooms or resources with events
+* `textDescription` field on `Event` for the plain-text description of an event (`text_description`)
+* `EventResource` model with `email` (required) and `name` (optional) fields
+* `select` and `tentativeAsBusy` query parameters on `ListEventQueryParams`, `FindEventQueryParams`, `CreateEventQueryParams`, and `UpdateEventQueryParams`
+* `skipNylasEmail` query parameter on `SendRsvpQueryParams` to suppress Nylas notification emails when sending an RSVP
+* `eventType` on `ListEventQueryParams` now accepts `List<EventType>` (was `EventType`) to allow filtering by multiple event types simultaneously
+* Extended `EventNotetaker.MeetingSettings` and `EventNotetakerRequest.MeetingSettings` with new fields:
+  - `actionItems` / `actionItemsSettings` (`ActionItemsSettings`) for AI-generated action items with optional custom instructions
+  - `summary` / `summarySettings` (`SummarySettings`) for AI-generated meeting summaries with optional custom instructions
+  - `leaveAfterSilenceSeconds` for configuring inactivity timeout
+  - `transcriptionSettings` (`TranscriptionSettings`) with `expectedLanguages` and `fallbackLanguage`
+* `metadataPair` field on `ListMessagesQueryParams` (and its `Builder`) for filtering messages by metadata key-value pairs via the `metadata_pair` query parameter. (#319)
+
+### Fixed
+* `ConferencingProvider`, `CreateEventAutoConferencingProvider`, and `CreateEventManualConferencingProvider` now deserialize to `null` instead of throwing a `JsonDataException` when the API returns an unrecognized provider name (e.g. `"Hangouts"`). (#320)
+* `url`, `originalErrorMessage`, and `timeout` are now exposed as readable properties on `NylasSdkRemoteClosedError` and `NylasSdkTimeoutError`. (#320)
+* Thread IDs containing `/` are now URL-encoded before being interpolated into request paths, preventing malformed URLs when using `Threads.find()`, `update()`, or `destroy()`. (#318)
+* `Configuration.participants` now defaults to an empty list when the field is absent from the API response (e.g. group-event configurations), preventing a `JsonDataException` from being thrown during deserialization.
+
 ## [v2.15.1] - Release 2026-03-30
 
 ### Changed
