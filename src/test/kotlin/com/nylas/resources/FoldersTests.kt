@@ -75,6 +75,34 @@ class FoldersTests {
       assertEquals(0, folder.totalCount)
       assertEquals(listOf("\\SENT"), folder.attributes)
     }
+
+    @Test
+    fun `Folder deserializes correctly when grant_id is absent due to select`() {
+      val adapter = JsonHelper.moshi().adapter(Folder::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """{ "id": "SENT", "name": "SENT", "object": "folder" }""",
+      )
+
+      val folder = adapter.fromJson(jsonBuffer)!!
+      assertIs<Folder>(folder)
+      assertEquals("SENT", folder.id)
+      assertEquals("", folder.grantId)
+      assertEquals("SENT", folder.name)
+    }
+
+    @Test
+    fun `Folder deserializes correctly when both id and grant_id are absent due to select`() {
+      val adapter = JsonHelper.moshi().adapter(Folder::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """{ "name": "SENT", "object": "folder" }""",
+      )
+
+      val folder = adapter.fromJson(jsonBuffer)!!
+      assertIs<Folder>(folder)
+      assertEquals("", folder.id)
+      assertEquals("", folder.grantId)
+      assertEquals("SENT", folder.name)
+    }
   }
 
   @Nested
