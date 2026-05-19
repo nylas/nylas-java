@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Fixed
+* `UpdateEventRequest.Builder.clearColorId()` now sends `"color_id": null` to the Nylas API, allowing event colors to be cleared. Previously, setting `colorId` to `null` was silently omitted from the request body due to Moshi's default null-skipping behavior, leaving the existing color unchanged. (#324)
+
 ## [v2.16.0] - Release 2026-05-07
 
 ### Added

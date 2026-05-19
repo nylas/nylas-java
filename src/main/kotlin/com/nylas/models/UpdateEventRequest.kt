@@ -100,7 +100,7 @@ data class UpdateEventRequest(
    * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
    */
   @Json(name = "color_id")
-  val colorId: String? = null,
+  val colorId: NullableField<String>? = null,
   /**
    * List of resources (e.g. rooms) to associate with the event.
    */
@@ -609,7 +609,7 @@ data class UpdateEventRequest(
     private var capacity: Int? = null
     private var hideParticipant: Boolean? = null
     private var notetaker: EventNotetakerRequest? = null
-    private var colorId: String? = null
+    private var colorId: NullableField<String>? = null
     private var resources: List<EventResource>? = null
 
     /**
@@ -740,7 +740,14 @@ data class UpdateEventRequest(
      * @return The builder.
      * @see <a href="https://developers.google.com/calendar/api/v3/reference/colors">Google Calendar Colors</a>
      */
-    fun colorId(colorId: String) = apply { this.colorId = colorId }
+    fun colorId(colorId: String) = apply { this.colorId = NullableField.Value(colorId) }
+
+    /**
+     * Clear the Google color ID for the event, reverting to the calendar default.
+     * Sends `"color_id": null` in the request body.
+     * @return The builder.
+     */
+    fun clearColorId() = apply { this.colorId = NullableField.Clear }
 
     /**
      * Update the list of resources (e.g. rooms) to associate with the event.
