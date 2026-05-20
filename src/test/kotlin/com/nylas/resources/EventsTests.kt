@@ -562,6 +562,40 @@ class EventsTests {
     }
 
     @Test
+    fun `UpdateEventRequest Builder colorId method serializes color_id field`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest.Builder().colorId("9").build()
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      assertEquals("9", jsonMap["color_id"])
+    }
+
+    @Test
+    fun `UpdateEventRequest with color_id value in JSON deserializes to NullableField Value`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = adapter.fromJson("""{"color_id":"5"}""")
+
+      assertIs<NullableField.Value<String>>(request?.colorId)
+      assertEquals("5", (request?.colorId as NullableField.Value).v)
+    }
+
+    @Test
+    fun `UpdateEventRequest with null color_id in JSON deserializes to NullableField Clear`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = adapter.fromJson("""{"color_id":null}""")
+
+      assertIs<NullableField.Clear>(request?.colorId)
+    }
+
+    @Test
+    fun `UpdateEventRequest with colorId roundtrips through serialization correctly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val original = UpdateEventRequest.Builder().colorId("3").build()
+
+      assertEquals(original, adapter.fromJson(adapter.toJson(original)))
+    }
+
+    @Test
     fun `Event with existing ConferencingProvider still works properly`() {
       // This test verifies that the original Event model continues to work with the original ConferencingProvider enum
       // The Event model uses the original Conferencing sealed class, not the new CreateEvent/UpdateEvent ones
