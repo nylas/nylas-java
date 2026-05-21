@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Changed
+* Extended `EventResource` with additional room metadata fields: `capacity` (`Int`), `building` (`String`), `floorName` / `floor_name` (`String`), `floorSection` / `floor_section` (`String`), and `floorNumber` / `floor_number` (`Int`) — all optional, defaulting to `null`
+
 ## [v2.16.0] - Release 2026-05-07
 
 ### Added

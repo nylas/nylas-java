@@ -1400,7 +1400,15 @@ class EventsTests {
           "object": "event",
           "when": {"date": "2024-06-18", "object": "date"},
           "resources": [
-            {"email": "room@example.com", "name": "Conference Room A"},
+            {
+              "email": "room@example.com",
+              "name": "Conference Room A",
+              "capacity": 10,
+              "building": "HQ",
+              "floor_name": "Second Floor",
+              "floor_section": "East Wing",
+              "floor_number": 2
+            },
             {"email": "projector@example.com"}
           ],
           "text_description": "Plain text version of description"
@@ -1410,10 +1418,22 @@ class EventsTests {
 
       val event = adapter.fromJson(jsonBuffer)!!
       assertEquals(2, event.resources?.size)
-      assertEquals("room@example.com", event.resources?.get(0)?.email)
-      assertEquals("Conference Room A", event.resources?.get(0)?.name)
-      assertEquals("projector@example.com", event.resources?.get(1)?.email)
-      assertEquals(null, event.resources?.get(1)?.name)
+      val room = event.resources?.get(0)!!
+      assertEquals("room@example.com", room.email)
+      assertEquals("Conference Room A", room.name)
+      assertEquals(10, room.capacity)
+      assertEquals("HQ", room.building)
+      assertEquals("Second Floor", room.floorName)
+      assertEquals("East Wing", room.floorSection)
+      assertEquals(2, room.floorNumber)
+      val projector = event.resources?.get(1)!!
+      assertEquals("projector@example.com", projector.email)
+      assertEquals(null, projector.name)
+      assertEquals(null, projector.capacity)
+      assertEquals(null, projector.building)
+      assertEquals(null, projector.floorName)
+      assertEquals(null, projector.floorSection)
+      assertEquals(null, projector.floorNumber)
       assertEquals("Plain text version of description", event.textDescription)
     }
 
@@ -1443,7 +1463,15 @@ class EventsTests {
       val request = CreateEventRequest(
         whenObj = CreateEventRequest.When.Time(1620000000),
         resources = listOf(
-          EventResource(email = "room@example.com", name = "Conference Room A"),
+          EventResource(
+            email = "room@example.com",
+            name = "Conference Room A",
+            capacity = 10,
+            building = "HQ",
+            floorName = "Second Floor",
+            floorSection = "East Wing",
+            floorNumber = 2,
+          ),
           EventResource(email = "projector@example.com"),
         ),
       )
@@ -1451,8 +1479,14 @@ class EventsTests {
       val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
       val resources = jsonMap["resources"] as List<*>
       assertEquals(2, resources.size)
-      assertEquals("room@example.com", (resources[0] as Map<*, *>)["email"])
-      assertEquals("Conference Room A", (resources[0] as Map<*, *>)["name"])
+      val room = resources[0] as Map<*, *>
+      assertEquals("room@example.com", room["email"])
+      assertEquals("Conference Room A", room["name"])
+      assertEquals(10.0, room["capacity"])
+      assertEquals("HQ", room["building"])
+      assertEquals("Second Floor", room["floor_name"])
+      assertEquals("East Wing", room["floor_section"])
+      assertEquals(2.0, room["floor_number"])
       assertEquals("projector@example.com", (resources[1] as Map<*, *>)["email"])
     }
 
@@ -1460,14 +1494,30 @@ class EventsTests {
     fun `UpdateEventRequest with resources serializes correctly`() {
       val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
       val request = UpdateEventRequest(
-        resources = listOf(EventResource(email = "room@example.com", name = "Room B")),
+        resources = listOf(
+          EventResource(
+            email = "room@example.com",
+            name = "Room B",
+            capacity = 5,
+            building = "Annex",
+            floorName = "Ground Floor",
+            floorSection = "West",
+            floorNumber = 1,
+          ),
+        ),
       )
 
       val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
       val resources = jsonMap["resources"] as List<*>
       assertEquals(1, resources.size)
-      assertEquals("room@example.com", (resources[0] as Map<*, *>)["email"])
-      assertEquals("Room B", (resources[0] as Map<*, *>)["name"])
+      val room = resources[0] as Map<*, *>
+      assertEquals("room@example.com", room["email"])
+      assertEquals("Room B", room["name"])
+      assertEquals(5.0, room["capacity"])
+      assertEquals("Annex", room["building"])
+      assertEquals("Ground Floor", room["floor_name"])
+      assertEquals("West", room["floor_section"])
+      assertEquals(1.0, room["floor_number"])
     }
 
     @Test
