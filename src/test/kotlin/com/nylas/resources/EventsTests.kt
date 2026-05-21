@@ -17,6 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class EventsTests {
@@ -534,7 +535,7 @@ class EventsTests {
     @Test
     fun `UpdateEventRequest with colorId serializes color_id field`() {
       val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
-      val request = UpdateEventRequest(colorId = "11")
+      val request = UpdateEventRequest(colorId = NullableField.Value("11"))
 
       val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
       assertEquals("11", jsonMap["color_id"])
@@ -547,6 +548,51 @@ class EventsTests {
 
       val json = adapter.toJson(request)
       assertFalse(json.contains("color_id"))
+    }
+
+    @Test
+    fun `UpdateEventRequest with clearColorId serializes color_id as null`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest.Builder().clearColorId().build()
+
+      val json = adapter.toJson(request)
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(json)!!
+      assertTrue(jsonMap.containsKey("color_id"))
+      assertNull(jsonMap["color_id"])
+    }
+
+    @Test
+    fun `UpdateEventRequest Builder colorId method serializes color_id field`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest.Builder().colorId("9").build()
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      assertEquals("9", jsonMap["color_id"])
+    }
+
+    @Test
+    fun `UpdateEventRequest with color_id value in JSON deserializes to NullableField Value`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = adapter.fromJson("""{"color_id":"5"}""")
+
+      assertIs<NullableField.Value<String>>(request?.colorId)
+      assertEquals("5", (request?.colorId as NullableField.Value).v)
+    }
+
+    @Test
+    fun `UpdateEventRequest with null color_id in JSON deserializes to NullableField Clear`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = adapter.fromJson("""{"color_id":null}""")
+
+      assertIs<NullableField.Clear>(request?.colorId)
+    }
+
+    @Test
+    fun `UpdateEventRequest with colorId roundtrips through serialization correctly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val original = UpdateEventRequest.Builder().colorId("3").build()
+
+      assertEquals(original, adapter.fromJson(adapter.toJson(original)))
     }
 
     @Test
@@ -1055,7 +1101,7 @@ class EventsTests {
               transcription = true,
             ),
           ),
-          colorId = "11",
+          colorId = NullableField.Value("11"),
         )
       val updateEventQueryParams =
         UpdateEventQueryParams(

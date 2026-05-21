@@ -49,6 +49,7 @@ class JsonHelper {
       .add(MicrosoftAdminConsentCredentialDataAdapter())
       .add(GoogleServiceAccountCredentialDataAdapter())
       .add(ConnectorOverrideCredentialDataAdapter())
+      .add(NullableFieldAdapterFactory())
       // Polymorphic adapters
       .add(WHEN_JSON_FACTORY)
       .add(FREE_BUSY_JSON_FACTORY)

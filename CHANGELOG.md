@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+### Fixed
+* `UpdateEventRequest.Builder.clearColorId()` now sends `"color_id": null` to the Nylas API, allowing event colors to be cleared. Previously, setting `colorId` to `null` was silently omitted from the request body due to Moshi's default null-skipping behavior, leaving the existing color unchanged. (#324)
 ### Changed
 * Extended `EventResource` with additional room metadata fields: `capacity` (`Int`), `building` (`String`), `floorName` / `floor_name` (`String`), `floorSection` / `floor_section` (`String`), and `floorNumber` / `floor_number` (`Int`) — all optional, defaulting to `null`
 
