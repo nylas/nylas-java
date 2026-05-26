@@ -15,3 +15,6 @@ out
 .idea
 .DS_Store
 src/main/kotlin/com/nylas/Main.kt
+
+# Claude Code per-user local settings (not shared)
+.claude/settings.local.json
