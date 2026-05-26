@@ -10,7 +10,7 @@ data class RuleAction(
    * The action to perform.
    */
   @Json(name = "type")
-  val type: RuleActionType = RuleActionType.BLOCK,
+  val type: RuleActionType,
   /**
    * Required when type is [RuleActionType.ASSIGN_TO_FOLDER] — the folder ID to assign to.
    */

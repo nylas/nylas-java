@@ -42,6 +42,12 @@ data class UpdateRuleRequest(
   @Json(name = "enabled")
   val enabled: Boolean? = null,
 ) {
+  init {
+    require(actions == null || !(actions.any { it.type == RuleActionType.BLOCK } && actions.size > 1)) {
+      "RuleActionType.BLOCK is terminal and cannot be combined with other actions."
+    }
+  }
+
   /**
    * Builder for [UpdateRuleRequest].
    */
@@ -106,6 +112,7 @@ data class UpdateRuleRequest(
     /**
      * Build the [UpdateRuleRequest].
      * @return An [UpdateRuleRequest] with the provided values.
+     * @throws IllegalArgumentException if [RuleActionType.BLOCK] is combined with other actions.
      */
     fun build() = UpdateRuleRequest(name, trigger, match, actions, description, priority, enabled)
   }

@@ -27,7 +27,7 @@ data class CreateNylasListRequest(
    * @param name Name of the list.
    * @param type The type of values this list will hold.
    */
-  data class Builder(
+  class Builder(
     private val name: String,
     private val type: NylasListType,
   ) {

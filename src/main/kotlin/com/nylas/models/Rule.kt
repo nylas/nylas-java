@@ -25,22 +25,22 @@ data class Rule(
    * Evaluation order — lower numbers run first. Range 0–1000, default 10.
    */
   @Json(name = "priority")
-  val priority: Int = 10,
+  val priority: Int? = null,
   /**
    * Whether the rule is active.
    */
   @Json(name = "enabled")
-  val enabled: Boolean = true,
+  val enabled: Boolean? = null,
   /**
    * When this rule is evaluated — on inbound mail or outbound sends.
    */
   @Json(name = "trigger")
-  val trigger: RuleTrigger = RuleTrigger.INBOUND,
+  val trigger: RuleTrigger? = null,
   /**
    * The match conditions for this rule.
    */
   @Json(name = "match")
-  val match: RuleMatch = RuleMatch(),
+  val match: RuleMatch? = null,
   /**
    * The actions to perform when conditions are met.
    */

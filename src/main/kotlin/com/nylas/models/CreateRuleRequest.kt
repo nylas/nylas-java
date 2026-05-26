@@ -42,6 +42,12 @@ data class CreateRuleRequest(
   @Json(name = "enabled")
   val enabled: Boolean? = null,
 ) {
+  init {
+    require(!(actions.any { it.type == RuleActionType.BLOCK } && actions.size > 1)) {
+      "RuleActionType.BLOCK is terminal and cannot be combined with other actions."
+    }
+  }
+
   /**
    * Builder for [CreateRuleRequest].
    * @param name Name of the rule.
@@ -49,7 +55,7 @@ data class CreateRuleRequest(
    * @param match The match conditions.
    * @param actions The actions to perform.
    */
-  data class Builder(
+  class Builder(
     private val name: String,
     private val trigger: RuleTrigger,
     private val match: RuleMatch,
@@ -83,6 +89,7 @@ data class CreateRuleRequest(
     /**
      * Build the [CreateRuleRequest].
      * @return A [CreateRuleRequest] with the provided values.
+     * @throws IllegalArgumentException if [RuleActionType.BLOCK] is combined with other actions.
      */
     fun build() = CreateRuleRequest(name, trigger, match, actions, description, priority, enabled)
   }

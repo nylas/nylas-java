@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import com.squareup.moshi.Types
 
 /**
@@ -35,7 +36,7 @@ class NylasLists(client: NylasClient) : Resource<NylasList>(client, NylasList::c
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(listId: String, overrides: RequestOverrides? = null): Response<NylasList> {
-    val path = String.format("v3/lists/%s", listId)
+    val path = String.format("v3/lists/%s", PathEncoder.encode(listId))
     return findResource(path, overrides = overrides)
   }
 
@@ -63,7 +64,7 @@ class NylasLists(client: NylasClient) : Resource<NylasList>(client, NylasList::c
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(listId: String, requestBody: UpdateNylasListRequest, overrides: RequestOverrides? = null): Response<NylasList> {
-    val path = String.format("v3/lists/%s", listId)
+    val path = String.format("v3/lists/%s", PathEncoder.encode(listId))
     val serializedRequestBody = JsonHelper.moshi().adapter(UpdateNylasListRequest::class.java).toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
   }
@@ -77,7 +78,7 @@ class NylasLists(client: NylasClient) : Resource<NylasList>(client, NylasList::c
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(listId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/lists/%s", listId)
+    val path = String.format("v3/lists/%s", PathEncoder.encode(listId))
     return destroyResource(path, overrides = overrides)
   }
 
@@ -95,7 +96,7 @@ class NylasLists(client: NylasClient) : Resource<NylasList>(client, NylasList::c
     queryParams: ListNylasListItemsQueryParams? = null,
     overrides: RequestOverrides? = null,
   ): ListResponse<NylasListItem> {
-    val path = String.format("v3/lists/%s/items", listId)
+    val path = String.format("v3/lists/%s/items", PathEncoder.encode(listId))
     val responseType = Types.newParameterizedType(ListResponse::class.java, NylasListItem::class.java)
     return client.executeGet(path, responseType, queryParams, overrides)
   }
@@ -114,7 +115,7 @@ class NylasLists(client: NylasClient) : Resource<NylasList>(client, NylasList::c
     requestBody: ListItemsRequest,
     overrides: RequestOverrides? = null,
   ): Response<NylasList> {
-    val path = String.format("v3/lists/%s/items", listId)
+    val path = String.format("v3/lists/%s/items", PathEncoder.encode(listId))
     val serializedRequestBody = JsonHelper.moshi().adapter(ListItemsRequest::class.java).toJson(requestBody)
     val responseType = Types.newParameterizedType(Response::class.java, NylasList::class.java)
     return client.executePost(path, responseType, serializedRequestBody, overrides = overrides)
@@ -134,7 +135,7 @@ class NylasLists(client: NylasClient) : Resource<NylasList>(client, NylasList::c
     requestBody: ListItemsRequest,
     overrides: RequestOverrides? = null,
   ): Response<NylasList> {
-    val path = String.format("v3/lists/%s/items", listId)
+    val path = String.format("v3/lists/%s/items", PathEncoder.encode(listId))
     val serializedRequestBody = JsonHelper.moshi().adapter(ListItemsRequest::class.java).toJson(requestBody)
     val responseType = Types.newParameterizedType(Response::class.java, NylasList::class.java)
     return client.executeDelete(path, responseType, serializedRequestBody, overrides = overrides)

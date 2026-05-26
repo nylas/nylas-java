@@ -316,6 +316,7 @@ class NylasListsTests {
       assertEquals("v3/lists/$listId/items", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, NylasList::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
     }
 
     @Test
@@ -341,6 +342,7 @@ class NylasListsTests {
       assertEquals("v3/lists/$listId/items", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, NylasList::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
     }
   }
 }

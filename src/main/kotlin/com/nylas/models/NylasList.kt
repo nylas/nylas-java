@@ -26,7 +26,7 @@ data class NylasList(
    * The type of values stored in this list. Immutable after creation.
    */
   @Json(name = "type")
-  val type: NylasListType = NylasListType.DOMAIN,
+  val type: NylasListType? = null,
   /**
    * The number of items currently in the list.
    */

@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 
 /**
  * Nylas Policies API
@@ -34,7 +35,7 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(policyId: String, overrides: RequestOverrides? = null): Response<Policy> {
-    val path = String.format("v3/policies/%s", policyId)
+    val path = String.format("v3/policies/%s", PathEncoder.encode(policyId))
     return findResource(path, overrides = overrides)
   }
 
@@ -61,7 +62,7 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(policyId: String, requestBody: UpdatePolicyRequest, overrides: RequestOverrides? = null): Response<Policy> {
-    val path = String.format("v3/policies/%s", policyId)
+    val path = String.format("v3/policies/%s", PathEncoder.encode(policyId))
     val serializedRequestBody = JsonHelper.moshi().adapter(UpdatePolicyRequest::class.java).toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
   }
@@ -75,7 +76,7 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(policyId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/policies/%s", policyId)
+    val path = String.format("v3/policies/%s", PathEncoder.encode(policyId))
     return destroyResource(path, overrides = overrides)
   }
 }

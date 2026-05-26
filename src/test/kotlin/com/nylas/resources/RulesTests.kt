@@ -21,6 +21,7 @@ import org.mockito.kotlin.whenever
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 
@@ -92,11 +93,11 @@ class RulesTests {
       assertEquals(1, rule.priority)
       assertEquals(true, rule.enabled)
       assertEquals(RuleTrigger.INBOUND, rule.trigger)
-      assertEquals(RuleMatchOperator.ANY, rule.match.operator)
-      assertEquals(2, rule.match.conditions.size)
-      assertEquals("from.domain", rule.match.conditions[0].field)
-      assertEquals(RuleConditionOperator.IS, rule.match.conditions[0].operator)
-      assertEquals("spam-domain.com", rule.match.conditions[0].value)
+      assertEquals(RuleMatchOperator.ANY, rule.match!!.operator)
+      assertEquals(2, rule.match!!.conditions.size)
+      assertEquals("from.domain", rule.match!!.conditions[0].field)
+      assertEquals(RuleConditionOperator.IS, rule.match!!.conditions[0].operator)
+      assertEquals("spam-domain.com", rule.match!!.conditions[0].value)
       assertEquals(1, rule.actions.size)
       assertEquals(RuleActionType.BLOCK, rule.actions[0].type)
       assertNull(rule.actions[0].value)
@@ -142,8 +143,8 @@ class RulesTests {
       val rule = adapter.fromJson(jsonBuffer)!!
       assertIs<Rule>(rule)
       assertEquals(RuleTrigger.OUTBOUND, rule.trigger)
-      assertEquals(RuleMatchOperator.ALL, rule.match.operator)
-      assertEquals("outbound.type", rule.match.conditions[0].field)
+      assertEquals(RuleMatchOperator.ALL, rule.match!!.operator)
+      assertEquals("outbound.type", rule.match!!.conditions[0].field)
       assertEquals(RuleActionType.ASSIGN_TO_FOLDER, rule.actions[0].type)
       assertEquals("Label_1234567890", rule.actions[0].value)
     }
@@ -165,8 +166,8 @@ class RulesTests {
       val deserialized = adapter.fromJson(json)!!
       assertEquals("Block spam", deserialized.name)
       assertEquals(RuleTrigger.INBOUND, deserialized.trigger)
-      assertEquals(RuleMatchOperator.ANY, deserialized.match.operator)
-      assertEquals(1, deserialized.match.conditions.size)
+      assertEquals(RuleMatchOperator.ANY, deserialized.match!!.operator)
+      assertEquals(1, deserialized.match!!.conditions.size)
       assertEquals(RuleActionType.BLOCK, deserialized.actions[0].type)
       assertNull(deserialized.description)
       assertNull(deserialized.priority)
@@ -190,6 +191,58 @@ class RulesTests {
       assertEquals("Test rule", request.description)
       assertEquals(5, request.priority)
       assertEquals(false, request.enabled)
+    }
+
+    @Test
+    fun `CreateRuleRequest throws when BLOCK is combined with other actions`() {
+      assertFailsWith<IllegalArgumentException> {
+        CreateRuleRequest(
+          name = "Bad Rule",
+          trigger = RuleTrigger.INBOUND,
+          match = RuleMatch(operator = RuleMatchOperator.ANY, conditions = emptyList()),
+          actions = listOf(
+            RuleAction(type = RuleActionType.BLOCK),
+            RuleAction(type = RuleActionType.MARK_AS_SPAM),
+          ),
+        )
+      }
+    }
+
+    @Test
+    fun `UpdateRuleRequest throws when BLOCK is combined with other actions`() {
+      assertFailsWith<IllegalArgumentException> {
+        UpdateRuleRequest(
+          actions = listOf(
+            RuleAction(type = RuleActionType.BLOCK),
+            RuleAction(type = RuleActionType.ARCHIVE),
+          ),
+        )
+      }
+    }
+
+    @Test
+    fun `Rule with absent optional fields deserializes nullable fields to null`() {
+      val adapter = JsonHelper.moshi().adapter(Rule::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "id": "abc123",
+            "name": "Minimal Rule",
+            "actions": [],
+            "application_id": "app-id",
+            "organization_id": "org-id",
+            "created_at": 1000,
+            "updated_at": 1000
+          }
+        """.trimIndent(),
+      )
+
+      val rule = adapter.fromJson(jsonBuffer)!!
+      assertNull(rule.priority)
+      assertNull(rule.enabled)
+      assertNull(rule.trigger)
+      assertNull(rule.match)
+      assertNull(rule.description)
     }
   }
 

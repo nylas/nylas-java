@@ -36,7 +36,7 @@ data class CreatePolicyRequest(
    * Builder for [CreatePolicyRequest].
    * @param name Name of the policy.
    */
-  data class Builder(
+  class Builder(
     private val name: String,
   ) {
     private var options: PolicyOptions? = null
