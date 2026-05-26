@@ -103,30 +103,82 @@ data class SendTransactionalEmailRequest(
     private var customHeaders: List<CustomHeader>? = null
     private var isPlaintext: Boolean? = null
 
+    /**
+     * Set BCC recipients.
+     * @param bcc An array of bcc recipients.
+     */
     fun bcc(bcc: List<EmailName>?) = apply { this.bcc = bcc }
 
+    /**
+     * Set CC recipients.
+     * @param cc An array of cc recipients.
+     */
     fun cc(cc: List<EmailName>?) = apply { this.cc = cc }
 
+    /**
+     * Set reply-to recipients.
+     * @param replyTo An array of name and email pairs that override the sent reply-to headers.
+     */
     fun replyTo(replyTo: List<EmailName>?) = apply { this.replyTo = replyTo }
 
+    /**
+     * Set attachments.
+     * @param attachments An array of files to attach to the message.
+     */
     fun attachments(attachments: List<CreateAttachmentRequest>?) = apply { this.attachments = attachments }
 
+    /**
+     * Set the message subject.
+     * @param subject The message subject.
+     */
     fun subject(subject: String?) = apply { this.subject = subject }
 
+    /**
+     * Set the message body.
+     * @param body The full HTML message body.
+     */
     fun body(body: String?) = apply { this.body = body }
 
+    /**
+     * Set the scheduled send time.
+     * @param sendAt Unix timestamp to send the message at.
+     */
     fun sendAt(sendAt: Long?) = apply { this.sendAt = sendAt }
 
+    /**
+     * Set the scheduled send time.
+     * @param sendAt Unix timestamp to send the message at (converted to Long).
+     */
     fun sendAt(sendAt: Int?) = apply { this.sendAt = sendAt?.toLong() }
 
+    /**
+     * Set the reply-to message ID.
+     * @param replyToMessageId The ID of the message that you are replying to.
+     */
     fun replyToMessageId(replyToMessageId: String?) = apply { this.replyToMessageId = replyToMessageId }
 
+    /**
+     * Set tracking options.
+     * @param trackingOptions Options for tracking opens, links, and thread replies.
+     */
     fun trackingOptions(trackingOptions: TrackingOptions?) = apply { this.trackingOptions = trackingOptions }
 
+    /**
+     * Set whether to use draft support.
+     * @param useDraft Whether or not to use draft support. Primarily used for large attachments.
+     */
     fun useDraft(useDraft: Boolean?) = apply { this.useDraft = useDraft }
 
+    /**
+     * Set custom headers.
+     * @param customHeaders A list of custom headers to add to the message.
+     */
     fun customHeaders(customHeaders: List<CustomHeader>?) = apply { this.customHeaders = customHeaders }
 
+    /**
+     * Set whether to send as plain text.
+     * @param isPlaintext When true, the message body is sent as plain text with no HTML MIME part.
+     */
     fun isPlaintext(isPlaintext: Boolean?) = apply { this.isPlaintext = isPlaintext }
 
     fun build() =
