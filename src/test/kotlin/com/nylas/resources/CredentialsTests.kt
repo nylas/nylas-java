@@ -442,5 +442,25 @@ class CredentialsTests {
       assertEquals("new-client-secret", credentialData["client_secret"])
       assertEquals("my-tenant", credentialData["tenant"])
     }
+
+    @Test
+    fun `finding a credential URL-encodes a credential id containing slashes`() {
+      val slashedCredentialId = "prefix/cred-123"
+
+      credentials.find(AuthProvider.IMAP, slashedCredentialId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Credential>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/connectors/imap/creds/prefix%2Fcred-123", pathCaptor.firstValue)
+    }
   }
 }

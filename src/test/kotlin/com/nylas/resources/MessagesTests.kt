@@ -289,6 +289,31 @@ class MessagesTests {
     }
 
     @Test
+    fun `listing messages with metadata_pair calls requests with the correct params`() {
+      val queryParams =
+        ListMessagesQueryParams(
+          metadataPair = mapOf("campaign" to "welcome-email"),
+        )
+
+      messages.list(grantId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Message::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
     fun `listing messages without query params calls requests with the correct params`() {
       messages.list(grantId)
 
@@ -428,6 +453,46 @@ class MessagesTests {
       assertEquals("v3/grants/$grantId/messages/$messageId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a message URL-encodes a message id containing slashes`() {
+      val messageId = "INBOX/message-123"
+
+      messages.find(grantId, messageId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/INBOX%2Fmessage-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying a message URL-encodes a message id containing slashes`() {
+      val messageId = "INBOX/message-123"
+
+      messages.destroy(grantId, messageId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<ListResponse<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/messages/INBOX%2Fmessage-123", pathCaptor.firstValue)
     }
   }
 

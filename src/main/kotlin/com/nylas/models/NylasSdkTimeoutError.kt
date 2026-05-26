@@ -6,6 +6,6 @@ package com.nylas.models
  * @param timeout The timeout value set in the Nylas SDK, in seconds.
  */
 class NylasSdkTimeoutError(
-  url: String,
-  timeout: Int,
+  val url: String,
+  val timeout: Int,
 ) : AbstractNylasSdkError("Nylas SDK timed out before receiving a response from the server.")

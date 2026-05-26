@@ -118,12 +118,22 @@ data class ListEventQueryParams(
   @Json(name = "attendees")
   val attendees: List<String>? = null,
   /**
-   * Filter for events with the specified event type.
+   * Filter for events with the specified event type(s).
    * You can pass this query parameter multiple times to select or exclude multiple event types.
    * (Google only)
    */
   @Json(name = "event_type")
-  val eventType: EventType? = null,
+  val eventType: List<EventType>? = null,
+  /**
+   * Comma-separated list of fields to return in the response.
+   */
+  @Json(name = "select")
+  val select: String? = null,
+  /**
+   * When true, tentative events are counted as busy.
+   */
+  @Json(name = "tentative_as_busy")
+  val tentativeAsBusy: Boolean? = null,
 ) : IQueryParams {
   /**
    * Builder for [ListEventQueryParams].
@@ -151,7 +161,9 @@ data class ListEventQueryParams(
     private var updatedBefore: Long? = null
     private var updatedAfter: Long? = null
     private var attendees: List<String>? = null
-    private var eventType: EventType? = null
+    private var eventType: List<EventType>? = null
+    private var select: String? = null
+    private var tentativeAsBusy: Boolean? = null
 
     /**
      * Sets the maximum number of objects to return.
@@ -291,13 +303,27 @@ data class ListEventQueryParams(
     fun attendees(attendees: List<String>?) = apply { this.attendees = attendees }
 
     /**
-     * Sets the event type to filter for events with.
-     * You can pass this query parameter multiple times to select or exclude multiple event types.
+     * Sets the event type(s) to filter for events with.
+     * You can pass multiple event types to select or exclude multiple event types.
      * (Google only)
-     * @param eventType The event type to filter for events with.
+     * @param eventType The list of event types to filter for.
      * @return The builder.
      */
-    fun eventType(eventType: EventType?) = apply { this.eventType = eventType }
+    fun eventType(eventType: List<EventType>?) = apply { this.eventType = eventType }
+
+    /**
+     * Sets the comma-separated list of fields to return in the response.
+     * @param select The fields to return.
+     * @return The builder.
+     */
+    fun select(select: String?) = apply { this.select = select }
+
+    /**
+     * Sets whether tentative events are counted as busy.
+     * @param tentativeAsBusy Whether tentative events are counted as busy.
+     * @return The builder.
+     */
+    fun tentativeAsBusy(tentativeAsBusy: Boolean?) = apply { this.tentativeAsBusy = tentativeAsBusy }
 
     /**
      * Builds a [ListEventQueryParams] instance.
@@ -323,6 +349,8 @@ data class ListEventQueryParams(
       updatedAfter,
       attendees,
       eventType,
+      select,
+      tentativeAsBusy,
     )
   }
 }

@@ -216,5 +216,25 @@ class RedirectUriTests {
       assertEquals("v3/applications/redirect-uris/$redirectUriId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
+
+    @Test
+    fun `finding a redirectUri URL-encodes a redirectUri id containing slashes`() {
+      val slashedRedirectUriId = "prefix/uri-123"
+
+      redirectUris.find(slashedRedirectUriId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<RedirectUri>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/applications/redirect-uris/prefix%2Furi-123", pathCaptor.firstValue)
+    }
   }
 }

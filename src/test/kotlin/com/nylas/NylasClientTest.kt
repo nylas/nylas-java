@@ -197,6 +197,12 @@ class NylasClientTest {
       val result = nylasClient.notetakers()
       assertNotNull(result)
     }
+
+    @Test
+    fun `domains returns a valid Domains instance`() {
+      val result = nylasClient.domains()
+      assertNotNull(result)
+    }
   }
 
   @Nested

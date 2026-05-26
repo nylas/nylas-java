@@ -99,5 +99,25 @@ class SessionsTest {
       assertEquals("v3/scheduling/sessions/$sessionId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
+
+    @Test
+    fun `deleting a session URL-encodes a session id containing slashes`() {
+      val slashedSessionId = "prefix/session-123"
+
+      sessions.destroy(slashedSessionId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<DeleteResponse>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/scheduling/sessions/prefix%2Fsession-123", pathCaptor.firstValue)
+    }
   }
 }

@@ -9,6 +9,23 @@ Your job is to maintain parity with the API to ensure that the SDK supports all 
 
 When asked to add support for a new feature, query parameter, or API endpoint, follow this workflow:
 
+### 0. Analyse Backward Compatibility FIRST (before proposing any plan)
+
+Before writing a plan or touching any code, explicitly analyse whether the proposed changes are backward compatible for existing SDK consumers (both Kotlin and Java).
+
+Check all of the following:
+- **Source compatibility (Kotlin)**: Does changing a type (e.g. `String` → `String?`) break existing call sites that assume non-nullability?
+- **Source compatibility (Java)**: Does the change affect compiled Java code that uses the SDK?
+- **Binary compatibility (JVM)**: Does the bytecode signature of any public method change?
+- **Constructor/data class compatibility**: Does changing a field's type or default break existing construction patterns?
+
+If the change is **NOT** backward compatible, output this warning in your response before anything else:
+
+> # ⚠️ WARNING: THIS CHANGE IS NOT BACKWARD COMPATIBLE ⚠️
+> Existing SDK consumers will be broken. Do not proceed without explicit user approval or a backward-compatible alternative.
+
+If a backward-compatible alternative exists (e.g. using `String = ""` instead of `String?` to keep Moshi happy while preserving non-nullability), prefer it and explain why.
+
 ### 1. Understand the Codebase
 - Scan the project structure
 - Understand the architecture and how it's organized

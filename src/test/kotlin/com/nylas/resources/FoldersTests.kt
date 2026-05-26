@@ -75,6 +75,34 @@ class FoldersTests {
       assertEquals(0, folder.totalCount)
       assertEquals(listOf("\\SENT"), folder.attributes)
     }
+
+    @Test
+    fun `Folder deserializes correctly when grant_id is absent due to select`() {
+      val adapter = JsonHelper.moshi().adapter(Folder::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """{ "id": "SENT", "name": "SENT", "object": "folder" }""",
+      )
+
+      val folder = adapter.fromJson(jsonBuffer)!!
+      assertIs<Folder>(folder)
+      assertEquals("SENT", folder.id)
+      assertEquals("", folder.grantId)
+      assertEquals("SENT", folder.name)
+    }
+
+    @Test
+    fun `Folder deserializes correctly when both id and grant_id are absent due to select`() {
+      val adapter = JsonHelper.moshi().adapter(Folder::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """{ "name": "SENT", "object": "folder" }""",
+      )
+
+      val folder = adapter.fromJson(jsonBuffer)!!
+      assertIs<Folder>(folder)
+      assertEquals("", folder.id)
+      assertEquals("", folder.grantId)
+      assertEquals("SENT", folder.name)
+    }
   }
 
   @Nested
@@ -388,6 +416,46 @@ class FoldersTests {
       assertEquals("v3/grants/$grantId/folders/$folderId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a folder URL-encodes a folder id containing slashes`() {
+      val folderId = "INBOX/folder-123"
+
+      folders.find(grantId, folderId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/folders/INBOX%2Ffolder-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying a folder URL-encodes a folder id containing slashes`() {
+      val folderId = "INBOX/folder-123"
+
+      folders.destroy(grantId, folderId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<ListResponse<Folder>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/folders/INBOX%2Ffolder-123", pathCaptor.firstValue)
     }
   }
 }

@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 /**
  * Nylas Sessions API
  *
@@ -35,7 +36,7 @@ class Sessions(client: NylasClient) : Resource<Session>(client, Session::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(sessionId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/scheduling/sessions/%s", sessionId)
+    val path = String.format("v3/scheduling/sessions/%s", PathEncoder.encode(sessionId))
     return destroyResource(path, overrides = overrides)
   }
 }

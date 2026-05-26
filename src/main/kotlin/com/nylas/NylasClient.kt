@@ -9,6 +9,7 @@ import com.nylas.util.JsonHelper
 import com.squareup.moshi.JsonDataException
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import java.io.IOException
 import java.lang.Exception
@@ -109,6 +110,12 @@ open class NylasClient(
    * @return The Drafts API
    */
   open fun drafts(): Drafts = Drafts(this)
+
+  /**
+   * Access the Domains API
+   * @return The Domains API
+   */
+  open fun domains(): Domains = Domains(this)
 
   /**
    * Access the Events API
@@ -268,7 +275,7 @@ open class NylasClient(
     overrides: RequestOverrides? = null,
   ): T {
     val url = buildUrl(path, queryParams, overrides)
-    var jsonBody = RequestBody.create(null, ByteArray(0))
+    var jsonBody = ByteArray(0).toRequestBody(null)
     if (requestBody != null) {
       jsonBody = JsonHelper.jsonRequestBody(requestBody)
     }
