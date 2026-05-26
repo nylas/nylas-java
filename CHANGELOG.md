@@ -1,5 +1,14 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Added
+* Transactional email support via `Domains.sendTransactionalEmail()`
+  - `SendTransactionalEmailRequest` model (and fluent `Builder`) for composing transactional messages from a verified domain — supports `to`, `from`, `cc`, `bcc`, `reply_to`, `subject`, `body`, `send_at`, `reply_to_message_id`, `tracking_options`, `use_draft`, `custom_headers`, and `is_plaintext`
+  - `NylasClient.domains()` accessor returning the new `Domains` resource
+  - Automatic multipart/form-data upload when the total attachment size exceeds the JSON limit
+  - Examples: `TransactionalEmailExample.java` and `KotlinTransactionalEmailExample.kt`
+
 ## [v2.16.1] - Release 2026-05-21
 
 ### Fixed
