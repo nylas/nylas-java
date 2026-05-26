@@ -15,7 +15,10 @@ import org.mockito.kotlin.*
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class EventsTests {
   private val mockHttpClient: OkHttpClient = Mockito.mock(OkHttpClient::class.java)
@@ -111,7 +114,8 @@ class EventsTests {
                 "audio_recording": true,
                 "transcription": true
               }
-            }
+            },
+            "color_id": "7"
           }
           """.trimIndent(),
         )
@@ -171,6 +175,7 @@ class EventsTests {
       assertEquals(false, event.notetaker?.meetingSettings?.videoRecording)
       assertEquals(true, event.notetaker?.meetingSettings?.audioRecording)
       assertEquals(true, event.notetaker?.meetingSettings?.transcription)
+      assertEquals("7", event.colorId)
     }
 
     @Test
@@ -326,6 +331,14 @@ class EventsTests {
     }
 
     @Test
+    fun `CreateEventAutoConferencingProvider deserializes unknown value as null`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventAutoConferencingProvider::class.java).nullSafe()
+
+      assertEquals(null, adapter.fromJson("\"Hangouts\""))
+      assertEquals(null, adapter.fromJson("\"some_future_provider\""))
+    }
+
+    @Test
     fun `CreateEventManualConferencingProvider serializes properly`() {
       val adapter = JsonHelper.moshi().adapter(CreateEventManualConferencingProvider::class.java)
 
@@ -347,6 +360,65 @@ class EventsTests {
       assertEquals(CreateEventManualConferencingProvider.TEAMS_FOR_BUSINESS, adapter.fromJson("\"Teams for Business\""))
       assertEquals(CreateEventManualConferencingProvider.SKYPE_FOR_BUSINESS, adapter.fromJson("\"Skype for Business\""))
       assertEquals(CreateEventManualConferencingProvider.SKYPE_FOR_CONSUMER, adapter.fromJson("\"Skype for Consumer\""))
+    }
+
+    @Test
+    fun `CreateEventManualConferencingProvider deserializes unknown value as null`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventManualConferencingProvider::class.java).nullSafe()
+
+      assertEquals(null, adapter.fromJson("\"Hangouts\""))
+      assertEquals(null, adapter.fromJson("\"some_future_provider\""))
+    }
+
+    @Test
+    fun `ConferencingProvider deserializes known values properly`() {
+      val adapter = JsonHelper.moshi().adapter(ConferencingProvider::class.java)
+
+      assertEquals(ConferencingProvider.ZOOM_MEETING, adapter.fromJson("\"Zoom Meeting\""))
+      assertEquals(ConferencingProvider.GOOGLE_MEET, adapter.fromJson("\"Google Meet\""))
+      assertEquals(ConferencingProvider.MICROSOFT_TEAMS, adapter.fromJson("\"Microsoft Teams\""))
+      assertEquals(ConferencingProvider.WEBEX, adapter.fromJson("\"WebEx\""))
+      assertEquals(ConferencingProvider.GOTOMEETING, adapter.fromJson("\"GoToMeeting\""))
+      assertEquals(ConferencingProvider.SKYPE_FOR_CONSUMER, adapter.fromJson("\"Skype for Consumer\""))
+      assertEquals(ConferencingProvider.SKYPE_FOR_BUSINESS, adapter.fromJson("\"Skype for Business\""))
+    }
+
+    @Test
+    fun `ConferencingProvider deserializes unknown value as null`() {
+      val adapter = JsonHelper.moshi().adapter(ConferencingProvider::class.java).nullSafe()
+
+      assertEquals(null, adapter.fromJson("\"Hangouts\""))
+      assertEquals(null, adapter.fromJson("\"some_future_provider\""))
+    }
+
+    @Test
+    fun `Event with unknown conferencing provider deserializes without throwing`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "5d3qmne77v32r8l4phyuksl2x",
+          "grant_id": "41009df5-bf11-4c97-aa18-b285b5f2e386",
+          "calendar_id": "7d93zl2palhxqdy6e5qinsakt",
+          "object": "event",
+          "conferencing": {
+            "provider": "Hangouts",
+            "details": {
+              "url": "https://hangouts.google.com/call/abc123"
+            }
+          },
+          "when": {
+            "date": "2024-06-18",
+            "object": "date"
+          }
+        }
+        """.trimIndent(),
+      )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+      assertIs<Conferencing.Details>(event.conferencing)
+      val conferencingDetails = event.conferencing as Conferencing.Details
+      assertEquals(null, conferencingDetails.provider)
     }
 
     @Test
@@ -437,6 +509,90 @@ class EventsTests {
       val details = conferencing["details"] as Map<*, *>
       assertEquals("https://teams.microsoft.com/join/123", details["url"])
       assertEquals("123456", details["pin"])
+    }
+
+    @Test
+    fun `CreateEventRequest with colorId serializes color_id field`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
+      val request = CreateEventRequest(
+        whenObj = CreateEventRequest.When.Time(1620000000),
+        colorId = "7",
+      )
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      assertEquals("7", jsonMap["color_id"])
+    }
+
+    @Test
+    fun `CreateEventRequest without colorId omits color_id from serialized JSON`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
+      val request = CreateEventRequest(whenObj = CreateEventRequest.When.Time(1620000000))
+
+      val json = adapter.toJson(request)
+      assertFalse(json.contains("color_id"))
+    }
+
+    @Test
+    fun `UpdateEventRequest with colorId serializes color_id field`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest(colorId = NullableField.Value("11"))
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      assertEquals("11", jsonMap["color_id"])
+    }
+
+    @Test
+    fun `UpdateEventRequest without colorId omits color_id from serialized JSON`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest(title = "Test")
+
+      val json = adapter.toJson(request)
+      assertFalse(json.contains("color_id"))
+    }
+
+    @Test
+    fun `UpdateEventRequest with clearColorId serializes color_id as null`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest.Builder().clearColorId().build()
+
+      val json = adapter.toJson(request)
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(json)!!
+      assertTrue(jsonMap.containsKey("color_id"))
+      assertNull(jsonMap["color_id"])
+    }
+
+    @Test
+    fun `UpdateEventRequest Builder colorId method serializes color_id field`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest.Builder().colorId("9").build()
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      assertEquals("9", jsonMap["color_id"])
+    }
+
+    @Test
+    fun `UpdateEventRequest with color_id value in JSON deserializes to NullableField Value`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = adapter.fromJson("""{"color_id":"5"}""")
+
+      assertIs<NullableField.Value<String>>(request?.colorId)
+      assertEquals("5", (request?.colorId as NullableField.Value).v)
+    }
+
+    @Test
+    fun `UpdateEventRequest with null color_id in JSON deserializes to NullableField Clear`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = adapter.fromJson("""{"color_id":null}""")
+
+      assertIs<NullableField.Clear>(request?.colorId)
+    }
+
+    @Test
+    fun `UpdateEventRequest with colorId roundtrips through serialization correctly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val original = UpdateEventRequest.Builder().colorId("3").build()
+
+      assertEquals(original, adapter.fromJson(adapter.toJson(original)))
     }
 
     @Test
@@ -820,6 +976,7 @@ class EventsTests {
 
       assertEquals("v3/grants/$grantId/events", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Event::class.java), typeCaptor.firstValue)
+      assertEquals(listEventQueryParams, queryParamCaptor.firstValue)
     }
 
     @Test
@@ -874,6 +1031,7 @@ class EventsTests {
 
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
+      assertEquals(findEventQueryParams, queryParamCaptor.firstValue)
     }
 
     @Test
@@ -899,6 +1057,7 @@ class EventsTests {
               transcription = true,
             ),
           ),
+          colorId = "7",
         )
       val createEventQueryParams =
         CreateEventQueryParams(
@@ -923,6 +1082,7 @@ class EventsTests {
       assertEquals("v3/grants/$grantId/events", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(createEventRequest), requestBodyCaptor.firstValue)
+      assertTrue(requestBodyCaptor.firstValue.contains("\"color_id\":\"7\""))
     }
 
     @Test
@@ -941,6 +1101,7 @@ class EventsTests {
               transcription = true,
             ),
           ),
+          colorId = NullableField.Value("11"),
         )
       val updateEventQueryParams =
         UpdateEventQueryParams(
@@ -965,6 +1126,7 @@ class EventsTests {
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Event::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(updateEventRequest), requestBodyCaptor.firstValue)
+      assertTrue(requestBodyCaptor.firstValue.contains("\"color_id\":\"11\""))
     }
 
     @Test
@@ -1155,6 +1317,49 @@ class EventsTests {
 
       assertEquals("v3/grants/$grantId/events/$eventId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
+      assertEquals(destroyEventQueryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding an event URL-encodes an event id containing slashes`() {
+      val eventId = "prefix/event-123"
+      val queryParams = FindEventQueryParams(calendarId = "cal-1")
+
+      events.find(grantId, eventId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/prefix%2Fevent-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying an event URL-encodes an event id containing slashes`() {
+      val eventId = "prefix/event-123"
+      val queryParams = DestroyEventQueryParams(calendarId = "cal-1")
+
+      events.destroy(grantId, eventId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<ListResponse<Event>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/events/prefix%2Fevent-123", pathCaptor.firstValue)
     }
   }
 
@@ -1201,6 +1406,251 @@ class EventsTests {
       assertEquals("v3/grants/$grantId/events/$eventId/send-rsvp", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertEquals(adapter.toJson(sendRsvpRequest), requestBodyCaptor.firstValue)
+      assertEquals(sendRsvpQueryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `sending RSVP with skipNylasEmail calls requests with the correct params`() {
+      val eventId = "event-123"
+      val sendRsvpRequest = SendRsvpRequest(status = RsvpStatus.NO)
+      val sendRsvpQueryParams = SendRsvpQueryParams(
+        calendarId = "calendar-id",
+        skipNylasEmail = true,
+      )
+
+      events.sendRsvp(grantId, eventId, sendRsvpRequest, sendRsvpQueryParams)
+      val queryParamCaptor = argumentCaptor<SendRsvpQueryParams>()
+      verify(mockNylasClient).executePost<DeleteResponse>(
+        any(),
+        any(),
+        any(),
+        queryParamCaptor.capture(),
+        anyOrNull(),
+      )
+
+      assertEquals(true, queryParamCaptor.firstValue.skipNylasEmail)
+    }
+  }
+
+  @Nested
+  inner class NewFieldTests {
+    @Test
+    fun `Event deserializes resources and textDescription fields`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "event-123",
+          "grant_id": "grant-456",
+          "calendar_id": "primary",
+          "object": "event",
+          "when": {"date": "2024-06-18", "object": "date"},
+          "resources": [
+            {
+              "email": "room@example.com",
+              "name": "Conference Room A",
+              "capacity": 10,
+              "building": "HQ",
+              "floor_name": "Second Floor",
+              "floor_section": "East Wing",
+              "floor_number": 2
+            },
+            {"email": "projector@example.com"}
+          ],
+          "text_description": "Plain text version of description"
+        }
+        """.trimIndent(),
+      )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+      assertEquals(2, event.resources?.size)
+      val room = event.resources?.get(0)!!
+      assertEquals("room@example.com", room.email)
+      assertEquals("Conference Room A", room.name)
+      assertEquals(10, room.capacity)
+      assertEquals("HQ", room.building)
+      assertEquals("Second Floor", room.floorName)
+      assertEquals("East Wing", room.floorSection)
+      assertEquals(2, room.floorNumber)
+      val projector = event.resources?.get(1)!!
+      assertEquals("projector@example.com", projector.email)
+      assertEquals(null, projector.name)
+      assertEquals(null, projector.capacity)
+      assertEquals(null, projector.building)
+      assertEquals(null, projector.floorName)
+      assertEquals(null, projector.floorSection)
+      assertEquals(null, projector.floorNumber)
+      assertEquals("Plain text version of description", event.textDescription)
+    }
+
+    @Test
+    fun `Event with null resources and textDescription deserializes correctly`() {
+      val adapter = JsonHelper.moshi().adapter(Event::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "event-123",
+          "grant_id": "grant-456",
+          "calendar_id": "primary",
+          "object": "event",
+          "when": {"date": "2024-06-18", "object": "date"}
+        }
+        """.trimIndent(),
+      )
+
+      val event = adapter.fromJson(jsonBuffer)!!
+      assertEquals(null, event.resources)
+      assertEquals(null, event.textDescription)
+    }
+
+    @Test
+    fun `CreateEventRequest with resources serializes correctly`() {
+      val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
+      val request = CreateEventRequest(
+        whenObj = CreateEventRequest.When.Time(1620000000),
+        resources = listOf(
+          EventResource(
+            email = "room@example.com",
+            name = "Conference Room A",
+            capacity = 10,
+            building = "HQ",
+            floorName = "Second Floor",
+            floorSection = "East Wing",
+            floorNumber = 2,
+          ),
+          EventResource(email = "projector@example.com"),
+        ),
+      )
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      val resources = jsonMap["resources"] as List<*>
+      assertEquals(2, resources.size)
+      val room = resources[0] as Map<*, *>
+      assertEquals("room@example.com", room["email"])
+      assertEquals("Conference Room A", room["name"])
+      assertEquals(10.0, room["capacity"])
+      assertEquals("HQ", room["building"])
+      assertEquals("Second Floor", room["floor_name"])
+      assertEquals("East Wing", room["floor_section"])
+      assertEquals(2.0, room["floor_number"])
+      assertEquals("projector@example.com", (resources[1] as Map<*, *>)["email"])
+    }
+
+    @Test
+    fun `UpdateEventRequest with resources serializes correctly`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
+      val request = UpdateEventRequest(
+        resources = listOf(
+          EventResource(
+            email = "room@example.com",
+            name = "Room B",
+            capacity = 5,
+            building = "Annex",
+            floorName = "Ground Floor",
+            floorSection = "West",
+            floorNumber = 1,
+          ),
+        ),
+      )
+
+      val jsonMap = JsonHelper.moshi().adapter(Map::class.java).fromJson(adapter.toJson(request))!!
+      val resources = jsonMap["resources"] as List<*>
+      assertEquals(1, resources.size)
+      val room = resources[0] as Map<*, *>
+      assertEquals("room@example.com", room["email"])
+      assertEquals("Room B", room["name"])
+      assertEquals(5.0, room["capacity"])
+      assertEquals("Annex", room["building"])
+      assertEquals("Ground Floor", room["floor_name"])
+      assertEquals("West", room["floor_section"])
+      assertEquals(1.0, room["floor_number"])
+    }
+
+    @Test
+    fun `EventNotetaker deserializes new meeting settings fields`() {
+      val adapter = JsonHelper.moshi().adapter(EventNotetaker::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "notetaker-123",
+          "name": "My Bot",
+          "meeting_settings": {
+            "video_recording": true,
+            "audio_recording": true,
+            "transcription": true,
+            "action_items": true,
+            "action_items_settings": {"custom_instructions": "Focus on action items"},
+            "summary": true,
+            "summary_settings": {"custom_instructions": "Be concise"},
+            "leave_after_silence_seconds": 300,
+            "transcription_settings": {
+              "expected_languages": ["en", "es"],
+              "fallback_language": "en"
+            }
+          }
+        }
+        """.trimIndent(),
+      )
+
+      val notetaker = adapter.fromJson(jsonBuffer)!!
+      val settings = notetaker.meetingSettings!!
+      assertEquals(true, settings.actionItems)
+      assertEquals("Focus on action items", settings.actionItemsSettings?.customInstructions)
+      assertEquals(true, settings.summary)
+      assertEquals("Be concise", settings.summarySettings?.customInstructions)
+      assertEquals(300, settings.leaveAfterSilenceSeconds)
+      assertEquals(listOf("en", "es"), settings.transcriptionSettings?.expectedLanguages)
+      assertEquals("en", settings.transcriptionSettings?.fallbackLanguage)
+    }
+
+    @Test
+    fun `ListEventQueryParams supports multiple eventTypes`() {
+      val params = ListEventQueryParams.Builder("primary")
+        .eventType(listOf(EventType.DEFAULT, EventType.OUT_OF_OFFICE))
+        .select("id,title")
+        .tentativeAsBusy(true)
+        .build()
+
+      assertEquals(listOf(EventType.DEFAULT, EventType.OUT_OF_OFFICE), params.eventType)
+      assertEquals("id,title", params.select)
+      assertEquals(true, params.tentativeAsBusy)
+    }
+
+    @Test
+    fun `FindEventQueryParams supports select and tentativeAsBusy`() {
+      val params = FindEventQueryParams.Builder("primary")
+        .select("id,title,when")
+        .tentativeAsBusy(false)
+        .build()
+
+      assertEquals("id,title,when", params.select)
+      assertEquals(false, params.tentativeAsBusy)
+    }
+
+    @Test
+    fun `CreateEventQueryParams supports select and tentativeAsBusy`() {
+      val params = CreateEventQueryParams.Builder("primary")
+        .notifyParticipants(true)
+        .select("id,title")
+        .tentativeAsBusy(true)
+        .build()
+
+      assertEquals("id,title", params.select)
+      assertEquals(true, params.tentativeAsBusy)
+      assertEquals(true, params.notifyParticipants)
+    }
+
+    @Test
+    fun `UpdateEventQueryParams supports select and tentativeAsBusy`() {
+      val params = UpdateEventQueryParams.Builder("primary")
+        .notifyParticipants(false)
+        .select("id,title")
+        .tentativeAsBusy(false)
+        .build()
+
+      assertEquals("id,title", params.select)
+      assertEquals(false, params.tentativeAsBusy)
+      assertEquals(false, params.notifyParticipants)
     }
   }
 }

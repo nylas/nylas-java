@@ -333,5 +333,24 @@ class NotetakersTests {
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
+
+    @Test
+    fun `finding a notetaker URL-encodes a notetaker id containing slashes`() {
+      val slashedNotetakerId = "prefix/notetaker-123"
+
+      notetakers.find(slashedNotetakerId, grantId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Notetaker>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        isNull(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/$grantId/notetakers/prefix%2Fnotetaker-123", pathCaptor.firstValue)
+    }
   }
 }

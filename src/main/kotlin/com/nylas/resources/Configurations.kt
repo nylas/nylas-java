@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 
 /**
  * Nylas Configurations API
@@ -49,7 +50,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     configId: String,
     overrides: RequestOverrides? = null,
   ): Response<Configuration> {
-    val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, configId)
+    val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, PathEncoder.encode(configId))
     return findResource(path, overrides = overrides)
   }
 
@@ -89,7 +90,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     requestBody: UpdateConfigurationRequest,
     overrides: RequestOverrides? = null,
   ): Response<Configuration> {
-    val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, configId)
+    val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, PathEncoder.encode(configId))
     val adapter = JsonHelper.moshi().adapter(UpdateConfigurationRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return updateResource(path, serializedRequestBody, overrides = overrides)
@@ -108,7 +109,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     configId: String,
     overrides: RequestOverrides? = null,
   ): DeleteResponse {
-    val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, configId)
+    val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, PathEncoder.encode(configId))
     return destroyResource(path, overrides = overrides)
   }
 }

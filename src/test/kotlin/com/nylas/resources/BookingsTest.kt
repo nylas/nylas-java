@@ -215,5 +215,25 @@ class BookingsTest {
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
       assertEquals(queryParams, queryParamCaptor.firstValue)
     }
+
+    @Test
+    fun `finding a booking URL-encodes a booking id containing slashes`() {
+      val slashedBookingId = "prefix/booking-123"
+
+      bookings.find(slashedBookingId)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<FindBookingQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Booking>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/scheduling/bookings/prefix%2Fbooking-123", pathCaptor.firstValue)
+    }
   }
 }
