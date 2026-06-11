@@ -18,7 +18,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.mockito.kotlin.whenever
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
