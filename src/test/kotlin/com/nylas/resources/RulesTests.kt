@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Nested
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -329,7 +330,9 @@ class RulesTests {
 
     @Test
     fun `listing rules calls requests with the correct params`() {
-      whenever(mockNylasClient.executeGet<RulesListResponse>(any(), any(), any(), any())).thenReturn(RulesListResponse())
+      whenever(
+        mockNylasClient.executeGet<RulesListResponse>(any(), any(), anyOrNull(), anyOrNull()),
+      ).thenReturn(RulesListResponse())
 
       rules.list()
 
@@ -352,7 +355,9 @@ class RulesTests {
     @Test
     fun `listing rules with query params passes them correctly`() {
       val queryParams = ListRulesQueryParams(limit = 5, pageToken = "cursor123")
-      whenever(mockNylasClient.executeGet<RulesListResponse>(any(), any(), any(), any())).thenReturn(RulesListResponse())
+      whenever(
+        mockNylasClient.executeGet<RulesListResponse>(any(), any(), anyOrNull(), anyOrNull()),
+      ).thenReturn(RulesListResponse())
 
       rules.list(queryParams)
 
