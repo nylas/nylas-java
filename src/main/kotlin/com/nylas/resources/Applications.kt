@@ -2,6 +2,7 @@ package com.nylas.resources
 
 import com.nylas.NylasClient
 import com.nylas.models.*
+import com.nylas.util.JsonHelper
 import com.squareup.moshi.Types
 
 /**
@@ -29,5 +30,20 @@ class Applications(private val client: NylasClient) {
     val path = "v3/applications"
     val responseType = Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java)
     return client.executeGet(path, responseType, overrides = overrides)
+  }
+
+  /**
+   * Update application details.
+   * @param requestBody The values to update the application with
+   * @param overrides Optional request overrides to apply
+   * @return The updated application details
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  @JvmOverloads
+  fun update(requestBody: UpdateApplicationRequest, overrides: RequestOverrides? = null): Response<ApplicationDetails> {
+    val path = "v3/applications"
+    val responseType = Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java)
+    val serializedRequestBody = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java).toJson(requestBody)
+    return client.executePatch(path, responseType, serializedRequestBody, overrides = overrides)
   }
 }

@@ -184,6 +184,12 @@ open class NylasClient(
   open fun rules(): Rules = Rules(this)
 
   /**
+   * Access the Workspaces API
+   * @return The Workspaces API
+   */
+  open fun workspaces(): Workspaces = Workspaces(this)
+
+  /**
    * Access the Lists API
    * @return The Lists API
    */

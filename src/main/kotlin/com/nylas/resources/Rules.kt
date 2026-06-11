@@ -4,6 +4,7 @@ import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
 import com.nylas.util.PathEncoder
+import com.squareup.moshi.Types
 
 /**
  * Nylas Rules API
@@ -23,7 +24,13 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(queryParams: ListRulesQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Rule> {
-    return listResource("v3/rules", queryParams, overrides)
+    val response = client.executeGet<RulesListResponse>(
+      "v3/rules",
+      RulesListResponse::class.java,
+      queryParams,
+      overrides,
+    )
+    return response.toListResponse()
   }
 
   /**
@@ -78,5 +85,24 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   fun destroy(ruleId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/rules/%s", PathEncoder.encode(ruleId))
     return destroyResource(path, overrides = overrides)
+  }
+
+  /**
+   * Return rule evaluation audit records for a grant.
+   * @param grantId The ID of the grant to query rule evaluations for
+   * @param queryParams Optional query parameters to apply
+   * @param overrides Optional request overrides to apply
+   * @return The list of rule evaluations
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  @JvmOverloads
+  fun listEvaluations(
+    grantId: String,
+    queryParams: ListRuleEvaluationsQueryParams? = null,
+    overrides: RequestOverrides? = null,
+  ): ListResponse<RuleEvaluation> {
+    val path = String.format("v3/grants/%s/rule-evaluations", PathEncoder.encode(grantId))
+    val responseType = Types.newParameterizedType(ListResponse::class.java, RuleEvaluation::class.java)
+    return client.executeGet(path, responseType, queryParams, overrides)
   }
 }

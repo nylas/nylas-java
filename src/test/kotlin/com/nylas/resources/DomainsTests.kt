@@ -270,5 +270,160 @@ class DomainsTests {
       )
       assertEquals("override-key", overrideParamCaptor.firstValue.apiKey)
     }
+
+    @Test
+    fun `listing managed domains calls requests with the correct params`() {
+      val queryParams = ListDomainsQueryParams(limit = 5, pageToken = "cursor123")
+      domains.list(queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Domain>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Domain::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a managed domain calls requests with the correct params`() {
+      domains.find("domain/with/slash")
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<Response<Domain>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/domain%2Fwith%2Fslash", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
+    }
+
+    @Test
+    fun `creating a managed domain calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(CreateDomainRequest::class.java)
+      val requestBody = CreateDomainRequest(name = "Acme", domainAddress = "mail.acme.com")
+      domains.create(requestBody)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<Domain>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating a managed domain calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateDomainRequest::class.java)
+      val requestBody = UpdateDomainRequest(name = "Renamed")
+      domains.update("dom-123", requestBody)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePut<Response<Domain>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying a managed domain calls requests with the correct params`() {
+      domains.destroy("dom-123")
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDelete<DeleteResponse>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
+      assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
+    }
+
+    @Test
+    fun `getting managed domain info calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java)
+      val requestBody = DomainVerificationRequest(DomainVerificationType.SPF)
+      domains.info("dom-123", requestBody)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<DomainVerificationResult>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123/info", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+    }
+
+    @Test
+    fun `verifying a managed domain calls requests with the correct params`() {
+      val adapter = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java)
+      val requestBody = DomainVerificationRequest(DomainVerificationType.DKIM)
+      domains.verify("dom-123", requestBody)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePost<Response<DomainVerificationResult>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123/verify", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+    }
   }
 }

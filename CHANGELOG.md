@@ -10,8 +10,13 @@
   - Examples: `TransactionalEmailExample.java` and `KotlinTransactionalEmailExample.kt`
 * Administration API — Policies, Rules, and Lists (app-level, `nylas` provider only)
   - `Policies` resource via `client.policies()`: full CRUD (`list`, `find`, `create`, `update`, `destroy`) with `CreatePolicyRequest` / `UpdatePolicyRequest` and supporting models (`Policy`, `PolicyLimits`, `PolicyOptions`, `PolicySpamDetection`)
-  - `Rules` resource via `client.rules()`: full CRUD with `CreateRuleRequest` / `UpdateRuleRequest` and supporting models (`Rule`, `RuleAction`, `RuleActionType`, `RuleCondition`, `RuleConditionOperator`, `RuleMatch`, `RuleMatchOperator`, `RuleTrigger`)
+  - `Rules` resource via `client.rules()`: full CRUD plus `listEvaluations` for grant rule-evaluation audit records; handles the nested `/v3/rules` list envelope returned by the API
   - `NylasLists` resource via `client.lists()`: full CRUD plus `listItems`, `addItems`, and `removeItems` for managing list contents; `NylasList`, `NylasListItem`, `NylasListType`, `ListItemsRequest` models
+* Application administration updates
+  - `Applications.update()` for `PATCH /v3/applications`
+  - Redirect URI updates use `PATCH /v3/applications/redirect-uris/{id}`
+  - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`
+  - `Workspaces` resource via `client.workspaces()`: CRUD, `autoGroup`, and `manualAssign`
 
 ## [v2.16.1] - Release 2026-05-21
 

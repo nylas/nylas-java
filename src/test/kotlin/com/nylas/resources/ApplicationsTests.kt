@@ -148,6 +148,33 @@ class ApplicationsTests {
       assertEquals("v3/applications", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java), typeCaptor.firstValue)
     }
+
+    @Test
+    fun `updating application details calls requests with the correct params`() {
+      val requestBody = UpdateApplicationRequest(
+        branding = ApplicationDetails.Branding(name = "Renamed app"),
+      )
+      val adapter = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java)
+
+      mockApplications.update(requestBody)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePatch<Response<ApplicationDetails>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/applications", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+    }
   }
 
   @Nested

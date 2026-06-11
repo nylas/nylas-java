@@ -18,6 +18,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.mockito.kotlin.whenever
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -244,6 +245,76 @@ class RulesTests {
       assertNull(rule.match)
       assertNull(rule.description)
     }
+
+    @Test
+    fun `RulesListResponse unwraps nested rules list response`() {
+      val adapter = JsonHelper.moshi().adapter(RulesListResponse::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "request_id": "req-123",
+            "data": {
+              "items": [
+                {
+                  "id": "rule-1",
+                  "name": "Block spam",
+                  "actions": [],
+                  "application_id": "app-id",
+                  "organization_id": "org-id",
+                  "created_at": 1000,
+                  "updated_at": 1000
+                }
+              ],
+              "next_cursor": "cursor-123"
+            }
+          }
+        """.trimIndent(),
+      )
+
+      val response = adapter.fromJson(jsonBuffer)!!.toListResponse()
+
+      assertEquals("req-123", response.requestId)
+      assertEquals("cursor-123", response.nextCursor)
+      assertEquals("rule-1", response.data.first().id)
+    }
+
+    @Test
+    fun `RuleEvaluation deserializes properly`() {
+      val adapter = JsonHelper.moshi().adapter(RuleEvaluation::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "id": "eval-123",
+            "grant_id": "grant-123",
+            "message_id": "message-123",
+            "evaluated_at": 1742933005,
+            "evaluation_stage": "inbox_processing",
+            "evaluation_input": {
+              "from_address": "sender@example.com",
+              "from_domain": "example.com",
+              "from_tld": "com"
+            },
+            "applied_actions": {
+              "marked_as_spam": true,
+              "folder_ids": ["spam-folder"]
+            },
+            "matched_rule_ids": ["rule-1"],
+            "application_id": "app-id",
+            "organization_id": "org-id",
+            "created_at": 1742933005,
+            "updated_at": 1742933005
+          }
+        """.trimIndent(),
+      )
+
+      val evaluation = adapter.fromJson(jsonBuffer)!!
+
+      assertEquals("eval-123", evaluation.id)
+      assertEquals(RuleEvaluationStage.INBOX_PROCESSING, evaluation.evaluationStage)
+      assertEquals("example.com", evaluation.evaluationInput?.fromDomain)
+      assertEquals(true, evaluation.appliedActions?.markedAsSpam)
+      assertEquals(listOf("rule-1"), evaluation.matchedRuleIds)
+    }
   }
 
   @Nested
@@ -259,13 +330,15 @@ class RulesTests {
 
     @Test
     fun `listing rules calls requests with the correct params`() {
+      whenever(mockNylasClient.executeGet<RulesListResponse>(any(), any(), any(), any())).thenReturn(RulesListResponse())
+
       rules.list()
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Rule>>(
+      verify(mockNylasClient).executeGet<RulesListResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -273,20 +346,22 @@ class RulesTests {
       )
 
       assertEquals("v3/rules", pathCaptor.firstValue)
-      assertEquals(Types.newParameterizedType(ListResponse::class.java, Rule::class.java), typeCaptor.firstValue)
+      assertEquals(RulesListResponse::class.java, typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
 
     @Test
     fun `listing rules with query params passes them correctly`() {
       val queryParams = ListRulesQueryParams(limit = 5, pageToken = "cursor123")
+      whenever(mockNylasClient.executeGet<RulesListResponse>(any(), any(), any(), any())).thenReturn(RulesListResponse())
+
       rules.list(queryParams)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Rule>>(
+      verify(mockNylasClient).executeGet<RulesListResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -394,6 +469,27 @@ class RulesTests {
       assertEquals("v3/rules/$ruleId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing rule evaluations calls requests with the correct params`() {
+      val queryParams = ListRuleEvaluationsQueryParams(limit = 5, pageToken = "cursor123")
+      rules.listEvaluations("grant-abc123", queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<RuleEvaluation>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/grants/grant-abc123/rule-evaluations", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, RuleEvaluation::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
     }
   }
 }
