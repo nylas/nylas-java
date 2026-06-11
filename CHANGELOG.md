@@ -7,7 +7,7 @@
   - `Applications.update()` for `PATCH /v3/applications`
   - Redirect URI updates use `PATCH /v3/applications/redirect-uris/{id}`
   - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`
-  - `Workspaces` resource via `client.workspaces()`: CRUD, `autoGroup`, and `manualAssign`
+  - `Workspaces` resource via `client.workspaces()`: CRUD, `autoGroup`, `manualAssign`, `default`, `policyId`, and `ruleIds`
 * Transactional email support via `Domains.sendTransactionalEmail()`
   - `SendTransactionalEmailRequest` model (and fluent `Builder`) for composing transactional messages from a verified domain — supports `to`, `from`, `cc`, `bcc`, `reply_to`, `subject`, `body`, `send_at`, `reply_to_message_id`, `tracking_options`, `use_draft`, `custom_headers`, and `is_plaintext`
   - `NylasClient.domains()` accessor returning the new `Domains` resource

@@ -31,8 +31,9 @@ class WorkspacesTests {
             "name": "Acme",
             "domain": "acme.com",
             "auto_group": true,
+            "default": true,
             "policy_id": "policy-123",
-            "rules_ids": ["rule-1"],
+            "rule_ids": ["rule-1"],
             "created_at": 1742933005,
             "updated_at": 1742933006
           }
@@ -45,7 +46,8 @@ class WorkspacesTests {
       assertEquals("ws-123", workspace.workspaceId)
       assertEquals("acme.com", workspace.domain)
       assertEquals(true, workspace.autoGroup)
-      assertEquals(listOf("rule-1"), workspace.rulesIds)
+      assertEquals(true, workspace.default)
+      assertEquals(listOf("rule-1"), workspace.ruleIds)
     }
 
     @Test

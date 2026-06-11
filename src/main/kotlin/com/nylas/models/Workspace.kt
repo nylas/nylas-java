@@ -16,10 +16,12 @@ data class Workspace(
   val domain: String,
   @Json(name = "auto_group")
   val autoGroup: Boolean,
+  @Json(name = "default")
+  val default: Boolean? = null,
   @Json(name = "policy_id")
   val policyId: String? = null,
-  @Json(name = "rules_ids")
-  val rulesIds: List<String>? = null,
+  @Json(name = "rule_ids")
+  val ruleIds: List<String>? = null,
   @Json(name = "created_at")
   val createdAt: Long,
   @Json(name = "updated_at")
