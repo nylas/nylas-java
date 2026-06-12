@@ -17,13 +17,14 @@ import com.squareup.moshi.Types
 class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::class.java) {
   /**
    * Return all workspaces for your application.
+   * @param queryParams Optional query parameters to apply
    * @param overrides Optional request overrides to apply
    * @return The list of workspaces
    */
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
-  fun list(overrides: RequestOverrides? = null): ListResponse<Workspace> {
-    return listResource("v3/workspaces", overrides = overrides)
+  fun list(queryParams: ListWorkspacesQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Workspace> {
+    return listResource("v3/workspaces", queryParams, overrides)
   }
 
   /**

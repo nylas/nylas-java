@@ -171,6 +171,28 @@ class WorkspacesTests {
 
       assertEquals("v3/workspaces", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Workspace::class.java), typeCaptor.firstValue)
+      assertNull(queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing workspaces with query params passes them correctly`() {
+      val queryParams = ListWorkspacesQueryParams(limit = 5, pageToken = "cursor123")
+      workspaces.list(queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGet<ListResponse<Workspace>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/workspaces", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(ListResponse::class.java, Workspace::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
     @Test
