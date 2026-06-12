@@ -17,6 +17,12 @@ data class CreateWorkspaceRequest(
   @Json(name = "rule_ids")
   val ruleIds: List<String>? = null,
 ) {
+  init {
+    require(autoGroup != true || !domain.isNullOrBlank()) {
+      "domain is required when autoGroup is true"
+    }
+  }
+
   data class Builder(private val name: String) {
     private var domain: String? = null
     private var autoGroup: Boolean? = null

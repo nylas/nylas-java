@@ -14,6 +14,7 @@ import org.mockito.kotlin.verify
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 
@@ -69,6 +70,21 @@ class WorkspacesTests {
 
       assertNull(response.grantsAssigned)
       assertNull(response.grantsRemoved)
+    }
+
+    @Test
+    fun `CreateWorkspaceRequest requires domain only when auto-group is true`() {
+      assertFailsWith<IllegalArgumentException> {
+        CreateWorkspaceRequest.Builder("Acme").autoGroup(true).build()
+      }
+
+      val explicitNoAutoGroup = CreateWorkspaceRequest.Builder("Acme").autoGroup(false).build()
+      assertNull(explicitNoAutoGroup.domain)
+      assertEquals(false, explicitNoAutoGroup.autoGroup)
+
+      val defaultAutoGroup = CreateWorkspaceRequest.Builder("Acme").build()
+      assertNull(defaultAutoGroup.domain)
+      assertNull(defaultAutoGroup.autoGroup)
     }
   }
 
