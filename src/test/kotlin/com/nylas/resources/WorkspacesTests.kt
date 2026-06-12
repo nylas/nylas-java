@@ -86,6 +86,61 @@ class WorkspacesTests {
       assertNull(defaultAutoGroup.domain)
       assertNull(defaultAutoGroup.autoGroup)
     }
+
+    @Test
+    fun `UpdateWorkspaceRequest only serializes documented update fields`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateWorkspaceRequest::class.java)
+      val request = UpdateWorkspaceRequest.Builder()
+        .name("Renamed")
+        .autoGroup(false)
+        .policyId("policy-123")
+        .ruleIds(listOf("rule-1"))
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assert(json.contains("\"name\":\"Renamed\"")) { "Expected name in JSON, got: $json" }
+      assert(json.contains("\"auto_group\":false")) { "Expected auto_group in JSON, got: $json" }
+      assert(json.contains("\"policy_id\":\"policy-123\"")) { "Expected policy_id in JSON, got: $json" }
+      assert(json.contains("\"rule_ids\":[\"rule-1\"]")) { "Expected rule_ids in JSON, got: $json" }
+      assert(!json.contains("\"domain\"")) { "Expected domain to stay out of update serialization, got: $json" }
+    }
+
+    @Test
+    fun `UpdateWorkspaceRequest omits policy id when unchanged`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateWorkspaceRequest::class.java)
+      val request = UpdateWorkspaceRequest.Builder()
+        .name("Renamed")
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assert(!json.contains("\"policy_id\"")) { "Expected policy_id to be omitted, got: $json" }
+    }
+
+    @Test
+    fun `UpdateWorkspaceRequest serializes explicit null policy detach`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateWorkspaceRequest::class.java)
+      val request = UpdateWorkspaceRequest.Builder()
+        .policyId(null)
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assert(json.contains("\"policy_id\":null")) { "Expected policy_id:null in JSON, got: $json" }
+    }
+
+    @Test
+    fun `UpdateWorkspaceRequest clearPolicyId serializes explicit null policy detach`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateWorkspaceRequest::class.java)
+      val request = UpdateWorkspaceRequest.Builder()
+        .clearPolicyId()
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assert(json.contains("\"policy_id\":null")) { "Expected policy_id:null in JSON, got: $json" }
+    }
   }
 
   @Nested

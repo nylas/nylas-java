@@ -21,6 +21,7 @@ import org.mockito.kotlin.whenever
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 
@@ -101,12 +102,28 @@ class NylasListsTests {
     @Test
     fun `CreateNylasListRequest serializes correctly`() {
       val adapter = JsonHelper.moshi().adapter(CreateNylasListRequest::class.java)
-      val request = CreateNylasListRequest(name = "Blocked domains", type = NylasListType.DOMAIN)
+      val request = CreateNylasListRequest(
+        name = "Blocked domains",
+        type = NylasListType.DOMAIN,
+        description = "Domains we have identified as sending unwanted mail.",
+      )
       val json = adapter.toJson(request)
       val deserialized = adapter.fromJson(json)!!
+      assertEquals(
+        """{"name":"Blocked domains","type":"domain","description":"Domains we have identified as sending unwanted mail."}""",
+        json,
+      )
       assertEquals("Blocked domains", deserialized.name)
       assertEquals(NylasListType.DOMAIN, deserialized.type)
-      assertNull(deserialized.description)
+      assertEquals("Domains we have identified as sending unwanted mail.", deserialized.description)
+    }
+
+    @Test
+    fun `CreateNylasListRequest omits null description`() {
+      val adapter = JsonHelper.moshi().adapter(CreateNylasListRequest::class.java)
+      val request = CreateNylasListRequest(name = "Blocked domains", type = NylasListType.DOMAIN)
+
+      assertEquals("""{"name":"Blocked domains","type":"domain"}""", adapter.toJson(request))
     }
 
     @Test
@@ -118,6 +135,20 @@ class NylasListsTests {
       assertEquals("My TLD List", request.name)
       assertEquals(NylasListType.TLD, request.type)
       assertEquals("Top-level domains to block", request.description)
+    }
+
+    @Test
+    fun `CreateNylasListRequest rejects blank name`() {
+      assertFailsWith<IllegalArgumentException> {
+        CreateNylasListRequest(name = " ", type = NylasListType.DOMAIN)
+      }
+    }
+
+    @Test
+    fun `CreateNylasListRequest rejects names over 256 characters`() {
+      assertFailsWith<IllegalArgumentException> {
+        CreateNylasListRequest(name = "a".repeat(257), type = NylasListType.DOMAIN)
+      }
     }
 
     @Test

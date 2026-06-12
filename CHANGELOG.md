@@ -6,7 +6,7 @@
 * Application administration updates
   - `Applications.update()` for `PATCH /v3/applications`
   - Redirect URI updates use `PATCH /v3/applications/redirect-uris/{id}`
-  - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`
+  - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`; these require Nylas Service Account request-signing headers in `RequestOverrides.headers`
   - `Workspaces` resource via `client.workspaces()`: CRUD, `autoGroup`, `manualAssign`, `default`, `policyId`, and `ruleIds`; `CreateWorkspaceRequest` validates that `domain` is present when `autoGroup` is true
 * Transactional email support via `Domains.sendTransactionalEmail()`
   - `SendTransactionalEmailRequest` model (and fluent `Builder`) for composing transactional messages from a verified domain — supports `to`, `from`, `cc`, `bcc`, `reply_to`, `subject`, `body`, `send_at`, `reply_to_message_id`, `tracking_options`, `use_draft`, `custom_headers`, and `is_plaintext`
@@ -17,6 +17,7 @@
   - `Policies` resource via `client.policies()`: full CRUD (`list`, `find`, `create`, `update`, `destroy`) with `CreatePolicyRequest` / `UpdatePolicyRequest` and supporting models (`Policy`, `PolicyLimits`, `PolicyOptions`, `PolicySpamDetection`)
   - `Rules` resource via `client.rules()`: full CRUD plus `listEvaluations` for grant rule-evaluation audit records; handles the nested `/v3/rules` list envelope returned by the API
   - `NylasLists` resource via `client.lists()`: full CRUD plus `listItems`, `addItems`, and `removeItems` for managing list contents; `NylasList`, `NylasListItem`, `NylasListType`, `ListItemsRequest` models
+  - `NylasLists.create()` for `POST /v3/lists` with `CreateNylasListRequest` (`name`, `type`, and optional `description`)
 
 ## [v2.16.1] - Release 2026-05-21
 

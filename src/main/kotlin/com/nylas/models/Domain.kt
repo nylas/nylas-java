@@ -18,12 +18,6 @@ data class Domain(
   val branded: Boolean? = null,
   @Json(name = "region")
   val region: String? = null,
-  @Json(name = "tenant_key")
-  val tenantKey: String? = null,
-  @Json(name = "dkim_public_key")
-  val dkimPublicKey: String? = null,
-  @Json(name = "dkim_submitted_at")
-  val dkimSubmittedAt: Long? = null,
   @Json(name = "verified_ownership")
   val verifiedOwnership: Boolean? = null,
   @Json(name = "verified_mx")

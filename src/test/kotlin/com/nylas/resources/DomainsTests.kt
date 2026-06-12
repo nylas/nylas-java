@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 
@@ -116,6 +117,69 @@ class DomainsTests {
       assert(!json.contains("\"send_at\"")) { "Expected no send_at field, got: $json" }
       assert(!json.contains("\"is_plaintext\"")) { "Expected no is_plaintext field, got: $json" }
     }
+
+    @Test
+    fun `Domain ignores unexpected response fields`() {
+      val adapter = JsonHelper.moshi().adapter(Domain::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+        {
+          "id": "dom-123",
+          "name": "Acme",
+          "domain_address": "mail.acme.com",
+          "organization_id": "org-123",
+          "region": "us",
+          "unexpected_response_id": "unexpected-value",
+          "unexpected_status": "internal-value",
+          "unexpected_timestamp": 1742933005,
+          "verified_ownership": true,
+          "verified_dkim": true,
+          "verified_spf": true,
+          "verified_mx": true,
+          "verified_feedback": false,
+          "verified_dmarc": false,
+          "verified_arc": false,
+          "created_at": 1742932766,
+          "updated_at": 1742933005
+        }
+        """.trimIndent(),
+      )
+
+      val domain = adapter.fromJson(jsonBuffer)!!
+      val json = adapter.toJson(domain)
+
+      assertEquals("dom-123", domain.id)
+      assertEquals("mail.acme.com", domain.domainAddress)
+      assert(!json.contains("unexpected_response_id")) {
+        "Expected unexpected_response_id to stay out of public serialization, got: $json"
+      }
+      assert(!json.contains("unexpected_status")) {
+        "Expected unexpected_status to stay out of public serialization, got: $json"
+      }
+      assert(!json.contains("unexpected_timestamp")) {
+        "Expected unexpected_timestamp to stay out of public serialization, got: $json"
+      }
+    }
+
+    @Test
+    fun `UpdateDomainRequest only serializes documented update fields`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateDomainRequest::class.java)
+      val request = UpdateDomainRequest.Builder().name("Renamed").build()
+
+      val json = adapter.toJson(request)
+
+      assertEquals("""{"name":"Renamed"}""", json)
+    }
+
+    @Test
+    fun `ListDomainsQueryParams only exposes documented query parameters`() {
+      val queryParams = ListDomainsQueryParams.Builder()
+        .limit(5)
+        .pageToken("cursor123")
+        .build()
+
+      assertEquals(mapOf("limit" to 5.0, "page_token" to "cursor123"), queryParams.convertToMap())
+    }
   }
 
   @Nested
@@ -123,6 +187,15 @@ class DomainsTests {
     private lateinit var domainName: String
     private lateinit var mockNylasClient: NylasClient
     private lateinit var domains: Domains
+
+    private fun serviceAccountOverrides() = RequestOverrides(
+      headers = mapOf(
+        "X-Nylas-Kid" to "service-account-id",
+        "X-Nylas-Timestamp" to "1742932766",
+        "X-Nylas-Nonce" to "nonce",
+        "X-Nylas-Signature" to "signature",
+      ),
+    )
 
     @BeforeEach
     fun setup() {
@@ -274,7 +347,8 @@ class DomainsTests {
     @Test
     fun `listing managed domains calls requests with the correct params`() {
       val queryParams = ListDomainsQueryParams(limit = 5, pageToken = "cursor123")
-      domains.list(queryParams)
+      val overrides = serviceAccountOverrides()
+      domains.list(queryParams, overrides)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -290,11 +364,24 @@ class DomainsTests {
       assertEquals("v3/admin/domains", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Domain::class.java), typeCaptor.firstValue)
       assertEquals(queryParams, queryParamCaptor.firstValue)
+      assertEquals(overrides, overrideParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `managed domain endpoints require service account signing headers`() {
+      val exception = assertFailsWith<IllegalArgumentException> {
+        domains.list(ListDomainsQueryParams(limit = 5), RequestOverrides(headers = mapOf("X-Nylas-Kid" to "")))
+      }
+
+      assert(exception.message!!.contains("X-Nylas-Timestamp")) {
+        "Expected missing signing headers in error, got: ${exception.message}"
+      }
     }
 
     @Test
     fun `finding a managed domain calls requests with the correct params`() {
-      domains.find("domain/with/slash")
+      val overrides = serviceAccountOverrides()
+      domains.find("domain/with/slash", overrides)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -309,13 +396,15 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains/domain%2Fwith%2Fslash", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
+      assertEquals(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
     fun `creating a managed domain calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(CreateDomainRequest::class.java)
       val requestBody = CreateDomainRequest(name = "Acme", domainAddress = "mail.acme.com")
-      domains.create(requestBody)
+      val overrides = serviceAccountOverrides()
+      domains.create(requestBody, overrides)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -333,13 +422,15 @@ class DomainsTests {
       assertEquals("v3/admin/domains", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
     fun `updating a managed domain calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(UpdateDomainRequest::class.java)
       val requestBody = UpdateDomainRequest(name = "Renamed")
-      domains.update("dom-123", requestBody)
+      val overrides = serviceAccountOverrides()
+      domains.update("dom-123", requestBody, overrides)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -357,11 +448,13 @@ class DomainsTests {
       assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
     fun `destroying a managed domain calls requests with the correct params`() {
-      domains.destroy("dom-123")
+      val overrides = serviceAccountOverrides()
+      domains.destroy("dom-123", overrides)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -376,13 +469,15 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
+      assertEquals(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
     fun `getting managed domain info calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java)
       val requestBody = DomainVerificationRequest(DomainVerificationType.SPF)
-      domains.info("dom-123", requestBody)
+      val overrides = serviceAccountOverrides()
+      domains.info("dom-123", requestBody, overrides)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -400,13 +495,15 @@ class DomainsTests {
       assertEquals("v3/admin/domains/dom-123/info", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
     fun `verifying a managed domain calls requests with the correct params`() {
       val adapter = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java)
       val requestBody = DomainVerificationRequest(DomainVerificationType.DKIM)
-      domains.verify("dom-123", requestBody)
+      val overrides = serviceAccountOverrides()
+      domains.verify("dom-123", requestBody, overrides)
 
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
@@ -424,6 +521,7 @@ class DomainsTests {
       assertEquals("v3/admin/domains/dom-123/verify", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals(overrides, overrideParamCaptor.firstValue)
     }
   }
 }
