@@ -499,7 +499,6 @@ class DomainsTests {
 
     @Test
     fun `creating a managed domain calls requests with the correct params`() {
-      val adapter = JsonHelper.moshi().adapter(CreateDomainRequest::class.java)
       val requestBody = CreateDomainRequest(name = "Acme", domainAddress = "mail.acme.com")
       val overrides = serviceAccountOverrides()
       domains.create(requestBody, overrides)
@@ -519,13 +518,12 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals("""{"domain_address":"mail.acme.com","name":"Acme"}""", requestBodyCaptor.firstValue)
       assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
     fun `updating a managed domain calls requests with the correct params`() {
-      val adapter = JsonHelper.moshi().adapter(UpdateDomainRequest::class.java)
       val requestBody = UpdateDomainRequest(name = "Renamed")
       val overrides = serviceAccountOverrides()
       domains.update("dom-123", requestBody, overrides)
@@ -545,7 +543,7 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals("""{"name":"Renamed"}""", requestBodyCaptor.firstValue)
       assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
@@ -572,7 +570,6 @@ class DomainsTests {
 
     @Test
     fun `getting managed domain info calls requests with the correct params`() {
-      val adapter = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java)
       val requestBody = DomainVerificationRequest(DomainVerificationType.SPF)
       val overrides = serviceAccountOverrides()
       domains.info("dom-123", requestBody, overrides)
@@ -592,13 +589,12 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains/dom-123/info", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals("""{"type":"spf"}""", requestBodyCaptor.firstValue)
       assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
     fun `verifying a managed domain calls requests with the correct params`() {
-      val adapter = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java)
       val requestBody = DomainVerificationRequest(DomainVerificationType.DKIM)
       val overrides = serviceAccountOverrides()
       domains.verify("dom-123", requestBody, overrides)
@@ -618,7 +614,7 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains/dom-123/verify", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
-      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
+      assertEquals("""{"type":"dkim"}""", requestBodyCaptor.firstValue)
       assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 

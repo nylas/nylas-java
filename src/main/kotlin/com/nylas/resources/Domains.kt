@@ -164,7 +164,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val signedOverrides = requireServiceAccountSigning(overrides)
     val path = "v3/admin/domains"
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
-    val serializedRequestBody = JsonHelper.moshi().adapter(CreateDomainRequest::class.java).toJson(requestBody)
+    val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
     return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
@@ -200,7 +200,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val signedOverrides = requireServiceAccountSigning(overrides)
     val path = String.format("v3/admin/domains/%s", PathEncoder.encode(domainId))
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
-    val serializedRequestBody = JsonHelper.moshi().adapter(UpdateDomainRequest::class.java).toJson(requestBody)
+    val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
     return client.executePut(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
@@ -270,7 +270,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val signedOverrides = requireServiceAccountSigning(overrides)
     val path = String.format("v3/admin/domains/%s/info", PathEncoder.encode(domainId))
     val responseType = Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java)
-    val serializedRequestBody = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java).toJson(requestBody)
+    val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
     return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
@@ -312,7 +312,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val signedOverrides = requireServiceAccountSigning(overrides)
     val path = String.format("v3/admin/domains/%s/verify", PathEncoder.encode(domainId))
     val responseType = Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java)
-    val serializedRequestBody = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java).toJson(requestBody)
+    val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
     return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 

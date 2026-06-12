@@ -7,7 +7,7 @@
   - `Applications.update()` for `PATCH /v3/applications`
   - Application updates support `callback_uris`
   - Redirect URI updates use `PATCH /v3/applications/redirect-uris/{id}`
-  - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`; these support `ServiceAccountSigner` for Nylas Service Account request-signing auth without Bearer auth and still accept manually signed headers in `RequestOverrides.headers`
+  - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`; these support `ServiceAccountSigner` for Nylas Service Account request-signing auth without Bearer auth, canonical signed wire bodies, and manually signed headers in `RequestOverrides.headers`
   - `Workspaces` resource via `client.workspaces()`: CRUD, paginated listing with `limit` and `page_token`, `autoGroup`, `manualAssign`, `default`, `policyId`, and `ruleIds`; `CreateWorkspaceRequest` validates that `domain` is present when `autoGroup` is true
 * Transactional email support via `Domains.sendTransactionalEmail()`
   - `SendTransactionalEmailRequest` model (and fluent `Builder`) for composing transactional messages from a verified domain — supports `to`, `from`, `cc`, `bcc`, `reply_to`, `subject`, `body`, `send_at`, `reply_to_message_id`, `tracking_options`, `use_draft`, `custom_headers`, and `is_plaintext`
