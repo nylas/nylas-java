@@ -193,12 +193,10 @@ class DomainsTests {
       val queryParams = ListDomainsQueryParams.Builder()
         .limit(5)
         .pageToken("cursor123")
-        .domain("mail.acme.com")
-        .region(Region.US)
         .build()
 
       assertEquals(
-        mapOf("limit" to 5.0, "page_token" to "cursor123", "domain" to "mail.acme.com", "region" to "us"),
+        mapOf("limit" to 5.0, "page_token" to "cursor123"),
         queryParams.convertToMap(),
       )
     }
@@ -368,7 +366,7 @@ class DomainsTests {
 
     @Test
     fun `listing managed domains calls requests with the correct params`() {
-      val queryParams = ListDomainsQueryParams(limit = 5, pageToken = "cursor123", domain = "mail.acme.com", region = Region.US)
+      val queryParams = ListDomainsQueryParams(limit = 5, pageToken = "cursor123")
       val overrides = serviceAccountOverrides()
       domains.list(queryParams, overrides)
 
