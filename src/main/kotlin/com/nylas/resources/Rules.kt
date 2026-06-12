@@ -24,8 +24,8 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(queryParams: ListRulesQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Rule> {
-    val responseType = Types.newParameterizedType(ListResponse::class.java, Rule::class.java)
-    return client.executeGet("v3/rules", responseType, queryParams, overrides)
+    val nestedResponse = client.executeGet<RulesListResponse>("v3/rules", RulesListResponse::class.java, queryParams, overrides)
+    return nestedResponse.toListResponse()
   }
 
   /**

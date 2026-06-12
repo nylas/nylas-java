@@ -67,3 +67,42 @@ data class Rule(
   @Json(name = "updated_at")
   val updatedAt: Long = 0,
 )
+
+/**
+ * Class representation of the nested list envelope returned by GET /v3/rules.
+ */
+data class RulesListResponse(
+  /**
+   * Nested list payload.
+   */
+  @Json(name = "data")
+  val data: RulesListData = RulesListData(),
+  /**
+   * The request ID.
+   */
+  @Json(name = "request_id")
+  val requestId: String = "",
+) {
+  /**
+   * Convert the nested rules list envelope into the SDK's standard list response.
+   */
+  fun toListResponse(): ListResponse<Rule> {
+    return ListResponse(data = data.items, requestId = requestId, nextCursor = data.nextCursor)
+  }
+}
+
+/**
+ * Class representation of the nested rules list data payload.
+ */
+data class RulesListData(
+  /**
+   * Rules returned by the API.
+   */
+  @Json(name = "items")
+  val items: List<Rule> = emptyList(),
+  /**
+   * The cursor to use to get the next page of rules.
+   */
+  @Json(name = "next_cursor")
+  val nextCursor: String? = null,
+)

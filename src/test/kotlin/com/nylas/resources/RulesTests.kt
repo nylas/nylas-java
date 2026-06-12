@@ -247,6 +247,39 @@ class RulesTests {
     }
 
     @Test
+    fun `RulesListResponse unwraps nested list envelope`() {
+      val adapter = JsonHelper.moshi().adapter(RulesListResponse::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "request_id": "request-123",
+            "data": {
+              "items": [
+                {
+                  "id": "rule-123",
+                  "name": "Block spam",
+                  "actions": [{"type": "block"}],
+                  "application_id": "app-id",
+                  "organization_id": "org-id",
+                  "created_at": 1742932766,
+                  "updated_at": 1742932767
+                }
+              ],
+              "next_cursor": "cursor-123"
+            }
+          }
+        """.trimIndent(),
+      )
+
+      val listResponse = adapter.fromJson(jsonBuffer)!!.toListResponse()
+
+      assertEquals("request-123", listResponse.requestId)
+      assertEquals("cursor-123", listResponse.nextCursor)
+      assertEquals(1, listResponse.data.size)
+      assertEquals("rule-123", listResponse.data[0].id)
+    }
+
+    @Test
     fun `RuleEvaluation deserializes properly`() {
       val adapter = JsonHelper.moshi().adapter(RuleEvaluation::class.java)
       val jsonBuffer = Buffer().writeUtf8(
@@ -298,10 +331,9 @@ class RulesTests {
 
     @Test
     fun `listing rules calls requests with the correct params`() {
-      val responseType = Types.newParameterizedType(ListResponse::class.java, Rule::class.java)
       whenever(
-        mockNylasClient.executeGet<ListResponse<Rule>>(any(), any(), anyOrNull(), anyOrNull()),
-      ).thenReturn(ListResponse())
+        mockNylasClient.executeGet<RulesListResponse>(any(), any(), anyOrNull(), anyOrNull()),
+      ).thenReturn(RulesListResponse())
 
       rules.list()
 
@@ -309,7 +341,7 @@ class RulesTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Rule>>(
+      verify(mockNylasClient).executeGet<RulesListResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -317,17 +349,16 @@ class RulesTests {
       )
 
       assertEquals("v3/rules", pathCaptor.firstValue)
-      assertEquals(responseType, typeCaptor.firstValue)
+      assertEquals(RulesListResponse::class.java, typeCaptor.firstValue)
       assertNull(queryParamCaptor.firstValue)
     }
 
     @Test
     fun `listing rules with query params passes them correctly`() {
       val queryParams = ListRulesQueryParams(limit = 5, pageToken = "cursor123")
-      val responseType = Types.newParameterizedType(ListResponse::class.java, Rule::class.java)
       whenever(
-        mockNylasClient.executeGet<ListResponse<Rule>>(any(), any(), anyOrNull(), anyOrNull()),
-      ).thenReturn(ListResponse())
+        mockNylasClient.executeGet<RulesListResponse>(any(), any(), anyOrNull(), anyOrNull()),
+      ).thenReturn(RulesListResponse())
 
       rules.list(queryParams)
 
@@ -335,7 +366,7 @@ class RulesTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Rule>>(
+      verify(mockNylasClient).executeGet<RulesListResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -343,7 +374,7 @@ class RulesTests {
       )
 
       assertEquals("v3/rules", pathCaptor.firstValue)
-      assertEquals(responseType, typeCaptor.firstValue)
+      assertEquals(RulesListResponse::class.java, typeCaptor.firstValue)
       assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
