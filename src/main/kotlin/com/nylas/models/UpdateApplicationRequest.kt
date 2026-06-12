@@ -20,7 +20,7 @@ data class UpdateApplicationRequest(
    * List of callback URIs for the application.
    */
   @Json(name = "callback_uris")
-  val callbackUris: List<CreateRedirectUriRequest>? = null,
+  val callbackUris: List<UpdateApplicationRedirectUriRequest>? = null,
 ) {
   /**
    * Builder for [UpdateApplicationRequest].
@@ -28,7 +28,7 @@ data class UpdateApplicationRequest(
   class Builder {
     private var branding: Branding? = null
     private var hostedAuthentication: ApplicationDetails.HostedAuthentication? = null
-    private var callbackUris: List<CreateRedirectUriRequest>? = null
+    private var callbackUris: List<UpdateApplicationRedirectUriRequest>? = null
 
     /**
      * Set branding details for the application.
@@ -50,7 +50,7 @@ data class UpdateApplicationRequest(
      * @param callbackUris List of callback URIs.
      * @return This builder.
      */
-    fun callbackUris(callbackUris: List<CreateRedirectUriRequest>?) = apply { this.callbackUris = callbackUris }
+    fun callbackUris(callbackUris: List<UpdateApplicationRedirectUriRequest>?) = apply { this.callbackUris = callbackUris }
 
     /**
      * Build the [UpdateApplicationRequest].
@@ -86,3 +86,29 @@ data class UpdateApplicationRequest(
     val description: String? = null,
   )
 }
+
+/**
+ * Callback URI shape accepted by application updates.
+ */
+data class UpdateApplicationRedirectUriRequest(
+  /**
+   * Existing callback URI ID. Include this when preserving or updating an existing URI.
+   */
+  @Json(name = "id")
+  val id: String? = null,
+  /**
+   * Redirect URL.
+   */
+  @Json(name = "url")
+  val url: String,
+  /**
+   * Platform identifier.
+   */
+  @Json(name = "platform")
+  val platform: Platform,
+  /**
+   * Optional settings for the redirect URI.
+   */
+  @Json(name = "settings")
+  val settings: RedirectUriSettings? = null,
+)

@@ -129,6 +129,21 @@ class WorkspacesTests {
 
       assert(json.contains("\"policy_id\":null")) { "Expected policy_id:null in JSON, got: $json" }
     }
+
+    @Test
+    fun `WorkspaceAutoGroupRequest serializes all supported filters`() {
+      val adapter = JsonHelper.moshi().adapter(WorkspaceAutoGroupRequest::class.java)
+      val request = WorkspaceAutoGroupRequest.Builder()
+        .afterCreatedAt(1742933005)
+        .invalidAlso(true)
+        .specificDomain("acme.com")
+        .build()
+
+      assertEquals(
+        """{"after_created_at":1742933005,"invalid_also":true,"specific_domain":"acme.com"}""",
+        adapter.toJson(request),
+      )
+    }
   }
 
   @Nested
