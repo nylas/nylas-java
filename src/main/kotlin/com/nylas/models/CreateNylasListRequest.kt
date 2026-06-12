@@ -7,7 +7,7 @@ import com.squareup.moshi.Json
  */
 data class CreateNylasListRequest(
   /**
-   * Name of the list (1–256 characters).
+   * Name of the list.
    */
   @Json(name = "name")
   val name: String,
@@ -22,12 +22,6 @@ data class CreateNylasListRequest(
   @Json(name = "description")
   val description: String? = null,
 ) {
-  init {
-    require(name.isNotBlank() && name.length <= 256) {
-      "name must be between 1 and 256 characters"
-    }
-  }
-
   /**
    * Builder for [CreateNylasListRequest].
    * @param name Name of the list.

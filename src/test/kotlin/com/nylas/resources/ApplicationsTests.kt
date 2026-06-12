@@ -123,8 +123,7 @@ class ApplicationsTests {
       val request = UpdateApplicationRequest.Builder()
         .callbackUris(
           listOf(
-            RedirectUri(
-              id = "0556d035-6cb6-4262-a035-6b77e11cf8fc",
+            CreateRedirectUriRequest(
               url = "https://example.com/callback",
               platform = Platform.WEB,
             ),
@@ -137,6 +136,7 @@ class ApplicationsTests {
       assert(json.contains("\"callback_uris\"")) { "Expected callback_uris in JSON, got: $json" }
       assert(json.contains("\"url\":\"https://example.com/callback\"")) { "Expected callback URL in JSON, got: $json" }
       assert(json.contains("\"platform\":\"web\"")) { "Expected platform in JSON, got: $json" }
+      assert(!json.contains("\"id\"")) { "Expected callback URI id to be omitted from JSON, got: $json" }
     }
 
     @Test

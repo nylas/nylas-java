@@ -20,7 +20,7 @@ data class UpdateApplicationRequest(
    * List of callback URIs for the application.
    */
   @Json(name = "callback_uris")
-  val callbackUris: List<RedirectUri>? = null,
+  val callbackUris: List<CreateRedirectUriRequest>? = null,
 ) {
   /**
    * Builder for [UpdateApplicationRequest].
@@ -28,7 +28,7 @@ data class UpdateApplicationRequest(
   class Builder {
     private var branding: Branding? = null
     private var hostedAuthentication: ApplicationDetails.HostedAuthentication? = null
-    private var callbackUris: List<RedirectUri>? = null
+    private var callbackUris: List<CreateRedirectUriRequest>? = null
 
     /**
      * Set branding details for the application.
@@ -50,7 +50,7 @@ data class UpdateApplicationRequest(
      * @param callbackUris List of callback URIs.
      * @return This builder.
      */
-    fun callbackUris(callbackUris: List<RedirectUri>?) = apply { this.callbackUris = callbackUris }
+    fun callbackUris(callbackUris: List<CreateRedirectUriRequest>?) = apply { this.callbackUris = callbackUris }
 
     /**
      * Build the [UpdateApplicationRequest].

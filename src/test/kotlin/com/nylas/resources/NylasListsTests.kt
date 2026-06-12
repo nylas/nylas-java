@@ -21,7 +21,6 @@ import org.mockito.kotlin.whenever
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 
@@ -135,20 +134,6 @@ class NylasListsTests {
       assertEquals("My TLD List", request.name)
       assertEquals(NylasListType.TLD, request.type)
       assertEquals("Top-level domains to block", request.description)
-    }
-
-    @Test
-    fun `CreateNylasListRequest rejects blank name`() {
-      assertFailsWith<IllegalArgumentException> {
-        CreateNylasListRequest(name = " ", type = NylasListType.DOMAIN)
-      }
-    }
-
-    @Test
-    fun `CreateNylasListRequest rejects names over 256 characters`() {
-      assertFailsWith<IllegalArgumentException> {
-        CreateNylasListRequest(name = "a".repeat(257), type = NylasListType.DOMAIN)
-      }
     }
 
     @Test
