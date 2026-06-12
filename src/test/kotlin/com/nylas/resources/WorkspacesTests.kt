@@ -119,18 +119,6 @@ class WorkspacesTests {
     }
 
     @Test
-    fun `UpdateWorkspaceRequest serializes explicit null policy detach`() {
-      val adapter = JsonHelper.moshi().adapter(UpdateWorkspaceRequest::class.java)
-      val request = UpdateWorkspaceRequest.Builder()
-        .policyId(null)
-        .build()
-
-      val json = adapter.toJson(request)
-
-      assert(json.contains("\"policy_id\":null")) { "Expected policy_id:null in JSON, got: $json" }
-    }
-
-    @Test
     fun `UpdateWorkspaceRequest clearPolicyId serializes explicit null policy detach`() {
       val adapter = JsonHelper.moshi().adapter(UpdateWorkspaceRequest::class.java)
       val request = UpdateWorkspaceRequest.Builder()

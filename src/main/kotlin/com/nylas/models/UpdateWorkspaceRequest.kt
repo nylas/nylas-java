@@ -23,9 +23,7 @@ data class UpdateWorkspaceRequest(
 
     fun name(name: String?) = apply { this.name = name }
     fun autoGroup(autoGroup: Boolean?) = apply { this.autoGroup = autoGroup }
-    fun policyId(policyId: String?) = apply {
-      this.policyId = if (policyId == null) NullableField.Clear else NullableField.Value(policyId)
-    }
+    fun policyId(policyId: String) = apply { this.policyId = NullableField.Value(policyId) }
     fun clearPolicyId() = apply { this.policyId = NullableField.Clear }
     fun ruleIds(ruleIds: List<String>?) = apply { this.ruleIds = ruleIds }
     fun build() = UpdateWorkspaceRequest(name, autoGroup, policyId, ruleIds)
