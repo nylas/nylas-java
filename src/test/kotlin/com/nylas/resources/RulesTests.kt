@@ -280,6 +280,37 @@ class RulesTests {
     }
 
     @Test
+    fun `RulesListResponse unwraps flat list envelope`() {
+      val adapter = JsonHelper.moshi().adapter(RulesListResponse::class.java)
+      val jsonBuffer = Buffer().writeUtf8(
+        """
+          {
+            "request_id": "request-123",
+            "data": [
+              {
+                "id": "rule-123",
+                "name": "Block spam",
+                "actions": [{"type": "block"}],
+                "application_id": "app-id",
+                "organization_id": "org-id",
+                "created_at": 1742932766,
+                "updated_at": 1742932767
+              }
+            ],
+            "next_cursor": "cursor-123"
+          }
+        """.trimIndent(),
+      )
+
+      val listResponse = adapter.fromJson(jsonBuffer)!!.toListResponse()
+
+      assertEquals("request-123", listResponse.requestId)
+      assertEquals("cursor-123", listResponse.nextCursor)
+      assertEquals(1, listResponse.data.size)
+      assertEquals("rule-123", listResponse.data[0].id)
+    }
+
+    @Test
     fun `RuleEvaluation deserializes properly`() {
       val adapter = JsonHelper.moshi().adapter(RuleEvaluation::class.java)
       val jsonBuffer = Buffer().writeUtf8(
