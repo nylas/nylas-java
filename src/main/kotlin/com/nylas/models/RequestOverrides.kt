@@ -27,6 +27,17 @@ data class RequestOverrides(
   val omitAuthorization: Boolean = false,
 ) {
   /**
+   * Preserve the public JVM constructor that existed before internal auth-control
+   * support was added.
+   */
+  constructor(
+    apiKey: String?,
+    apiUri: String?,
+    timeout: Long?,
+    headers: Map<String, String>?,
+  ) : this(apiKey, apiUri, timeout, headers, false)
+
+  /**
    * Builder for [RequestOverrides].
    */
   class Builder {
