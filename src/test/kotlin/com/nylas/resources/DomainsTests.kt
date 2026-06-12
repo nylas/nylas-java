@@ -6,6 +6,8 @@ import com.nylas.models.Response
 import com.nylas.util.JsonHelper
 import com.squareup.moshi.Types
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -13,11 +15,17 @@ import org.mockito.Mockito
 import org.mockito.kotlin.*
 import java.io.ByteArrayInputStream
 import java.lang.reflect.Type
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.Signature
+import java.util.Base64
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class DomainsTests {
 
@@ -364,7 +372,7 @@ class DomainsTests {
       assertEquals("v3/admin/domains", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Domain::class.java), typeCaptor.firstValue)
       assertEquals(queryParams, queryParamCaptor.firstValue)
-      assertEquals(overrides, overrideParamCaptor.firstValue)
+      assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
@@ -376,6 +384,96 @@ class DomainsTests {
       assert(exception.message!!.contains("X-Nylas-Timestamp")) {
         "Expected missing signing headers in error, got: ${exception.message}"
       }
+    }
+
+    @Test
+    fun `managed domain list passes service account signing headers through request overrides`() {
+      val capturedRequest = AtomicReference<Request>()
+      val httpClientBuilder = OkHttpClient.Builder().addInterceptor { chain ->
+        val request = chain.request()
+        capturedRequest.set(request)
+        okhttp3.Response.Builder()
+          .request(request)
+          .protocol(Protocol.HTTP_1_1)
+          .code(200)
+          .message("OK")
+          .body("""{"data":[],"request_id":"req-123"}""".toResponseBody("application/json".toMediaType()))
+          .build()
+      }
+      val client = NylasClient("api-key", httpClientBuilder, "https://api.test.nylas.com/")
+      val overrides = serviceAccountOverrides()
+
+      client.domains().list(overrides)
+
+      val request = capturedRequest.get()
+      assertNull(request.header("Authorization"))
+      assertEquals("service-account-id", request.header("X-Nylas-Kid"))
+      assertEquals("1742932766", request.header("X-Nylas-Timestamp"))
+      assertEquals("nonce", request.header("X-Nylas-Nonce"))
+      assertEquals("signature", request.header("X-Nylas-Signature"))
+    }
+
+    @Test
+    fun `non-domain requests keep bearer authorization`() {
+      val capturedRequest = AtomicReference<Request>()
+      val httpClientBuilder = OkHttpClient.Builder().addInterceptor { chain ->
+        val request = chain.request()
+        capturedRequest.set(request)
+        okhttp3.Response.Builder()
+          .request(request)
+          .protocol(Protocol.HTTP_1_1)
+          .code(200)
+          .message("OK")
+          .body("""{"data":[],"request_id":"req-123"}""".toResponseBody("application/json".toMediaType()))
+          .build()
+      }
+      val client = NylasClient("api-key", httpClientBuilder, "https://api.test.nylas.com/")
+
+      client.grants().list()
+
+      assertEquals("Bearer api-key", capturedRequest.get().header("Authorization"))
+    }
+
+    @Test
+    fun `creating managed domain with signer sends canonical body and generated signing headers`() {
+      val keyPair = testKeyPair()
+      val capturedRequest = AtomicReference<Request>()
+      val capturedBody = AtomicReference<String>()
+      val httpClientBuilder = OkHttpClient.Builder().addInterceptor { chain ->
+        val request = chain.request()
+        val buffer = Buffer()
+        request.body!!.writeTo(buffer)
+        capturedRequest.set(request)
+        capturedBody.set(buffer.readUtf8())
+        okhttp3.Response.Builder()
+          .request(request)
+          .protocol(Protocol.HTTP_1_1)
+          .code(200)
+          .message("OK")
+          .body("""{"data":{"id":"dom-123"},"request_id":"req-123"}""".toResponseBody("application/json".toMediaType()))
+          .build()
+      }
+      val client = NylasClient("api-key", httpClientBuilder, "https://api.test.nylas.com/")
+      val signer = ServiceAccountSigner(keyPair.private, "service-account-key-id")
+
+      client.domains().create(
+        CreateDomainRequest(name = "Acme", domainAddress = "mail.acme.com"),
+        signer,
+        RequestOverrides(headers = mapOf("X-Custom" to "keep")),
+      )
+
+      val request = capturedRequest.get()
+      val body = capturedBody.get()
+      assertEquals("""{"domain_address":"mail.acme.com","name":"Acme"}""", body)
+      assertNull(request.header("Authorization"))
+      assertEquals("keep", request.header("X-Custom"))
+      assertEquals("service-account-key-id", request.header("X-Nylas-Kid"))
+      assertTrue(request.header("X-Nylas-Nonce")!!.isNotBlank())
+      assertTrue(request.header("X-Nylas-Timestamp")!!.isNotBlank())
+      assertTrue(
+        verifyServiceAccountSignature(keyPair, request, body),
+        "Expected generated service account signature to verify against canonical request data",
+      )
     }
 
     @Test
@@ -396,7 +494,7 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains/domain%2Fwith%2Fslash", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
-      assertEquals(overrides, overrideParamCaptor.firstValue)
+      assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
@@ -422,7 +520,7 @@ class DomainsTests {
       assertEquals("v3/admin/domains", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
-      assertEquals(overrides, overrideParamCaptor.firstValue)
+      assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
@@ -448,7 +546,7 @@ class DomainsTests {
       assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
-      assertEquals(overrides, overrideParamCaptor.firstValue)
+      assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
@@ -469,7 +567,7 @@ class DomainsTests {
 
       assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
-      assertEquals(overrides, overrideParamCaptor.firstValue)
+      assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
@@ -495,7 +593,7 @@ class DomainsTests {
       assertEquals("v3/admin/domains/dom-123/info", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
-      assertEquals(overrides, overrideParamCaptor.firstValue)
+      assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
     }
 
     @Test
@@ -521,7 +619,37 @@ class DomainsTests {
       assertEquals("v3/admin/domains/dom-123/verify", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
       assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
-      assertEquals(overrides, overrideParamCaptor.firstValue)
+      assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
+    }
+
+    private fun assertServiceAccountOverrides(expected: RequestOverrides, actual: RequestOverrides) {
+      assertEquals(expected.apiKey, actual.apiKey)
+      assertEquals(expected.apiUri, actual.apiUri)
+      assertEquals(expected.timeout, actual.timeout)
+      assertEquals(expected.headers, actual.headers)
+      assertTrue(actual.omitAuthorization)
+    }
+
+    private fun verifyServiceAccountSignature(keyPair: KeyPair, request: Request, body: String?): Boolean {
+      val envelope = linkedMapOf<String, Any>(
+        "method" to request.method.lowercase(),
+        "nonce" to request.header("X-Nylas-Nonce")!!,
+        "path" to request.url.encodedPath,
+        "timestamp" to request.header("X-Nylas-Timestamp")!!.toLong(),
+      )
+      if (body != null) {
+        envelope["payload"] = body
+      }
+      val verifier = Signature.getInstance("SHA256withRSA")
+      verifier.initVerify(keyPair.public)
+      verifier.update(ServiceAccountSigner.canonicalJson(envelope).toByteArray(Charsets.UTF_8))
+      return verifier.verify(Base64.getDecoder().decode(request.header("X-Nylas-Signature")))
+    }
+
+    private fun testKeyPair(): KeyPair {
+      val generator = KeyPairGenerator.getInstance("RSA")
+      generator.initialize(2048)
+      return generator.generateKeyPair()
     }
   }
 }

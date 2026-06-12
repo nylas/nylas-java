@@ -361,8 +361,10 @@ open class NylasClient(
     val builder = Request.Builder().url(url.build())
 
     // Override the API key if it is provided in the override
-    val apiKey = overrides?.apiKey ?: this.apiKey
-    builder.addHeader(HttpHeaders.AUTHORIZATION.headerName, "Bearer $apiKey")
+    if (overrides?.omitAuthorization != true) {
+      val apiKey = overrides?.apiKey ?: this.apiKey
+      builder.addHeader(HttpHeaders.AUTHORIZATION.headerName, "Bearer $apiKey")
+    }
 
     // Add additional headers
     if (overrides?.headers != null) {

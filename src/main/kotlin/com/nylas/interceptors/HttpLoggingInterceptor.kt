@@ -118,7 +118,7 @@ class HttpLoggingInterceptor : Interceptor {
       for (i in 0 until headers.size) {
         val name = headers.name(i)
         var value = headers.value(i)
-        if (!isLogAuthHeader && "Authorization" == name) {
+        if ((!isLogAuthHeader && "Authorization" == name) || shouldRedactHeader(name)) {
           value = "<not logged>"
         }
         headersLog.append("  ").append(name).append(": ").append(value).append("\n")
@@ -166,5 +166,9 @@ class HttpLoggingInterceptor : Interceptor {
     private val requestLogs = LoggerFactory.getLogger("com.nylas.http.Summary")
     private val headersLogs = LoggerFactory.getLogger("com.nylas.http.Headers")
     private val bodyLogs = LoggerFactory.getLogger("com.nylas.http.Body")
+
+    internal fun shouldRedactHeader(name: String): Boolean {
+      return "X-Nylas-Signature".equals(name, ignoreCase = true)
+    }
   }
 }
