@@ -10,7 +10,7 @@ data class UpdateApplicationRequest(
    * Branding details for the application.
    */
   @Json(name = "branding")
-  val branding: ApplicationDetails.Branding? = null,
+  val branding: Branding? = null,
   /**
    * Hosted authentication branding details.
    */
@@ -26,7 +26,7 @@ data class UpdateApplicationRequest(
    * Builder for [UpdateApplicationRequest].
    */
   class Builder {
-    private var branding: ApplicationDetails.Branding? = null
+    private var branding: Branding? = null
     private var hostedAuthentication: ApplicationDetails.HostedAuthentication? = null
     private var callbackUris: List<RedirectUri>? = null
 
@@ -35,7 +35,7 @@ data class UpdateApplicationRequest(
      * @param branding Branding details.
      * @return This builder.
      */
-    fun branding(branding: ApplicationDetails.Branding?) = apply { this.branding = branding }
+    fun branding(branding: Branding?) = apply { this.branding = branding }
 
     /**
      * Set hosted authentication branding details.
@@ -58,4 +58,31 @@ data class UpdateApplicationRequest(
      */
     fun build() = UpdateApplicationRequest(branding, hostedAuthentication, callbackUris)
   }
+
+  /**
+   * Branding fields accepted by application updates. All fields are optional
+   * because PATCH /v3/applications accepts sparse branding changes.
+   */
+  data class Branding(
+    /**
+     * Name of the application.
+     */
+    @Json(name = "name")
+    val name: String? = null,
+    /**
+     * URL points to application icon.
+     */
+    @Json(name = "icon_url")
+    val iconUrl: String? = null,
+    /**
+     * Application / publisher website URL.
+     */
+    @Json(name = "website_url")
+    val websiteUrl: String? = null,
+    /**
+     * Description of the application.
+     */
+    @Json(name = "description")
+    val description: String? = null,
+  )
 }

@@ -116,8 +116,9 @@ class ServiceAccountSigner(privateKey: PrivateKey, private val privateKeyId: Str
     }
 
     fun loadPrivateKeyFromPem(privateKeyPem: String): RSAPrivateKey {
-      val isPkcs1 = privateKeyPem.contains("BEGIN RSA PRIVATE KEY")
-      val keyBytes = privateKeyPem
+      val pemText = normalizePemText(privateKeyPem)
+      val isPkcs1 = pemText.contains("BEGIN RSA PRIVATE KEY")
+      val keyBytes = pemText
         .replace("-----BEGIN RSA PRIVATE KEY-----", "")
         .replace("-----END RSA PRIVATE KEY-----", "")
         .replace("-----BEGIN PRIVATE KEY-----", "")
@@ -128,6 +129,21 @@ class ServiceAccountSigner(privateKey: PrivateKey, private val privateKeyId: Str
       val key = KeyFactory.getInstance("RSA").generatePrivate(PKCS8EncodedKeySpec(pkcs8Bytes))
       require(key is RSAPrivateKey) { "Private key must be RSA" }
       return key
+    }
+
+    private fun normalizePemText(privateKeyPem: String): String {
+      val trimmed = privateKeyPem.trim()
+      if (trimmed.contains("BEGIN")) {
+        return trimmed
+      }
+
+      return try {
+        val decoded = Base64.getDecoder().decode(trimmed)
+        val decodedText = decoded.toString(Charsets.UTF_8).trim()
+        if (decodedText.contains("BEGIN")) decodedText else trimmed
+      } catch (_: IllegalArgumentException) {
+        trimmed
+      }
     }
 
     private fun jsonString(value: String): String {

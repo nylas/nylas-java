@@ -29,6 +29,26 @@ enum class DomainVerificationType {
 }
 
 /**
+ * DNS verification types accepted by Manage Domains verification requests.
+ */
+enum class DomainVerificationRequestType {
+  @Json(name = "ownership")
+  OWNERSHIP,
+
+  @Json(name = "mx")
+  MX,
+
+  @Json(name = "spf")
+  SPF,
+
+  @Json(name = "dkim")
+  DKIM,
+
+  @Json(name = "feedback")
+  FEEDBACK,
+}
+
+/**
  * Status values returned by domain DNS verification attempts.
  */
 enum class DomainVerificationStatus {
@@ -47,14 +67,14 @@ enum class DomainVerificationStatus {
  */
 data class DomainVerificationRequest(
   @Json(name = "type")
-  val type: DomainVerificationType,
+  val type: DomainVerificationRequestType,
   @Json(name = "options")
   val options: Map<String, Any>? = null,
 ) {
   /**
    * Builder for [DomainVerificationRequest].
    */
-  data class Builder(private val type: DomainVerificationType) {
+  data class Builder(private val type: DomainVerificationRequestType) {
     private var options: Map<String, Any>? = null
 
     /**

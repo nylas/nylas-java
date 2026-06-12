@@ -25,7 +25,7 @@ class ServiceAccountSignerTests {
 
   @Test
   fun `canonical json uses sdk json names for request models`() {
-    val json = ServiceAccountSigner.canonicalJson(DomainVerificationRequest(DomainVerificationType.SPF))
+    val json = ServiceAccountSigner.canonicalJson(DomainVerificationRequest(DomainVerificationRequestType.SPF))
 
     assertEquals("""{"type":"spf"}""", json)
   }
@@ -54,6 +54,20 @@ class ServiceAccountSignerTests {
     val result = signer.buildHeaders("GET", "/v3/admin/domains", timestamp = 1, nonce = "n".repeat(20))
 
     assertEquals(null, result.serializedJsonBody)
+    assertTrue(result.headers.getValue("X-Nylas-Signature").isNotBlank())
+  }
+
+  @Test
+  fun `loads base64 encoded PEM service account private key`() {
+    val keyPair = testKeyPair()
+    val privateKeyBody = Base64.getMimeEncoder(64, "\n".toByteArray()).encodeToString(keyPair.private.encoded)
+    val pem = "-----BEGIN PRIVATE KEY-----\n$privateKeyBody\n-----END PRIVATE KEY-----"
+    val base64EncodedPem = Base64.getEncoder().encodeToString(pem.toByteArray(Charsets.UTF_8))
+    val signer = ServiceAccountSigner(base64EncodedPem, "kid")
+
+    val result = signer.buildHeaders("GET", "/v3/admin/domains", timestamp = 1, nonce = "n".repeat(20))
+
+    assertEquals("kid", result.headers["X-Nylas-Kid"])
     assertTrue(result.headers.getValue("X-Nylas-Signature").isNotBlank())
   }
 

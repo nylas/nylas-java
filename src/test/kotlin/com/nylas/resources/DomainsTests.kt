@@ -570,7 +570,7 @@ class DomainsTests {
 
     @Test
     fun `getting managed domain info calls requests with the correct params`() {
-      val requestBody = DomainVerificationRequest(DomainVerificationType.SPF)
+      val requestBody = DomainVerificationRequest(DomainVerificationRequestType.SPF)
       val overrides = serviceAccountOverrides()
       domains.info("dom-123", requestBody, overrides)
 
@@ -595,7 +595,7 @@ class DomainsTests {
 
     @Test
     fun `verifying a managed domain calls requests with the correct params`() {
-      val requestBody = DomainVerificationRequest(DomainVerificationType.DKIM)
+      val requestBody = DomainVerificationRequest(DomainVerificationRequestType.DKIM)
       val overrides = serviceAccountOverrides()
       domains.verify("dom-123", requestBody, overrides)
 

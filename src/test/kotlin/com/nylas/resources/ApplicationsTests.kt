@@ -138,6 +138,18 @@ class ApplicationsTests {
       assert(json.contains("\"url\":\"https://example.com/callback\"")) { "Expected callback URL in JSON, got: $json" }
       assert(json.contains("\"platform\":\"web\"")) { "Expected platform in JSON, got: $json" }
     }
+
+    @Test
+    fun `UpdateApplicationRequest serializes sparse branding fields`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java)
+      val request = UpdateApplicationRequest.Builder()
+        .branding(UpdateApplicationRequest.Branding(iconUrl = "https://example.com/icon.png"))
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assertEquals("""{"branding":{"icon_url":"https://example.com/icon.png"}}""", json)
+    }
   }
 
   @Nested
@@ -174,7 +186,7 @@ class ApplicationsTests {
     @Test
     fun `updating application details calls requests with the correct params`() {
       val requestBody = UpdateApplicationRequest(
-        branding = ApplicationDetails.Branding(name = "Renamed app"),
+        branding = UpdateApplicationRequest.Branding(name = "Renamed app"),
       )
       val adapter = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java)
 
