@@ -46,12 +46,6 @@ enum class DomainVerificationRequestType {
 
   @Json(name = "feedback")
   FEEDBACK,
-
-  @Json(name = "dmarc")
-  DMARC,
-
-  @Json(name = "arc")
-  ARC,
 }
 
 /**

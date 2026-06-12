@@ -180,6 +180,15 @@ class DomainsTests {
     }
 
     @Test
+    fun `DomainVerificationResult deserializes extended response verification types`() {
+      val adapter = JsonHelper.moshi().adapter(DomainVerificationResult::class.java)
+      val result = adapter.fromJson("""{"domain_id":"dom-123","attempt":{"type":"dmarc"},"status":"pending"}""")!!
+
+      assertEquals(DomainVerificationType.DMARC, result.attempt?.type)
+      assertEquals(DomainVerificationStatus.PENDING, result.status)
+    }
+
+    @Test
     fun `ListDomainsQueryParams only exposes documented query parameters`() {
       val queryParams = ListDomainsQueryParams.Builder()
         .limit(5)
@@ -192,14 +201,6 @@ class DomainsTests {
         mapOf("limit" to 5.0, "page_token" to "cursor123", "domain" to "mail.acme.com", "region" to "us"),
         queryParams.convertToMap(),
       )
-    }
-
-    @Test
-    fun `DomainVerificationRequest supports all public verification request types`() {
-      val adapter = JsonHelper.moshi().adapter(DomainVerificationRequest::class.java)
-
-      assertEquals("""{"type":"dmarc"}""", adapter.toJson(DomainVerificationRequest(DomainVerificationRequestType.DMARC)))
-      assertEquals("""{"type":"arc"}""", adapter.toJson(DomainVerificationRequest(DomainVerificationRequestType.ARC)))
     }
   }
 
