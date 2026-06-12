@@ -184,6 +184,12 @@ open class NylasClient(
   open fun rules(): Rules = Rules(this)
 
   /**
+   * Access the Workspaces API
+   * @return The Workspaces API
+   */
+  open fun workspaces(): Workspaces = Workspaces(this)
+
+  /**
    * Access the Lists API
    * @return The Lists API
    */
@@ -355,8 +361,10 @@ open class NylasClient(
     val builder = Request.Builder().url(url.build())
 
     // Override the API key if it is provided in the override
-    val apiKey = overrides?.apiKey ?: this.apiKey
-    builder.addHeader(HttpHeaders.AUTHORIZATION.headerName, "Bearer $apiKey")
+    if (overrides?.omitAuthorization != true) {
+      val apiKey = overrides?.apiKey ?: this.apiKey
+      builder.addHeader(HttpHeaders.AUTHORIZATION.headerName, "Bearer $apiKey")
+    }
 
     // Add additional headers
     if (overrides?.headers != null) {

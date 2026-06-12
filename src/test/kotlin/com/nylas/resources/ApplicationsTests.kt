@@ -116,6 +116,41 @@ class ApplicationsTests {
       assertEquals("string", app.callbackUris?.get(0)?.settings?.packageName)
       assertEquals("string", app.callbackUris?.get(0)?.settings?.sha1CertificateFingerprint)
     }
+
+    @Test
+    fun `UpdateApplicationRequest serializes callback URIs`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java)
+      val request = UpdateApplicationRequest.Builder()
+        .callbackUris(
+          listOf(
+            UpdateApplicationRedirectUriRequest(
+              id = "0556d035-6cb6-4262-a035-6b77e11cf8fc",
+              url = "https://example.com/callback",
+              platform = Platform.WEB,
+            ),
+          ),
+        )
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assert(json.contains("\"callback_uris\"")) { "Expected callback_uris in JSON, got: $json" }
+      assert(json.contains("\"id\":\"0556d035-6cb6-4262-a035-6b77e11cf8fc\"")) { "Expected callback URI id in JSON, got: $json" }
+      assert(json.contains("\"url\":\"https://example.com/callback\"")) { "Expected callback URL in JSON, got: $json" }
+      assert(json.contains("\"platform\":\"web\"")) { "Expected platform in JSON, got: $json" }
+    }
+
+    @Test
+    fun `UpdateApplicationRequest serializes sparse branding fields`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java)
+      val request = UpdateApplicationRequest.Builder()
+        .branding(UpdateApplicationRequest.Branding(iconUrl = "https://example.com/icon.png"))
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assertEquals("""{"branding":{"icon_url":"https://example.com/icon.png"}}""", json)
+    }
   }
 
   @Nested
@@ -147,6 +182,33 @@ class ApplicationsTests {
 
       assertEquals("v3/applications", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java), typeCaptor.firstValue)
+    }
+
+    @Test
+    fun `updating application details calls requests with the correct params`() {
+      val requestBody = UpdateApplicationRequest(
+        branding = UpdateApplicationRequest.Branding(name = "Renamed app"),
+      )
+      val adapter = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java)
+
+      mockApplications.update(requestBody)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePatch<Response<ApplicationDetails>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/applications", pathCaptor.firstValue)
+      assertEquals(Types.newParameterizedType(Response::class.java, ApplicationDetails::class.java), typeCaptor.firstValue)
+      assertEquals(adapter.toJson(requestBody), requestBodyCaptor.firstValue)
     }
   }
 

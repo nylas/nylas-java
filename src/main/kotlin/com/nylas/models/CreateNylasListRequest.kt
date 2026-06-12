@@ -7,7 +7,7 @@ import com.squareup.moshi.Json
  */
 data class CreateNylasListRequest(
   /**
-   * Name of the list (1–256 characters).
+   * Name of the list.
    */
   @Json(name = "name")
   val name: String,

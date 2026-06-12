@@ -101,12 +101,28 @@ class NylasListsTests {
     @Test
     fun `CreateNylasListRequest serializes correctly`() {
       val adapter = JsonHelper.moshi().adapter(CreateNylasListRequest::class.java)
-      val request = CreateNylasListRequest(name = "Blocked domains", type = NylasListType.DOMAIN)
+      val request = CreateNylasListRequest(
+        name = "Blocked domains",
+        type = NylasListType.DOMAIN,
+        description = "Domains we have identified as sending unwanted mail.",
+      )
       val json = adapter.toJson(request)
       val deserialized = adapter.fromJson(json)!!
+      assertEquals(
+        """{"name":"Blocked domains","type":"domain","description":"Domains we have identified as sending unwanted mail."}""",
+        json,
+      )
       assertEquals("Blocked domains", deserialized.name)
       assertEquals(NylasListType.DOMAIN, deserialized.type)
-      assertNull(deserialized.description)
+      assertEquals("Domains we have identified as sending unwanted mail.", deserialized.description)
+    }
+
+    @Test
+    fun `CreateNylasListRequest omits null description`() {
+      val adapter = JsonHelper.moshi().adapter(CreateNylasListRequest::class.java)
+      val request = CreateNylasListRequest(name = "Blocked domains", type = NylasListType.DOMAIN)
+
+      assertEquals("""{"name":"Blocked domains","type":"domain"}""", adapter.toJson(request))
     }
 
     @Test

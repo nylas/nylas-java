@@ -3,6 +3,12 @@
 ## [Unreleased]
 
 ### Added
+* Application administration updates
+  - `Applications.update()` for `PATCH /v3/applications`
+  - Application updates support sparse branding fields and `callback_uris`, including callback URI IDs for preserving existing callback URIs
+  - Redirect URI updates use `PATCH /v3/applications/redirect-uris/{id}`
+  - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`; these support `ServiceAccountSigner` for Nylas Service Account request-signing auth without Bearer auth, canonical signed wire bodies, manually signed headers in `RequestOverrides.headers`, base64-encoded PEM service-account keys, and request-only verification types
+  - `Workspaces` resource via `client.workspaces()`: CRUD, paginated listing with `limit` and `page_token`, `autoGroup`, `manualAssign`, `default`, `policyId`, explicit `clearPolicyId`, and `ruleIds`; `CreateWorkspaceRequest` validates that `domain` is present when `autoGroup` is true; `WorkspaceAutoGroupRequest.invalidAlso` includes invalid grants in auto-grouping when enabled
 * Transactional email support via `Domains.sendTransactionalEmail()`
   - `SendTransactionalEmailRequest` model (and fluent `Builder`) for composing transactional messages from a verified domain — supports `to`, `from`, `cc`, `bcc`, `reply_to`, `subject`, `body`, `send_at`, `reply_to_message_id`, `tracking_options`, `use_draft`, `custom_headers`, and `is_plaintext`
   - `NylasClient.domains()` accessor returning the new `Domains` resource
@@ -10,8 +16,9 @@
   - Examples: `TransactionalEmailExample.java` and `KotlinTransactionalEmailExample.kt`
 * Administration API — Policies, Rules, and Lists (app-level, `nylas` provider only)
   - `Policies` resource via `client.policies()`: full CRUD (`list`, `find`, `create`, `update`, `destroy`) with `CreatePolicyRequest` / `UpdatePolicyRequest` and supporting models (`Policy`, `PolicyLimits`, `PolicyOptions`, `PolicySpamDetection`)
-  - `Rules` resource via `client.rules()`: full CRUD with `CreateRuleRequest` / `UpdateRuleRequest` and supporting models (`Rule`, `RuleAction`, `RuleActionType`, `RuleCondition`, `RuleConditionOperator`, `RuleMatch`, `RuleMatchOperator`, `RuleTrigger`)
+  - `Rules` resource via `client.rules()`: full CRUD plus `listEvaluations` for grant rule-evaluation audit records; handles the nested `/v3/rules` list envelope returned by the API
   - `NylasLists` resource via `client.lists()`: full CRUD plus `listItems`, `addItems`, and `removeItems` for managing list contents; `NylasList`, `NylasListItem`, `NylasListType`, `ListItemsRequest` models
+  - `NylasLists.create()` for `POST /v3/lists` with `CreateNylasListRequest` (`name`, `type`, and optional `description`)
 
 ## [v2.16.1] - Release 2026-05-21
 
