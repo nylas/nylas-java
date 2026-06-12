@@ -1,6 +1,5 @@
 package com.nylas.models
 
-import com.nylas.util.JsonHelper
 import com.squareup.moshi.Json
 
 /**
@@ -68,47 +67,3 @@ data class Rule(
   @Json(name = "updated_at")
   val updatedAt: Long = 0,
 )
-
-/**
- * Class representation of the nested list envelope returned by GET /v3/rules.
- */
-data class RulesListResponse(
-  /**
-   * Rules list payload. The API has returned both a standard list array and
-   * a nested object with `items` and `next_cursor`; normalize either shape.
-   */
-  @Json(name = "data")
-  val data: Any? = emptyList<Any>(),
-  /**
-   * The request ID.
-   */
-  @Json(name = "request_id")
-  val requestId: String = "",
-  /**
-   * The cursor to use to get the next page of rules when returned at the top level.
-   */
-  @Json(name = "next_cursor")
-  val nextCursor: String? = null,
-) {
-  /**
-   * Convert the rules list envelope into the SDK's standard list response.
-   */
-  fun toListResponse(): ListResponse<Rule> {
-    val nestedData = data as? Map<*, *>
-    val rawItems = when (data) {
-      is List<*> -> data
-      is Map<*, *> -> data["items"] as? List<*> ?: emptyList<Any>()
-      else -> emptyList<Any>()
-    }
-    val rules = rawItems.mapNotNull { ruleAdapter.fromJsonValue(it) }
-    return ListResponse(
-      data = rules,
-      requestId = requestId,
-      nextCursor = nextCursor ?: (nestedData?.get("next_cursor") as? String),
-    )
-  }
-
-  companion object {
-    private val ruleAdapter = JsonHelper.moshi().adapter(Rule::class.java)
-  }
-}

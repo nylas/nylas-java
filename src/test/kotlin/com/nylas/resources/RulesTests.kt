@@ -7,19 +7,22 @@ import com.nylas.util.JsonHelper
 import com.squareup.moshi.Types
 import okhttp3.Call
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.lang.reflect.Type
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -247,70 +250,6 @@ class RulesTests {
     }
 
     @Test
-    fun `RulesListResponse unwraps nested list envelope`() {
-      val adapter = JsonHelper.moshi().adapter(RulesListResponse::class.java)
-      val jsonBuffer = Buffer().writeUtf8(
-        """
-          {
-            "request_id": "request-123",
-            "data": {
-              "items": [
-                {
-                  "id": "rule-123",
-                  "name": "Block spam",
-                  "actions": [{"type": "block"}],
-                  "application_id": "app-id",
-                  "organization_id": "org-id",
-                  "created_at": 1742932766,
-                  "updated_at": 1742932767
-                }
-              ],
-              "next_cursor": "cursor-123"
-            }
-          }
-        """.trimIndent(),
-      )
-
-      val listResponse = adapter.fromJson(jsonBuffer)!!.toListResponse()
-
-      assertEquals("request-123", listResponse.requestId)
-      assertEquals("cursor-123", listResponse.nextCursor)
-      assertEquals(1, listResponse.data.size)
-      assertEquals("rule-123", listResponse.data[0].id)
-    }
-
-    @Test
-    fun `RulesListResponse unwraps flat list envelope`() {
-      val adapter = JsonHelper.moshi().adapter(RulesListResponse::class.java)
-      val jsonBuffer = Buffer().writeUtf8(
-        """
-          {
-            "request_id": "request-123",
-            "data": [
-              {
-                "id": "rule-123",
-                "name": "Block spam",
-                "actions": [{"type": "block"}],
-                "application_id": "app-id",
-                "organization_id": "org-id",
-                "created_at": 1742932766,
-                "updated_at": 1742932767
-              }
-            ],
-            "next_cursor": "cursor-123"
-          }
-        """.trimIndent(),
-      )
-
-      val listResponse = adapter.fromJson(jsonBuffer)!!.toListResponse()
-
-      assertEquals("request-123", listResponse.requestId)
-      assertEquals("cursor-123", listResponse.nextCursor)
-      assertEquals(1, listResponse.data.size)
-      assertEquals("rule-123", listResponse.data[0].id)
-    }
-
-    @Test
     fun `RuleEvaluation deserializes properly`() {
       val adapter = JsonHelper.moshi().adapter(RuleEvaluation::class.java)
       val jsonBuffer = Buffer().writeUtf8(
@@ -362,51 +301,44 @@ class RulesTests {
 
     @Test
     fun `listing rules calls requests with the correct params`() {
-      whenever(
-        mockNylasClient.executeGet<RulesListResponse>(any(), any(), anyOrNull(), anyOrNull()),
-      ).thenReturn(RulesListResponse())
+      val capturedRequest = AtomicReference<okhttp3.Request>()
+      val client = NylasClient("api-key", rulesListClient(capturedRequest, rulesListResponse(flat = true)), "https://api.test.nylas.com/")
 
-      rules.list()
+      val response = client.rules().list()
 
-      val pathCaptor = argumentCaptor<String>()
-      val typeCaptor = argumentCaptor<Type>()
-      val queryParamCaptor = argumentCaptor<IQueryParams>()
-      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<RulesListResponse>(
-        pathCaptor.capture(),
-        typeCaptor.capture(),
-        queryParamCaptor.capture(),
-        overrideParamCaptor.capture(),
-      )
-
-      assertEquals("v3/rules", pathCaptor.firstValue)
-      assertEquals(RulesListResponse::class.java, typeCaptor.firstValue)
-      assertNull(queryParamCaptor.firstValue)
+      assertEquals("/v3/rules", capturedRequest.get().url.encodedPath)
+      assertEquals("request-123", response.requestId)
+      assertEquals("cursor-123", response.nextCursor)
+      assertEquals(1, response.data.size)
+      assertEquals("rule-123", response.data[0].id)
     }
 
     @Test
     fun `listing rules with query params passes them correctly`() {
       val queryParams = ListRulesQueryParams(limit = 5, pageToken = "cursor123")
-      whenever(
-        mockNylasClient.executeGet<RulesListResponse>(any(), any(), anyOrNull(), anyOrNull()),
-      ).thenReturn(RulesListResponse())
+      val capturedRequest = AtomicReference<okhttp3.Request>()
+      val client = NylasClient("api-key", rulesListClient(capturedRequest, rulesListResponse(flat = true)), "https://api.test.nylas.com/")
 
-      rules.list(queryParams)
+      client.rules().list(queryParams)
 
-      val pathCaptor = argumentCaptor<String>()
-      val typeCaptor = argumentCaptor<Type>()
-      val queryParamCaptor = argumentCaptor<IQueryParams>()
-      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<RulesListResponse>(
-        pathCaptor.capture(),
-        typeCaptor.capture(),
-        queryParamCaptor.capture(),
-        overrideParamCaptor.capture(),
-      )
+      val requestUrl = capturedRequest.get().url
+      assertEquals("/v3/rules", requestUrl.encodedPath)
+      assertEquals("5", requestUrl.queryParameter("limit"))
+      assertEquals("cursor123", requestUrl.queryParameter("page_token"))
+    }
 
-      assertEquals("v3/rules", pathCaptor.firstValue)
-      assertEquals(RulesListResponse::class.java, typeCaptor.firstValue)
-      assertEquals(queryParams, queryParamCaptor.firstValue)
+    @Test
+    fun `listing rules unwraps nested list envelope`() {
+      val capturedRequest = AtomicReference<okhttp3.Request>()
+      val client = NylasClient("api-key", rulesListClient(capturedRequest, rulesListResponse(flat = false)), "https://api.test.nylas.com/")
+
+      val response = client.rules().list()
+
+      assertEquals("/v3/rules", capturedRequest.get().url.encodedPath)
+      assertEquals("request-123", response.requestId)
+      assertEquals("cursor-123", response.nextCursor)
+      assertEquals(1, response.data.size)
+      assertEquals("rule-123", response.data[0].id)
     }
 
     @Test
@@ -527,6 +459,41 @@ class RulesTests {
       assertEquals("v3/grants/grant-abc123/rule-evaluations", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, RuleEvaluation::class.java), typeCaptor.firstValue)
       assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    private fun rulesListClient(capturedRequest: AtomicReference<okhttp3.Request>, responseBody: String): OkHttpClient.Builder {
+      return OkHttpClient.Builder().addInterceptor { chain ->
+        val request = chain.request()
+        capturedRequest.set(request)
+        okhttp3.Response.Builder()
+          .request(request)
+          .protocol(Protocol.HTTP_1_1)
+          .code(200)
+          .message("OK")
+          .body(responseBody.toResponseBody("application/json".toMediaType()))
+          .build()
+      }
+    }
+
+    private fun rulesListResponse(flat: Boolean): String {
+      val ruleJson = """
+        {
+          "id": "rule-123",
+          "name": "Block spam",
+          "actions": [{"type": "block"}],
+          "application_id": "app-id",
+          "organization_id": "org-id",
+          "created_at": 1742932766,
+          "updated_at": 1742932767
+        }
+      """.trimIndent()
+      val dataJson = if (flat) {
+        """[$ruleJson]"""
+      } else {
+        """{"items":[$ruleJson],"next_cursor":"cursor-123"}"""
+      }
+      val topLevelCursor = if (flat) ""","next_cursor":"cursor-123"""" else ""
+      return """{"request_id":"request-123","data":$dataJson$topLevelCursor}"""
     }
   }
 }
