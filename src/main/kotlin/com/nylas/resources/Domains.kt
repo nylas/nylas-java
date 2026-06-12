@@ -19,13 +19,13 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
       "Manage Domains endpoints require Nylas Service Account signing headers: ${missingHeaders.joinToString()}"
     }
 
-    return (overrides ?: RequestOverrides()).copy(omitAuthorization = true)
+    return (overrides ?: RequestOverrides()).copy().apply { omitAuthorization = true }
   }
 
   private fun mergeSignerOverrides(overrides: RequestOverrides?, signerHeaders: Map<String, String>): RequestOverrides {
     val headers = overrides?.headers.orEmpty().toMutableMap()
     headers.putAll(signerHeaders)
-    return (overrides ?: RequestOverrides()).copy(headers = headers, omitAuthorization = true)
+    return (overrides ?: RequestOverrides()).copy(headers = headers).apply { omitAuthorization = true }
   }
 
   private fun signedRequest(

@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 class RequestOverridesTests {
   @Test
-  fun `four argument JVM constructor remains available`() {
+  fun `public data class ABI remains four fields`() {
     val constructor = RequestOverrides::class.java.getConstructor(
       String::class.java,
       String::class.java,
@@ -25,5 +25,19 @@ class RequestOverridesTests {
     assertEquals(30L, overrides.timeout)
     assertEquals(mapOf("X-Test" to "true"), overrides.headers)
     assertEquals(false, overrides.omitAuthorization)
+
+    RequestOverrides::class.java.getDeclaredMethod(
+      "copy",
+      String::class.java,
+      String::class.java,
+      java.lang.Long::class.java,
+      Map::class.java,
+    )
+    assertEquals(
+      false,
+      RequestOverrides::class.java.declaredConstructors.any { declaredConstructor ->
+        declaredConstructor.parameterTypes.lastOrNull() == java.lang.Boolean.TYPE
+      },
+    )
   }
 }

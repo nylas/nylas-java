@@ -20,22 +20,12 @@ data class RequestOverrides(
    * Additional headers to include in the request.
    */
   val headers: Map<String, String>? = emptyMap(),
+) {
   /**
    * Omit the default Authorization header for requests that use another authentication scheme.
    * @suppress Not for public use.
    */
-  val omitAuthorization: Boolean = false,
-) {
-  /**
-   * Preserve the public JVM constructor that existed before internal auth-control
-   * support was added.
-   */
-  constructor(
-    apiKey: String?,
-    apiUri: String?,
-    timeout: Long?,
-    headers: Map<String, String>?,
-  ) : this(apiKey, apiUri, timeout, headers, false)
+  internal var omitAuthorization: Boolean = false
 
   /**
    * Builder for [RequestOverrides].
