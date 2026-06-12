@@ -116,6 +116,28 @@ class ApplicationsTests {
       assertEquals("string", app.callbackUris?.get(0)?.settings?.packageName)
       assertEquals("string", app.callbackUris?.get(0)?.settings?.sha1CertificateFingerprint)
     }
+
+    @Test
+    fun `UpdateApplicationRequest serializes callback URIs`() {
+      val adapter = JsonHelper.moshi().adapter(UpdateApplicationRequest::class.java)
+      val request = UpdateApplicationRequest.Builder()
+        .callbackUris(
+          listOf(
+            RedirectUri(
+              id = "0556d035-6cb6-4262-a035-6b77e11cf8fc",
+              url = "https://example.com/callback",
+              platform = Platform.WEB,
+            ),
+          ),
+        )
+        .build()
+
+      val json = adapter.toJson(request)
+
+      assert(json.contains("\"callback_uris\"")) { "Expected callback_uris in JSON, got: $json" }
+      assert(json.contains("\"url\":\"https://example.com/callback\"")) { "Expected callback URL in JSON, got: $json" }
+      assert(json.contains("\"platform\":\"web\"")) { "Expected platform in JSON, got: $json" }
+    }
   }
 
   @Nested

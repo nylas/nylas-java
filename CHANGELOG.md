@@ -5,6 +5,7 @@
 ### Added
 * Application administration updates
   - `Applications.update()` for `PATCH /v3/applications`
+  - Application updates support `callback_uris`
   - Redirect URI updates use `PATCH /v3/applications/redirect-uris/{id}`
   - Manage Domains admin CRUD and verification endpoints on `client.domains()` via `/v3/admin/domains`; these support `ServiceAccountSigner` for Nylas Service Account request-signing auth without Bearer auth and still accept manually signed headers in `RequestOverrides.headers`
   - `Workspaces` resource via `client.workspaces()`: CRUD, paginated listing with `limit` and `page_token`, `autoGroup`, `manualAssign`, `default`, `policyId`, and `ruleIds`; `CreateWorkspaceRequest` validates that `domain` is present when `autoGroup` is true
