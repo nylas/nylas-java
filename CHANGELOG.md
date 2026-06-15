@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [v2.17.0] - Release 2026-06-15
 
 ### Added
 * Application administration updates
