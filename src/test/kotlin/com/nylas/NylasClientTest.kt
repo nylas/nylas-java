@@ -2,6 +2,7 @@ package com.nylas
 
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import okhttp3.*
 import okhttp3.Response
 import okio.Buffer
@@ -390,6 +391,26 @@ class NylasClientTest {
       assertEquals(mockResponseBody, result)
       assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method, "GET")
+    }
+    @Test
+    fun `pre-encoded path segments are not double-encoded`() {
+      // Simulates the path a resource builds for a Gmail attachment id ("v0:<...>:<...>:<size>")
+      // after the resource layer percent-encodes it with PathEncoder.
+      val attachmentId = "v0:UHJvZ3JhbW1l:YXBwbGljYXRpb24=:15204"
+      val path = "v3/grants/abc-123-grant-id/attachments/${PathEncoder.encode(attachmentId)}/download"
+
+      nylasClient.downloadResponse(path)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      // The ':' and '=' are encoded exactly once ('%3A', '%3D'); they must NOT become '%253A'/'%253D'.
+      assertEquals(
+        "https://api.us.nylas.com/v3/grants/abc-123-grant-id/attachments/v0%3AUHJvZ3JhbW1l%3AYXBwbGljYXRpb24%3D%3A15204/download",
+        capturedRequest.url.toString(),
+      )
+      assertEquals(attachmentId, capturedRequest.url.pathSegments[4])
     }
 
     @Test

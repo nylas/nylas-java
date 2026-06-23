@@ -528,12 +528,14 @@ open class NylasClient(
 
   private fun buildUrl(path: String, queryParams: IQueryParams?, overrides: RequestOverrides?): HttpUrl.Builder {
     // Sets the API URI if it is provided in the overrides.
+    // Path segments are already percent-encoded by the resource layer (see PathEncoder).
+    // Use addEncodedPathSegments so OkHttp does not encode them a second time
+    // (e.g. turning an already-encoded ':' of "%3A" into "%253A").
     var url = if (overrides?.apiUri != null) {
-      overrides.apiUri.toHttpUrl().newBuilder().addPathSegments(path)
+      overrides.apiUri.toHttpUrl().newBuilder().addEncodedPathSegments(path)
     } else {
-      newUrlBuilder().addPathSegments(path)
+      newUrlBuilder().addEncodedPathSegments(path)
     }
-
     if (queryParams != null) {
       url = addQueryParams(url, queryParams.convertToMap())
     }
