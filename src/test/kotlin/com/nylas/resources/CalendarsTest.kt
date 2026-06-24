@@ -551,7 +551,7 @@ class CalendarsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Calendar>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -576,7 +576,7 @@ class CalendarsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Calendar>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -596,7 +596,7 @@ class CalendarsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Calendar>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -640,7 +640,7 @@ class CalendarsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -688,7 +688,7 @@ class CalendarsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<ListResponse<Calendar>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -710,7 +710,7 @@ class CalendarsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Calendar>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -731,7 +731,7 @@ class CalendarsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Calendar>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -751,7 +751,7 @@ class CalendarsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Calendar>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -823,7 +823,7 @@ class CalendarsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -859,7 +859,7 @@ class CalendarsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -902,7 +902,7 @@ class CalendarsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -931,7 +931,7 @@ class CalendarsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ListCalendersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Calendar>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Calendar>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),

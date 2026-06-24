@@ -173,7 +173,7 @@ class NotetakersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListNotetakersQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Notetaker>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Notetaker>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -194,7 +194,7 @@ class NotetakersTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Notetaker>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Notetaker>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         isNull(),
@@ -225,7 +225,7 @@ class NotetakersTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Notetaker>>(
+      verify(mockNylasClient).executePostEncoded<Response<Notetaker>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -258,7 +258,7 @@ class NotetakersTests {
       val typeCaptor = argumentCaptor<Type>()
       val requestBodyCaptor = argumentCaptor<String>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<Response<Notetaker>>(
+      verify(mockNylasClient).executePutEncoded<Response<Notetaker>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -280,7 +280,7 @@ class NotetakersTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<LeaveNotetakerResponse>>(
+      verify(mockNylasClient).executePostEncoded<Response<LeaveNotetakerResponse>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         isNull(),
@@ -301,7 +301,7 @@ class NotetakersTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<NotetakerMediaResponse>>(
+      verify(mockNylasClient).executeGetEncoded<Response<NotetakerMediaResponse>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         isNull(),
@@ -322,7 +322,7 @@ class NotetakersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<DeleteResponse>(
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -343,7 +343,7 @@ class NotetakersTests {
       val pathCaptor = argumentCaptor<String>()
       val typeCaptor = argumentCaptor<Type>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Notetaker>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Notetaker>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         isNull(),

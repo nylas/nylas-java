@@ -16,8 +16,8 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(identifier: String, queryParams: ListThreadsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Thread> {
-    val path = String.format("v3/grants/%s/threads", identifier)
-    return listResource(path, queryParams, overrides)
+    val path = String.format("v3/grants/%s/threads", PathEncoder.encode(identifier))
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -30,8 +30,8 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, threadId: String, overrides: RequestOverrides? = null): Response<Thread> {
-    val path = String.format("v3/grants/%s/threads/%s", identifier, PathEncoder.encode(threadId))
-    return findResource(path, overrides = overrides)
+    val path = String.format("v3/grants/%s/threads/%s", PathEncoder.encode(identifier), PathEncoder.encode(threadId))
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -45,10 +45,10 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, threadId: String, requestBody: UpdateThreadRequest, overrides: RequestOverrides? = null): Response<Thread> {
-    val path = String.format("v3/grants/%s/threads/%s", identifier, PathEncoder.encode(threadId))
+    val path = String.format("v3/grants/%s/threads/%s", PathEncoder.encode(identifier), PathEncoder.encode(threadId))
     val adapter = JsonHelper.moshi().adapter(UpdateThreadRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -61,7 +61,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, threadId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/threads/%s", identifier, PathEncoder.encode(threadId))
-    return destroyResource(path, overrides = overrides)
+    val path = String.format("v3/grants/%s/threads/%s", PathEncoder.encode(identifier), PathEncoder.encode(threadId))
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

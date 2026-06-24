@@ -18,8 +18,8 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(identifier: String, queryParams: ListDraftsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Draft> {
-    val path = String.format("v3/grants/%s/drafts", identifier)
-    return listResource(path, queryParams, overrides)
+    val path = String.format("v3/grants/%s/drafts", PathEncoder.encode(identifier))
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -32,8 +32,8 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, draftId: String, overrides: RequestOverrides? = null): Response<Draft> {
-    val path = String.format("v3/grants/%s/drafts/%s", identifier, PathEncoder.encode(draftId))
-    return findResource(path, overrides = overrides)
+    val path = String.format("v3/grants/%s/drafts/%s", PathEncoder.encode(identifier), PathEncoder.encode(draftId))
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -46,7 +46,7 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun create(identifier: String, requestBody: CreateDraftRequest, overrides: RequestOverrides? = null): Response<Draft> {
-    val path = String.format("v3/grants/%s/drafts", identifier)
+    val path = String.format("v3/grants/%s/drafts", PathEncoder.encode(identifier))
     val responseType = Types.newParameterizedType(Response::class.java, Draft::class.java)
     val adapter = JsonHelper.moshi().adapter(CreateDraftRequest::class.java)
 
@@ -58,10 +58,10 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
 
-      client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
+      client.executeFormRequestEncoded(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
     } else {
       val serializedRequestBody = adapter.toJson(requestBody)
-      createResource(path, serializedRequestBody, overrides = overrides)
+      createResourceEncoded(path, serializedRequestBody, overrides = overrides)
     }
   }
 
@@ -76,7 +76,7 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, draftId: String, requestBody: UpdateDraftRequest, overrides: RequestOverrides? = null): Response<Draft> {
-    val path = String.format("v3/grants/%s/drafts/%s", identifier, PathEncoder.encode(draftId))
+    val path = String.format("v3/grants/%s/drafts/%s", PathEncoder.encode(identifier), PathEncoder.encode(draftId))
     val responseType = Types.newParameterizedType(Response::class.java, Draft::class.java)
     val adapter = JsonHelper.moshi().adapter(UpdateDraftRequest::class.java)
 
@@ -88,10 +88,10 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
 
-      client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, responseType, overrides = overrides)
+      client.executeFormRequestEncoded(path, NylasClient.HttpMethod.PUT, multipart, responseType, overrides = overrides)
     } else {
       val serializedRequestBody = adapter.toJson(requestBody)
-      updateResource(path, serializedRequestBody, overrides = overrides)
+      updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
     }
   }
 
@@ -105,8 +105,8 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, draftId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/drafts/%s", identifier, PathEncoder.encode(draftId))
-    return destroyResource(path, overrides = overrides)
+    val path = String.format("v3/grants/%s/drafts/%s", PathEncoder.encode(identifier), PathEncoder.encode(draftId))
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -119,8 +119,8 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun send(identifier: String, draftId: String, overrides: RequestOverrides? = null): Response<Message> {
-    val path = String.format("v3/grants/%s/drafts/%s", identifier, PathEncoder.encode(draftId))
+    val path = String.format("v3/grants/%s/drafts/%s", PathEncoder.encode(identifier), PathEncoder.encode(draftId))
     val responseType = Types.newParameterizedType(Response::class.java, Message::class.java)
-    return client.executePost(path, responseType, overrides = overrides)
+    return client.executePostEncoded(path, responseType, overrides = overrides)
   }
 }

@@ -2,6 +2,7 @@ package com.nylas
 
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import okhttp3.*
 import okhttp3.Response
 import okio.Buffer
@@ -203,6 +204,24 @@ class NylasClientTest {
       val result = nylasClient.domains()
       assertNotNull(result)
     }
+
+    @Test
+    fun `policies returns a valid Policies instance`() {
+      val result = nylasClient.policies()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `workspaces returns a valid Workspaces instance`() {
+      val result = nylasClient.workspaces()
+      assertNotNull(result)
+    }
+
+    @Test
+    fun `lists returns a valid NylasLists instance`() {
+      val result = nylasClient.lists()
+      assertNotNull(result)
+    }
   }
 
   @Nested
@@ -393,6 +412,27 @@ class NylasClientTest {
     }
 
     @Test
+    fun `pre-encoded path segments are not double-encoded`() {
+      // Simulates the path a resource builds for a Gmail attachment id ("v0:<...>:<...>:<size>")
+      // after the resource layer percent-encodes it with PathEncoder.
+      val attachmentId = "v0:UHJvZ3JhbW1l:YXBwbGljYXRpb24=:15204"
+      val path = "v3/grants/abc-123-grant-id/attachments/${PathEncoder.encode(attachmentId)}/download"
+
+      nylasClient.downloadResponseEncoded(path)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      // The ':' and '=' are encoded exactly once ('%3A', '%3D'); they must NOT become '%253A'/'%253D'.
+      assertEquals(
+        "https://api.us.nylas.com/v3/grants/abc-123-grant-id/attachments/v0%3AUHJvZ3JhbW1l%3AYXBwbGljYXRpb24%3D%3A15204/download",
+        capturedRequest.url.toString(),
+      )
+      assertEquals(attachmentId, capturedRequest.url.pathSegments[4])
+    }
+
+    @Test
     fun `should handle multipart request`() {
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
 
@@ -480,6 +520,22 @@ class NylasClientTest {
     }
 
     @Test
+    fun `executePutEncoded should preserve encoded path segments`() {
+      val putBody = "{ \"test\": \"updated\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executePutEncoded<Map<String, String>>("test/path%2Fsegment", type, putBody)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      assertEquals("https://api.us.nylas.com/test/path%2Fsegment", capturedRequest.url.toString())
+      assertEquals("PUT", capturedRequest.method)
+      assertEquals(putBody, capturedRequest.body.asString())
+    }
+
+    @Test
     fun `executePatch should set up the request with the correct params`() {
       val patchBody = "{ \"test\": \"updated\" }"
       val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
@@ -494,6 +550,22 @@ class NylasClientTest {
       assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method, "PATCH")
       assertEquals(requestBodyBuffer, patchBody)
+    }
+
+    @Test
+    fun `executePatchEncoded should preserve encoded path segments`() {
+      val patchBody = "{ \"test\": \"updated\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executePatchEncoded<Map<String, String>>("test/path%2Fsegment", type, patchBody)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      assertEquals("https://api.us.nylas.com/test/path%2Fsegment", capturedRequest.url.toString())
+      assertEquals("PATCH", capturedRequest.method)
+      assertEquals(patchBody, capturedRequest.body.asString())
     }
 
     @Test
@@ -514,6 +586,22 @@ class NylasClientTest {
     }
 
     @Test
+    fun `executePostEncoded should preserve encoded path segments`() {
+      val postBody = "{ \"test\": \"updated\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executePostEncoded<Map<String, String>>("test/path%2Fsegment", type, postBody)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      assertEquals("https://api.us.nylas.com/test/path%2Fsegment", capturedRequest.url.toString())
+      assertEquals("POST", capturedRequest.method)
+      assertEquals(postBody, capturedRequest.body.asString())
+    }
+
+    @Test
     fun `executeDelete should set up the request with the correct params`() {
       val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
       whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
@@ -525,6 +613,20 @@ class NylasClientTest {
 
       assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method, "DELETE")
+    }
+
+    @Test
+    fun `executeDeleteEncoded should preserve encoded path segments`() {
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executeDeleteEncoded<Map<String, String>>("test/path%2Fsegment", type)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      assertEquals("https://api.us.nylas.com/test/path%2Fsegment", capturedRequest.url.toString())
+      assertEquals("DELETE", capturedRequest.method)
     }
 
     @Test
@@ -542,6 +644,42 @@ class NylasClientTest {
       assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method, "DELETE")
       assertEquals(requestBodyBuffer, deleteBody)
+    }
+
+    @Test
+    fun `executeDeleteEncoded with a request body should preserve encoded path segments`() {
+      val deleteBody = "{ \"cancellation_reason\": \"No longer available\" }"
+      val type = JsonHelper.mapTypeOf(String::class.java, String::class.java)
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      nylasClient.executeDeleteEncoded<Map<String, String>>("test/path%2Fsegment", type, deleteBody)
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+
+      assertEquals("https://api.us.nylas.com/test/path%2Fsegment", capturedRequest.url.toString())
+      assertEquals("DELETE", capturedRequest.method)
+      assertEquals(deleteBody, capturedRequest.body.asString())
+    }
+
+    @Test
+    fun `executeFormRequestEncoded should preserve encoded path segments`() {
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{ \"foo\": \"bar\" }"))
+      val multipartBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+      multipartBuilder.addFormDataPart("message", "abc123")
+
+      nylasClient.executeFormRequestEncoded<Map<String, String>>(
+        "test/path%2Fsegment",
+        NylasClient.HttpMethod.POST,
+        multipartBuilder.build(),
+        JsonHelper.mapTypeOf(String::class.java, String::class.java),
+      )
+
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      val capturedRequest = requestCaptor.firstValue
+      assertEquals("https://api.us.nylas.com/test/path%2Fsegment", capturedRequest.url.toString())
+      assertEquals("POST", capturedRequest.method)
     }
 
     /**

@@ -24,7 +24,7 @@ class Sessions(client: NylasClient) : Resource<Session>(client, Session::class.j
     val path = "v3/scheduling/sessions"
     val adapter = JsonHelper.moshi().adapter(CreateSessionRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -37,6 +37,6 @@ class Sessions(client: NylasClient) : Resource<Session>(client, Session::class.j
   @JvmOverloads
   fun destroy(sessionId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/scheduling/sessions/%s", PathEncoder.encode(sessionId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

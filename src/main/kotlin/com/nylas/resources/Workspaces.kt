@@ -24,7 +24,7 @@ class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::c
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(queryParams: ListWorkspacesQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Workspace> {
-    return listResource("v3/workspaces", queryParams, overrides)
+    return listResourceEncoded("v3/workspaces", queryParams, overrides)
   }
 
   /**
@@ -37,7 +37,7 @@ class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::c
   @JvmOverloads
   fun find(workspaceId: String, overrides: RequestOverrides? = null): Response<Workspace> {
     val path = String.format("v3/workspaces/%s", PathEncoder.encode(workspaceId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -50,7 +50,7 @@ class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::c
   @JvmOverloads
   fun create(requestBody: CreateWorkspaceRequest, overrides: RequestOverrides? = null): Response<Workspace> {
     val serializedRequestBody = JsonHelper.moshi().adapter(CreateWorkspaceRequest::class.java).toJson(requestBody)
-    return createResource("v3/workspaces", serializedRequestBody, overrides = overrides)
+    return createResourceEncoded("v3/workspaces", serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -65,7 +65,7 @@ class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::c
   fun update(workspaceId: String, requestBody: UpdateWorkspaceRequest, overrides: RequestOverrides? = null): Response<Workspace> {
     val path = String.format("v3/workspaces/%s", PathEncoder.encode(workspaceId))
     val serializedRequestBody = JsonHelper.moshi().adapter(UpdateWorkspaceRequest::class.java).toJson(requestBody)
-    return patchResource(path, serializedRequestBody, overrides = overrides)
+    return patchResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -78,7 +78,7 @@ class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::c
   @JvmOverloads
   fun destroy(workspaceId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/workspaces/%s", PathEncoder.encode(workspaceId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -97,7 +97,7 @@ class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::c
     val serializedRequestBody = requestBody?.let {
       JsonHelper.moshi().adapter(WorkspaceAutoGroupRequest::class.java).toJson(it)
     }
-    return client.executePost("v3/workspaces/auto-group", responseType, serializedRequestBody, overrides = overrides)
+    return client.executePostEncoded("v3/workspaces/auto-group", responseType, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -117,6 +117,6 @@ class Workspaces(client: NylasClient) : Resource<Workspace>(client, Workspace::c
     val path = String.format("v3/workspaces/%s/manual-assign", PathEncoder.encode(workspaceId))
     val responseType = Types.newParameterizedType(Response::class.java, WorkspaceManualAssignResponse::class.java)
     val serializedRequestBody = JsonHelper.moshi().adapter(WorkspaceManualAssignRequest::class.java).toJson(requestBody)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = overrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = overrides)
   }
 }

@@ -967,7 +967,7 @@ class EventsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Event>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -996,7 +996,7 @@ class EventsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListImportEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Event>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -1022,7 +1022,7 @@ class EventsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<FindEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Event>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -1071,7 +1071,7 @@ class EventsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<CreateEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Event>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -1115,7 +1115,7 @@ class EventsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<UpdateEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<ListResponse<Event>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -1153,7 +1153,7 @@ class EventsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<UpdateEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<ListResponse<Event>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -1202,7 +1202,7 @@ class EventsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<UpdateEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<ListResponse<Event>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -1255,7 +1255,7 @@ class EventsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<UpdateEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<ListResponse<Event>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -1308,7 +1308,7 @@ class EventsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<DestroyEventQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Event>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -1331,7 +1331,7 @@ class EventsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Event>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -1352,7 +1352,7 @@ class EventsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Event>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -1395,7 +1395,7 @@ class EventsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<SendRsvpQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Event>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Event>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -1420,7 +1420,7 @@ class EventsTests {
 
       events.sendRsvp(grantId, eventId, sendRsvpRequest, sendRsvpQueryParams)
       val queryParamCaptor = argumentCaptor<SendRsvpQueryParams>()
-      verify(mockNylasClient).executePost<DeleteResponse>(
+      verify(mockNylasClient).executePostEncoded<DeleteResponse>(
         any(),
         any(),
         any(),

@@ -23,7 +23,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
   @JvmOverloads
   fun list(overrides: RequestOverrides? = null): ListResponse<Webhook> {
     val path = "v3/webhooks"
-    return listResource(path, overrides = overrides)
+    return listResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -36,7 +36,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
   @JvmOverloads
   fun find(webhookId: String, overrides: RequestOverrides? = null): Response<Webhook> {
     val path = String.format("v3/webhooks/%s", PathEncoder.encode(webhookId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -52,7 +52,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
     val adapter = JsonHelper.moshi().adapter(CreateWebhookRequest::class.java)
     val responseType = Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = overrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -68,7 +68,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
     val path = String.format("v3/webhooks/%s", PathEncoder.encode(webhookId))
     val adapter = JsonHelper.moshi().adapter(UpdateWebhookRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -81,7 +81,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
   @JvmOverloads
   fun destroy(webhookId: String, overrides: RequestOverrides? = null): WebhookDeleteResponse {
     val path = String.format("v3/webhooks/%s", PathEncoder.encode(webhookId))
-    return client.executeDelete(path, WebhookDeleteResponse::class.java, overrides = overrides)
+    return client.executeDeleteEncoded(path, WebhookDeleteResponse::class.java, overrides = overrides)
   }
 
   /**
@@ -95,7 +95,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
   fun rotateSecret(webhookId: String, overrides: RequestOverrides? = null): Response<WebhookWithSecret> {
     val path = String.format("v3/webhooks/rotate-secret/%s", PathEncoder.encode(webhookId))
     val responseType = Types.newParameterizedType(Response::class.java, WebhookWithSecret::class.java)
-    return client.executePost(path, responseType, overrides = overrides)
+    return client.executePostEncoded(path, responseType, overrides = overrides)
   }
 
   /**
@@ -108,7 +108,7 @@ class Webhooks(client: NylasClient) : Resource<Webhook>(client, Webhook::class.j
   fun ipAddresses(overrides: RequestOverrides? = null): Response<WebhookIpAddressesResponse> {
     val path = "v3/webhooks/ip-addresses"
     val responseType = Types.newParameterizedType(Response::class.java, WebhookIpAddressesResponse::class.java)
-    return client.executeGet(path, responseType, overrides = overrides)
+    return client.executeGetEncoded(path, responseType, overrides = overrides)
   }
 
   /**

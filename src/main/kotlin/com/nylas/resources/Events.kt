@@ -23,8 +23,8 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(identifier: String, queryParams: ListEventQueryParams, overrides: RequestOverrides? = null): ListResponse<Event> {
-    val path = String.format("v3/grants/%s/events", identifier)
-    return listResource(path, queryParams, overrides)
+    val path = String.format("v3/grants/%s/events", PathEncoder.encode(identifier))
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -40,8 +40,8 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun listImportEvents(identifier: String, queryParams: ListImportEventQueryParams, overrides: RequestOverrides? = null): ListResponse<Event> {
-    val path = String.format("v3/grants/%s/events/import", identifier)
-    return listResource(path, queryParams, overrides)
+    val path = String.format("v3/grants/%s/events/import", PathEncoder.encode(identifier))
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -55,8 +55,8 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, eventId: String, queryParams: FindEventQueryParams, overrides: RequestOverrides? = null): Response<Event> {
-    val path = String.format("v3/grants/%s/events/%s", identifier, PathEncoder.encode(eventId))
-    return findResource(path, queryParams, overrides)
+    val path = String.format("v3/grants/%s/events/%s", PathEncoder.encode(identifier), PathEncoder.encode(eventId))
+    return findResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -70,10 +70,10 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun create(identifier: String, requestBody: CreateEventRequest, queryParams: CreateEventQueryParams, overrides: RequestOverrides? = null): Response<Event> {
-    val path = String.format("v3/grants/%s/events", identifier)
+    val path = String.format("v3/grants/%s/events", PathEncoder.encode(identifier))
     val adapter = JsonHelper.moshi().adapter(CreateEventRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, queryParams, overrides)
+    return createResourceEncoded(path, serializedRequestBody, queryParams, overrides)
   }
 
   /**
@@ -88,10 +88,10 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, eventId: String, requestBody: UpdateEventRequest, queryParams: UpdateEventQueryParams, overrides: RequestOverrides? = null): Response<Event> {
-    val path = String.format("v3/grants/%s/events/%s", identifier, PathEncoder.encode(eventId))
+    val path = String.format("v3/grants/%s/events/%s", PathEncoder.encode(identifier), PathEncoder.encode(eventId))
     val adapter = JsonHelper.moshi().adapter(UpdateEventRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, queryParams, overrides)
+    return updateResourceEncoded(path, serializedRequestBody, queryParams, overrides)
   }
 
   /**
@@ -105,8 +105,8 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, eventId: String, queryParams: DestroyEventQueryParams, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/events/%s", identifier, PathEncoder.encode(eventId))
-    return destroyResource(path, queryParams, overrides)
+    val path = String.format("v3/grants/%s/events/%s", PathEncoder.encode(identifier), PathEncoder.encode(eventId))
+    return destroyResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -121,10 +121,10 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun sendRsvp(identifier: String, eventId: String, requestBody: SendRsvpRequest, queryParams: SendRsvpQueryParams, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/events/%s/send-rsvp", identifier, PathEncoder.encode(eventId))
+    val path = String.format("v3/grants/%s/events/%s/send-rsvp", PathEncoder.encode(identifier), PathEncoder.encode(eventId))
     val adapter = JsonHelper.moshi().adapter(SendRsvpRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
 
-    return client.executePost(path, DeleteResponse::class.java, serializedRequestBody, queryParams, overrides)
+    return client.executePostEncoded(path, DeleteResponse::class.java, serializedRequestBody, queryParams, overrides)
   }
 }

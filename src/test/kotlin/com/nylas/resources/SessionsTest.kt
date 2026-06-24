@@ -79,7 +79,7 @@ class SessionsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Session>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
+      verify(mockNylasClient).executePostEncoded<Session>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
 
       assertEquals("v3/scheduling/sessions", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Session::class.java), typeCaptor.firstValue)
@@ -95,7 +95,7 @@ class SessionsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<DeleteResponse>(pathCaptor.capture(), typeCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(pathCaptor.capture(), typeCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
       assertEquals("v3/scheduling/sessions/$sessionId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
     }
@@ -110,7 +110,7 @@ class SessionsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<DeleteResponse>(
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),

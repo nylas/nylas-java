@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import com.squareup.moshi.Types
 import okhttp3.Call
 import okhttp3.Interceptor
@@ -93,7 +94,7 @@ class AttachmentsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<FindAttachmentQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Attachment>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Attachment>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -111,7 +112,7 @@ class AttachmentsTests {
       val pathCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).downloadResponse(
+      verify(mockNylasClient).downloadResponseEncoded(
         pathCaptor.capture(),
         queryParamCaptor.capture(),
         overrideParamCaptor.capture(),
@@ -124,14 +125,14 @@ class AttachmentsTests {
     fun `downloadBytes makes a GET request to the correct path`() {
       val byteArray = byteArrayOf(0b00000100, 0b00000010, 0b00000011)
       whenever(mockResponseBody.bytes()).thenReturn(byteArray)
-      whenever(mockNylasClient.downloadResponse(any(), any(), overrides = eq(null))).thenReturn(mockResponseBody)
+      whenever(mockNylasClient.downloadResponseEncoded(any(), any(), overrides = eq(null))).thenReturn(mockResponseBody)
 
       val bytes = attachments.downloadBytes(grantId, attachmentId, queryParams)
 
       val pathCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).downloadResponse(
+      verify(mockNylasClient).downloadResponseEncoded(
         pathCaptor.capture(),
         queryParamCaptor.capture(),
         overrideParamCaptor.capture(),
@@ -152,7 +153,7 @@ class AttachmentsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Attachment>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Attachment>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -160,6 +161,27 @@ class AttachmentsTests {
       )
 
       assertEquals("v3/grants/$grantId/attachments/INBOX%2Fattach-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `download URL-encodes a grant identifier containing reserved characters`() {
+      val reservedGrantId = "grant/user@example.com"
+
+      attachments.download(reservedGrantId, attachmentId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).downloadResponseEncoded(
+        pathCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals(
+        "v3/grants/${PathEncoder.encode(reservedGrantId)}/attachments/$attachmentId/download",
+        pathCaptor.firstValue,
+      )
     }
   }
 }
