@@ -392,6 +392,7 @@ class NylasClientTest {
       assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path")
       assertEquals(capturedRequest.method, "GET")
     }
+
     @Test
     fun `pre-encoded path segments are not double-encoded`() {
       // Simulates the path a resource builds for a Gmail attachment id ("v0:<...>:<...>:<size>")
