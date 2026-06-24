@@ -27,7 +27,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @JvmOverloads
   fun list(identifier: String, queryParams: ListMessagesQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Message> {
     val path = String.format("v3/grants/%s/messages", identifier)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -42,7 +42,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @JvmOverloads
   fun find(identifier: String, messageId: String, queryParams: FindMessageQueryParams? = null, overrides: RequestOverrides? = null): Response<Message> {
     val path = String.format("v3/grants/%s/messages/%s", identifier, PathEncoder.encode(messageId))
-    return findResource(path, queryParams, overrides = overrides)
+    return findResourceEncoded(path, queryParams, overrides = overrides)
   }
 
   /**
@@ -59,7 +59,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
     val path = String.format("v3/grants/%s/messages/%s", identifier, PathEncoder.encode(messageId))
     val adapter = JsonHelper.moshi().adapter(UpdateMessageRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -73,7 +73,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   @JvmOverloads
   fun destroy(identifier: String, messageId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/grants/%s/messages/%s", identifier, PathEncoder.encode(messageId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -98,10 +98,10 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
 
-      client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
+      client.executeFormRequestEncoded(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
     } else {
       val serializedRequestBody = adapter.toJson(requestBody)
-      createResource(path, serializedRequestBody, overrides = overrides)
+      createResourceEncoded(path, serializedRequestBody, overrides = overrides)
     }
   }
 
@@ -116,7 +116,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   fun listScheduledMessages(identifier: String, overrides: RequestOverrides? = null): ListResponse<ScheduledMessage> {
     val path = String.format("v3/grants/%s/messages/schedules", identifier)
     val responseType = Types.newParameterizedType(ListResponse::class.java, ScheduledMessage::class.java)
-    return client.executeGet(path, responseType, overrides = overrides)
+    return client.executeGetEncoded(path, responseType, overrides = overrides)
   }
 
   /**
@@ -131,7 +131,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   fun findScheduledMessage(identifier: String, scheduleId: String, overrides: RequestOverrides? = null): Response<ScheduledMessage> {
     val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, PathEncoder.encode(scheduleId))
     val responseType = Types.newParameterizedType(Response::class.java, ScheduledMessage::class.java)
-    return client.executeGet(path, responseType, overrides = overrides)
+    return client.executeGetEncoded(path, responseType, overrides = overrides)
   }
 
   /**
@@ -145,7 +145,7 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
   fun stopScheduledMessage(identifier: String, scheduleId: String, overrides: RequestOverrides? = null): Response<StopScheduledMessageResponse> {
     val path = String.format("v3/grants/%s/messages/schedules/%s", identifier, PathEncoder.encode(scheduleId))
     val responseType = Types.newParameterizedType(Response::class.java, StopScheduledMessageResponse::class.java)
-    return client.executeDelete(path, responseType, overrides = overrides)
+    return client.executeDeleteEncoded(path, responseType, overrides = overrides)
   }
 
   /**
@@ -160,6 +160,6 @@ class Messages(client: NylasClient) : Resource<Message>(client, Message::class.j
     val adapter = JsonHelper.moshi().adapter(CleanMessagesRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     val responseType = Types.newParameterizedType(ListResponse::class.java, CleanMessagesResponse::class.java)
-    return client.executePut(path, responseType, serializedRequestBody)
+    return client.executePutEncoded(path, responseType, serializedRequestBody)
   }
 }

@@ -39,7 +39,7 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   @JvmOverloads
   fun find(ruleId: String, overrides: RequestOverrides? = null): Response<Rule> {
     val path = String.format("v3/rules/%s", PathEncoder.encode(ruleId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -52,7 +52,7 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   @JvmOverloads
   fun create(requestBody: CreateRuleRequest, overrides: RequestOverrides? = null): Response<Rule> {
     val serializedRequestBody = JsonHelper.moshi().adapter(CreateRuleRequest::class.java).toJson(requestBody)
-    return createResource("v3/rules", serializedRequestBody, overrides = overrides)
+    return createResourceEncoded("v3/rules", serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -67,7 +67,7 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   fun update(ruleId: String, requestBody: UpdateRuleRequest, overrides: RequestOverrides? = null): Response<Rule> {
     val path = String.format("v3/rules/%s", PathEncoder.encode(ruleId))
     val serializedRequestBody = JsonHelper.moshi().adapter(UpdateRuleRequest::class.java).toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -80,7 +80,7 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   @JvmOverloads
   fun destroy(ruleId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/rules/%s", PathEncoder.encode(ruleId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -99,7 +99,7 @@ class Rules(client: NylasClient) : Resource<Rule>(client, Rule::class.java) {
   ): ListResponse<RuleEvaluation> {
     val path = String.format("v3/grants/%s/rule-evaluations", PathEncoder.encode(grantId))
     val responseType = Types.newParameterizedType(ListResponse::class.java, RuleEvaluation::class.java)
-    return client.executeGet(path, responseType, queryParams, overrides)
+    return client.executeGetEncoded(path, responseType, queryParams, overrides)
   }
 }
 

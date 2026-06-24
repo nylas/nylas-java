@@ -27,7 +27,7 @@ class Bookings(client: NylasClient) : Resource<Booking>(client, Booking::class.j
     overrides: RequestOverrides? = null,
   ): Response<Booking> {
     val path = String.format("v3/scheduling/bookings/%s", PathEncoder.encode(bookingId))
-    return findResource(path, queryParams, overrides = overrides)
+    return findResourceEncoded(path, queryParams, overrides = overrides)
   }
 
   /**
@@ -47,7 +47,7 @@ class Bookings(client: NylasClient) : Resource<Booking>(client, Booking::class.j
     val path = "v3/scheduling/bookings"
     val adapter = JsonHelper.moshi().adapter(CreateBookingRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, queryParams, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, queryParams, overrides = overrides)
   }
 
   /**
@@ -69,7 +69,7 @@ class Bookings(client: NylasClient) : Resource<Booking>(client, Booking::class.j
     val path = String.format("v3/scheduling/bookings/%s", PathEncoder.encode(bookingId))
     val adapter = JsonHelper.moshi().adapter(ConfirmBookingRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, queryParams, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, queryParams, overrides = overrides)
   }
 
   /**
@@ -91,7 +91,7 @@ class Bookings(client: NylasClient) : Resource<Booking>(client, Booking::class.j
     val path = String.format("v3/scheduling/bookings/%s", PathEncoder.encode(bookingId))
     val adapter = JsonHelper.moshi().adapter(RescheduleBookingRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return patchResource(path, serializedRequestBody, queryParams, overrides = overrides)
+    return patchResourceEncoded(path, serializedRequestBody, queryParams, overrides = overrides)
   }
 
   /**
@@ -136,7 +136,7 @@ class Bookings(client: NylasClient) : Resource<Booking>(client, Booking::class.j
     val path = String.format("v3/scheduling/bookings/%s", PathEncoder.encode(bookingId))
     val adapter = JsonHelper.moshi().adapter(DestroyBookingRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return client.executeDelete(path, DeleteResponse::class.java, serializedRequestBody, queryParams, overrides)
+    return client.executeDeleteEncoded(path, DeleteResponse::class.java, serializedRequestBody, queryParams, overrides)
   }
 
   /**
@@ -153,6 +153,6 @@ class Bookings(client: NylasClient) : Resource<Booking>(client, Booking::class.j
    */
   fun destroy(bookingId: String, queryParams: DestroyBookingQueryParams? = null, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/scheduling/bookings/%s", PathEncoder.encode(bookingId))
-    return destroyResource(path, queryParams, overrides = overrides)
+    return destroyResourceEncoded(path, queryParams, overrides = overrides)
   }
 }

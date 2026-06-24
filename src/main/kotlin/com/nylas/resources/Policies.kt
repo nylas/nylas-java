@@ -23,7 +23,7 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(queryParams: ListPoliciesQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Policy> {
-    return listResource("v3/policies", queryParams, overrides)
+    return listResourceEncoded("v3/policies", queryParams, overrides)
   }
 
   /**
@@ -36,7 +36,7 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   @JvmOverloads
   fun find(policyId: String, overrides: RequestOverrides? = null): Response<Policy> {
     val path = String.format("v3/policies/%s", PathEncoder.encode(policyId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -49,7 +49,7 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   @JvmOverloads
   fun create(requestBody: CreatePolicyRequest, overrides: RequestOverrides? = null): Response<Policy> {
     val serializedRequestBody = JsonHelper.moshi().adapter(CreatePolicyRequest::class.java).toJson(requestBody)
-    return createResource("v3/policies", serializedRequestBody, overrides = overrides)
+    return createResourceEncoded("v3/policies", serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -64,7 +64,7 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   fun update(policyId: String, requestBody: UpdatePolicyRequest, overrides: RequestOverrides? = null): Response<Policy> {
     val path = String.format("v3/policies/%s", PathEncoder.encode(policyId))
     val serializedRequestBody = JsonHelper.moshi().adapter(UpdatePolicyRequest::class.java).toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -77,6 +77,6 @@ class Policies(client: NylasClient) : Resource<Policy>(client, Policy::class.jav
   @JvmOverloads
   fun destroy(policyId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/policies/%s", PathEncoder.encode(policyId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

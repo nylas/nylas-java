@@ -133,7 +133,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -161,7 +161,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -187,7 +187,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -244,7 +244,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -270,7 +270,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -321,7 +321,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -350,7 +350,7 @@ class FoldersTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Folder>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -382,7 +382,7 @@ class FoldersTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<ListResponse<Folder>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -406,7 +406,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Folder>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -428,7 +428,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Folder>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -448,7 +448,7 @@ class FoldersTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Folder>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Folder>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),

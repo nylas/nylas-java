@@ -104,7 +104,7 @@ class BookingsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<CreateBookingQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Booking>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
+      verify(mockNylasClient).executePostEncoded<Booking>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
 
       assertEquals("v3/scheduling/bookings", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Booking::class.java), typeCaptor.firstValue)
@@ -120,7 +120,7 @@ class BookingsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<FindBookingQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Booking>(pathCaptor.capture(), typeCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
+      verify(mockNylasClient).executeGetEncoded<Booking>(pathCaptor.capture(), typeCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
 
       assertEquals("v3/scheduling/bookings/$bookingId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Booking::class.java), typeCaptor.firstValue)
@@ -141,7 +141,7 @@ class BookingsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<RescheduleBookingQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePatch<Booking>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
+      verify(mockNylasClient).executePatchEncoded<Booking>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
 
       assertEquals("v3/scheduling/bookings/$bookingId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Booking::class.java), typeCaptor.firstValue)
@@ -164,7 +164,7 @@ class BookingsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<ConfirmBookingQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<Booking>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
+      verify(mockNylasClient).executePutEncoded<Booking>(pathCaptor.capture(), typeCaptor.capture(), requestBodyCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
 
       assertEquals("v3/scheduling/bookings/$bookingId", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(Response::class.java, Booking::class.java), typeCaptor.firstValue)
@@ -180,7 +180,7 @@ class BookingsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<DestroyBookingQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<DeleteResponse>(pathCaptor.capture(), typeCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(pathCaptor.capture(), typeCaptor.capture(), queryParamCaptor.capture(), overrideParamCaptor.capture())
 
       assertEquals("v3/scheduling/bookings/$bookingId", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
@@ -202,7 +202,7 @@ class BookingsTest {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<DestroyBookingQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<DeleteResponse>(
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -226,7 +226,7 @@ class BookingsTest {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<FindBookingQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Booking>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Booking>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),

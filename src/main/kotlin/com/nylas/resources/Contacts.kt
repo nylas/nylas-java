@@ -18,7 +18,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @JvmOverloads
   fun list(identifier: String, queryParams: ListContactsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Contact> {
     val path = String.format("v3/grants/%s/contacts", identifier)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -33,7 +33,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @JvmOverloads
   fun find(identifier: String, contactId: String, queryParams: FindContactQueryParams? = null, overrides: RequestOverrides? = null): Response<Contact> {
     val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
-    return findResource(path, queryParams, overrides)
+    return findResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -49,7 +49,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
     val path = String.format("v3/grants/%s/contacts", identifier)
     val adapter = JsonHelper.moshi().adapter(CreateContactRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -66,7 +66,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
     val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
     val adapter = JsonHelper.moshi().adapter(UpdateContactRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -80,7 +80,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @JvmOverloads
   fun destroy(identifier: String, contactId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -95,6 +95,6 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   fun listGroups(identifier: String, queryParams: ListContactGroupsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<ContactGroup> {
     val path = String.format("v3/grants/%s/contacts/groups", identifier)
     val responseType = Types.newParameterizedType(ListResponse::class.java, ContactGroup::class.java)
-    return client.executeGet(path, responseType, queryParams, overrides)
+    return client.executeGetEncoded(path, responseType, queryParams, overrides)
   }
 }

@@ -242,7 +242,7 @@ class DomainsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Message>>(
+      verify(mockNylasClient).executePostEncoded<Response<Message>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -267,7 +267,7 @@ class DomainsTests {
       domains.sendTransactionalEmail(domainName, request, overrides)
 
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Message>>(
+      verify(mockNylasClient).executePostEncoded<Response<Message>>(
         any(),
         any(),
         any(),
@@ -307,7 +307,7 @@ class DomainsTests {
       val requestBodyCaptor = argumentCaptor<RequestBody>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeFormRequest<Response<Message>>(
+      verify(mockNylasClient).executeFormRequestEncoded<Response<Message>>(
         pathCaptor.capture(),
         methodCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -353,7 +353,7 @@ class DomainsTests {
       domains.sendTransactionalEmail(domainName, request, overrides)
 
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeFormRequest<Response<Message>>(
+      verify(mockNylasClient).executeFormRequestEncoded<Response<Message>>(
         any(),
         any(),
         any(),
@@ -374,7 +374,7 @@ class DomainsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Domain>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Domain>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -497,7 +497,7 @@ class DomainsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Domain>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Domain>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -520,7 +520,7 @@ class DomainsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Domain>>(
+      verify(mockNylasClient).executePostEncoded<Response<Domain>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -545,7 +545,7 @@ class DomainsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<Response<Domain>>(
+      verify(mockNylasClient).executePutEncoded<Response<Domain>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -568,7 +568,7 @@ class DomainsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<DeleteResponse>(
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -591,7 +591,7 @@ class DomainsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<DomainVerificationResult>>(
+      verify(mockNylasClient).executePostEncoded<Response<DomainVerificationResult>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -616,7 +616,7 @@ class DomainsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<DomainVerificationResult>>(
+      verify(mockNylasClient).executePostEncoded<Response<DomainVerificationResult>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),

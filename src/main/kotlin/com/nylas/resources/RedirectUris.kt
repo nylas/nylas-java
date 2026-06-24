@@ -22,7 +22,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
   @JvmOverloads
   fun list(overrides: RequestOverrides? = null): ListResponse<RedirectUri> {
     val path = "v3/applications/redirect-uris"
-    return listResource(path, overrides = overrides)
+    return listResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -35,7 +35,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
   @JvmOverloads
   fun find(redirectUriId: String, overrides: RequestOverrides? = null): Response<RedirectUri> {
     val path = String.format("v3/applications/redirect-uris/%s", PathEncoder.encode(redirectUriId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -52,7 +52,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
       .adapter(CreateRedirectUriRequest::class.java)
       .toJson(requestBody)
 
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -70,7 +70,7 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
       .adapter(UpdateRedirectUriRequest::class.java)
       .toJson(requestBody)
 
-    return patchResource(path, serializedRequestBody, overrides = overrides)
+    return patchResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -83,6 +83,6 @@ class RedirectUris(client: NylasClient) : Resource<RedirectUri>(client, Redirect
   @JvmOverloads
   fun destroy(redirectUriId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/applications/redirect-uris/%s", PathEncoder.encode(redirectUriId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

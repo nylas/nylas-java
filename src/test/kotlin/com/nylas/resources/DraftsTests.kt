@@ -167,7 +167,7 @@ class DraftsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListDraftsQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Draft>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -187,7 +187,7 @@ class DraftsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<ListDraftsQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Draft>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -208,7 +208,7 @@ class DraftsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Draft>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -242,7 +242,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Draft>>(
+      verify(mockNylasClient).executePostEncoded<Response<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -276,7 +276,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Draft>>(
+      verify(mockNylasClient).executePostEncoded<Response<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -360,7 +360,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Draft>>(
+      verify(mockNylasClient).executePostEncoded<Response<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -408,7 +408,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<RequestBody>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeFormRequest<Response<Draft>>(
+      verify(mockNylasClient).executeFormRequestEncoded<Response<Draft>>(
         pathCaptor.capture(),
         methodCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -450,7 +450,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<Response<Draft>>(
+      verify(mockNylasClient).executePutEncoded<Response<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -503,7 +503,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<Response<Draft>>(
+      verify(mockNylasClient).executePutEncoded<Response<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -547,7 +547,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<RequestBody>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeFormRequest<Response<Draft>>(
+      verify(mockNylasClient).executeFormRequestEncoded<Response<Draft>>(
         pathCaptor.capture(),
         methodCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -580,7 +580,7 @@ class DraftsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Draft>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -618,7 +618,7 @@ class DraftsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<ListResponse<Draft>>(
+      verify(mockNylasClient).executePostEncoded<ListResponse<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -641,7 +641,7 @@ class DraftsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Draft>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -661,7 +661,7 @@ class DraftsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Draft>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Draft>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),

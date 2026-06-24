@@ -212,7 +212,7 @@ class ThreadsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Thread>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -232,7 +232,7 @@ class ThreadsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Thread>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -254,7 +254,7 @@ class ThreadsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Thread>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -273,7 +273,7 @@ class ThreadsTests {
       threads.find(grantId, threadId)
 
       val pathCaptor = argumentCaptor<String>()
-      verify(mockNylasClient).executeGet<ListResponse<Thread>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         any(),
         anyOrNull(),
@@ -291,7 +291,7 @@ class ThreadsTests {
       threads.update(grantId, threadId, updateThreadRequest)
 
       val pathCaptor = argumentCaptor<String>()
-      verify(mockNylasClient).executePut<ListResponse<Thread>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         any(),
         any(),
@@ -312,7 +312,7 @@ class ThreadsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Thread>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -339,7 +339,7 @@ class ThreadsTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<ListResponse<Thread>>(
+      verify(mockNylasClient).executePutEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -363,7 +363,7 @@ class ThreadsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<ListResponse<Thread>>(
+      verify(mockNylasClient).executeDeleteEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -484,7 +484,7 @@ class ThreadsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Thread>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Thread>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),

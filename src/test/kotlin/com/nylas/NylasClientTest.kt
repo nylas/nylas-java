@@ -400,7 +400,7 @@ class NylasClientTest {
       val attachmentId = "v0:UHJvZ3JhbW1l:YXBwbGljYXRpb24=:15204"
       val path = "v3/grants/abc-123-grant-id/attachments/${PathEncoder.encode(attachmentId)}/download"
 
-      nylasClient.downloadResponse(path)
+      nylasClient.downloadResponseEncoded(path)
 
       val requestCaptor = argumentCaptor<Request>()
       verify(mockHttpClient).newCall(requestCaptor.capture())

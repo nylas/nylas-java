@@ -17,7 +17,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
   @JvmOverloads
   fun list(provider: AuthProvider, queryParams: ListCredentialsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Credential> {
     val path = String.format("v3/connectors/%s/creds", provider.value)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -31,7 +31,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
   @JvmOverloads
   fun find(provider: AuthProvider, credentialsId: String, overrides: RequestOverrides? = null): Response<Credential> {
     val path = String.format("v3/connectors/%s/creds/%s", provider.value, PathEncoder.encode(credentialsId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -49,7 +49,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
       .adapter(CreateCredentialRequest::class.java)
       .toJson(requestBody)
 
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -68,7 +68,7 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
       .adapter(UpdateCredentialRequest::class.java)
       .toJson(requestBody)
 
-    return patchResource(path, serializedRequestBody, overrides = overrides)
+    return patchResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -82,6 +82,6 @@ class Credentials(client: NylasClient) : Resource<Credential>(client, Credential
   @JvmOverloads
   fun destroy(provider: AuthProvider, credentialsId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/connectors/%s/creds/%s", provider.value, PathEncoder.encode(credentialsId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

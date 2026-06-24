@@ -62,10 +62,10 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
       val attachmentLessPayload = requestBody.copy(attachments = null)
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
-      client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
+      client.executeFormRequestEncoded(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
     } else {
       val serializedRequestBody = adapter.toJson(requestBody)
-      createResource(path, serializedRequestBody, overrides = overrides)
+      createResourceEncoded(path, serializedRequestBody, overrides = overrides)
     }
   }
 
@@ -101,7 +101,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
   fun list(queryParams: ListDomainsQueryParams? = null, overrides: RequestOverrides): ListResponse<Domain> {
     val signedOverrides = requireServiceAccountSigning(overrides)
     val responseType = Types.newParameterizedType(ListResponse::class.java, Domain::class.java)
-    return client.executeGet("v3/admin/domains", responseType, queryParams, signedOverrides)
+    return client.executeGetEncoded("v3/admin/domains", responseType, queryParams, signedOverrides)
   }
 
   /**
@@ -120,7 +120,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
   ): ListResponse<Domain> {
     val (signedOverrides) = signedRequest(NylasClient.HttpMethod.GET, "v3/admin/domains", signer, overrides = overrides)
     val responseType = Types.newParameterizedType(ListResponse::class.java, Domain::class.java)
-    return client.executeGet("v3/admin/domains", responseType, queryParams, signedOverrides)
+    return client.executeGetEncoded("v3/admin/domains", responseType, queryParams, signedOverrides)
   }
 
   /**
@@ -134,7 +134,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val signedOverrides = requireServiceAccountSigning(overrides)
     val path = String.format("v3/admin/domains/%s", PathEncoder.encode(domainId))
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
-    return client.executeGet(path, responseType, overrides = signedOverrides)
+    return client.executeGetEncoded(path, responseType, overrides = signedOverrides)
   }
 
   /**
@@ -150,7 +150,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = String.format("v3/admin/domains/%s", PathEncoder.encode(domainId))
     val (signedOverrides) = signedRequest(NylasClient.HttpMethod.GET, path, signer, overrides = overrides)
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
-    return client.executeGet(path, responseType, overrides = signedOverrides)
+    return client.executeGetEncoded(path, responseType, overrides = signedOverrides)
   }
 
   /**
@@ -165,7 +165,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = "v3/admin/domains"
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
     val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   /**
@@ -185,7 +185,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = "v3/admin/domains"
     val (signedOverrides, serializedRequestBody) = signedRequest(NylasClient.HttpMethod.POST, path, signer, requestBody, overrides)
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   /**
@@ -201,7 +201,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = String.format("v3/admin/domains/%s", PathEncoder.encode(domainId))
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
     val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
-    return client.executePut(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePutEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   /**
@@ -223,7 +223,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = String.format("v3/admin/domains/%s", PathEncoder.encode(domainId))
     val (signedOverrides, serializedRequestBody) = signedRequest(NylasClient.HttpMethod.PUT, path, signer, requestBody, overrides)
     val responseType = Types.newParameterizedType(Response::class.java, Domain::class.java)
-    return client.executePut(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePutEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   /**
@@ -236,7 +236,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
   fun destroy(domainId: String, overrides: RequestOverrides): DeleteResponse {
     val signedOverrides = requireServiceAccountSigning(overrides)
     val path = String.format("v3/admin/domains/%s", PathEncoder.encode(domainId))
-    return client.executeDelete(path, DeleteResponse::class.java, overrides = signedOverrides)
+    return client.executeDeleteEncoded(path, DeleteResponse::class.java, overrides = signedOverrides)
   }
 
   /**
@@ -251,7 +251,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
   fun destroy(domainId: String, signer: ServiceAccountSigner, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/admin/domains/%s", PathEncoder.encode(domainId))
     val (signedOverrides) = signedRequest(NylasClient.HttpMethod.DELETE, path, signer, overrides = overrides)
-    return client.executeDelete(path, DeleteResponse::class.java, overrides = signedOverrides)
+    return client.executeDeleteEncoded(path, DeleteResponse::class.java, overrides = signedOverrides)
   }
 
   /**
@@ -271,7 +271,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = String.format("v3/admin/domains/%s/info", PathEncoder.encode(domainId))
     val responseType = Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java)
     val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   /**
@@ -293,7 +293,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = String.format("v3/admin/domains/%s/info", PathEncoder.encode(domainId))
     val (signedOverrides, serializedRequestBody) = signedRequest(NylasClient.HttpMethod.POST, path, signer, requestBody, overrides)
     val responseType = Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   /**
@@ -313,7 +313,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = String.format("v3/admin/domains/%s/verify", PathEncoder.encode(domainId))
     val responseType = Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java)
     val serializedRequestBody = ServiceAccountSigner.canonicalJson(requestBody)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   /**
@@ -335,7 +335,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     val path = String.format("v3/admin/domains/%s/verify", PathEncoder.encode(domainId))
     val (signedOverrides, serializedRequestBody) = signedRequest(NylasClient.HttpMethod.POST, path, signer, requestBody, overrides)
     val responseType = Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java)
-    return client.executePost(path, responseType, serializedRequestBody, overrides = signedOverrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = signedOverrides)
   }
 
   companion object {

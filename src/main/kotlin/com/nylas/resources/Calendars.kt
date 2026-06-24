@@ -27,7 +27,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
   @JvmOverloads
   fun list(identifier: String, queryParams: ListCalendersQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Calendar> {
     val path = String.format("v3/grants/%s/calendars", identifier)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -41,7 +41,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
   @JvmOverloads
   fun find(identifier: String, calendarId: String, overrides: RequestOverrides? = null): Response<Calendar> {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, PathEncoder.encode(calendarId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -57,7 +57,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
     val path = String.format("v3/grants/%s/calendars", identifier)
     val adapter = JsonHelper.moshi().adapter(CreateCalendarRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -74,7 +74,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
     val path = String.format("v3/grants/%s/calendars/%s", identifier, PathEncoder.encode(calendarId))
     val adapter = JsonHelper.moshi().adapter(UpdateCalendarRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -87,7 +87,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   fun destroy(identifier: String, calendarId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/grants/%s/calendars/%s", identifier, PathEncoder.encode(calendarId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -107,7 +107,7 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
 
     val responseType = Types.newParameterizedType(Response::class.java, GetAvailabilityResponse::class.java)
 
-    return client.executePost(path, responseType, serializedRequestBody, overrides = overrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -128,6 +128,6 @@ class Calendars(client: NylasClient) : Resource<Calendar>(client, Calendar::clas
 
     val responseType = Types.newParameterizedType(Response::class.java, GET_FREE_BUSY_RESPONSE_ADAPTER)
 
-    return client.executePost(path, responseType, serializedRequestBody, overrides = overrides)
+    return client.executePostEncoded(path, responseType, serializedRequestBody, overrides = overrides)
   }
 }

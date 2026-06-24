@@ -33,7 +33,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     overrides: RequestOverrides? = null,
   ): ListResponse<Configuration> {
     val path = String.format("v3/grants/%s/scheduling/configurations", identifier)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -51,7 +51,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     overrides: RequestOverrides? = null,
   ): Response<Configuration> {
     val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, PathEncoder.encode(configId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -71,7 +71,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     val path = String.format("v3/grants/%s/scheduling/configurations", identifier)
     val adapter = JsonHelper.moshi().adapter(CreateConfigurationRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -93,7 +93,7 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, PathEncoder.encode(configId))
     val adapter = JsonHelper.moshi().adapter(UpdateConfigurationRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -110,6 +110,6 @@ class Configurations(client: NylasClient) : Resource<Configuration>(client, Conf
     overrides: RequestOverrides? = null,
   ): DeleteResponse {
     val path = String.format("v3/grants/%s/scheduling/configurations/%s", identifier, PathEncoder.encode(configId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

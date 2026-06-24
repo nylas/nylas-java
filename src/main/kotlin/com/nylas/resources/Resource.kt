@@ -23,8 +23,18 @@ abstract class Resource<T> protected constructor(
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  protected fun listResourceEncoded(path: String, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<T> {
+    return client.executeGetEncoded(path, listResponseType, queryParams, overrides)
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   protected fun findResource(path: String, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): Response<T> {
     return client.executeGet(path, responseType, queryParams, overrides)
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  protected fun findResourceEncoded(path: String, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): Response<T> {
+    return client.executeGetEncoded(path, responseType, queryParams, overrides)
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -33,8 +43,18 @@ abstract class Resource<T> protected constructor(
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  protected fun createResourceEncoded(path: String, requestBody: String?, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): Response<T> {
+    return client.executePostEncoded(path, responseType, requestBody, queryParams, overrides)
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   protected fun updateResource(path: String, requestBody: String?, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): Response<T> {
     return client.executePut(path, responseType, requestBody, queryParams, overrides)
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  protected fun updateResourceEncoded(path: String, requestBody: String?, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): Response<T> {
+    return client.executePutEncoded(path, responseType, requestBody, queryParams, overrides)
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
@@ -43,7 +63,17 @@ abstract class Resource<T> protected constructor(
   }
 
   @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  protected fun patchResourceEncoded(path: String, requestBody: String?, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): Response<T> {
+    return client.executePatchEncoded(path, responseType, requestBody, queryParams, overrides)
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
   protected fun destroyResource(path: String, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): DeleteResponse {
     return client.executeDelete(path, DeleteResponse::class.java, queryParams, overrides)
+  }
+
+  @Throws(AbstractNylasApiError::class, NylasSdkTimeoutError::class)
+  protected fun destroyResourceEncoded(path: String, queryParams: IQueryParams? = null, overrides: RequestOverrides? = null): DeleteResponse {
+    return client.executeDeleteEncoded(path, DeleteResponse::class.java, queryParams, overrides)
   }
 }

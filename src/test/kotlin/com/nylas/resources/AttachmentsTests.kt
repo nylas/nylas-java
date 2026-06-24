@@ -93,7 +93,7 @@ class AttachmentsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<FindAttachmentQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Attachment>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Attachment>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -111,7 +111,7 @@ class AttachmentsTests {
       val pathCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).downloadResponse(
+      verify(mockNylasClient).downloadResponseEncoded(
         pathCaptor.capture(),
         queryParamCaptor.capture(),
         overrideParamCaptor.capture(),
@@ -124,14 +124,14 @@ class AttachmentsTests {
     fun `downloadBytes makes a GET request to the correct path`() {
       val byteArray = byteArrayOf(0b00000100, 0b00000010, 0b00000011)
       whenever(mockResponseBody.bytes()).thenReturn(byteArray)
-      whenever(mockNylasClient.downloadResponse(any(), any(), overrides = eq(null))).thenReturn(mockResponseBody)
+      whenever(mockNylasClient.downloadResponseEncoded(any(), any(), overrides = eq(null))).thenReturn(mockResponseBody)
 
       val bytes = attachments.downloadBytes(grantId, attachmentId, queryParams)
 
       val pathCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).downloadResponse(
+      verify(mockNylasClient).downloadResponseEncoded(
         pathCaptor.capture(),
         queryParamCaptor.capture(),
         overrideParamCaptor.capture(),
@@ -152,7 +152,7 @@ class AttachmentsTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Attachment>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Attachment>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),

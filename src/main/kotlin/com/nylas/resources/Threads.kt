@@ -17,7 +17,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @JvmOverloads
   fun list(identifier: String, queryParams: ListThreadsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Thread> {
     val path = String.format("v3/grants/%s/threads", identifier)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -31,7 +31,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @JvmOverloads
   fun find(identifier: String, threadId: String, overrides: RequestOverrides? = null): Response<Thread> {
     val path = String.format("v3/grants/%s/threads/%s", identifier, PathEncoder.encode(threadId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -48,7 +48,7 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
     val path = String.format("v3/grants/%s/threads/%s", identifier, PathEncoder.encode(threadId))
     val adapter = JsonHelper.moshi().adapter(UpdateThreadRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -62,6 +62,6 @@ class Threads(client: NylasClient) : Resource<Thread>(client, Thread::class.java
   @JvmOverloads
   fun destroy(identifier: String, threadId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/grants/%s/threads/%s", identifier, PathEncoder.encode(threadId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

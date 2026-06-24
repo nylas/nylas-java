@@ -19,7 +19,7 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @JvmOverloads
   fun list(identifier: String, queryParams: ListDraftsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Draft> {
     val path = String.format("v3/grants/%s/drafts", identifier)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -33,7 +33,7 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @JvmOverloads
   fun find(identifier: String, draftId: String, overrides: RequestOverrides? = null): Response<Draft> {
     val path = String.format("v3/grants/%s/drafts/%s", identifier, PathEncoder.encode(draftId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -58,10 +58,10 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
 
-      client.executeFormRequest(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
+      client.executeFormRequestEncoded(path, NylasClient.HttpMethod.POST, multipart, responseType, overrides = overrides)
     } else {
       val serializedRequestBody = adapter.toJson(requestBody)
-      createResource(path, serializedRequestBody, overrides = overrides)
+      createResourceEncoded(path, serializedRequestBody, overrides = overrides)
     }
   }
 
@@ -88,10 +88,10 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
       val serializedRequestBody = adapter.toJson(attachmentLessPayload)
       val multipart = FileUtils.buildFormRequest(requestBody, serializedRequestBody)
 
-      client.executeFormRequest(path, NylasClient.HttpMethod.PUT, multipart, responseType, overrides = overrides)
+      client.executeFormRequestEncoded(path, NylasClient.HttpMethod.PUT, multipart, responseType, overrides = overrides)
     } else {
       val serializedRequestBody = adapter.toJson(requestBody)
-      updateResource(path, serializedRequestBody, overrides = overrides)
+      updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
     }
   }
 
@@ -106,7 +106,7 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   @JvmOverloads
   fun destroy(identifier: String, draftId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/grants/%s/drafts/%s", identifier, PathEncoder.encode(draftId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -121,6 +121,6 @@ class Drafts(client: NylasClient) : Resource<Draft>(client, Draft::class.java) {
   fun send(identifier: String, draftId: String, overrides: RequestOverrides? = null): Response<Message> {
     val path = String.format("v3/grants/%s/drafts/%s", identifier, PathEncoder.encode(draftId))
     val responseType = Types.newParameterizedType(Response::class.java, Message::class.java)
-    return client.executePost(path, responseType, overrides = overrides)
+    return client.executePostEncoded(path, responseType, overrides = overrides)
   }
 }

@@ -178,7 +178,7 @@ class PoliciesTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Policy>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Policy>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -199,7 +199,7 @@ class PoliciesTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<ListResponse<Policy>>(
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Policy>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -219,7 +219,7 @@ class PoliciesTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeGet<Response<Policy>>(
+      verify(mockNylasClient).executeGetEncoded<Response<Policy>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),
@@ -242,7 +242,7 @@ class PoliciesTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePost<Response<Policy>>(
+      verify(mockNylasClient).executePostEncoded<Response<Policy>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -267,7 +267,7 @@ class PoliciesTests {
       val requestBodyCaptor = argumentCaptor<String>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executePut<Response<Policy>>(
+      verify(mockNylasClient).executePutEncoded<Response<Policy>>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         requestBodyCaptor.capture(),
@@ -289,7 +289,7 @@ class PoliciesTests {
       val typeCaptor = argumentCaptor<Type>()
       val queryParamCaptor = argumentCaptor<IQueryParams>()
       val overrideParamCaptor = argumentCaptor<RequestOverrides>()
-      verify(mockNylasClient).executeDelete<DeleteResponse>(
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(
         pathCaptor.capture(),
         typeCaptor.capture(),
         queryParamCaptor.capture(),

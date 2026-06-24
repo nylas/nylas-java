@@ -17,7 +17,7 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
   @JvmOverloads
   fun list(identifier: String, queryParams: ListFoldersQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Folder> {
     val path = String.format("v3/grants/%s/folders", identifier)
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -31,7 +31,7 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
   @JvmOverloads
   fun find(identifier: String, folderId: String, overrides: RequestOverrides? = null): Response<Folder> {
     val path = String.format("v3/grants/%s/folders/%s", identifier, PathEncoder.encode(folderId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -47,7 +47,7 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
     val path = String.format("v3/grants/%s/folders", identifier)
     val adapter = JsonHelper.moshi().adapter(CreateFolderRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -64,7 +64,7 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
     val path = String.format("v3/grants/%s/folders/%s", identifier, PathEncoder.encode(folderId))
     val adapter = JsonHelper.moshi().adapter(UpdateFolderRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -78,6 +78,6 @@ class Folders(client: NylasClient) : Resource<Folder>(client, Folder::class.java
   @JvmOverloads
   fun destroy(identifier: String, folderId: String, overrides: RequestOverrides? = null): DeleteResponse {
     val path = String.format("v3/grants/%s/folders/%s", identifier, PathEncoder.encode(folderId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }

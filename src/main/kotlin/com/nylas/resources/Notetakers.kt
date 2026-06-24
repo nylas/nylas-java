@@ -22,7 +22,7 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
     overrides: RequestOverrides? = null,
   ): ListResponse<Notetaker> {
     val path = identifier?.let { String.format("v3/grants/%s/notetakers", it) } ?: "v3/notetakers"
-    return listResource(path, queryParams, overrides)
+    return listResourceEncoded(path, queryParams, overrides)
   }
 
   /**
@@ -40,7 +40,7 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
     overrides: RequestOverrides? = null,
   ): Response<Notetaker> {
     val path = identifier?.let { String.format("v3/grants/%s/notetakers/%s", it, PathEncoder.encode(notetakerId)) } ?: String.format("v3/notetakers/%s", PathEncoder.encode(notetakerId))
-    return findResource(path, overrides = overrides)
+    return findResourceEncoded(path, overrides = overrides)
   }
 
   /**
@@ -60,7 +60,7 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
     val path = identifier?.let { String.format("v3/grants/%s/notetakers", it) } ?: "v3/notetakers"
     val adapter = JsonHelper.moshi().adapter(CreateNotetakerRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return createResource(path, serializedRequestBody, overrides = overrides)
+    return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -82,7 +82,7 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
     val path = identifier?.let { String.format("v3/grants/%s/notetakers/%s", it, PathEncoder.encode(notetakerId)) } ?: String.format("v3/notetakers/%s", PathEncoder.encode(notetakerId))
     val adapter = JsonHelper.moshi().adapter(UpdateNotetakerRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
-    return updateResource(path, serializedRequestBody, overrides = overrides)
+    return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
   }
 
   /**
@@ -101,7 +101,7 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
   ): Response<LeaveNotetakerResponse> {
     val path = identifier?.let { String.format("v3/grants/%s/notetakers/%s/leave", it, PathEncoder.encode(notetakerId)) } ?: String.format("v3/notetakers/%s/leave", PathEncoder.encode(notetakerId))
     val responseType = Types.newParameterizedType(Response::class.java, LeaveNotetakerResponse::class.java)
-    return client.executePost(path, responseType, null, null, overrides)
+    return client.executePostEncoded(path, responseType, null, null, overrides)
   }
 
   /**
@@ -120,7 +120,7 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
   ): Response<NotetakerMediaResponse> {
     val path = identifier?.let { String.format("v3/grants/%s/notetakers/%s/media", it, PathEncoder.encode(notetakerId)) } ?: String.format("v3/notetakers/%s/media", PathEncoder.encode(notetakerId))
     val type = Types.newParameterizedType(Response::class.java, NotetakerMediaResponse::class.java)
-    return client.executeGet(path, type, null, overrides)
+    return client.executeGetEncoded(path, type, null, overrides)
   }
 
   /**
@@ -138,6 +138,6 @@ class Notetakers(client: NylasClient) : Resource<Notetaker>(client, Notetaker::c
     overrides: RequestOverrides? = null,
   ): DeleteResponse {
     val path = identifier?.let { String.format("v3/grants/%s/notetakers/%s/cancel", it, PathEncoder.encode(notetakerId)) } ?: String.format("v3/notetakers/%s/cancel", PathEncoder.encode(notetakerId))
-    return destroyResource(path, overrides = overrides)
+    return destroyResourceEncoded(path, overrides = overrides)
   }
 }
