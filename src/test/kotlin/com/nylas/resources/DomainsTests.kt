@@ -510,6 +510,28 @@ class DomainsTests {
     }
 
     @Test
+    fun `listing managed domains with signer calls requests with merged signer headers`() {
+      val signer = ServiceAccountSigner(testKeyPair().private, "service-account-key-id")
+      val queryParams = ListDomainsQueryParams(limit = 2)
+
+      domains.list(queryParams, signer, RequestOverrides(headers = mapOf("X-Custom" to "keep")))
+
+      val pathCaptor = argumentCaptor<String>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Domain>>(
+        pathCaptor.capture(),
+        any(),
+        eq(queryParams),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains", pathCaptor.firstValue)
+      assertEquals("keep", overrideParamCaptor.firstValue.headers?.get("X-Custom"))
+      assertEquals("service-account-key-id", overrideParamCaptor.firstValue.headers?.get("X-Nylas-Kid"))
+      assertTrue(overrideParamCaptor.firstValue.omitAuthorization)
+    }
+
+    @Test
     fun `creating a managed domain calls requests with the correct params`() {
       val requestBody = CreateDomainRequest(name = "Acme", domainAddress = "mail.acme.com")
       val overrides = serviceAccountOverrides()
@@ -532,6 +554,27 @@ class DomainsTests {
       assertEquals(Types.newParameterizedType(Response::class.java, Domain::class.java), typeCaptor.firstValue)
       assertEquals("""{"domain_address":"mail.acme.com","name":"Acme"}""", requestBodyCaptor.firstValue)
       assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `finding a managed domain with signer calls requests with merged signer headers`() {
+      val signer = ServiceAccountSigner(testKeyPair().private, "service-account-key-id")
+
+      domains.find("domain/with/slash", signer, RequestOverrides(headers = mapOf("X-Custom" to "keep")))
+
+      val pathCaptor = argumentCaptor<String>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeGetEncoded<Response<Domain>>(
+        pathCaptor.capture(),
+        any(),
+        anyOrNull(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/domain%2Fwith%2Fslash", pathCaptor.firstValue)
+      assertEquals("keep", overrideParamCaptor.firstValue.headers?.get("X-Custom"))
+      assertEquals("service-account-key-id", overrideParamCaptor.firstValue.headers?.get("X-Nylas-Kid"))
+      assertTrue(overrideParamCaptor.firstValue.omitAuthorization)
     }
 
     @Test
@@ -560,6 +603,31 @@ class DomainsTests {
     }
 
     @Test
+    fun `updating a managed domain with signer calls requests with canonical body and signer headers`() {
+      val signer = ServiceAccountSigner(testKeyPair().private, "service-account-key-id")
+      val requestBody = UpdateDomainRequest(name = "Renamed")
+
+      domains.update("dom-123", requestBody, signer, RequestOverrides(headers = mapOf("X-Custom" to "keep")))
+
+      val pathCaptor = argumentCaptor<String>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePutEncoded<Response<Domain>>(
+        pathCaptor.capture(),
+        any(),
+        requestBodyCaptor.capture(),
+        anyOrNull(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
+      assertEquals("""{"name":"Renamed"}""", requestBodyCaptor.firstValue)
+      assertEquals("keep", overrideParamCaptor.firstValue.headers?.get("X-Custom"))
+      assertEquals("service-account-key-id", overrideParamCaptor.firstValue.headers?.get("X-Nylas-Kid"))
+      assertTrue(overrideParamCaptor.firstValue.omitAuthorization)
+    }
+
+    @Test
     fun `destroying a managed domain calls requests with the correct params`() {
       val overrides = serviceAccountOverrides()
       domains.destroy("dom-123", overrides)
@@ -578,6 +646,27 @@ class DomainsTests {
       assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
       assertEquals(DeleteResponse::class.java, typeCaptor.firstValue)
       assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `destroying a managed domain with signer calls requests with signer headers`() {
+      val signer = ServiceAccountSigner(testKeyPair().private, "service-account-key-id")
+
+      domains.destroy("dom-123", signer, RequestOverrides(headers = mapOf("X-Custom" to "keep")))
+
+      val pathCaptor = argumentCaptor<String>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executeDeleteEncoded<DeleteResponse>(
+        pathCaptor.capture(),
+        any(),
+        anyOrNull(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123", pathCaptor.firstValue)
+      assertEquals("keep", overrideParamCaptor.firstValue.headers?.get("X-Custom"))
+      assertEquals("service-account-key-id", overrideParamCaptor.firstValue.headers?.get("X-Nylas-Kid"))
+      assertTrue(overrideParamCaptor.firstValue.omitAuthorization)
     }
 
     @Test
@@ -606,6 +695,31 @@ class DomainsTests {
     }
 
     @Test
+    fun `getting managed domain info with signer calls requests with signer headers`() {
+      val signer = ServiceAccountSigner(testKeyPair().private, "service-account-key-id")
+      val requestBody = DomainVerificationRequest(DomainVerificationRequestType.SPF)
+
+      domains.info("dom-123", requestBody, signer, RequestOverrides(headers = mapOf("X-Custom" to "keep")))
+
+      val pathCaptor = argumentCaptor<String>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePostEncoded<Response<DomainVerificationResult>>(
+        pathCaptor.capture(),
+        any(),
+        requestBodyCaptor.capture(),
+        anyOrNull(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123/info", pathCaptor.firstValue)
+      assertEquals("""{"type":"spf"}""", requestBodyCaptor.firstValue)
+      assertEquals("keep", overrideParamCaptor.firstValue.headers?.get("X-Custom"))
+      assertEquals("service-account-key-id", overrideParamCaptor.firstValue.headers?.get("X-Nylas-Kid"))
+      assertTrue(overrideParamCaptor.firstValue.omitAuthorization)
+    }
+
+    @Test
     fun `verifying a managed domain calls requests with the correct params`() {
       val requestBody = DomainVerificationRequest(DomainVerificationRequestType.DKIM)
       val overrides = serviceAccountOverrides()
@@ -628,6 +742,31 @@ class DomainsTests {
       assertEquals(Types.newParameterizedType(Response::class.java, DomainVerificationResult::class.java), typeCaptor.firstValue)
       assertEquals("""{"type":"dkim"}""", requestBodyCaptor.firstValue)
       assertServiceAccountOverrides(overrides, overrideParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `verifying a managed domain with signer calls requests with signer headers`() {
+      val signer = ServiceAccountSigner(testKeyPair().private, "service-account-key-id")
+      val requestBody = DomainVerificationRequest(DomainVerificationRequestType.DKIM)
+
+      domains.verify("dom-123", requestBody, signer, RequestOverrides(headers = mapOf("X-Custom" to "keep")))
+
+      val pathCaptor = argumentCaptor<String>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePostEncoded<Response<DomainVerificationResult>>(
+        pathCaptor.capture(),
+        any(),
+        requestBodyCaptor.capture(),
+        anyOrNull(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals("v3/admin/domains/dom-123/verify", pathCaptor.firstValue)
+      assertEquals("""{"type":"dkim"}""", requestBodyCaptor.firstValue)
+      assertEquals("keep", overrideParamCaptor.firstValue.headers?.get("X-Custom"))
+      assertEquals("service-account-key-id", overrideParamCaptor.firstValue.headers?.get("X-Nylas-Kid"))
+      assertTrue(overrideParamCaptor.firstValue.omitAuthorization)
     }
 
     private fun assertServiceAccountOverrides(expected: RequestOverrides, actual: RequestOverrides) {
