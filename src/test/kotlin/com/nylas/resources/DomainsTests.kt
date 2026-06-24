@@ -4,6 +4,7 @@ import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.models.Response
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import com.squareup.moshi.Types
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -275,6 +276,35 @@ class DomainsTests {
         overrideParamCaptor.capture(),
       )
       assertEquals("override-key", overrideParamCaptor.firstValue.apiKey)
+    }
+
+    @Test
+    fun `sending a transactional email URL-encodes a domain containing reserved characters`() {
+      val reservedDomainName = "mail/acme.example"
+      val request = SendTransactionalEmailRequest.Builder(
+        to = listOf(EmailName(email = "jane.doe@example.com", name = "Jane Doe")),
+        from = EmailName(email = "support@acme.com", name = "ACME Support"),
+      ).build()
+
+      domains.sendTransactionalEmail(reservedDomainName, request)
+
+      val pathCaptor = argumentCaptor<String>()
+      val typeCaptor = argumentCaptor<Type>()
+      val requestBodyCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).executePostEncoded<Response<Message>>(
+        pathCaptor.capture(),
+        typeCaptor.capture(),
+        requestBodyCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals(
+        "v3/domains/${PathEncoder.encode(reservedDomainName)}/messages/send",
+        pathCaptor.firstValue,
+      )
     }
 
     @Test

@@ -17,7 +17,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun list(identifier: String, queryParams: ListContactsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<Contact> {
-    val path = String.format("v3/grants/%s/contacts", identifier)
+    val path = String.format("v3/grants/%s/contacts", PathEncoder.encode(identifier))
     return listResourceEncoded(path, queryParams, overrides)
   }
 
@@ -32,7 +32,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, contactId: String, queryParams: FindContactQueryParams? = null, overrides: RequestOverrides? = null): Response<Contact> {
-    val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
+    val path = String.format("v3/grants/%s/contacts/%s", PathEncoder.encode(identifier), PathEncoder.encode(contactId))
     return findResourceEncoded(path, queryParams, overrides)
   }
 
@@ -46,7 +46,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun create(identifier: String, requestBody: CreateContactRequest, overrides: RequestOverrides? = null): Response<Contact> {
-    val path = String.format("v3/grants/%s/contacts", identifier)
+    val path = String.format("v3/grants/%s/contacts", PathEncoder.encode(identifier))
     val adapter = JsonHelper.moshi().adapter(CreateContactRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return createResourceEncoded(path, serializedRequestBody, overrides = overrides)
@@ -63,7 +63,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun update(identifier: String, contactId: String, requestBody: UpdateContactRequest, overrides: RequestOverrides? = null): Response<Contact> {
-    val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
+    val path = String.format("v3/grants/%s/contacts/%s", PathEncoder.encode(identifier), PathEncoder.encode(contactId))
     val adapter = JsonHelper.moshi().adapter(UpdateContactRequest::class.java)
     val serializedRequestBody = adapter.toJson(requestBody)
     return updateResourceEncoded(path, serializedRequestBody, overrides = overrides)
@@ -79,7 +79,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun destroy(identifier: String, contactId: String, overrides: RequestOverrides? = null): DeleteResponse {
-    val path = String.format("v3/grants/%s/contacts/%s", identifier, PathEncoder.encode(contactId))
+    val path = String.format("v3/grants/%s/contacts/%s", PathEncoder.encode(identifier), PathEncoder.encode(contactId))
     return destroyResourceEncoded(path, overrides = overrides)
   }
 
@@ -93,7 +93,7 @@ class Contacts(client: NylasClient) : Resource<Contact>(client, Contact::class.j
   @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun listGroups(identifier: String, queryParams: ListContactGroupsQueryParams? = null, overrides: RequestOverrides? = null): ListResponse<ContactGroup> {
-    val path = String.format("v3/grants/%s/contacts/groups", identifier)
+    val path = String.format("v3/grants/%s/contacts/groups", PathEncoder.encode(identifier))
     val responseType = Types.newParameterizedType(ListResponse::class.java, ContactGroup::class.java)
     return client.executeGetEncoded(path, responseType, queryParams, overrides)
   }

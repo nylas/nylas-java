@@ -53,7 +53,7 @@ class Domains(client: NylasClient) : Resource<Message>(client, Message::class.ja
     requestBody: SendTransactionalEmailRequest,
     overrides: RequestOverrides? = null,
   ): Response<Message> {
-    val path = String.format("v3/domains/%s/messages/send", domainName)
+    val path = String.format("v3/domains/%s/messages/send", PathEncoder.encode(domainName))
     val responseType = Types.newParameterizedType(Response::class.java, Message::class.java)
     val adapter = JsonHelper.moshi().adapter(SendTransactionalEmailRequest::class.java)
 

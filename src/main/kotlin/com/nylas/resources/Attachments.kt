@@ -24,7 +24,7 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun find(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams, overrides: RequestOverrides? = null): Response<Attachment> {
-    val path = String.format("v3/grants/%s/attachments/%s", identifier, PathEncoder.encode(attachmentId))
+    val path = String.format("v3/grants/%s/attachments/%s", PathEncoder.encode(identifier), PathEncoder.encode(attachmentId))
     return findResourceEncoded(path, queryParams, overrides = overrides)
   }
 
@@ -46,7 +46,7 @@ class Attachments(client: NylasClient) : Resource<Attachment>(client, Attachment
   @Throws(NylasOAuthError::class, NylasSdkTimeoutError::class)
   @JvmOverloads
   fun download(identifier: String, attachmentId: String, queryParams: FindAttachmentQueryParams, overrides: RequestOverrides? = null): ResponseBody {
-    val path = String.format("v3/grants/%s/attachments/%s/download", identifier, PathEncoder.encode(attachmentId))
+    val path = String.format("v3/grants/%s/attachments/%s/download", PathEncoder.encode(identifier), PathEncoder.encode(attachmentId))
 
     return client.downloadResponseEncoded(path, queryParams, overrides = overrides)
   }

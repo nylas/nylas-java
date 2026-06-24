@@ -3,6 +3,7 @@ package com.nylas.resources
 import com.nylas.NylasClient
 import com.nylas.models.*
 import com.nylas.util.JsonHelper
+import com.nylas.util.PathEncoder
 import com.squareup.moshi.Types
 import okhttp3.Call
 import okhttp3.Interceptor
@@ -160,6 +161,27 @@ class AttachmentsTests {
       )
 
       assertEquals("v3/grants/$grantId/attachments/INBOX%2Fattach-123", pathCaptor.firstValue)
+    }
+
+    @Test
+    fun `download URL-encodes a grant identifier containing reserved characters`() {
+      val reservedGrantId = "grant/user@example.com"
+
+      attachments.download(reservedGrantId, attachmentId, queryParams)
+
+      val pathCaptor = argumentCaptor<String>()
+      val queryParamCaptor = argumentCaptor<IQueryParams>()
+      val overrideParamCaptor = argumentCaptor<RequestOverrides>()
+      verify(mockNylasClient).downloadResponseEncoded(
+        pathCaptor.capture(),
+        queryParamCaptor.capture(),
+        overrideParamCaptor.capture(),
+      )
+
+      assertEquals(
+        "v3/grants/${PathEncoder.encode(reservedGrantId)}/attachments/$attachmentId/download",
+        pathCaptor.firstValue,
+      )
     }
   }
 }
