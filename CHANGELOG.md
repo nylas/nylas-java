@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [unreleased]
+## [v2.17.1] - Release 2026-06-25
 
 ### Fixed
 * Prevent double-encoding of pre-encoded path IDs when building request URLs, fixing Gmail attachment download 404s for attachment IDs containing reserved characters such as `:` and `=`
