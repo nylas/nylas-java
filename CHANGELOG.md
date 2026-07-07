@@ -1,5 +1,10 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Changed
+* Clarify that event `default` visibility is Google-only
+
 ## [v2.17.1] - Release 2026-06-25
 
 ### Fixed
