@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+* `GetFreeBusyRequest.tentativeAsBusy` mapped to the `tentative_as_busy` request field while preserving the existing Java constructor overload for backward compatibility
+
 ### Changed
 * Clarify that event `default` visibility is Google-only
 

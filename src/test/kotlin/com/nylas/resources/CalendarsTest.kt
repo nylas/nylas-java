@@ -101,6 +101,38 @@ class CalendarsTest {
       assertEquals(2, cal.notetaker?.rules?.participantFilter?.participantsGte)
       assertEquals(10, cal.notetaker?.rules?.participantFilter?.participantsLte)
     }
+
+    @Test
+    fun `GetFreeBusyRequest serializes tentative as busy when set`() {
+      val adapter = JsonHelper.moshi().adapter(GetFreeBusyRequest::class.java)
+      val request = GetFreeBusyRequest(
+        startTime = 1620000000,
+        endTime = 1620003600,
+        emails = listOf("test@nylas.com"),
+        tentativeAsBusy = true,
+      )
+
+      val json = adapter.toJson(request)
+      val deserialized = adapter.fromJson(json)!!
+
+      assertEquals(true, deserialized.tentativeAsBusy)
+    }
+
+    @Test
+    fun `GetFreeBusyRequest legacy constructor remains backward compatible`() {
+      val adapter = JsonHelper.moshi().adapter(GetFreeBusyRequest::class.java)
+      val request = GetFreeBusyRequest(
+        1620000000,
+        1620003600,
+        listOf("test@nylas.com"),
+      )
+
+      val json = adapter.toJson(request)
+      val deserialized = adapter.fromJson(json)!!
+
+      assertEquals(null, deserialized.tentativeAsBusy)
+      assertEquals(false, json.contains("tentative_as_busy"))
+    }
   }
 
   @Nested
@@ -923,6 +955,7 @@ class CalendarsTest {
         startTime = 1620000000,
         endTime = 1620000000,
         emails = listOf("test@nylas.com"),
+        tentativeAsBusy = true,
       )
 
       calendars.getFreeBusy(grantId, getFreeBusyRequest)

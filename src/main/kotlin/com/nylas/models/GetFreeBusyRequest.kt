@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 /**
  * Class representation of a Nylas get free-busy request
  */
-data class GetFreeBusyRequest(
+data class GetFreeBusyRequest @JvmOverloads constructor(
   /**
    * Unix timestamp representing the start of the time block for assessing the account's free/busy schedule.
    */
@@ -21,4 +21,9 @@ data class GetFreeBusyRequest(
    */
   @Json(name = "emails")
   val emails: List<String>,
+  /**
+   * When true, tentative events are counted as busy.
+   */
+  @Json(name = "tentative_as_busy")
+  val tentativeAsBusy: Boolean? = null,
 )
