@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [v2.18.0] - Release 2026-07-10
 
 ### Added
 * `GetFreeBusyRequest.tentativeAsBusy` mapped to the `tentative_as_busy` request field while preserving the existing Java constructor overload for backward compatibility
