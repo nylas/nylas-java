@@ -50,13 +50,13 @@ This repository is for contributors and anyone installing the SDK from source. I
 Kotlin DSL (`build.gradle.kts`):
 
 ```kotlin
-implementation("com.nylas.sdk:nylas:2.17.1")
+implementation("com.nylas.sdk:nylas:2.18.0")
 ```
 
 Groovy (`build.gradle`):
 
 ```groovy
-implementation 'com.nylas.sdk:nylas:2.17.1'
+implementation 'com.nylas.sdk:nylas:2.18.0'
 ```
 
 ### Maven
@@ -65,7 +65,7 @@ implementation 'com.nylas.sdk:nylas:2.17.1'
 <dependency>
   <groupId>com.nylas.sdk</groupId>
   <artifactId>nylas</artifactId>
-  <version>2.17.1</version>
+  <version>2.18.0</version>
 </dependency>
 ```
 
