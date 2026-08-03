@@ -51,6 +51,19 @@ The `LargeAttachmentsExample` demonstrates how to send emails with large file at
 - Use the `FileUtils.attachFileRequestBuilder()` helper method for easy file attachment
 - Automatic cleanup of temporary test files
 
+### Custom Tracking Hostname Example
+
+`CustomTrackingDomainExample` demonstrates the optional `TrackingOptions.domainName` field for:
+
+- regular grant-based sends;
+- draft creation;
+- scheduled grant-based sends; and
+- Transactional Send.
+
+The hostname must be active and owned by the authenticated organization. Enable link tracking, open tracking, or both when setting it. Omit `domainName` to keep using the default Nylas tracking hostname.
+
+For Transactional Send, the values are intentionally distinct: `NYLAS_TRANSACTIONAL_SENDER_DOMAIN` is the verified sender domain used in `/v3/domains/{domain_name}/messages/send`, while `NYLAS_TRACKING_HOSTNAME` becomes `tracking_options.domain_name` in the request body.
+
 ## Setup
 
 ### 1. Environment Setup
@@ -71,6 +84,10 @@ NYLAS_GRANT_ID=your_grant_id_here
 
 # Test email address (required for large attachments example)
 NYLAS_TEST_EMAIL=test@example.com
+
+# An active custom hostname owned by your organization (custom tracking example)
+RECIPIENT_EMAIL=recipient@example.com
+NYLAS_TRACKING_HOSTNAME=tracking.example.com
 
 # Add your meeting link (Zoom, Google Meet, or Microsoft Teams) - for Notetaker example
 MEETING_LINK=your_meeting_link_here
@@ -120,6 +137,14 @@ Run Java Large Attachments example:
 ./gradlew :examples:run -PmainClass=com.nylas.examples.LargeAttachmentsExample
 ```
 
+Run the custom tracking hostname example (defaults to a regular send):
+```bash
+NYLAS_CUSTOM_TRACKING_OPERATION=regular \
+  ./gradlew :examples:run -PmainClass=com.nylas.examples.CustomTrackingDomainExample
+```
+
+Choose `draft`, `scheduled`, or `transactional` for the other operations. Scheduled sends also require `NYLAS_SEND_AT` as a Unix timestamp. Transactional Send requires `NYLAS_TRANSACTIONAL_SENDER_DOMAIN` and `SENDER_EMAIL`; the non-transactional operations require `NYLAS_GRANT_ID`.
+
 #### Option 2: Using the Makefile
 
 List available examples:
@@ -147,6 +172,7 @@ make kotlin-way
    - `EventsExample.java` (Java - demonstrates events)
    - `FoldersExample.java` (Java - demonstrates folders and single_level parameter)
    - `LargeAttachmentsExample.java` (Java - demonstrates large file attachments)
+   - `CustomTrackingDomainExample.java` (Java - demonstrates custom link and open tracking hostnames)
    - `NotetakerExample.java` (Java - demonstrates notetakers)
    - `KotlinNotetakerExample.kt` (Kotlin - demonstrates notetakers)
    - `KotlinFoldersExample.kt` (Kotlin - demonstrates folders and single_level parameter)
@@ -193,4 +219,4 @@ The Messages examples showcase the following new features added to the Nylas SDK
 
 ## Additional Information
 
-For more information about the Nylas API, refer to the [Nylas API documentation](https://developer.nylas.com/). 
+For more information about the Nylas API, refer to the [Nylas API documentation](https://developer.nylas.com/).

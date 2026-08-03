@@ -56,6 +56,7 @@ tasks.register("listExamples") {
         println("- Java-Messages: com.nylas.examples.MessagesExample")
         println("- Java-Folders: com.nylas.examples.FoldersExample")
         println("- Java-Large-Attachments: com.nylas.examples.LargeAttachmentsExample")
+        println("- Java-Custom-Tracking-Domain: com.nylas.examples.CustomTrackingDomainExample")
         println("- Kotlin-Notetaker: com.nylas.examples.KotlinNotetakerExampleKt")
         println("- Kotlin-Messages: com.nylas.examples.KotlinMessagesExampleKt")
         println("- Kotlin-Folders: com.nylas.examples.KotlinFoldersExampleKt")
@@ -73,4 +74,4 @@ sourceSets {
             srcDir("src/main/kotlin")
         }
     }
-} 
+}

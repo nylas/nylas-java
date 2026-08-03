@@ -63,7 +63,7 @@ class DomainsTests {
           "body": "Welcome! We're here to help.",
           "send_at": 1620000000,
           "reply_to_message_id": "msg-123",
-          "tracking_options": {"opens": true, "links": true, "thread_replies": false, "label": "welcome"},
+          "tracking_options": {"opens": true, "links": true, "thread_replies": false, "label": "welcome", "domain_name": "tracking.example.com"},
           "use_draft": false,
           "custom_headers": [{"name": "X-Custom", "value": "custom-value"}],
           "is_plaintext": false
@@ -91,6 +91,7 @@ class DomainsTests {
       assertEquals(true, request.trackingOptions?.links)
       assertEquals(false, request.trackingOptions?.threadReplies)
       assertEquals("welcome", request.trackingOptions?.label)
+      assertEquals("tracking.example.com", request.trackingOptions?.domainName)
       assertEquals(false, request.useDraft)
       assertEquals(1, request.customHeaders?.size)
       assertEquals("X-Custom", request.customHeaders?.get(0)?.name)
