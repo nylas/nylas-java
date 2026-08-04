@@ -145,7 +145,8 @@ class MessagesTests {
               "opens": true,
               "thread_replies": false,
               "links": true,
-              "label": "test-campaign"
+              "label": "test-campaign",
+              "domain_name": "tracking.example.com"
             }
           }
           """.trimIndent(),
@@ -160,6 +161,7 @@ class MessagesTests {
       assertEquals(false, message.trackingOptions?.threadReplies)
       assertEquals(true, message.trackingOptions?.links)
       assertEquals("test-campaign", message.trackingOptions?.label)
+      assertEquals("tracking.example.com", message.trackingOptions?.domainName)
     }
 
     @Test
