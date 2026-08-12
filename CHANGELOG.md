@@ -5,6 +5,9 @@
 ### Added
 * Optional `TrackingOptions.domainName` support for custom link and open tracking hostnames in regular sends, Transactional Send, drafts, and scheduled sends. The field serializes as `tracking_options.domain_name` and is omitted when unset.
 
+### Fixed
+* `attendees` (events) and `any_email` (messages, threads, drafts) are now sent as a single comma-delimited query parameter instead of repeated parameters. The API parses both as comma-delimited strings, so passing more than one value previously caused the API to keep only the last one, returning silently incorrect, order-dependent results. Public types are unchanged (`List<String>`), and null, empty, and single-element values produce the same request as before. Note that `any_email` accepts at most 25 addresses; over-long lists now surface an API validation error instead of silently filtering on a single address. `event_type` is unaffected — the API genuinely supports repeating it.
+
 ## [v2.18.0] - Release 2026-07-10
 
 ### Added

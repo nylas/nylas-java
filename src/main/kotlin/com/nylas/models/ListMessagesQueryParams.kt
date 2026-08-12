@@ -25,6 +25,8 @@ data class ListMessagesQueryParams(
   val subject: String? = null,
   /**
    * Return emails that have been sent or received from this list of email addresses.
+   * Pass one email address per list entry; the SDK sends them to the API as a single
+   * comma-delimited value. The API accepts a maximum of 25 addresses.
    */
   @Json(name = "any_email")
   val anyEmail: List<String>? = null,

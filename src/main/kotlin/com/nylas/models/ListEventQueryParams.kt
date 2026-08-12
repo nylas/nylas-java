@@ -112,7 +112,10 @@ data class ListEventQueryParams(
   val updatedAfter: Long? = null,
   /**
    * Filter for events that include the specified attendees.
-   * This parameter accepts a comma-delimited list of email addresses.
+   * Pass one email address per list entry; the SDK sends them to the API as a single
+   * comma-delimited value.
+   * Note: multiple attendees are matched with AND — an event must include every address
+   * listed to be returned.
    * (Not supported for virtual calendars)
    */
   @Json(name = "attendees")
@@ -295,7 +298,10 @@ data class ListEventQueryParams(
 
     /**
      * Sets the attendees to filter for events with.
-     * This parameter accepts a comma-delimited list of email addresses.
+     * Pass one email address per list entry; the SDK sends them to the API as a single
+     * comma-delimited value.
+     * Note: multiple attendees are matched with AND — an event must include every address
+     * listed to be returned.
      * (Not supported for virtual calendars)
      * @param attendees The attendees to filter for events with.
      * @return The builder.
