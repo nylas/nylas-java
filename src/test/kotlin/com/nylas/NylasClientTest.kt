@@ -225,6 +225,102 @@ class NylasClientTest {
   }
 
   @Nested
+  inner class QueryParamSerializationTests {
+    private val mockHttpClient: OkHttpClient = mock(OkHttpClient::class.java)
+    private val mockCall: Call = mock(Call::class.java)
+    private val mockResponse: Response = mock(Response::class.java)
+    private val mockResponseBody: ResponseBody = mock(ResponseBody::class.java)
+
+    @BeforeEach
+    fun setup() {
+      MockitoAnnotations.openMocks(this)
+      val mockOkHttpClientBuilder: OkHttpClient.Builder = mock()
+      whenever(mockOkHttpClientBuilder.addInterceptor(any<Interceptor>())).thenReturn(mockOkHttpClientBuilder)
+      whenever(mockOkHttpClientBuilder.build()).thenReturn(mockHttpClient)
+      whenever(mockHttpClient.newCall(any())).thenReturn(mockCall)
+      whenever(mockCall.execute()).thenReturn(mockResponse)
+      whenever(mockResponse.isSuccessful).thenReturn(true)
+      whenever(mockResponse.body).thenReturn(mockResponseBody)
+      nylasClient = NylasClient("testApiKey", mockOkHttpClientBuilder)
+    }
+
+    private fun requestUrlFor(queryParams: IQueryParams): HttpUrl {
+      whenever(mockResponseBody.source()).thenReturn(Buffer().writeUtf8("{}"))
+      nylasClient.executeGet<Map<String, String>>(
+        "v3/grants/grant-123/events",
+        JsonHelper.mapTypeOf(String::class.java, String::class.java),
+        queryParams,
+      )
+      val requestCaptor = argumentCaptor<Request>()
+      verify(mockHttpClient).newCall(requestCaptor.capture())
+      return requestCaptor.firstValue.url
+    }
+
+    @Test
+    fun `should join attendees into a single comma-delimited param`() {
+      val url = requestUrlFor(
+        ListEventQueryParams(calendarId = "primary", attendees = listOf("rumit@x.com", "ale@x.com")),
+      )
+
+      assertEquals(listOf("rumit@x.com,ale@x.com"), url.queryParameterValues("attendees"))
+      // The comma is percent-encoded on the wire; the API url-decodes before splitting.
+      assertEquals(
+        "https://api.us.nylas.com/v3/grants/grant-123/events?calendar_id=primary&attendees=rumit%40x.com%2Cale%40x.com",
+        url.toString(),
+      )
+    }
+
+    @Test
+    fun `should join any_email into a single comma-delimited param`() {
+      val url = requestUrlFor(ListMessagesQueryParams(anyEmail = listOf("a@x.com", "b@x.com")))
+
+      assertEquals(listOf("a@x.com,b@x.com"), url.queryParameterValues("any_email"))
+    }
+
+    @Test
+    fun `should leave a single-element list unchanged`() {
+      val url = requestUrlFor(ListEventQueryParams(calendarId = "primary", attendees = listOf("rumit@x.com")))
+
+      assertEquals(listOf("rumit@x.com"), url.queryParameterValues("attendees"))
+    }
+
+    @Test
+    fun `should omit the param entirely for an empty list`() {
+      val url = requestUrlFor(ListEventQueryParams(calendarId = "primary", attendees = emptyList()))
+
+      assertEquals(emptyList<String?>(), url.queryParameterValues("attendees"))
+    }
+
+    @Test
+    fun `should pass through a value the caller already comma-joined`() {
+      val url = requestUrlFor(
+        ListEventQueryParams(calendarId = "primary", attendees = listOf("rumit@x.com,ale@x.com")),
+      )
+
+      assertEquals(listOf("rumit@x.com,ale@x.com"), url.queryParameterValues("attendees"))
+    }
+
+    @Test
+    fun `should still repeat event_type params`() {
+      val url = requestUrlFor(
+        ListEventQueryParams(
+          calendarId = "primary",
+          eventType = listOf(EventType.DEFAULT, EventType.OUT_OF_OFFICE),
+        ),
+      )
+
+      assertEquals(listOf("default", "outOfOffice"), url.queryParameterValues("event_type"))
+    }
+
+    @Test
+    fun `should still repeat other list params`() {
+      val url = requestUrlFor(ListMessagesQueryParams(to = listOf("a@x.com", "b@x.com")))
+
+      assertEquals(listOf("a@x.com", "b@x.com"), url.queryParameterValues("to"))
+    }
+  }
+
+  @Nested
   inner class RequestTests {
     private val mockHttpClient: OkHttpClient = mock(OkHttpClient::class.java)
     private val mockCall: Call = mock(Call::class.java)
