@@ -313,10 +313,70 @@ class NylasClientTest {
     }
 
     @Test
-    fun `should still repeat other list params`() {
-      val url = requestUrlFor(ListMessagesQueryParams(to = listOf("a@x.com", "b@x.com")))
+    fun `should send only the first value for single-valued params`() {
+      val url = requestUrlFor(
+        ListMessagesQueryParams(
+          to = listOf("a@x.com", "b@x.com"),
+          from = listOf("c@x.com", "d@x.com"),
+          cc = listOf("e@x.com", "f@x.com"),
+          bcc = listOf("g@x.com", "h@x.com"),
+          inFolder = listOf("folder-1", "folder-2"),
+        ),
+      )
 
-      assertEquals(listOf("a@x.com", "b@x.com"), url.queryParameterValues("to"))
+      // The API binds each of these as a scalar string and would keep only one value anyway;
+      // sending one param makes which value wins deterministic instead of parser-dependent.
+      assertEquals(listOf("a@x.com"), url.queryParameterValues("to"))
+      assertEquals(listOf("c@x.com"), url.queryParameterValues("from"))
+      assertEquals(listOf("e@x.com"), url.queryParameterValues("cc"))
+      assertEquals(listOf("g@x.com"), url.queryParameterValues("bcc"))
+      assertEquals(listOf("folder-1"), url.queryParameterValues("in"))
+    }
+
+    @Test
+    fun `should collapse single-valued params on threads`() {
+      val url = requestUrlFor(ListThreadsQueryParams(to = listOf("a@x.com", "b@x.com")))
+
+      assertEquals(listOf("a@x.com"), url.queryParameterValues("to"))
+    }
+
+    @Test
+    fun `should collapse single-valued params on drafts`() {
+      val url = requestUrlFor(ListDraftsQueryParams(cc = listOf("a@x.com", "b@x.com")))
+
+      assertEquals(listOf("a@x.com"), url.queryParameterValues("cc"))
+    }
+
+    @Test
+    fun `should leave a single-valued param untouched when given one value`() {
+      val url = requestUrlFor(ListMessagesQueryParams(to = listOf("a@x.com")))
+
+      assertEquals("https://api.us.nylas.com/v3/grants/grant-123/events?to=a%40x.com", url.toString())
+    }
+
+    @Test
+    fun `should send only the first metadata pair`() {
+      val url = requestUrlFor(
+        ListMessagesQueryParams(metadataPair = linkedMapOf("key1" to "value1", "key2" to "value2")),
+      )
+
+      // The API accepts exactly one key:value pair and would ignore the rest.
+      assertEquals(listOf("key1:value1"), url.queryParameterValues("metadata_pair"))
+    }
+
+    @Test
+    fun `should omit metadata_pair given an empty map`() {
+      val url = requestUrlFor(ListMessagesQueryParams(metadataPair = emptyMap()))
+
+      assertEquals(emptyList<String?>(), url.queryParameterValues("metadata_pair"))
+    }
+
+    @Test
+    fun `should omit single-valued params given an empty list`() {
+      val url = requestUrlFor(ListMessagesQueryParams(to = emptyList(), cc = emptyList()))
+
+      assertEquals(emptyList<String?>(), url.queryParameterValues("to"))
+      assertEquals(emptyList<String?>(), url.queryParameterValues("cc"))
     }
   }
 
@@ -570,7 +630,10 @@ class NylasClientTest {
       verify(mockHttpClient).newCall(requestCaptor.capture())
       val capturedRequest = requestCaptor.firstValue
 
-      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path?foo=bar&list=a&list=b&list=c&map=key1%3Avalue1&map=key2%3Avalue2")
+      // Maps are metadata_pair, which the API accepts as exactly one key:value pair, so only
+      // the first entry is sent. Lists are repeated; the parameters the API cannot accept
+      // repeated are collapsed upstream, in IQueryParams.convertToMap.
+      assertEquals(capturedRequest.url.toString(), "https://api.us.nylas.com/test/path?foo=bar&list=a&list=b&list=c&map=key1%3Avalue1")
       assertEquals(capturedRequest.method, "GET")
     }
 

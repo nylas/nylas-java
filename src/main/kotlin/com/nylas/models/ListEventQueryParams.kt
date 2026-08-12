@@ -138,6 +138,14 @@ data class ListEventQueryParams(
   @Json(name = "tentative_as_busy")
   val tentativeAsBusy: Boolean? = null,
 ) : IQueryParams {
+
+  /**
+   * The API does not accept repeated values for this parameter.
+   * See [joinCommaDelimitedParams].
+   */
+  override fun convertToMap(): Map<String, Any> =
+    super.convertToMap().joinCommaDelimitedParams("attendees")
+
   /**
    * Builder for [ListEventQueryParams].
    */

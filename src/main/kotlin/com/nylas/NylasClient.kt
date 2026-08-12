@@ -19,18 +19,6 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 /**
- * Query parameters the API parses as a single comma-delimited string rather than as
- * repeated parameters. Keyed by parameter name because these names mean the same thing
- * on every endpoint that accepts them.
- *
- * Note: `event_type` is deliberately absent — the API genuinely supports repeating it.
- *
- * ponytail: a key-name set instead of per-class metadata; move it onto IQueryParams only
- * if some endpoint ever uses one of these names with repeated-param semantics.
- */
-private val COMMA_DELIMITED_QUERY_KEYS = setOf("attendees", "any_email")
-
-/**
  * The NylasClient is the entry point to the Java SDK.
  *
  * An instance holds a configured http client pointing to a base URL and is intended to be reused and shared
@@ -668,22 +656,16 @@ open class NylasClient(
     for ((key, value) in params) {
       when (value) {
         is List<*> -> {
-          if (key in COMMA_DELIMITED_QUERY_KEYS) {
-            // The API parses these as a single comma-delimited string; repeated
-            // params would silently keep only the last value.
-            if (value.isNotEmpty()) {
-              url.addQueryParameter(key, value.joinToString(",") { it.toString() })
-            }
-          } else {
-            for (item in value) {
-              url.addQueryParameter(key, item.toString())
-            }
+          // Parameters the API does not accept as repeated values are already collapsed by
+          // the query parameter class itself, via IQueryParams.convertToMap.
+          for (item in value) {
+            url.addQueryParameter(key, item.toString())
           }
         }
         is Map<*, *> -> {
-          for ((k, v) in value) {
-            url.addQueryParameter(key, "$k:$v")
-          }
+          // Only metadata_pair is a map, and the API accepts exactly one `key:value` pair —
+          // repeating the parameter makes it keep just one and silently ignore the rest.
+          value.entries.firstOrNull()?.let { (k, v) -> url.addQueryParameter(key, "$k:$v") }
         }
         is Double -> {
           url.addQueryParameter(key, value.toInt().toString())
