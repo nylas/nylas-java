@@ -25,21 +25,41 @@ data class ListDraftsQueryParams(
   val subject: String? = null,
   /**
    * Return emails that have been sent or received from this list of email addresses.
+   * Pass one email address per list entry; the SDK sends them to the API as a single
+   * comma-delimited value. The API accepts a maximum of 25 addresses.
    */
   @Json(name = "any_email")
   val anyEmail: List<String>? = null,
   /**
    * Return items containing drafts to be sent these email address.
+   *
+   * Note: the API filters on a single address. If a list is provided, only the first
+   * entry is used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to
+   * String in a future major version.
    */
   @Json(name = "to")
   val to: List<String>? = null,
   /**
    * Return items containing drafts cc'ing these email address.
+   *
+   * Note: the API filters on a single address. If a list is provided, only the first
+   * entry is used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to
+   * String in a future major version.
    */
   @Json(name = "cc")
   val cc: List<String>? = null,
   /**
    * Return items containing drafts bcc'ing these email address.
+   *
+   * Note: the API filters on a single address. If a list is provided, only the first
+   * entry is used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to
+   * String in a future major version.
    */
   @Json(name = "bcc")
   val bcc: List<String>? = null,
@@ -64,6 +84,16 @@ data class ListDraftsQueryParams(
   @Json(name = "has_attachment")
   val hasAttachment: Boolean? = null,
 ) : IQueryParams {
+
+  /**
+   * The API does not accept repeated values for these parameters.
+   * See [joinCommaDelimitedParams] and [collapseSingleValueParams].
+   */
+  override fun convertToMap(): Map<String, Any> =
+    super.convertToMap()
+      .collapseSingleValueParams("to", "cc", "bcc")
+      .joinCommaDelimitedParams("any_email")
+
   /**
    * Builder for [ListDraftsQueryParams].
    */

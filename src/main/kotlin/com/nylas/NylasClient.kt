@@ -656,14 +656,16 @@ open class NylasClient(
     for ((key, value) in params) {
       when (value) {
         is List<*> -> {
+          // Parameters the API does not accept as repeated values are already collapsed by
+          // the query parameter class itself, via IQueryParams.convertToMap.
           for (item in value) {
             url.addQueryParameter(key, item.toString())
           }
         }
         is Map<*, *> -> {
-          for ((k, v) in value) {
-            url.addQueryParameter(key, "$k:$v")
-          }
+          // Only metadata_pair is a map, and the API accepts exactly one `key:value` pair —
+          // repeating the parameter makes it keep just one and silently ignore the rest.
+          value.entries.firstOrNull()?.let { (k, v) -> url.addQueryParameter(key, "$k:$v") }
         }
         is Double -> {
           url.addQueryParameter(key, value.toInt().toString())

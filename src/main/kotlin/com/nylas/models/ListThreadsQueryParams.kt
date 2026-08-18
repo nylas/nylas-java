@@ -22,26 +22,52 @@ data class ListThreadsQueryParams(
   val subject: String? = null,
   /**
    * Return emails that have been sent or received from this list of email addresses.
+   * Pass one email address per list entry; the SDK sends them to the API as a single
+   * comma-delimited value. The API accepts a maximum of 25 addresses.
    */
   @Json(name = "any_email")
   val anyEmail: List<String>? = null,
   /**
    * Return items containing messages sent to these email address.
+   *
+   * Note: the API filters on a single address. If a list is provided, only the first
+   * entry is used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to
+   * String in a future major version.
    */
   @Json(name = "to")
   val to: List<String>? = null,
   /**
    * Return items containing messages sent from these email address.
+   *
+   * Note: the API filters on a single address. If a list is provided, only the first
+   * entry is used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to
+   * String in a future major version.
    */
   @Json(name = "from")
   val from: List<String>? = null,
   /**
    * Return items containing messages cc'd on these email address.
+   *
+   * Note: the API filters on a single address. If a list is provided, only the first
+   * entry is used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to
+   * String in a future major version.
    */
   @Json(name = "cc")
   val cc: List<String>? = null,
   /**
    * Return items containing messages bcc'd on these email address.
+   *
+   * Note: the API filters on a single address. If a list is provided, only the first
+   * entry is used.
+   *
+   * @deprecated The List<String> type for this parameter is deprecated and will be changed to
+   * String in a future major version.
    */
   @Json(name = "bcc")
   val bcc: List<String>? = null,
@@ -91,22 +117,13 @@ data class ListThreadsQueryParams(
 ) : IQueryParams {
 
   /**
-   * Override convertToMap to handle the inFolder parameter correctly.
-   * The API expects a single folder ID, so we use only the first item if a list is provided.
+   * The API does not accept repeated values for these parameters.
+   * See [joinCommaDelimitedParams] and [collapseSingleValueParams].
    */
-  override fun convertToMap(): Map<String, Any> {
-    val map = super.convertToMap().toMutableMap()
-
-    // Handle inFolder parameter to use only the first item if it's a list
-    if (inFolder?.isNotEmpty() == true) {
-      map["in"] = inFolder.first()
-    } else if (inFolder?.isEmpty() == true) {
-      // Remove the "in" key if the list is empty
-      map.remove("in")
-    }
-
-    return map
-  }
+  override fun convertToMap(): Map<String, Any> =
+    super.convertToMap()
+      .collapseSingleValueParams("to", "from", "cc", "bcc", "in")
+      .joinCommaDelimitedParams("any_email")
 
   /**
    * Builder for [ListThreadsQueryParams].
