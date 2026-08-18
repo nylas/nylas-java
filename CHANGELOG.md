@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## Unreleased
+## [v2.18.1] - Release 2026-08-18
 
 ### Added
 * Optional `TrackingOptions.domainName` support for custom link and open tracking hostnames in regular sends, Transactional Send, drafts, and scheduled sends. The field serializes as `tracking_options.domain_name` and is omitted when unset.
