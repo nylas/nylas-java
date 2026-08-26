@@ -28,6 +28,12 @@ data class Contact(
   val jobTitle: String? = null,
   @Json(name = "manager_name")
   val managerName: String? = null,
+  /**
+   * Nylas-owned metadata associated with the contact. Metadata is not written
+   * to the provider and does not follow a contact if its public ID changes.
+   */
+  @Json(name = "metadata")
+  val metadata: Map<String, String>? = null,
   @Json(name = "middle_name")
   val middleName: String? = null,
   @Json(name = "nickname")

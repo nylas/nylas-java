@@ -1,5 +1,11 @@
 # Nylas Java SDK Changelog
 
+## [Unreleased]
+
+### Added
+* Contact metadata request/response models and `metadata_pair` filtering.
+* `contact.updated` and `contact.deleted` webhook trigger constants with iCloud and Yahoo compatibility documentation.
+
 ## [v2.18.1] - Release 2026-08-18
 
 ### Added

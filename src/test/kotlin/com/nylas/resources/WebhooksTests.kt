@@ -52,7 +52,8 @@ class WebhooksTests {
             "id": "UMWjAjMeWQ4D8gYF2moonK4486",
             "description": "Production webhook destination",
             "trigger_types": [
-              "calendar.created"
+              "contact.updated",
+              "contact.deleted"
             ],
             "webhook_url": "https://example.com/webhooks",
             "status": "active",
@@ -70,13 +71,21 @@ class WebhooksTests {
       val webhook = adapter.fromJson(jsonBuffer)!!
       assertEquals("UMWjAjMeWQ4D8gYF2moonK4486", webhook.id)
       assertEquals("Production webhook destination", webhook.description)
-      assertEquals(listOf(WebhookTriggers.CALENDAR_CREATED), webhook.triggerTypes)
+      assertEquals(listOf(WebhookTriggers.CONTACT_UPDATED, WebhookTriggers.CONTACT_DELETED), webhook.triggerTypes)
       assertEquals("https://example.com/webhooks", webhook.webhookUrl)
       assertEquals(WebhookStatus.ACTIVE, webhook.status)
       assertEquals(listOf("jane@example.com", "joe@example.com"), webhook.notificationEmailAddresses)
       assertEquals(1234567890, webhook.statusUpdatedAt)
       assertEquals(1234567890, webhook.createdAt)
       assertEquals(1234567890, webhook.updatedAt)
+    }
+
+    @Test
+    fun `contact webhook triggers serialize using the supported wire names`() {
+      val adapter = JsonHelper.moshi().adapter(WebhookTriggers::class.java)
+
+      assertEquals("\"contact.updated\"", adapter.toJson(WebhookTriggers.CONTACT_UPDATED))
+      assertEquals("\"contact.deleted\"", adapter.toJson(WebhookTriggers.CONTACT_DELETED))
     }
   }
 
