@@ -15,14 +15,6 @@ enum class WebhookTriggers {
   @Json(name = "calendar.deleted")
   CALENDAR_DELETED,
 
-  /** Native iCloud supports this contact trigger; Yahoo does not. */
-  @Json(name = "contact.updated")
-  CONTACT_UPDATED,
-
-  /** Native iCloud supports this contact trigger; Yahoo does not. */
-  @Json(name = "contact.deleted")
-  CONTACT_DELETED,
-
   @Json(name = "event.created")
   EVENT_CREATED,
 
@@ -67,4 +59,12 @@ enum class WebhookTriggers {
 
   @Json(name = "thread.replied")
   THREAD_REPLIED,
+
+  /** Native iCloud supports this contact trigger; Yahoo does not. */
+  @Json(name = "contact.updated")
+  CONTACT_UPDATED,
+
+  /** Native iCloud supports this contact trigger; Yahoo does not. */
+  @Json(name = "contact.deleted")
+  CONTACT_DELETED,
 }

@@ -223,7 +223,7 @@ class ContactsTests {
     fun `listing contacts calls requests with the correct params`() {
       val queryParams = ListContactsQueryParams(
         limit = 10,
-        metadataPair = mapOf("key1" to "sync_eligible"),
+        email = "test@gmail.com",
       )
 
       contacts.list(grantId, queryParams)
@@ -241,6 +241,25 @@ class ContactsTests {
 
       assertEquals("v3/grants/$grantId/contacts", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Contact::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing contacts accepts a metadata pair query param`() {
+      val queryParams = ListContactsQueryParams(
+        metadataPair = mapOf("key1" to "sync_eligible"),
+      )
+
+      contacts.list(grantId, queryParams)
+
+      val queryParamCaptor = argumentCaptor<ListContactsQueryParams>()
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Contact>>(
+        any(),
+        any(),
+        queryParamCaptor.capture(),
+        anyOrNull(),
+      )
+
       assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
