@@ -44,6 +44,12 @@ data class ListContactsQueryParams(
    */
   @Json(name = "recurse")
   val recurse: Boolean? = null,
+  /**
+   * Filters contacts by one indexed metadata entry. Use one of key1 through
+   * key5. This filter cannot be combined with provider-side contact filters.
+   */
+  @Json(name = "metadata_pair")
+  val metadataPair: Map<String, String>? = null,
 ) : IQueryParams {
   class Builder {
     private var limit: Int? = null
@@ -53,6 +59,7 @@ data class ListContactsQueryParams(
     private var source: SourceType? = null
     private var group: String? = null
     private var recurse: Boolean? = null
+    private var metadataPair: Map<String, String>? = null
 
     /**
      * Sets the maximum number of objects to return.
@@ -107,6 +114,13 @@ data class ListContactsQueryParams(
     fun recurse(recurse: Boolean?) = apply { this.recurse = recurse }
 
     /**
+     * Sets the indexed metadata key/value pair used to filter contacts.
+     * @param metadataPair A single key/value pair using key1 through key5.
+     * @return The builder.
+     */
+    fun metadataPair(metadataPair: Map<String, String>?) = apply { this.metadataPair = metadataPair }
+
+    /**
      * Builds a [ListContactsQueryParams] instance.
      * @return The [ListContactsQueryParams] instance.
      */
@@ -118,6 +132,7 @@ data class ListContactsQueryParams(
       source = source,
       group = group,
       recurse = recurse,
+      metadataPair = metadataPair,
     )
   }
 }

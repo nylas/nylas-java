@@ -19,6 +19,12 @@ data class UpdateContactRequest(
   val jobTitle: String? = null,
   @Json(name = "manager_name")
   val managerName: String? = null,
+  /**
+   * Nylas-owned metadata for the contact. Null preserves existing metadata, a
+   * map replaces it, and an empty map clears it.
+   */
+  @Json(name = "metadata")
+  val metadata: Map<String, String>? = null,
   @Json(name = "middle_name")
   val middleName: String? = null,
   @Json(name = "nickname")
@@ -53,6 +59,7 @@ data class UpdateContactRequest(
     private var imAddresses: List<InstantMessagingAddress>? = null
     private var jobTitle: String? = null
     private var managerName: String? = null
+    private var metadata: Map<String, String>? = null
     private var middleName: String? = null
     private var nickname: String? = null
     private var notes: String? = null
@@ -74,6 +81,7 @@ data class UpdateContactRequest(
     fun imAddresses(imAddresses: List<InstantMessagingAddress>?) = apply { this.imAddresses = imAddresses }
     fun jobTitle(jobTitle: String?) = apply { this.jobTitle = jobTitle }
     fun managerName(managerName: String?) = apply { this.managerName = managerName }
+    fun metadata(metadata: Map<String, String>?) = apply { this.metadata = metadata }
     fun middleName(middleName: String?) = apply { this.middleName = middleName }
     fun nickname(nickname: String?) = apply { this.nickname = nickname }
     fun notes(notes: String?) = apply { this.notes = notes }
@@ -96,6 +104,7 @@ data class UpdateContactRequest(
       imAddresses = imAddresses,
       jobTitle = jobTitle,
       managerName = managerName,
+      metadata = metadata,
       middleName = middleName,
       nickname = nickname,
       notes = notes,

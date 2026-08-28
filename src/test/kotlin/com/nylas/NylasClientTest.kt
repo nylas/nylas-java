@@ -365,6 +365,13 @@ class NylasClientTest {
     }
 
     @Test
+    fun `should serialize a contact metadata pair`() {
+      val url = requestUrlFor(ListContactsQueryParams(metadataPair = mapOf("key1" to "sync_eligible")))
+
+      assertEquals(listOf("key1:sync_eligible"), url.queryParameterValues("metadata_pair"))
+    }
+
+    @Test
     fun `should omit metadata_pair given an empty map`() {
       val url = requestUrlFor(ListMessagesQueryParams(metadataPair = emptyMap()))
 

@@ -78,6 +78,14 @@ class WebhooksTests {
       assertEquals(1234567890, webhook.createdAt)
       assertEquals(1234567890, webhook.updatedAt)
     }
+
+    @Test
+    fun `contact webhook triggers serialize using the supported wire names`() {
+      val adapter = JsonHelper.moshi().adapter(WebhookTriggers::class.java)
+
+      assertEquals("\"contact.updated\"", adapter.toJson(WebhookTriggers.CONTACT_UPDATED))
+      assertEquals("\"contact.deleted\"", adapter.toJson(WebhookTriggers.CONTACT_DELETED))
+    }
   }
 
   @Nested

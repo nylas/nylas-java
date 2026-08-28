@@ -68,6 +68,9 @@ class ContactsTests {
             ],
             "job_title": "Software Engineer",
             "manager_name": "Bill",
+            "metadata": {
+              "key1": "sync_eligible"
+            },
             "middle_name": "Jacob",
             "nickname": "JD",
             "notes": "Loves ramen",
@@ -111,6 +114,7 @@ class ContactsTests {
       assertEquals("5d3qmne77v32r8l4phyuksl2x", contact.id)
       assertEquals("Software Engineer", contact.jobTitle)
       assertEquals("Bill", contact.managerName)
+      assertEquals(mapOf("key1" to "sync_eligible"), contact.metadata)
       assertEquals("Jacob", contact.middleName)
       assertEquals("JD", contact.nickname)
       assertEquals("Loves ramen", contact.notes)
@@ -177,6 +181,29 @@ class ContactsTests {
         contact.physicalAddresses,
       )
     }
+
+    @Test
+    fun `contact requests serialize metadata using the public wire name`() {
+      val createAdapter = JsonHelper.moshi().adapter(CreateContactRequest::class.java)
+      val updateAdapter = JsonHelper.moshi().adapter(UpdateContactRequest::class.java)
+
+      assertEquals(
+        """{"metadata":{"key1":"sync_eligible"}}""",
+        createAdapter.toJson(
+          CreateContactRequest.Builder()
+            .metadata(mapOf("key1" to "sync_eligible"))
+            .build(),
+        ),
+      )
+      assertEquals(
+        """{"metadata":{}}""",
+        updateAdapter.toJson(
+          UpdateContactRequest.Builder()
+            .metadata(emptyMap())
+            .build(),
+        ),
+      )
+    }
   }
 
   @Nested
@@ -214,6 +241,25 @@ class ContactsTests {
 
       assertEquals("v3/grants/$grantId/contacts", pathCaptor.firstValue)
       assertEquals(Types.newParameterizedType(ListResponse::class.java, Contact::class.java), typeCaptor.firstValue)
+      assertEquals(queryParams, queryParamCaptor.firstValue)
+    }
+
+    @Test
+    fun `listing contacts accepts a metadata pair query param`() {
+      val queryParams = ListContactsQueryParams(
+        metadataPair = mapOf("key1" to "sync_eligible"),
+      )
+
+      contacts.list(grantId, queryParams)
+
+      val queryParamCaptor = argumentCaptor<ListContactsQueryParams>()
+      verify(mockNylasClient).executeGetEncoded<ListResponse<Contact>>(
+        any(),
+        any(),
+        queryParamCaptor.capture(),
+        anyOrNull(),
+      )
+
       assertEquals(queryParams, queryParamCaptor.firstValue)
     }
 
@@ -310,6 +356,7 @@ class ContactsTests {
         ),
         jobTitle = "Software Engineer",
         managerName = "Bill",
+        metadata = mapOf("key1" to "sync_eligible"),
         middleName = "Jacob",
         nickname = "JD",
         notes = "Loves ramen",
@@ -386,6 +433,7 @@ class ContactsTests {
         ),
         jobTitle = "Software Engineer",
         managerName = "Bill",
+        metadata = emptyMap(),
         middleName = "Jacob",
         nickname = "JD",
         notes = "Loves ramen",
