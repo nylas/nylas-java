@@ -110,6 +110,27 @@ class Events(client: NylasClient) : Resource<Event>(client, Event::class.java) {
   }
 
   /**
+   * Run multiple event create, update and delete operations in one request.
+   * Supported for Google and Microsoft grants.
+   *
+   * A 207 response (one or more operations failed) is returned, not thrown.
+   * Check each result's [BatchEventResult.status] and [BatchEventResult.error].
+   * @param identifier The identifier of the grant to act upon
+   * @param requestBody The operations to run
+   * @param queryParams The query parameters to include in the request, applied to every operation
+   * @param overrides Optional request overrides to apply
+   * @return The results, in the same order as the operations
+   */
+  @Throws(NylasApiError::class, NylasSdkTimeoutError::class)
+  @JvmOverloads
+  fun batch(identifier: String, requestBody: BatchEventsRequest, queryParams: BatchEventsQueryParams, overrides: RequestOverrides? = null): BatchEventsResponse {
+    val path = String.format("v3/grants/%s/events/batch", PathEncoder.encode(identifier))
+    val adapter = JsonHelper.moshi().adapter(BatchEventsRequest::class.java)
+    val serializedRequestBody = adapter.toJson(requestBody)
+    return client.executePostEncoded(path, BatchEventsResponse::class.java, serializedRequestBody, queryParams, overrides)
+  }
+
+  /**
    * Send RSVP. Allows users to respond to events they have been added to as an attendee.
    * @param identifier The identifier of the grant to act upon
    * @param eventId The id of the Event to update.

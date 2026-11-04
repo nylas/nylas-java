@@ -5,6 +5,7 @@
 ### Added
 * Contact metadata request/response models and `metadata_pair` filtering.
 * `contact.updated` and `contact.deleted` webhook trigger constants with iCloud and Yahoo compatibility documentation.
+* Added Events batch endpoint (Google and Microsoft): `Events.batch()` runs multiple event create, update and delete operations in one `POST /v3/grants/{grant_id}/events/batch` request. A 207 Multi-Status response is returned, not thrown; check each result's `status` and `error`.
 
 ## [v2.18.1] - Release 2026-08-18
 

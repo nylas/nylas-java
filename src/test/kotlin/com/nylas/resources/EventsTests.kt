@@ -6,6 +6,8 @@ import com.nylas.models.Response
 import com.nylas.util.JsonHelper
 import com.squareup.moshi.Types
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -15,6 +17,7 @@ import org.mockito.kotlin.*
 import java.lang.reflect.Type
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
@@ -1651,6 +1654,241 @@ class EventsTests {
       assertEquals("id,title", params.select)
       assertEquals(false, params.tentativeAsBusy)
       assertEquals(false, params.notifyParticipants)
+    }
+  }
+
+  @Nested
+  inner class BatchTests {
+    private val grantId = "abc-123-grant-id"
+    private val requests = mutableListOf<okhttp3.Request>()
+
+    // Real NylasClient with an interceptor that returns a canned response, so status handling
+    // (200/207/400) runs through the real client code instead of a mocked isSuccessful.
+    private fun eventsReturning(code: Int, body: String): Events {
+      val httpClientBuilder = OkHttpClient.Builder().addInterceptor { chain ->
+        requests.add(chain.request())
+        okhttp3.Response.Builder()
+          .request(chain.request())
+          .protocol(Protocol.HTTP_1_1)
+          .code(code)
+          .message("")
+          .body(body.toResponseBody("application/json".toMediaType()))
+          .build()
+      }
+      return Events(NylasClient("test-api-key", httpClientBuilder))
+    }
+
+    private val createRequest = CreateEventRequest(
+      whenObj = CreateEventRequest.When.Timespan(startTime = 1798794000, endTime = 1798795800),
+      title = "Standup",
+    )
+
+    // colorId = Clear checks that an explicit null still reaches the wire through the batch body.
+    private val updateRequest = UpdateEventRequest(title = "Renamed", colorId = NullableField.Clear)
+    private val batchRequest = BatchEventsRequest(
+      listOf(
+        BatchEventOperation.create(createRequest),
+        BatchEventOperation.update("EVENT_ID_1", updateRequest),
+        BatchEventOperation.delete("EVENT_ID_2"),
+      ),
+    )
+
+    @Test
+    fun `batch sends POST to the batch path with query params and snake_case body`() {
+      val events = eventsReturning(200, """{"request_id":"req-1","data":[]}""")
+      val queryParams = BatchEventsQueryParams.Builder("primary")
+        .notifyParticipants(false)
+        .grantEmail("user@example.com")
+        .tentativeAsBusy(true)
+        .select("id,title")
+        .build()
+
+      events.batch(grantId, batchRequest, queryParams)
+
+      val request = requests.single()
+      assertEquals("POST", request.method)
+      assertEquals("/v3/grants/$grantId/events/batch", request.url.encodedPath)
+      assertEquals(
+        setOf("calendar_id", "notify_participants", "grant_email", "tentative_as_busy", "select"),
+        request.url.queryParameterNames,
+      )
+      assertEquals("primary", request.url.queryParameter("calendar_id"))
+      assertEquals("false", request.url.queryParameter("notify_participants"))
+      assertEquals("user@example.com", request.url.queryParameter("grant_email"))
+      assertEquals("true", request.url.queryParameter("tentative_as_busy"))
+      assertEquals("id,title", request.url.queryParameter("select"))
+
+      val body = Buffer().also { request.body!!.writeTo(it) }.readUtf8()
+      val createJson = JsonHelper.moshi().adapter(CreateEventRequest::class.java).toJson(createRequest)
+      val updateJson = JsonHelper.moshi().adapter(UpdateEventRequest::class.java).toJson(updateRequest)
+      assertEquals(
+        """{"operations":[{"method":"create","body":$createJson},""" +
+          """{"method":"update","event_id":"EVENT_ID_1","body":$updateJson},""" +
+          """{"method":"delete","event_id":"EVENT_ID_2"}]}""",
+        body,
+      )
+      assertTrue(body.contains("\"start_time\":1798794000"))
+      assertTrue(body.contains("\"color_id\":null"))
+    }
+
+    @Test
+    fun `batch only sends calendar_id when no optional params are set`() {
+      val events = eventsReturning(200, """{"request_id":"req-1","data":[]}""")
+
+      events.batch(grantId, batchRequest, BatchEventsQueryParams("primary"))
+
+      assertEquals(setOf("calendar_id"), requests.single().url.queryParameterNames)
+    }
+
+    @Test
+    fun `batch 200 response deserializes events in operation order`() {
+      val events = eventsReturning(
+        200,
+        """
+        {
+          "request_id": "req-200",
+          "data": [
+            { "status": 200, "data": { "id": "new-event-id", "title": "Standup", "calendar_id": "primary", "when": { "start_time": 1798794000, "end_time": 1798795800, "object": "timespan" } } },
+            { "status": 200, "data": { "id": "EVENT_ID_1", "title": "Renamed", "calendar_id": "primary", "when": { "start_time": 1798794000, "end_time": 1798795800, "object": "timespan" } } },
+            { "status": 200 }
+          ]
+        }
+        """.trimIndent(),
+      )
+
+      val response = events.batch(grantId, batchRequest, BatchEventsQueryParams("primary"))
+
+      assertEquals("req-200", response.requestId)
+      assertEquals(3, response.data.size)
+      assertEquals(listOf(200, 200, 200), response.data.map { it.status })
+      assertEquals("new-event-id", response.data[0].data?.id)
+      assertEquals("Standup", response.data[0].data?.title)
+      assertIs<When.Timespan>(response.data[0].data?.getWhen())
+      assertEquals("EVENT_ID_1", response.data[1].data?.id)
+      assertEquals("Renamed", response.data[1].data?.title)
+      assertNull(response.data[2].data)
+      assertTrue(response.data.all { it.error == null && it.retryAfter == null && it.providerEventCreated == null })
+    }
+
+    @Test
+    fun `batch 207 response is returned not thrown and exposes failure details`() {
+      val events = eventsReturning(
+        207,
+        """
+        {
+          "request_id": "req-207",
+          "data": [
+            { "status": 200, "data": { "id": "new-event-id", "title": "Standup" } },
+            { "status": 429, "error": { "type": "rate_limit_error", "message": "Too many requests", "provider_error": { "code": 429 } }, "retry_after": 2.5 },
+            { "status": 500, "error": { "type": "internal_error", "message": "Failed after create" }, "provider_event_created": true }
+          ]
+        }
+        """.trimIndent(),
+      )
+
+      val response = events.batch(grantId, batchRequest, BatchEventsQueryParams("primary"))
+
+      assertEquals("req-207", response.requestId)
+      assertEquals(listOf(200, 429, 500), response.data.map { it.status })
+      assertEquals("new-event-id", response.data[0].data?.id)
+      assertNull(response.data[0].error)
+
+      val throttled = response.data[1]
+      assertNull(throttled.data)
+      assertEquals("rate_limit_error", throttled.error?.type)
+      assertEquals("Too many requests", throttled.error?.message)
+      assertEquals(429.0, throttled.error?.providerError?.get("code"))
+      assertEquals(2.5, throttled.retryAfter)
+      assertNull(throttled.providerEventCreated)
+
+      val duplicateRisk = response.data[2]
+      assertEquals("internal_error", duplicateRisk.error?.type)
+      assertEquals("Failed after create", duplicateRisk.error?.message)
+      assertEquals(true, duplicateRisk.providerEventCreated)
+      assertNull(duplicateRisk.retryAfter)
+    }
+
+    @Test
+    fun `batch 207 response where every operation failed still returns`() {
+      val events = eventsReturning(
+        207,
+        """
+        {
+          "request_id": "req-207-all",
+          "data": [
+            { "status": 400, "error": { "type": "invalid_request_error", "message": "Bad body" } },
+            { "status": 404, "error": { "type": "not_found_error", "message": "Event EVENT_ID_1 not found" } },
+            { "status": 404, "error": { "type": "not_found_error", "message": "Event EVENT_ID_2 not found" } }
+          ]
+        }
+        """.trimIndent(),
+      )
+
+      val response = events.batch(grantId, batchRequest, BatchEventsQueryParams("primary"))
+
+      assertEquals(listOf(400, 404, 404), response.data.map { it.status })
+      assertTrue(response.data.all { it.data == null && it.error != null })
+      assertEquals("Event EVENT_ID_1 not found", response.data[1].error?.message)
+      assertEquals("Event EVENT_ID_2 not found", response.data[2].error?.message)
+    }
+
+    @Test
+    fun `batch retry_after of zero deserializes as zero`() {
+      val events = eventsReturning(
+        207,
+        """{"request_id":"req","data":[{"status":503,"error":{"type":"provider_error","message":"Unavailable"},"retry_after":0}]}""",
+      )
+
+      val response = events.batch(grantId, batchRequest, BatchEventsQueryParams("primary"))
+
+      assertEquals(0.0, response.data.single().retryAfter)
+    }
+
+    @Test
+    fun `batch 400 response throws NylasApiError`() {
+      val events = eventsReturning(
+        400,
+        """{"request_id":"req-400","error":{"type":"invalid_request_error","message":"calendar_id is required"}}""",
+      )
+
+      val exception = assertFailsWith<NylasApiError> {
+        events.batch(grantId, batchRequest, BatchEventsQueryParams("primary"))
+      }
+
+      assertEquals(400, exception.statusCode)
+      assertEquals("req-400", exception.requestId)
+      assertEquals("invalid_request_error", exception.type)
+      assertEquals("calendar_id is required", exception.message)
+    }
+
+    @Test
+    fun `batch operation factories set the fields each method requires`() {
+      val create = BatchEventOperation.create(createRequest)
+      assertEquals(BatchEventMethod.CREATE, create.method)
+      assertNull(create.eventId)
+      assertEquals(createRequest, create.body)
+
+      val update = BatchEventOperation.update("EVENT_ID_1", updateRequest)
+      assertEquals(BatchEventMethod.UPDATE, update.method)
+      assertEquals("EVENT_ID_1", update.eventId)
+      assertEquals(updateRequest, update.body)
+
+      val delete = BatchEventOperation.delete("EVENT_ID_2")
+      assertEquals(BatchEventMethod.DELETE, delete.method)
+      assertEquals("EVENT_ID_2", delete.eventId)
+      assertNull(delete.body)
+
+      // Operations can only be built through the factories above.
+      assertTrue(BatchEventOperation::class.constructors.all { it.visibility == kotlin.reflect.KVisibility.PRIVATE })
+    }
+
+    @Test
+    fun `batch URL-encodes the grant identifier`() {
+      val events = eventsReturning(200, """{"request_id":"req","data":[]}""")
+
+      events.batch("user@example.com", batchRequest, BatchEventsQueryParams("primary"))
+
+      assertEquals("/v3/grants/user%40example.com/events/batch", requests.single().url.encodedPath)
     }
   }
 }

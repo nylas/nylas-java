@@ -22,6 +22,16 @@ The `EventsExample` demonstrates how to use the Nylas Java/Kotlin SDK to interac
 - Filter events by date range
 - Show event details
 
+### Batch Events Example
+
+The `BatchEventsExample` demonstrates the Events batch endpoint (Google and Microsoft only):
+
+- Create, update and delete events in one request
+- Loop over per-operation results (a 207 response is returned, not thrown)
+- Retry throttled items (`429`/`503`) after `retry_after`, and never retry items with `provider_event_created: true`
+
+Requires `NYLAS_API_KEY`, `NYLAS_GRANT_ID` and `NYLAS_EVENT_ID` (an existing event to update). `NYLAS_CALENDAR_ID` is optional and defaults to `primary`.
+
 ### Notetaker Example
 
 The `NotetakerExample` demonstrates how to use the Nylas Java/Kotlin SDK to interact with the Notetakers API:
@@ -82,6 +92,9 @@ NYLAS_API_KEY=your_api_key_here
 # Your grant ID (required for message examples)
 NYLAS_GRANT_ID=your_grant_id_here
 
+# An existing event ID to update (batch events example)
+NYLAS_EVENT_ID=your_event_id_here
+
 # Test email address (required for large attachments example)
 NYLAS_TEST_EMAIL=test@example.com
 
@@ -110,6 +123,11 @@ Run Kotlin Messages example:
 Run Java Events example:
 ```bash
 ./gradlew :examples:run -PmainClass=com.nylas.examples.EventsExample
+```
+
+Run Java Batch Events example:
+```bash
+./gradlew :examples:run -PmainClass=com.nylas.examples.BatchEventsExample
 ```
 
 Run Java Notetaker example:
@@ -170,6 +188,7 @@ make kotlin-way
    - `MessagesExample.java` (Java - demonstrates new message features)
    - `KotlinMessagesExample.kt` (Kotlin - demonstrates new message features)  
    - `EventsExample.java` (Java - demonstrates events)
+   - `BatchEventsExample.java` (Java - demonstrates the Events batch endpoint)
    - `FoldersExample.java` (Java - demonstrates folders and single_level parameter)
    - `LargeAttachmentsExample.java` (Java - demonstrates large file attachments)
    - `CustomTrackingDomainExample.java` (Java - demonstrates custom link and open tracking hostnames)
@@ -191,6 +210,7 @@ examples/
         │   └── com/nylas/examples/
         │       ├── MessagesExample.java         # NEW: Message features demo
         │       ├── EventsExample.java           # Events API demo
+        │       ├── BatchEventsExample.java      # Events batch endpoint demo
         │       ├── FoldersExample.java          # NEW: Folders API demo with single_level parameter
         │       ├── LargeAttachmentsExample.java # NEW: Large file attachments demo
         │       └── NotetakerExample.java        # Notetaker API demo
