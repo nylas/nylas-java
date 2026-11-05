@@ -1,6 +1,6 @@
 # Nylas Java SDK Changelog
 
-## [Unreleased]
+## [v2.18.2] - Release 2026-11-05
 
 ### Added
 * Contact metadata request/response models and `metadata_pair` filtering.
