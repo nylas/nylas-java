@@ -6,6 +6,10 @@
 * Contact metadata request/response models and `metadata_pair` filtering.
 * `contact.updated` and `contact.deleted` webhook trigger constants with iCloud and Yahoo compatibility documentation.
 
+### Fixed
+* Building from source no longer fails when JDK 8 is not installed locally: Gradle now downloads the JDK 8 toolchain required by the build (foojay toolchain resolver). This also fixes CodeQL autobuild on GitHub's current `ubuntu-latest` runners.
+* SDK reference docs deployment now uses `cloudflare/wrangler-action`, replacing the removed `cloudflare/pages-action`.
+
 ## [v2.18.1] - Release 2026-08-18
 
 ### Added

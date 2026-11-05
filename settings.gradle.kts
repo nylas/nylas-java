@@ -7,6 +7,12 @@
  * in the user manual at https://docs.gradle.org/5.4/userguide/multi_project_builds.html
  */
 
+plugins {
+  // Downloads the JDK 8 toolchain required by jvmToolchain(8) when it is not installed locally
+  // (e.g. GitHub's ubuntu-latest image used by CodeQL autobuild no longer ships JDK 8).
+  id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}
+
 rootProject.name = "nylas"
 
 // Include the examples subproject
